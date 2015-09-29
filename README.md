@@ -26,4 +26,4 @@ generating Go code for custom FIT product profiles.
 - [Custom Product Profiles](https://github.com/tormoder/gofit/wiki/Custom-Product-Profiles)
 - [Upcoming Features](https://github.com/tormoder/gofit/wiki/Upcoming-Features)
 - [Contributing](https://github.com/tormoder/gofit/blob/master/CONTRIBUTING.md)
-- [License](https://github.com/tormoder/gofit/wiki/License.md)
+- [License](https://github.com/tormoder/gofit/wiki/License)

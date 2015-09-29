@@ -1,0 +1,13 @@
+In St. John's, Newfoundland.
+
+30 minute build, then 2 easy, then 2x20 @ 320w NP.  Slightly lower on the second set simply due to being downhill sections.
+
+WASP data included - did see a WiFi dropout note, so while data would be aligned, if there's a full-drop in there, it's just the WASP unit to iPhone connection (the WASP didn't lose connectivity to ANT+ sensors).
+
+Units:
+1) Vector (new, within 3 days)- 9915
+2) Quarq Elsa (new, within 1 week)- 37809
+3) Stages (new, within 1 week) - 35387
+4) PowerTap G3 (new, first ride) - 42327
+5) Speed-Only Sensor
+6) Speed-Cadence Sensor

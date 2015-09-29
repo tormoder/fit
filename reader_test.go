@@ -46,6 +46,13 @@ func TestSramExamples(t *testing.T) {
 	}
 }
 
+func TestDCRainmakerFiles(t *testing.T) {
+	for _, test := range testsDCRain {
+		file := filepath.Join(tfolder, dcrain, test)
+		testDecode(t, file, false, false, false)
+	}
+}
+
 func TestMiscFitFilesFromWWW(t *testing.T) {
 	for _, test := range testsMisc {
 		file := filepath.Join(tfolder, misc, test)
@@ -178,6 +185,7 @@ const (
 	fitsdk   = "fitsdk"
 	fitparse = "python-fitparse"
 	sram     = "sram"
+	dcrain   = "dcrainmaker"
 	misc     = "misc"
 	corrupt  = "corrupt"
 )
@@ -206,7 +214,6 @@ var testsFitSDK = []string{
 		1."
 	*/
 	// "WeightScaleSingleUser.fit",
-
 }
 
 // Test data from python-fitparse and forks.
@@ -232,6 +239,11 @@ var testsSram = []string{
 		We now allow compatible types.
 	*/
 	"Settings2.fit",
+}
+
+// Power data published by DCRainmaker in power meter reviews.
+var testsDCRain = []string{
+	"Edge810-Vector-2013-08-16-15-35-10.fit",
 }
 
 // Miscellaneous fit files found online.

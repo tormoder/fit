@@ -1,0 +1,3 @@
+This directory is used to store temporary files during profile generation.
+
+See program found in ../cmd/fitgenprofile/main.go.

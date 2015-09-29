@@ -15,8 +15,9 @@
 	profmem \
 	profobj \
 	mdgen \
+	get \
 
-all: fmt vet test testrace
+all: get fmt vet test testrace
 
 test:
 	go test -v ./...
@@ -84,3 +85,6 @@ profobj:
 
 mdgen:
 	godoc2md github.com/tormoder/gofit Fit Header CheckIntegrity > MainApiReference.md
+
+get:
+	go get -v ./...

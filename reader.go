@@ -697,35 +697,35 @@ func (d *decoder) parseDataFields(dm *defmsg, knownMsg bool, msgv reflect.Value)
 
 				case fitSint16:
 					for i := 0; i < dsize; i += fitSint16.size() {
-						i16 := int16(dm.arch.Uint16(d.tmp[i:fitSint16.size()]))
+						i16 := int16(dm.arch.Uint16(d.tmp[i : i+fitSint16.size()]))
 						i16v := reflect.ValueOf(i16)
 						nfieldv := reflect.Append(fieldv, i16v)
 						fieldv.Set(nfieldv)
 					}
 				case fitUint16, fitUint16z:
 					for i := 0; i < dsize; i += fitUint16.size() {
-						ui16 := uint16(dm.arch.Uint16(d.tmp[i:fitUint16.size()]))
+						ui16 := uint16(dm.arch.Uint16(d.tmp[i : i+fitUint16.size()]))
 						ui16v := reflect.ValueOf(ui16)
 						nfieldv := reflect.Append(fieldv, ui16v)
 						fieldv.Set(nfieldv)
 					}
 				case fitSint32:
 					for i := 0; i < dsize; i += fitSint32.size() {
-						i32 := int32(dm.arch.Uint32(d.tmp[i:fitSint32.size()]))
+						i32 := int32(dm.arch.Uint32(d.tmp[i : i+fitSint32.size()]))
 						i32v := reflect.ValueOf(i32)
 						nfieldv := reflect.Append(fieldv, i32v)
 						fieldv.Set(nfieldv)
 					}
 				case fitUint32, fitUint32z:
 					for i := 0; i < dsize; i += fitUint32.size() {
-						u32 := uint32(dm.arch.Uint32(d.tmp[i:fitUint32.size()]))
+						u32 := uint32(dm.arch.Uint32(d.tmp[i : i+fitUint32.size()]))
 						u32v := reflect.ValueOf(u32)
 						nfieldv := reflect.Append(fieldv, u32v)
 						fieldv.Set(nfieldv)
 					}
 				case fitFloat32:
 					for i := 0; i < dsize; i += fitFloat32.size() {
-						bits := dm.arch.Uint32(d.tmp[:fitFloat32.size()])
+						bits := dm.arch.Uint32(d.tmp[i : i+fitFloat32.size()])
 						f32 := float64(math.Float32frombits(bits))
 						f32v := reflect.ValueOf(f32)
 						nfieldv := reflect.Append(fieldv, f32v)
@@ -733,7 +733,7 @@ func (d *decoder) parseDataFields(dm *defmsg, knownMsg bool, msgv reflect.Value)
 					}
 				case fitFloat64:
 					for i := 0; i < dsize; i += fitFloat64.size() {
-						bits := dm.arch.Uint64(d.tmp[:fitFloat64.size()])
+						bits := dm.arch.Uint64(d.tmp[i : i+fitFloat64.size()])
 						f64 := float64(math.Float64frombits(bits))
 						f64v := reflect.ValueOf(f64)
 						nfieldv := reflect.Append(fieldv, f64v)
@@ -868,7 +868,7 @@ func (d *decoder) parseDataFields(dm *defmsg, knownMsg bool, msgv reflect.Value)
 					}
 				case fitSint16:
 					for i := 0; i < dsize; i += fitSint16.size() {
-						i16 := int16(dm.arch.Uint16(d.tmp[:fitUint16.size()]))
+						i16 := int16(dm.arch.Uint16(d.tmp[i : i+fitUint16.size()]))
 						f64 := float64(
 							float32(i16)/pfield.scale - float32(pfield.offset),
 						)
@@ -877,7 +877,7 @@ func (d *decoder) parseDataFields(dm *defmsg, knownMsg bool, msgv reflect.Value)
 					}
 				case fitUint16, fitUint16z:
 					for i := 0; i < dsize; i += fitUint16.size() {
-						u16 := uint16(dm.arch.Uint16(d.tmp[:fitUint16.size()]))
+						u16 := uint16(dm.arch.Uint16(d.tmp[i : i+fitUint16.size()]))
 						f64 := float64(
 							float32(u16)/pfield.scale - float32(pfield.offset),
 						)
@@ -886,7 +886,7 @@ func (d *decoder) parseDataFields(dm *defmsg, knownMsg bool, msgv reflect.Value)
 					}
 				case fitSint32:
 					for i := 0; i < dsize; i += fitSint32.size() {
-						i32 := int32(dm.arch.Uint32(d.tmp[:fitSint32.size()]))
+						i32 := int32(dm.arch.Uint32(d.tmp[i : i+fitSint32.size()]))
 						f64 := float64(
 							float32(i32)/pfield.scale - float32(pfield.offset),
 						)
@@ -895,7 +895,7 @@ func (d *decoder) parseDataFields(dm *defmsg, knownMsg bool, msgv reflect.Value)
 					}
 				case fitUint32, fitUint32z:
 					for i := 0; i < dsize; i += fitUint32.size() {
-						u32 := uint32(dm.arch.Uint32(d.tmp[:fitUint32.size()]))
+						u32 := uint32(dm.arch.Uint32(d.tmp[i : i+fitUint32.size()]))
 						f64 := float64(
 							float32(u32)/pfield.scale - float32(pfield.offset),
 						)

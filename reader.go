@@ -587,8 +587,11 @@ func (d *decoder) parseCompressedTimestampHeader(recordHeader byte) (reflect.Val
 
 func (d *decoder) parseDataFields(dm *defmsg, knownMsg bool, msgv reflect.Value) (reflect.Value, error) {
 	for i, dfield := range dm.fieldDefs {
+
 		dsize := int(dfield.size)
+		dbt := dfield.btype
 		padding := 0
+
 		pfield, pfound := getField(dm.globalMsgNum, dfield.num)
 		if pfound {
 			if pfield.btype != fitString && pfield.array == 0 {
@@ -627,7 +630,7 @@ func (d *decoder) parseDataFields(dm *defmsg, knownMsg bool, msgv reflect.Value)
 		switch pfield.t {
 		case fit:
 			if pfield.array == 0 {
-				switch dfield.btype {
+				switch dbt {
 				case fitByte, fitEnum, fitUint8, fitUint8z:
 					fieldv.SetUint(uint64(d.tmp[0]))
 				case fitSint8:
@@ -668,90 +671,75 @@ func (d *decoder) parseDataFields(dm *defmsg, knownMsg bool, msgv reflect.Value)
 					return reflect.Value{},
 						fmt.Errorf(
 							"unknown base type %d for %dth field %v in definition message %v",
-							dfield.btype, i, dfield, dm,
+							dbt, i, dfield, dm,
 						)
 				}
 			} else {
-				switch dfield.btype {
-				case fitByte:
+				if dbt == fitByte {
 					// Set directly.
 					fieldv.SetBytes(d.tmp[:dsize])
-				case fitEnum:
-					for i := 0; i < dsize; i += fitEnum.size() {
-						bv := reflect.ValueOf(byte(d.tmp[i]))
-						nfieldv := reflect.Append(fieldv, bv)
-						fieldv.Set(nfieldv)
-					}
-				case fitUint8, fitUint8z:
-					for i := 0; i < dsize; i += fitEnum.size() {
-						ui8v := reflect.ValueOf(uint8(d.tmp[i]))
-						nfieldv := reflect.Append(fieldv, ui8v)
-						fieldv.Set(nfieldv)
+					continue
+				}
+
+				slicev := reflect.MakeSlice(
+					fieldv.Type(),
+					dsize/dbt.size(),
+					dsize/dbt.size(),
+				)
+
+				switch dbt {
+				case fitUint8, fitUint8z, fitEnum:
+					for j := 0; j < dsize; j++ {
+						slicev.Index(j).SetUint(uint64(d.tmp[j]))
 					}
 				case fitSint8:
-					for i := 0; i < dsize; i += fitSint8.size() {
-						i8v := reflect.ValueOf(int8(d.tmp[i]))
-						nfieldv := reflect.Append(fieldv, i8v)
-						fieldv.Set(nfieldv)
+					for j := 0; j < dsize; j++ {
+						slicev.Index(j).SetInt(int64(d.tmp[j]))
 					}
-
 				case fitSint16:
-					for i := 0; i < dsize; i += fitSint16.size() {
-						i16 := int16(dm.arch.Uint16(d.tmp[i : i+fitSint16.size()]))
-						i16v := reflect.ValueOf(i16)
-						nfieldv := reflect.Append(fieldv, i16v)
-						fieldv.Set(nfieldv)
+					for j, k := 0, 0; j < dsize; j, k = j+dbt.size(), k+1 {
+						i16 := int64(dm.arch.Uint16(d.tmp[j : j+dbt.size()]))
+						slicev.Index(k).SetInt(i16)
 					}
 				case fitUint16, fitUint16z:
-					for i := 0; i < dsize; i += fitUint16.size() {
-						ui16 := uint16(dm.arch.Uint16(d.tmp[i : i+fitUint16.size()]))
-						ui16v := reflect.ValueOf(ui16)
-						nfieldv := reflect.Append(fieldv, ui16v)
-						fieldv.Set(nfieldv)
+					for j, k := 0, 0; j < dsize; j, k = j+dbt.size(), k+1 {
+						ui16 := uint64(dm.arch.Uint16(d.tmp[j : j+dbt.size()]))
+						slicev.Index(k).SetUint(ui16)
 					}
 				case fitSint32:
-					for i := 0; i < dsize; i += fitSint32.size() {
-						i32 := int32(dm.arch.Uint32(d.tmp[i : i+fitSint32.size()]))
-						i32v := reflect.ValueOf(i32)
-						nfieldv := reflect.Append(fieldv, i32v)
-						fieldv.Set(nfieldv)
+					for j, k := 0, 0; j < dsize; j, k = j+dbt.size(), k+1 {
+						i32 := int64(dm.arch.Uint32(d.tmp[j : j+dbt.size()]))
+						slicev.Index(k).SetInt(i32)
 					}
 				case fitUint32, fitUint32z:
-					for i := 0; i < dsize; i += fitUint32.size() {
-						u32 := uint32(dm.arch.Uint32(d.tmp[i : i+fitUint32.size()]))
-						u32v := reflect.ValueOf(u32)
-						nfieldv := reflect.Append(fieldv, u32v)
-						fieldv.Set(nfieldv)
+					for j, k := 0, 0; j < dsize; j, k = j+dbt.size(), k+1 {
+						ui32 := uint64(dm.arch.Uint32(d.tmp[j : j+dbt.size()]))
+						slicev.Index(k).SetUint(ui32)
 					}
 				case fitFloat32:
-					for i := 0; i < dsize; i += fitFloat32.size() {
-						bits := dm.arch.Uint32(d.tmp[i : i+fitFloat32.size()])
+					for j, k := 0, 0; j < dsize; j, k = j+dbt.size(), k+1 {
+						bits := dm.arch.Uint32(d.tmp[j : j+dbt.size()])
 						f32 := float64(math.Float32frombits(bits))
-						f32v := reflect.ValueOf(f32)
-						nfieldv := reflect.Append(fieldv, f32v)
-						fieldv.Set(nfieldv)
+						slicev.Index(k).SetFloat(f32)
 					}
 				case fitFloat64:
-					for i := 0; i < dsize; i += fitFloat64.size() {
-						bits := dm.arch.Uint64(d.tmp[i : i+fitFloat64.size()])
+					for j, k := 0, 0; j < dsize; j, k = j+dbt.size(), k+1 {
+						bits := dm.arch.Uint64(d.tmp[j : j+dbt.size()])
 						f64 := float64(math.Float64frombits(bits))
-						f64v := reflect.ValueOf(f64)
-						nfieldv := reflect.Append(fieldv, f64v)
-						fieldv.Set(nfieldv)
+						slicev.Index(k).SetFloat(f64)
 					}
 				case fitString:
 					if dfield.size == 0 {
 						continue
 					}
+					var strings []string
 					j, k := 0, 0
 					for {
 						if d.tmp[j+k] == 0x00 {
 							if k == 0 {
 								break
 							}
-							sv := reflect.ValueOf(string(d.tmp[j : j+k]))
-							sav := reflect.Append(fieldv, sv)
-							fieldv.Set(sav)
+							strings = append(strings, string(d.tmp[j:j+k]))
 							j = j + k + 1
 							if j >= dsize {
 								break
@@ -763,20 +751,21 @@ func (d *decoder) parseDataFields(dm *defmsg, knownMsg bool, msgv reflect.Value)
 								// We have not seen a 0x00 terminator,
 								// but there's no room for one.
 								// Take the string we have and exit loop.
-								sv := reflect.ValueOf(string(d.tmp[j:dsize]))
-								sav := reflect.Append(fieldv, sv)
-								fieldv.Set(sav)
+								strings = append(strings, string(d.tmp[j:dsize]))
 								break
 							}
 						}
 					}
+					fieldv.Set(reflect.ValueOf(strings))
+					continue // Special case: we don't want the Set after the switch.
 				default:
 					return reflect.Value{},
 						fmt.Errorf(
 							"unknown base type %d for %dth field %v in definition message %v",
-							dfield.btype, i, dfield, dm,
+							dbt, i, dfield, dm,
 						)
 				}
+				fieldv.Set(slicev)
 			}
 		case timeutc:
 			u32 := dm.arch.Uint32(d.tmp[0:4])
@@ -807,8 +796,16 @@ func (d *decoder) parseDataFields(dm *defmsg, knownMsg bool, msgv reflect.Value)
 			lng := NewLongitudeSemicircles(int32(i32))
 			fieldv.Set(reflect.ValueOf(lng))
 		case float:
+			if !dbt.integer() {
+				return reflect.Value{},
+					fmt.Errorf(
+						"field %d for message %v is not an integer and can't be scaled",
+						pfield.num, dm.globalMsgNum,
+					)
+			}
+
 			if pfield.array == 0 {
-				switch dfield.btype {
+				switch dbt {
 				case fitSint8:
 					s8 := int8(d.tmp[0])
 					fieldv.SetFloat(float64(
@@ -839,76 +836,64 @@ func (d *decoder) parseDataFields(dm *defmsg, knownMsg bool, msgv reflect.Value)
 					fieldv.SetFloat(float64(
 						float32(u32)/pfield.scale - float32(pfield.offset)),
 					)
-				default:
-					return reflect.Value{},
-						fmt.Errorf(
-							"field %d for message %v is not a number and can't be scaled",
-							pfield.num, dm.globalMsgNum,
-						)
 				}
 			} else {
-				switch dfield.btype {
+				slicev := reflect.MakeSlice(
+					reflect.TypeOf([]float64{}),
+					dsize/dbt.size(),
+					dsize/dbt.size(),
+				)
+				switch dbt {
 				case fitSint8:
-					for i := 0; i < dsize; i += fitSint8.size() {
-						s8 := int8(d.tmp[i])
+					for j := 0; j < dsize; j += dbt.size() {
+						s8 := int8(d.tmp[j])
 						f64 := float64(
 							float32(s8)/pfield.scale - float32(pfield.offset),
 						)
-						nfieldv := reflect.Append(fieldv, reflect.ValueOf(f64))
-						fieldv.Set(nfieldv)
+						slicev.Index(j).Set(reflect.ValueOf(f64))
 					}
 				case fitUint8, fitUint8z:
-					for i := 0; i < dsize; i += fitUint8.size() {
+					for j := 0; j < dsize; j += dbt.size() {
 						u8 := uint8(d.tmp[i])
 						f64 := float64(
 							float32(u8)/pfield.scale - float32(pfield.offset),
 						)
-						nfieldv := reflect.Append(fieldv, reflect.ValueOf(f64))
-						fieldv.Set(nfieldv)
+						slicev.Index(j).Set(reflect.ValueOf(f64))
 					}
 				case fitSint16:
-					for i := 0; i < dsize; i += fitSint16.size() {
-						i16 := int16(dm.arch.Uint16(d.tmp[i : i+fitUint16.size()]))
+					for j, k := 0, 0; j < dsize; j, k = j+dbt.size(), k+1 {
+						i16 := int16(dm.arch.Uint16(d.tmp[j : j+dbt.size()]))
 						f64 := float64(
 							float32(i16)/pfield.scale - float32(pfield.offset),
 						)
-						nfieldv := reflect.Append(fieldv, reflect.ValueOf(f64))
-						fieldv.Set(nfieldv)
+						slicev.Index(k).Set(reflect.ValueOf(f64))
 					}
 				case fitUint16, fitUint16z:
-					for i := 0; i < dsize; i += fitUint16.size() {
-						u16 := uint16(dm.arch.Uint16(d.tmp[i : i+fitUint16.size()]))
+					for j, k := 0, 0; j < dsize; j, k = j+dbt.size(), k+1 {
+						u16 := uint16(dm.arch.Uint16(d.tmp[j : j+dbt.size()]))
 						f64 := float64(
 							float32(u16)/pfield.scale - float32(pfield.offset),
 						)
-						nfieldv := reflect.Append(fieldv, reflect.ValueOf(f64))
-						fieldv.Set(nfieldv)
+						slicev.Index(k).Set(reflect.ValueOf(f64))
 					}
 				case fitSint32:
-					for i := 0; i < dsize; i += fitSint32.size() {
-						i32 := int32(dm.arch.Uint32(d.tmp[i : i+fitSint32.size()]))
+					for j, k := 0, 0; j < dsize; j, k = j+dbt.size(), k+1 {
+						i32 := int32(dm.arch.Uint32(d.tmp[j : j+dbt.size()]))
 						f64 := float64(
 							float32(i32)/pfield.scale - float32(pfield.offset),
 						)
-						nfieldv := reflect.Append(fieldv, reflect.ValueOf(f64))
-						fieldv.Set(nfieldv)
+						slicev.Index(k).Set(reflect.ValueOf(f64))
 					}
 				case fitUint32, fitUint32z:
-					for i := 0; i < dsize; i += fitUint32.size() {
-						u32 := uint32(dm.arch.Uint32(d.tmp[i : i+fitUint32.size()]))
+					for j, k := 0, 0; j < dsize; j, k = j+dbt.size(), k+1 {
+						u32 := uint32(dm.arch.Uint32(d.tmp[j : j+dbt.size()]))
 						f64 := float64(
 							float32(u32)/pfield.scale - float32(pfield.offset),
 						)
-						nfieldv := reflect.Append(fieldv, reflect.ValueOf(f64))
-						fieldv.Set(nfieldv)
+						slicev.Index(k).Set(reflect.ValueOf(f64))
 					}
-				default:
-					return reflect.Value{},
-						fmt.Errorf(
-							"field %d for message %v is not a number and can't be scaled",
-							pfield.num, dm.globalMsgNum,
-						)
 				}
+				fieldv.Set(slicev)
 			}
 		default:
 			panic("parseDataFields: unreachable")

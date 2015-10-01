@@ -13,10 +13,16 @@ gofit is a [Go](http://www.golang.org/) package that implements decoding of the
 Protocol](http://www.thisisant.com/resources/fit). Fit is a "compact binary
 format designed for storing and sharing data from sport, fitness and health
 devices". Fit files are created by newer GPS enabled Garmin sport watches and
-cycling computers, such as their Forerunner/Edge/Fenix series. gofit supports
+cycling computers, such as the Forerunner/Edge/Fenix series. gofit supports
 generating Go code for custom FIT product profiles.
 
 **Current supported FIT SDK version:** 16.10
+
+### Installation
+
+```
+$ go get github.com/tormoder/gofit
+```
 
 ### About gofit
 

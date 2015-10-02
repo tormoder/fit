@@ -32,7 +32,7 @@ fmt:
 	gofmt -l -s . dyncrc16 cmd/fitgen cmd/fitgen/internal/profile
 
 vet:
-	go vet ./...
+	go tool vet -shift=false .
 
 lint:
 	golint . | \

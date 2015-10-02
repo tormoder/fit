@@ -78,8 +78,8 @@ func main() {
 		sdkVersion    string
 		stringerInput string
 
-		goTypes map[string]*profile.GoType
-		goMsgs  []*profile.GoMsg
+		goTypes map[string]*profile.Type
+		goMsgs  []*profile.Msg
 
 		pyScript         = filepath.Join(gofitSrcDir, "lib/python/xls_to_csv.py")
 		typesCSVOut      = filepath.Join(profileDir, types+".csv")
@@ -230,7 +230,7 @@ func generateCSV(pyScript, workbookPath, typesCSVOut, msgsCSVOut string) error {
 	return nil
 }
 
-func generateTypes(sdkVersion, input, output string) (map[string]*profile.GoType, string, error) {
+func generateTypes(sdkVersion, input, output string) (map[string]*profile.Type, string, error) {
 	file, err := os.Open(input)
 	if err != nil {
 		return nil, "", fmt.Errorf("typegen: error opening input file: %v", err)
@@ -242,7 +242,7 @@ func generateTypes(sdkVersion, input, output string) (map[string]*profile.GoType
 		return nil, "", fmt.Errorf("typegen: error creating parser: %v", err)
 	}
 
-	var types []*profile.Type
+	var ptypes []*profile.PType
 	for {
 		t, perr := parser.ParseType()
 		if perr == io.EOF {
@@ -251,16 +251,16 @@ func generateTypes(sdkVersion, input, output string) (map[string]*profile.GoType
 		if perr != nil {
 			return nil, "", fmt.Errorf("typegen: error parsing types: %v", perr)
 		}
-		types = append(types, t)
+		ptypes = append(ptypes, t)
 	}
 
-	goTypes, err := profile.TransformTypes(types)
+	types, err := profile.TransformTypes(ptypes)
 	if err != nil {
 		return nil, "", fmt.Errorf("typegen: error transforming types: %v", err)
 	}
 
 	generator := profile.NewGenerator(sdkVersion)
-	source, err := generator.GenerateTypes(goTypes)
+	source, err := generator.GenerateTypes(types)
 	if err != nil {
 		return nil, "", fmt.Errorf("typegen: error generating source: %v", err)
 
@@ -270,16 +270,16 @@ func generateTypes(sdkVersion, input, output string) (map[string]*profile.GoType
 		return nil, "", fmt.Errorf("typegen: error writing output file: %v", err)
 	}
 
-	tkeys := make([]string, 0, len(goTypes))
-	for tkey := range goTypes {
+	tkeys := make([]string, 0, len(types))
+	for tkey := range types {
 		tkeys = append(tkeys, tkey)
 	}
 	sort.Strings(tkeys)
 
 	var atn bytes.Buffer
 	for _, tkey := range tkeys {
-		t := goTypes[tkey]
-		atn.WriteString(t.CamelCaseName)
+		t := types[tkey]
+		atn.WriteString(t.CCName)
 		atn.WriteByte(',')
 	}
 
@@ -287,10 +287,10 @@ func generateTypes(sdkVersion, input, output string) (map[string]*profile.GoType
 	allTypeNames = allTypeNames[:len(allTypeNames)-1] // last comma
 
 	log.Println("typegen: success")
-	return goTypes, string(allTypeNames), nil
+	return types, string(allTypeNames), nil
 }
 
-func generateMsgs(sdkVersion, input, output string, types map[string]*profile.GoType) ([]*profile.GoMsg, error) {
+func generateMsgs(sdkVersion, input, output string, types map[string]*profile.Type) ([]*profile.Msg, error) {
 	file, err := os.Open(input)
 	if err != nil {
 		return nil, fmt.Errorf("msggen: error opening input file: %v", err)
@@ -302,7 +302,7 @@ func generateMsgs(sdkVersion, input, output string, types map[string]*profile.Go
 		return nil, fmt.Errorf("msggen: error creating parser: %v", err)
 	}
 
-	var msgs []*profile.Msg
+	var pmsgs []*profile.PMsg
 	for {
 		m, perr := parser.ParseMsg()
 		if perr == io.EOF {
@@ -311,16 +311,16 @@ func generateMsgs(sdkVersion, input, output string, types map[string]*profile.Go
 		if perr != nil {
 			return nil, fmt.Errorf("msggen: error parsing msgs: %v", perr)
 		}
-		msgs = append(msgs, m)
+		pmsgs = append(pmsgs, m)
 	}
 
-	goMsgs, err := profile.TransformMsgs(msgs, types)
+	msgs, err := profile.TransformMsgs(pmsgs, types)
 	if err != nil {
 		return nil, fmt.Errorf("msggen: error transforming msgs: %v", err)
 	}
 
 	generator := profile.NewGenerator(sdkVersion)
-	source, err := generator.GenerateMsgs(goMsgs)
+	source, err := generator.GenerateMsgs(msgs)
 	if err != nil {
 		return nil, fmt.Errorf("msggen: error generating source: %v", err)
 
@@ -331,12 +331,12 @@ func generateMsgs(sdkVersion, input, output string, types map[string]*profile.Go
 	}
 
 	log.Println("msggen: success")
-	return goMsgs, nil
+	return msgs, nil
 }
 
-func generateProfile(sdkVersion string, goTypes map[string]*profile.GoType, goMsgs []*profile.GoMsg, output string, jmptable bool) error {
+func generateProfile(sdkVersion string, types map[string]*profile.Type, msgs []*profile.Msg, output string, jmptable bool) error {
 	generator := profile.NewGenerator(sdkVersion)
-	source, err := generator.GenerateProfile(goTypes, goMsgs, jmptable)
+	source, err := generator.GenerateProfile(types, msgs, jmptable)
 	if err != nil {
 		return fmt.Errorf("profilegen: error generating source: %v", err)
 
@@ -380,7 +380,7 @@ func runAllTests(pkgDir string) error {
 	return nil
 }
 
-func logMesgNumVsMsgs(types map[string]*profile.GoType, msgs []*profile.GoMsg) error {
+func logMesgNumVsMsgs(types map[string]*profile.Type, msgs []*profile.Msg) error {
 	mesgNum, found := types["MesgNum"]
 	if !found {
 		return errors.New("mesgnum-vs-#msgs: can't find MesgNum type")
@@ -396,9 +396,9 @@ func logMesgNumVsMsgs(types map[string]*profile.GoType, msgs []*profile.GoMsg) e
 		return nil
 	}
 
-	msgsMap := make(map[string]*profile.GoMsg)
+	msgsMap := make(map[string]*profile.Msg)
 	for _, msg := range msgs {
-		msgsMap[msg.CamelCaseName] = msg
+		msgsMap[msg.CCName] = msg
 	}
 
 	var mdiff []string

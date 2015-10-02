@@ -1,5 +1,9 @@
 package profile
 
+var typeQuirks = map[string]string{
+	"activity": "activity_mode",
+}
+
 var timestampTypes = map[string]bool{
 	"date_time":       true,
 	"local_date_time": true,

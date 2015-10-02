@@ -36,5 +36,5 @@ workdir
 fit-fuzz.zip
 
 # binaries
-cmd/fitgenprofile/fitgenprofile
+cmd/fitgen/fitgen
 cmd/stringer/stringer

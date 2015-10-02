@@ -6,19 +6,19 @@ import (
 	"io"
 )
 
-type Type struct {
+type PType struct {
 	Header []string
 	Fields [][]string
 }
 
-type Msg struct {
+type PMsg struct {
 	Header []string
-	Fields []*Field
+	Fields []*PField
 }
 
-type Field struct {
-	RegField  []string
-	DynFields [][]string
+type PField struct {
+	Field     []string
+	Subfields [][]string
 }
 
 type Parser struct {
@@ -62,7 +62,7 @@ func (p *Parser) init() error {
 	return nil
 }
 
-func (p *Parser) ParseType() (*Type, error) {
+func (p *Parser) ParseType() (*PType, error) {
 	if !p.typeParser {
 		return nil, errors.New("illegal operation: this is a message parser")
 	}
@@ -73,7 +73,7 @@ func (p *Parser) ParseType() (*Type, error) {
 	if tok != THDR {
 		return nil, fmt.Errorf("got %s, expected %s, input %v", tok, MSGHDR, lit)
 	}
-	t := &Type{}
+	t := &PType{}
 	t.Header = lit
 	for {
 		tok, lit := p.scan()
@@ -96,7 +96,7 @@ func (p *Parser) ParseType() (*Type, error) {
 	}
 }
 
-func (p *Parser) ParseMsg() (*Msg, error) {
+func (p *Parser) ParseMsg() (*PMsg, error) {
 	if p.typeParser {
 		return nil, errors.New("illegal operation: this is a type parser")
 	}
@@ -111,21 +111,21 @@ func (p *Parser) ParseMsg() (*Msg, error) {
 		return nil, fmt.Errorf("got %s, expected %s, input %v", tok, MSGHDR, lit)
 	}
 
-	m := &Msg{}
+	m := &PMsg{}
 	m.Header = lit
-	var lf *Field
+	var lf *PField
 
 	for {
 		tok, lit = p.scan()
 		switch tok {
 		case MSGFIELD:
-			lf = &Field{RegField: lit}
+			lf = &PField{Field: lit}
 			m.Fields = append(m.Fields, lf)
 		case DYNMSGFIELD:
 			if lf == nil {
 				return nil, fmt.Errorf("unexpected %s due to no seen field for message yet, input: %s", tok, lit)
 			}
-			lf.DynFields = append(lf.DynFields, lit)
+			lf.Subfields = append(lf.Subfields, lit)
 		case CSVHDR, MSGHDR, FMSGSHDR, ILLEGAL:
 			return nil, fmt.Errorf("unexpected %s when parsing message, input: %s", tok, lit)
 		case EMPTY, EOF:

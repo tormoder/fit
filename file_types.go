@@ -148,18 +148,22 @@ func (a *ActivityFile) add(msg reflect.Value) {
 		a.Activity = &tmp
 	case SessionMsg:
 		tmp := x.(SessionMsg)
+		tmp.expandComponents()
 		a.Sessions = append(a.Sessions, &tmp)
 	case LapMsg:
 		tmp := x.(LapMsg)
+		tmp.expandComponents()
 		a.Laps = append(a.Laps, &tmp)
 	case LengthMsg:
 		tmp := x.(LengthMsg)
 		a.Lengths = append(a.Lengths, &tmp)
 	case RecordMsg:
 		tmp := x.(RecordMsg)
+		tmp.expandComponents()
 		a.Records = append(a.Records, &tmp)
 	case EventMsg:
 		tmp := x.(EventMsg)
+		tmp.expandComponents()
 		a.Events = append(a.Events, &tmp)
 	case HrvMsg:
 		tmp := x.(HrvMsg)
@@ -261,12 +265,14 @@ func (c *CourseFile) add(msg reflect.Value) {
 		c.Course = &tmp
 	case LapMsg:
 		tmp := x.(LapMsg)
+		tmp.expandComponents()
 		c.Laps = append(c.Laps, &tmp)
 	case CoursePointMsg:
 		tmp := x.(CoursePointMsg)
 		c.CoursePoints = append(c.CoursePoints, &tmp)
 	case RecordMsg:
 		tmp := x.(RecordMsg)
+		tmp.expandComponents()
 		c.Records = append(c.Records, &tmp)
 	default:
 	}
@@ -349,9 +355,11 @@ func (a *ActivitySummaryFile) add(msg reflect.Value) {
 		a.Activity = &tmp
 	case SessionMsg:
 		tmp := x.(SessionMsg)
+		tmp.expandComponents()
 		a.Sessions = append(a.Sessions, &tmp)
 	case LapMsg:
 		tmp := x.(LapMsg)
+		tmp.expandComponents()
 		a.Laps = append(a.Laps, &tmp)
 	default:
 	}

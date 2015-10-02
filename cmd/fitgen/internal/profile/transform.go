@@ -2,160 +2,226 @@ package profile
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 )
 
-var typeQuirks = map[string]string{
-	"activity": "activity_mode",
-}
-
-type GoType struct {
-	Name          string
-	CamelCaseName string
-	OrigName      string
-	PkgName       string
-	BaseType      string
-	GoBaseType    string
-	InvalidValue  string
-	Values        []ValueTriple
-}
-
-type ValueTriple struct {
-	Name, Value, Comment string
-}
-
-type GoMsg struct {
-	Name          string
-	CamelCaseName string
-	Fields        []*GoField
-}
-
-type GoField struct {
-	DefNum        string
-	Name          string
-	CamelCaseName string
-	Type          string
-	Array         string // 255=N
-	Components    []string
-	Scale         string
-	Offset        string
-	Units         string
-	Bits          []string
-	RefFieldName  []string
-	RefFieldValue []string
-	Comment       string
-	Example       string
-
-	BaseType  string
-	GoType    string
-	GoInvalid string
-
-	DynFields []*GoField
-}
-
-func TransformTypes(types []*Type) (map[string]*GoType, error) {
-	gts := make(map[string]*GoType)
-	for _, t := range types {
-		_, found := timestampTypes[t.Header[tname]]
-		if found {
+func TransformTypes(ptypes []*PType) (map[string]*Type, error) {
+	types := make(map[string]*Type)
+	for _, pt := range ptypes {
+		t := Type{data: pt}
+		skip, err := t.transform()
+		if err != nil {
+			return nil, err
+		}
+		if skip {
 			continue
 		}
-		var gt GoType
-		gt.Name = t.Header[tname]
-		if len(gt.Name) == 0 {
-			return nil, fmt.Errorf("found empty type name in header %q", t.Header)
-		}
-		gt.OrigName = gt.Name
-		gt.CamelCaseName = toCamelCase(gt.Name)
-		gt.PkgName = strings.ToLower(gt.CamelCaseName)
-		gt.BaseType = t.Header[tbtype]
-		gt.GoBaseType, found = baseTypeToGoType[gt.BaseType]
-		if !found {
-			return nil, fmt.Errorf("no go type found for base type: %q", t.Header[tbtype])
-		}
-		gt.InvalidValue, found = baseTypeToInvalidValue[gt.BaseType]
-		if !found {
-			return nil, fmt.Errorf("no invalid value found for base type: %q", gt.BaseType)
-		}
-
-		for _, f := range t.Fields {
-			vt := ValueTriple{
-				Name:    toCamelCase(f[tvalname]),
-				Value:   trimFloat(f[tval]),
-				Comment: f[tcomment],
-			}
-			gt.Values = append(gt.Values, vt)
-		}
-
-		if renamed, found := typeQuirks[gt.Name]; found {
-			gt.Name = renamed
-			gt.CamelCaseName = toCamelCase(gt.Name)
-			gt.PkgName = strings.ToLower(gt.CamelCaseName)
-		}
-
-		gts[gt.CamelCaseName] = &gt
+		types[t.CCName] = &t
 	}
 
-	return gts, nil
+	return types, nil
 }
 
-func TransformMsgs(msgs []*Msg, types map[string]*GoType) ([]*GoMsg, error) {
-	var goMsgs []*GoMsg
-	for _, msg := range msgs {
-		var goMsg GoMsg
-		goMsg.Name = msg.Header[mmsgname]
-		if len(goMsg.Name) == 0 {
+func (t *Type) transform() (skip bool, err error) {
+	_, found := timestampTypes[t.data.Header[tNAME]]
+	if found {
+		return true, nil
+	}
+
+	t.Name = t.data.Header[tNAME]
+	if len(t.Name) == 0 {
+		return false, fmt.Errorf(
+			"found empty type name in header %q",
+			t.data.Header)
+	}
+	t.OrigName = t.Name
+	t.CCName = toCamelCase(t.Name)
+
+	t.PkgName = strings.ToLower(t.CCName)
+	t.BaseType = t.data.Header[tBTYPE]
+	t.GoBaseType, found = baseTypeToGoType[t.BaseType]
+	if !found {
+		return false, fmt.Errorf(
+			"no go type found for base type: %q",
+			t.data.Header[tBTYPE])
+	}
+	t.InvalidValue, found = baseTypeToInvalidValue[t.BaseType]
+	if !found {
+		return false, fmt.Errorf(
+			"no invalid value found for base type: %q",
+			t.BaseType)
+	}
+
+	for _, f := range t.data.Fields {
+		vt := ValueTriple{
+			Name:    toCamelCase(f[tVALNAME]),
+			Value:   trimFloat(f[tVAL]),
+			Comment: f[tCOMMENT],
+		}
+		t.Values = append(t.Values, vt)
+	}
+
+	if renamed, found := typeQuirks[t.Name]; found {
+		t.Name = renamed
+		t.CCName = toCamelCase(t.Name)
+		t.PkgName = strings.ToLower(t.CCName)
+	}
+
+	return false, nil
+}
+
+func TransformMsgs(pmsgs []*PMsg, types map[string]*Type) ([]*Msg, error) {
+	var msgs []*Msg
+	for _, pmsg := range pmsgs {
+		msg := Msg{
+			Name:        pmsg.Header[mMSGNAME],
+			FieldByName: make(map[string]*Field),
+		}
+
+		if len(msg.Name) == 0 {
 			return nil, fmt.Errorf(
 				"found empty message name in header %q",
-				msg.Header,
-			)
+				pmsg.Header)
 		}
-		goMsg.CamelCaseName = toCamelCase(goMsg.Name)
+		msg.CCName = toCamelCase(msg.Name)
+		debugln("transforming message", msg.CCName)
 
-		for _, msgField := range msg.Fields {
-			regField, err := parseField(msgField.RegField, types)
+		for _, pfield := range pmsg.Fields {
+			f := &Field{data: pfield.Field}
+			skip, err := f.transform(false, types)
 			if err != nil {
 				return nil, err
 			}
-			if regField == nil {
+			if skip {
 				continue
 			}
-			goMsg.Fields = append(goMsg.Fields, regField)
-			if len(msgField.DynFields) == 0 {
+			msg.Fields = append(msg.Fields, f)
+			msg.FieldByName[f.CCName] = f
+			if len(pfield.Subfields) == 0 {
 				continue
 			}
-			for _, df := range msgField.DynFields {
-				dynField, err := parseField(df, types)
+
+			for _, sfield := range pfield.Subfields {
+				sf := &Field{data: sfield}
+				skip, err := sf.transform(true, types)
 				if err != nil {
-					return nil, err
+					return nil, fmt.Errorf("error parsing subfield: %v", err)
 				}
-				if dynField != nil {
-					regField.DynFields = append(regField.DynFields, dynField)
+				if skip {
+					continue
 				}
+				f.Subfields = append(f.Subfields, sf)
 			}
 		}
-		goMsgs = append(goMsgs, &goMsg)
+		msgs = append(msgs, &msg)
 	}
 
-	return goMsgs, nil
+	return msgs, nil
 }
 
-func parseField(mff []string, types map[string]*GoType) (*GoField, error) {
-	var (
-		f     GoField
-		ft    string
-		found bool
-	)
-
-	if mff[mexample] == "" {
-		return nil, nil
+func (f *Field) transform(subfield bool, types map[string]*Type) (skip bool, err error) {
+	if f.data[mEXAMPLE] == "" {
+		return true, nil
 	}
 
-	f.DefNum = trimFloat(mff[mfdefn])
-	f.Name = mff[mfname]
-	f.CamelCaseName = toCamelCase(f.Name)
+	f.DefNum = trimFloat(f.data[mFDEFN])
+	f.Name = f.data[mFNAME]
+	f.CCName = toCamelCase(f.Name)
 
-	typeName := mff[mftype]
+	f.parseBaseType(types)
+	err = f.parseType(types)
+	if err != nil {
+		return false, err
+	}
+
+	f.parseArray()
+
+	f.Units = f.data[mUNITS]
+	f.Comment = f.data[mCOMMENT]
+	f.Example = trimFloat(f.data[mEXAMPLE])
+
+	if subfield {
+		f.parseRefFields()
+	}
+
+	if f.data[mCOMPS] == "" {
+		f.parseScaleOffset()
+		return false, nil
+	}
+
+	err = f.parseComponents(types)
+	if err != nil {
+		return false, err
+	}
+
+	return false, nil
+}
+
+func (f *Field) parseType(types map[string]*Type) error {
+	switch {
+	case strings.HasSuffix(f.Name, "_lat"):
+		f.Type = "Latitude"
+		f.GoType = "lat"
+		f.GoInvalid = "0x7FFFFFFF"
+	case strings.HasSuffix(f.Name, "_long"):
+		f.Type = "Longitude"
+		f.GoType = "lng"
+		f.GoInvalid = "0x7FFFFFFF"
+	default:
+		ft := f.data[mFTYPE]
+		_, found := timestampTypes[ft]
+		if found {
+			f.Type = "time.Time"
+			f.GoInvalid = "timeBase"
+			if strings.HasPrefix(ft, "local") {
+				f.GoType = "timelocal"
+			} else {
+				f.GoType = "timeutc"
+			}
+			return nil
+		}
+
+		f.GoType = "fit"
+
+		if renamed, shouldRename := typeQuirks[ft]; shouldRename {
+			f.Type = toCamelCase(renamed)
+		} else {
+			if btype, isBaseType := baseTypeToGoType[ft]; isBaseType {
+				f.Type = btype
+			} else {
+				f.Type = toCamelCase(ft)
+			}
+		}
+
+		tdef, tfound := types[f.Type]
+		if tfound {
+			f.GoInvalid = tdef.InvalidValue
+			return nil
+		}
+
+		if f.Type == "Bool" { // Special case for now.
+			f.GoInvalid = "0xFF"
+			return nil
+		}
+
+		// Assume base type.
+		val, vfound := goBaseTypeToInvalidValue[f.Type]
+		if !vfound {
+			return fmt.Errorf(
+				"base type for type %q not found",
+				f.Type,
+			)
+		}
+		f.GoInvalid = val
+		f.BTInvalid = val // GoInvalid may be overwritten in parseArray.
+	}
+
+	return nil
+}
+
+func (f *Field) parseBaseType(types map[string]*Type) {
+	typeName := f.data[mFTYPE]
 	if rewrite, tfound := typeQuirks[typeName]; tfound {
 		typeName = rewrite
 	}
@@ -172,83 +238,11 @@ func parseField(mff []string, types map[string]*GoType) (*GoField, error) {
 			f.BaseType = "fit" + toCamelCase(typeName)
 		}
 	}
+}
 
-	switch {
-	case mff[mscale] != "" && mff[mcomps] == "":
-		scaleSplit := strings.Split(mff[mscale], ",")
-		f.Scale = scaleSplit[0]
-		if mff[moffset] != "" {
-			f.Offset = trimFloat(mff[moffset])
-		} else {
-			f.Offset = "0"
-		}
-		f.Type = "float64"
-		f.GoType = "float"
-		f.GoInvalid = "0xFFFFFFFFFFFFFFFF"
-	case strings.HasSuffix(f.Name, "_lat"):
-		f.Type = "Latitude"
-		f.Scale = "0"
-		f.Offset = "0"
-		f.GoType = "lat"
-		f.GoInvalid = "0x7FFFFFFF"
-	case strings.HasSuffix(f.Name, "_long"):
-		f.Type = "Longitude"
-		f.Scale = "0"
-		f.Offset = "0"
-		f.GoType = "lng"
-		f.GoInvalid = "0x7FFFFFFF"
-	default:
-		ft = mff[mftype]
-		_, found = timestampTypes[ft]
-		if found {
-			f.Type = "time.Time"
-			f.Scale = "0"
-			f.Offset = "0"
-			f.GoInvalid = "timeBase"
-			if strings.HasPrefix(ft, "local") {
-				f.GoType = "timelocal"
-			} else {
-				f.GoType = "timeutc"
-			}
-		} else {
-			if renamed, shouldRename := typeQuirks[ft]; shouldRename {
-				f.Type = toCamelCase(renamed)
-			} else {
-				if btype, isBaseType := baseTypeToGoType[ft]; isBaseType {
-					f.Type = btype
-				} else {
-					f.Type = toCamelCase(ft)
-				}
-			}
-
-			f.Scale = "0"
-			f.Offset = "0"
-			f.GoType = "fit"
-
-			typeDef, tfound := types[f.Type]
-			if !tfound {
-				// special case for now
-				if f.Type == "Bool" {
-					f.GoInvalid = "0xFF"
-				} else {
-					// Assume base type.
-					invalidValue, bfound := goBaseTypeToInvalidValue[f.Type]
-					if !bfound {
-						return nil, fmt.Errorf(
-							"TransformMsgs: base type for type %q not found",
-							f.Type,
-						)
-					}
-					f.GoInvalid = invalidValue
-				}
-			} else {
-				f.GoInvalid = typeDef.InvalidValue
-			}
-		}
-	}
-
+func (f *Field) parseArray() {
 	arrayStr := strings.TrimFunc(
-		mff[marray], func(r rune) bool {
+		f.data[mARRAY], func(r rune) bool {
 			if r == '[' || r == ']' {
 				return true
 			}
@@ -264,15 +258,10 @@ func parseField(mff []string, types map[string]*GoType) (*GoField, error) {
 		f.Array = arrayStr
 		f.GoInvalid = "nil"
 	}
+}
 
-	if mff[mcomps] != "" {
-		f.Components = strings.Split(mff[mcomps], ",")
-		f.Bits = strings.Split(mff[mbits], ",")
-	}
-
-	f.Units = mff[munits]
-
-	f.RefFieldName = strings.Split(mff[mrfname], ",")
+func (f *Field) parseRefFields() {
+	f.RefFieldName = strings.Split(f.data[mRFNAME], ",")
 	if len(f.RefFieldName) > 0 {
 		for i, rfn := range f.RefFieldName {
 			tmp := strings.TrimSpace(rfn)
@@ -280,15 +269,129 @@ func parseField(mff []string, types map[string]*GoType) (*GoField, error) {
 		}
 	}
 
-	f.RefFieldValue = strings.Split(mff[mrfval], ",")
+	f.RefFieldValue = strings.Split(f.data[mRFVAL], ",")
 	if len(f.RefFieldValue) > 0 {
 		for i, rfv := range f.RefFieldValue {
 			tmp := strings.TrimSpace(rfv)
 			f.RefFieldValue[i] = toCamelCase(tmp)
 		}
 	}
-	f.Comment = mff[mcomment]
-	f.Example = trimFloat(mff[mexample])
+}
 
-	return &f, nil
+func (f *Field) parseScaleOffset() {
+	if f.data[mSCALE] == "" {
+		return
+	}
+	f.Scale = f.data[mSCALE]
+	if f.data[mOFFSET] != "" {
+		f.Offset = trimFloat(f.data[mOFFSET])
+	}
+}
+
+func (f *Field) parseComponents(types map[string]*Type) error {
+	if f.data[mCOMPS] == "" {
+		return nil
+	}
+
+	debugln("parsing components for field", f.CCName)
+
+	switch f.BaseType {
+	case "fitUint8", "fitUint16", "fitUint32":
+	case "fitByte":
+		if f.Array == "0" {
+			return fmt.Errorf("parseComponents: base type was byte but not an array")
+		}
+	default:
+		return fmt.Errorf(
+			"parseComponents: unhandled base type (%s) for field %s",
+			f.BaseType, f.CCName)
+	}
+
+	components := strings.Split(f.data[mCOMPS], ",")
+	if len(components) == 0 {
+		return fmt.Errorf("parseComponents: zero components after string split")
+	}
+
+	bits := strings.Split(f.data[mBITS], ",")
+	if len(components) != len(bits) {
+		return fmt.Errorf(
+			"parseComponents: number of components (%d) and bits (%d) differ",
+			len(components), len(bits))
+	}
+
+	accumulate := strings.Split(f.data[mACCUMU], ",")
+	if len(accumulate) == 1 && accumulate[0] == "" {
+		accumulate = nil
+	}
+
+	if len(accumulate) > 0 && (len(accumulate) != len(components)) {
+		return fmt.Errorf(
+			"parseComponents: number of components (%d) and accumulate flags (%d) differ",
+			len(components), len(accumulate))
+	}
+
+	f.Components = make([]Component, len(components))
+
+	var (
+		err       error
+		bitsTotal int
+	)
+
+	for i, comp := range components {
+		f.Components[i].Name = strings.TrimSpace(comp)
+		f.Components[i].Name = toCamelCase(f.Components[i].Name)
+		f.Components[i].Bits = strings.TrimSpace(bits[i])
+		f.Components[i].Bits = trimFloat(f.Components[i].Bits)
+		f.Components[i].BitsInt, err = strconv.Atoi(f.Components[i].Bits)
+		if err != nil {
+			return fmt.Errorf("parseComponents: error converting bit to integer: %v", err)
+		}
+		bitsTotal += f.Components[i].BitsInt
+		if len(accumulate) == len(components) {
+			tmp := strings.TrimSpace(accumulate[i])
+			tmp = trimFloat(tmp)
+			f.Components[i].Accumulate, err = strconv.ParseBool(tmp)
+			if err != nil {
+				return fmt.Errorf("parseComponents: %v", err)
+			}
+		}
+	}
+
+	if bitsTotal > 32 || bitsTotal < 0 {
+		return fmt.Errorf("parseComponents: illegal size for total number of bits: %d", bitsTotal)
+	}
+
+	if len(components) == 1 {
+		// Set any scale on the "main" field.
+		// TODO(tormoder): Verify that this is correct.
+		f.parseScaleOffset()
+		return nil
+	}
+
+	cscale := strings.Split(f.data[mSCALE], ",")
+	coffset := strings.Split(f.data[mOFFSET], ",")
+
+	if len(coffset) == 1 && coffset[0] == "" {
+		coffset = nil
+	}
+	if len(cscale) != len(components) {
+		return fmt.Errorf(
+			"parseComponents: number of components (%d) and scales (%d) differ",
+			len(components), len(cscale))
+	}
+	if len(coffset) != 0 && len(coffset) != len(components) {
+		return fmt.Errorf(
+			"parseComponents: #offset != 0 and number of components (%d) and offsets (%d) differ",
+			len(components), len(coffset))
+	}
+
+	for i := range f.Components {
+		f.Components[i].Scale = strings.TrimSpace(cscale[i])
+		if len(coffset) == 0 {
+			continue
+		}
+		f.Components[i].Offset = strings.TrimSpace(coffset[i])
+	}
+
+	return nil
 }

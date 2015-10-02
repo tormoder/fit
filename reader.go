@@ -774,12 +774,19 @@ func (d *decoder) parseDataFields(dm *defmsg, knownMsg bool, msgv reflect.Value)
 			d.lastTimeOffset = int32(d.timestamp & compressedTimeMask)
 			fieldv.Set(reflect.ValueOf(t))
 		case timelocal:
-			// TODO: Improve. This is not so easy... We have offset
-			// from UTC, but getting actual timezone is complex.
-			// Daylight savings etc. Could take GPS coordinates
-			// into account, but ugh... For now use a custom
-			// timezone with the calculated offset to indicated
-			// that it is not UTC.
+			/*
+				TODO(tormoder): Improve. This is not so easy...
+				We have offset from UTC, but getting actual
+				timezone is complex. Could take GPS
+				coordinates into account, but ugh...
+
+				Update - this actually exists for Go
+				https://github.com/bradfitz/latlong
+
+				For now use a custom timezone with the
+				calculated offset to indicated that it is not
+				UTC.
+			*/
 			u32 := dm.arch.Uint32(d.tmp[:fitUint32.size()])
 			local := decodeDateTime(u32)
 			utc := decodeDateTime(d.timestamp)
@@ -795,106 +802,6 @@ func (d *decoder) parseDataFields(dm *defmsg, knownMsg bool, msgv reflect.Value)
 			i32 := dm.arch.Uint32(d.tmp[:fitSint32.size()])
 			lng := NewLongitudeSemicircles(int32(i32))
 			fieldv.Set(reflect.ValueOf(lng))
-		case float:
-			if !dbt.integer() {
-				return reflect.Value{},
-					fmt.Errorf(
-						"field %d for message %v is not an integer and can't be scaled",
-						pfield.num, dm.globalMsgNum,
-					)
-			}
-
-			if pfield.array == 0 {
-				switch dbt {
-				case fitSint8:
-					s8 := int8(d.tmp[0])
-					fieldv.SetFloat(float64(
-						float32(s8)/pfield.scale - float32(pfield.offset)),
-					)
-				case fitUint8, fitUint8z:
-					u8 := uint8(d.tmp[0])
-					fieldv.SetFloat(float64(
-						float32(u8)/pfield.scale - float32(pfield.offset)),
-					)
-				case fitSint16:
-					i16 := int16(dm.arch.Uint16(d.tmp[:dsize]))
-					fieldv.SetFloat(
-						float64(float32(i16)/pfield.scale - float32(pfield.offset)),
-					)
-				case fitUint16, fitUint16z:
-					u16 := uint16(dm.arch.Uint16(d.tmp[:dsize]))
-					fieldv.SetFloat(
-						float64(float32(u16)/pfield.scale - float32(pfield.offset)),
-					)
-				case fitSint32:
-					i32 := int32(dm.arch.Uint32(d.tmp[:dsize]))
-					fieldv.SetFloat(
-						float64(float32(i32)/pfield.scale - float32(pfield.offset)),
-					)
-				case fitUint32, fitUint32z:
-					u32 := uint32(dm.arch.Uint32(d.tmp[:dsize]))
-					fieldv.SetFloat(float64(
-						float32(u32)/pfield.scale - float32(pfield.offset)),
-					)
-				}
-			} else {
-				slicev := reflect.MakeSlice(
-					reflect.TypeOf([]float64{}),
-					dsize/dbt.size(),
-					dsize/dbt.size(),
-				)
-				switch dbt {
-				case fitSint8:
-					for j := 0; j < dsize; j += dbt.size() {
-						s8 := int8(d.tmp[j])
-						f64 := float64(
-							float32(s8)/pfield.scale - float32(pfield.offset),
-						)
-						slicev.Index(j).Set(reflect.ValueOf(f64))
-					}
-				case fitUint8, fitUint8z:
-					for j := 0; j < dsize; j += dbt.size() {
-						u8 := uint8(d.tmp[j])
-						f64 := float64(
-							float32(u8)/pfield.scale - float32(pfield.offset),
-						)
-						slicev.Index(j).Set(reflect.ValueOf(f64))
-					}
-				case fitSint16:
-					for j, k := 0, 0; j < dsize; j, k = j+dbt.size(), k+1 {
-						i16 := int16(dm.arch.Uint16(d.tmp[j : j+dbt.size()]))
-						f64 := float64(
-							float32(i16)/pfield.scale - float32(pfield.offset),
-						)
-						slicev.Index(k).Set(reflect.ValueOf(f64))
-					}
-				case fitUint16, fitUint16z:
-					for j, k := 0, 0; j < dsize; j, k = j+dbt.size(), k+1 {
-						u16 := uint16(dm.arch.Uint16(d.tmp[j : j+dbt.size()]))
-						f64 := float64(
-							float32(u16)/pfield.scale - float32(pfield.offset),
-						)
-						slicev.Index(k).Set(reflect.ValueOf(f64))
-					}
-				case fitSint32:
-					for j, k := 0, 0; j < dsize; j, k = j+dbt.size(), k+1 {
-						i32 := int32(dm.arch.Uint32(d.tmp[j : j+dbt.size()]))
-						f64 := float64(
-							float32(i32)/pfield.scale - float32(pfield.offset),
-						)
-						slicev.Index(k).Set(reflect.ValueOf(f64))
-					}
-				case fitUint32, fitUint32z:
-					for j, k := 0, 0; j < dsize; j, k = j+dbt.size(), k+1 {
-						u32 := uint32(dm.arch.Uint32(d.tmp[j : j+dbt.size()]))
-						f64 := float64(
-							float32(u32)/pfield.scale - float32(pfield.offset),
-						)
-						slicev.Index(k).Set(reflect.ValueOf(f64))
-					}
-				}
-				fieldv.Set(slicev)
-			}
 		default:
 			panic("parseDataFields: unreachable")
 		}

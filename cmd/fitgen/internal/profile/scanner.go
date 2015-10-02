@@ -94,13 +94,13 @@ func (s *Scanner) tscan() (tok Token, lit []string) {
 	if ch == nil {
 		return EOF, nil
 	}
-	if ch[tname] != "" {
-		if ch[tvalname] != "" {
+	if ch[tNAME] != "" {
+		if ch[tVALNAME] != "" {
 			return CSVHDR, ch
 		}
 		return THDR, ch
 	}
-	if ch[tvalname] == "" {
+	if ch[tVALNAME] == "" {
 		return EMPTY, ch
 	}
 	return TFIELD, ch
@@ -113,22 +113,22 @@ func (s *Scanner) mscan() (tok Token, lit []string) {
 		return EOF, nil
 	}
 
-	if ch[mmsgname] != "" {
+	if ch[mMSGNAME] != "" {
 		// not empty: CSVHDR, MSGHDR
-		if ch[mfdefn] == "" {
+		if ch[mFDEFN] == "" {
 			return MSGHDR, ch
 		}
 		return CSVHDR, ch
 	}
 
-	if ch[mfdefn] == "" {
+	if ch[mFDEFN] == "" {
 		// fdefn empty: can be FMSGHDR, EMPTY, DYNMSGFIELD
-		if ch[mfname] == "" {
+		if ch[mFNAME] == "" {
 			// fname empty: FMSGSHDR, EMPTY
 			switch {
-			case ch[mftype] != "":
+			case ch[mFTYPE] != "":
 				return FMSGSHDR, ch
-			case isempty(ch[mftype:]):
+			case isempty(ch[mFTYPE:]):
 				return EMPTY, ch
 			default:
 				return ILLEGAL, ch

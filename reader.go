@@ -854,7 +854,7 @@ func (d *decoder) parseDataFields(dm *defmsg, knownMsg bool, msgv reflect.Value)
 					}
 				case fitUint8, fitUint8z:
 					for j := 0; j < dsize; j += dbt.size() {
-						u8 := uint8(d.tmp[i])
+						u8 := uint8(d.tmp[j])
 						f64 := float64(
 							float32(u8)/pfield.scale - float32(pfield.offset),
 						)

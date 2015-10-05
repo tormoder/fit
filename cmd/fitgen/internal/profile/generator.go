@@ -141,6 +141,7 @@ func (g *Generator) genMsgs(msgs []*GoMsg) {
 	g.p("import \"time\"")
 	g.p()
 	for _, msg := range msgs {
+		g.p("// ", msg.CamelCaseName, " represents the ", msg.Name, " FIT message type.")
 		g.p("type ", msg.CamelCaseName, "Msg", " struct {")
 		dynFieldsIdx := g.genFields(msg)
 		if len(dynFieldsIdx) == 0 {

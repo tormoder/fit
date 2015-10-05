@@ -2,6 +2,8 @@ package fit
 
 import "reflect"
 
+// ActivityFile represents the Activity FIT file type.
+// Records sensor data and events from active sessions.
 type ActivityFile struct {
 	Activity *ActivityMsg
 	Sessions []*SessionMsg
@@ -12,6 +14,8 @@ type ActivityFile struct {
 	Hrvs     []*HrvMsg
 }
 
+// DeviceFile represents the Device FIT file type.
+// Describes a device's file structure and capabilities.
 type DeviceFile struct {
 	Softwares         []*SoftwareMsg
 	Capabilities      []*CapabilitiesMsg
@@ -20,6 +24,9 @@ type DeviceFile struct {
 	FieldCapabilities []*FieldCapabilitiesMsg
 }
 
+// SettingsFile represents the Settings FIT file type.
+// Describes a user’s parameters such as Age & Weight as well as device
+// settings.
 type SettingsFile struct {
 	UserProfiles   []*UserProfileMsg
 	HrmProfiles    []*HrmProfileMsg
@@ -28,6 +35,8 @@ type SettingsFile struct {
 	DeviceSettings []*DeviceSettingsMsg
 }
 
+// SportFile represents the Sport Settings FIT file type.
+// Describes a user’s desired sport/zone settings.
 type SportFile struct {
 	ZonesTarget  *ZonesTargetMsg
 	Sport        *SportMsg
@@ -38,11 +47,16 @@ type SportFile struct {
 	CadenceZones []*CadenceZoneMsg
 }
 
+// WorkoutFile represents the Workout FIT file type.
+// Describes a structured activity that can be designed on a computer and
+// transferred to a display device to guide a user through the activity.
 type WorkoutFile struct {
 	Workout      *WorkoutMsg
 	WorkoutSteps []*WorkoutStepMsg
 }
 
+// CourseFile represents the Course FIT file type.
+// Uses data from an activity to recreate a course.
 type CourseFile struct {
 	Course       *CourseMsg
 	Laps         []*LapMsg
@@ -50,49 +64,69 @@ type CourseFile struct {
 	Records      []*RecordMsg
 }
 
+// SchedulesFile represents the Schedules FIT file type.
+// Provides scheduling of workouts and courses.
 type SchedulesFile struct {
 	Schedules []*ScheduleMsg
 }
 
+// WeightFile represents the Weight FIT file type.
+// Records weight scale data.
 type WeightFile struct {
 	UserProfile  *UserProfileMsg
 	WeightScales []*WeightScaleMsg
 }
 
+// TotalsFile represents the Totals FIT file type.
+// Summarizes a user’s total activity, characterized by sport.
 type TotalsFile struct {
 	Totals []*TotalsMsg
 }
 
+// GoalsFile represents the Goals FIT file type.
+// Describes a user’s exercise/health goals.
 type GoalsFile struct {
 	Goals []*GoalMsg
 }
 
+// BloodPressureFile represents the Bload Pressure FIT file type.
+// Records blood pressure data.
 type BloodPressureFile struct {
 	UserProfile    *UserProfileMsg
 	BloodPressures []*BloodPressureMsg
 }
 
+// MonitoringAFile represents the MonitoringA FIT file type.
+// Records detailed monitoring data (i.e. logging interval < 24 Hr).
 type MonitoringAFile struct {
 	MonitoringInfo *MonitoringInfoMsg
 	Monitorings    []*MonitoringMsg
 }
 
+// ActivitySummaryFile represents the Activity Summary FIT file type.
+// Similar to Activity file, contains summary information only.
 type ActivitySummaryFile struct {
 	Activity *ActivityMsg
 	Sessions []*SessionMsg
 	Laps     []*LapMsg
 }
 
+// MonitoringDailyFile represents the Daily Monitoring FIT file type.
+// Records daily summary monitoring data (i.e. logging interval = 24 hour).
 type MonitoringDailyFile struct {
 	MonitoringInfo *MonitoringInfoMsg
 	Monitorings    []*MonitoringMsg
 }
 
+// MonitoringBFile represents the MonitoringB FIT file type.
+// Records detailed monitoring data (i.e. logging interval < 24 Hr).
 type MonitoringBFile struct {
 	MonitoringInfo *MonitoringInfoMsg
 	Monitorings    []*MonitoringMsg
 }
 
+// SegmentFile represents the Segment FIT file type.
+// Describes timing data for virtual races.
 type SegmentFile struct {
 	SegmentId               *SegmentIdMsg
 	SegmentLeaderboardEntry *SegmentLeaderboardEntryMsg
@@ -100,6 +134,8 @@ type SegmentFile struct {
 	SegmentPoints           []*SegmentPointMsg
 }
 
+// SegmentListFile represents the Segment List FIT file type.
+// Describes available segments.
 type SegmentListFile struct {
 	SegmentFiles []*SegmentFileMsg
 }

@@ -36,13 +36,10 @@ vet:
 
 lint:
 	golint . | \
-		grep -v types_string.go | \
 		grep -v types.go | \
 		grep -v types_man.go | \
+		grep -v types_string.go | \
 		grep -v messages.go | \
-		grep -v profile.go | \
-		grep -v stringer.go | \
-		grep -v fileId | \
 		grep -v FileId
 	golint dyncrc16
 	golint cmd/fitgen

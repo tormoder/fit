@@ -12,6 +12,7 @@ var typeQuirks = map[string]string{
 type GoType struct {
 	Name          string
 	CamelCaseName string
+	OrigName      string
 	PkgName       string
 	BaseType      string
 	GoBaseType    string
@@ -64,7 +65,8 @@ func TransformTypes(types []*Type) (map[string]*GoType, error) {
 		if len(gt.Name) == 0 {
 			return nil, fmt.Errorf("found empty type name in header %q", t.Header)
 		}
-		gt.CamelCaseName = toCamelCase(t.Header[tname])
+		gt.OrigName = gt.Name
+		gt.CamelCaseName = toCamelCase(gt.Name)
 		gt.PkgName = strings.ToLower(gt.CamelCaseName)
 		gt.BaseType = t.Header[tbtype]
 		gt.GoBaseType, found = baseTypeToGoType[gt.BaseType]
@@ -90,8 +92,10 @@ func TransformTypes(types []*Type) (map[string]*GoType, error) {
 			gt.CamelCaseName = toCamelCase(gt.Name)
 			gt.PkgName = strings.ToLower(gt.CamelCaseName)
 		}
+
 		gts[gt.CamelCaseName] = &gt
 	}
+
 	return gts, nil
 }
 

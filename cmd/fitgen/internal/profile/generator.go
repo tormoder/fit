@@ -121,6 +121,7 @@ func (g *Generator) genTypes(types map[string]*GoType) {
 
 	for _, tkey := range tkeys {
 		t := types[tkey]
+		g.p("// ", t.CamelCaseName, " represents the ", t.OrigName, " FIT type.")
 		g.p("type ", t.CamelCaseName, " ", t.GoBaseType)
 		g.p()
 		g.p("const (")

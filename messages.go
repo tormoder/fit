@@ -2,12 +2,13 @@
 // program found in 'cmd/fitgen/main.go'
 // DO NOT EDIT.
 // SDK Version: 16.10
-// Generation time: Mon Sep 28 11:04:08 UTC 2015
+// Generation time: Tue Oct  6 17:37:03 UTC 2015
 
 package fit
 
 import "time"
 
+// FileId represents the file_id FIT message type.
 type FileIdMsg struct {
 	Type         File
 	Manufacturer Manufacturer
@@ -18,6 +19,10 @@ type FileIdMsg struct {
 	ProductName  string    // Optional free form string to indicate the devices name or model
 }
 
+// GetProduct returns the appropriate Product
+// subfield if a matching reference field/value combination is found.
+// If none of the reference field/value combinations are true
+// then the main field is returned.
 func (x *FileIdMsg) GetProduct() interface{} {
 	switch x.Manufacturer {
 	case ManufacturerGarmin, ManufacturerDynastream, ManufacturerDynastreamOem:
@@ -27,25 +32,33 @@ func (x *FileIdMsg) GetProduct() interface{} {
 	}
 }
 
+// FileCreator represents the file_creator FIT message type.
 type FileCreatorMsg struct {
 	SoftwareVersion uint16
 	HardwareVersion uint8
 }
 
+// TimestampCorrelation represents the timestamp_correlation FIT message type.
 type TimestampCorrelationMsg struct {
 }
 
+// Software represents the software FIT message type.
 type SoftwareMsg struct {
 	MessageIndex MessageIndex
 	Version      float64
 	PartNumber   string
 }
 
+// SlaveDevice represents the slave_device FIT message type.
 type SlaveDeviceMsg struct {
 	Manufacturer Manufacturer
 	Product      uint16
 }
 
+// GetProduct returns the appropriate Product
+// subfield if a matching reference field/value combination is found.
+// If none of the reference field/value combinations are true
+// then the main field is returned.
 func (x *SlaveDeviceMsg) GetProduct() interface{} {
 	switch x.Manufacturer {
 	case ManufacturerGarmin, ManufacturerDynastream, ManufacturerDynastreamOem:
@@ -55,6 +68,7 @@ func (x *SlaveDeviceMsg) GetProduct() interface{} {
 	}
 }
 
+// Capabilities represents the capabilities FIT message type.
 type CapabilitiesMsg struct {
 	Languages             []uint8      // Use language_bits_x types where x is index of array.
 	Sports                []SportBits0 // Use sport_bits_x types where x is index of array.
@@ -62,6 +76,7 @@ type CapabilitiesMsg struct {
 	ConnectivitySupported ConnectivityCapabilities
 }
 
+// FileCapabilities represents the file_capabilities FIT message type.
 type FileCapabilitiesMsg struct {
 	MessageIndex MessageIndex
 	Type         File
@@ -71,6 +86,7 @@ type FileCapabilitiesMsg struct {
 	MaxSize      uint32
 }
 
+// MesgCapabilities represents the mesg_capabilities FIT message type.
 type MesgCapabilitiesMsg struct {
 	MessageIndex MessageIndex
 	File         File
@@ -79,6 +95,10 @@ type MesgCapabilitiesMsg struct {
 	Count        uint16
 }
 
+// GetCount returns the appropriate Count
+// subfield if a matching reference field/value combination is found.
+// If none of the reference field/value combinations are true
+// then the main field is returned.
 func (x *MesgCapabilitiesMsg) GetCount() interface{} {
 	switch x.CountType {
 	case MesgCountNumPerFile:
@@ -92,6 +112,7 @@ func (x *MesgCapabilitiesMsg) GetCount() interface{} {
 	}
 }
 
+// FieldCapabilities represents the field_capabilities FIT message type.
 type FieldCapabilitiesMsg struct {
 	MessageIndex MessageIndex
 	File         File
@@ -100,12 +121,14 @@ type FieldCapabilitiesMsg struct {
 	Count        uint16
 }
 
+// DeviceSettings represents the device_settings FIT message type.
 type DeviceSettingsMsg struct {
 	ActiveTimeZone uint8     // Index into time zone arrays.
 	UtcOffset      uint32    // Offset from system time. Required to convert timestamp from system time to UTC.
 	TimeZoneOffset []float64 // timezone offset in 1/4 hour increments
 }
 
+// UserProfile represents the user_profile FIT message type.
 type UserProfileMsg struct {
 	MessageIndex               MessageIndex
 	FriendlyName               string
@@ -132,6 +155,7 @@ type UserProfileMsg struct {
 	HeightSetting              DisplayMeasure
 }
 
+// HrmProfile represents the hrm_profile FIT message type.
 type HrmProfileMsg struct {
 	MessageIndex      MessageIndex
 	Enabled           Bool
@@ -140,6 +164,7 @@ type HrmProfileMsg struct {
 	HrmAntIdTransType uint8
 }
 
+// SdmProfile represents the sdm_profile FIT message type.
 type SdmProfileMsg struct {
 	MessageIndex      MessageIndex
 	Enabled           Bool
@@ -151,6 +176,7 @@ type SdmProfileMsg struct {
 	OdometerRollover  uint8 // Rollover counter that can be used to extend the odometer
 }
 
+// BikeProfile represents the bike_profile FIT message type.
 type BikeProfileMsg struct {
 	MessageIndex             MessageIndex
 	Name                     string
@@ -186,6 +212,7 @@ type BikeProfileMsg struct {
 	ShimanoDi2Enabled        Bool
 }
 
+// ZonesTarget represents the zones_target FIT message type.
 type ZonesTargetMsg struct {
 	MaxHeartRate             uint8
 	ThresholdHeartRate       uint8
@@ -194,36 +221,42 @@ type ZonesTargetMsg struct {
 	PwrCalcType              PwrZoneCalc
 }
 
+// Sport represents the sport FIT message type.
 type SportMsg struct {
 	Sport    Sport
 	SubSport SubSport
 	Name     string
 }
 
+// HrZone represents the hr_zone FIT message type.
 type HrZoneMsg struct {
 	MessageIndex MessageIndex
 	HighBpm      uint8
 	Name         string
 }
 
+// SpeedZone represents the speed_zone FIT message type.
 type SpeedZoneMsg struct {
 	MessageIndex MessageIndex
 	HighValue    float64
 	Name         string
 }
 
+// CadenceZone represents the cadence_zone FIT message type.
 type CadenceZoneMsg struct {
 	MessageIndex MessageIndex
 	HighValue    uint8
 	Name         string
 }
 
+// PowerZone represents the power_zone FIT message type.
 type PowerZoneMsg struct {
 	MessageIndex MessageIndex
 	HighValue    uint16
 	Name         string
 }
 
+// MetZone represents the met_zone FIT message type.
 type MetZoneMsg struct {
 	MessageIndex MessageIndex
 	HighBpm      uint8
@@ -231,6 +264,7 @@ type MetZoneMsg struct {
 	FatCalories  float64
 }
 
+// Goal represents the goal FIT message type.
 type GoalMsg struct {
 	MessageIndex    MessageIndex
 	Sport           Sport
@@ -246,6 +280,7 @@ type GoalMsg struct {
 	Enabled         Bool
 }
 
+// Activity represents the activity FIT message type.
 type ActivityMsg struct {
 	Timestamp      time.Time
 	TotalTimerTime float64 // Exclude pauses
@@ -257,6 +292,7 @@ type ActivityMsg struct {
 	EventGroup     uint8
 }
 
+// Session represents the session FIT message type.
 type SessionMsg struct {
 	MessageIndex           MessageIndex // Selected bit is set for the current session.
 	Timestamp              time.Time    // Sesson end time.
@@ -348,6 +384,10 @@ type SessionMsg struct {
 	EnhancedMaxAltitude    float64
 }
 
+// GetTotalCycles returns the appropriate TotalCycles
+// subfield if a matching reference field/value combination is found.
+// If none of the reference field/value combinations are true
+// then the main field is returned.
 func (x *SessionMsg) GetTotalCycles() interface{} {
 	switch x.Sport {
 	case SportRunning, SportWalking:
@@ -357,6 +397,10 @@ func (x *SessionMsg) GetTotalCycles() interface{} {
 	}
 }
 
+// GetAvgCadence returns the appropriate AvgCadence
+// subfield if a matching reference field/value combination is found.
+// If none of the reference field/value combinations are true
+// then the main field is returned.
 func (x *SessionMsg) GetAvgCadence() interface{} {
 	switch x.Sport {
 	case SportRunning:
@@ -366,6 +410,10 @@ func (x *SessionMsg) GetAvgCadence() interface{} {
 	}
 }
 
+// GetMaxCadence returns the appropriate MaxCadence
+// subfield if a matching reference field/value combination is found.
+// If none of the reference field/value combinations are true
+// then the main field is returned.
 func (x *SessionMsg) GetMaxCadence() interface{} {
 	switch x.Sport {
 	case SportRunning:
@@ -375,6 +423,7 @@ func (x *SessionMsg) GetMaxCadence() interface{} {
 	}
 }
 
+// Lap represents the lap FIT message type.
 type LapMsg struct {
 	MessageIndex                  MessageIndex
 	Timestamp                     time.Time // Lap end time.
@@ -460,6 +509,10 @@ type LapMsg struct {
 	EnhancedMaxAltitude           float64
 }
 
+// GetTotalCycles returns the appropriate TotalCycles
+// subfield if a matching reference field/value combination is found.
+// If none of the reference field/value combinations are true
+// then the main field is returned.
 func (x *LapMsg) GetTotalCycles() interface{} {
 	switch x.Sport {
 	case SportRunning, SportWalking:
@@ -469,6 +522,10 @@ func (x *LapMsg) GetTotalCycles() interface{} {
 	}
 }
 
+// GetAvgCadence returns the appropriate AvgCadence
+// subfield if a matching reference field/value combination is found.
+// If none of the reference field/value combinations are true
+// then the main field is returned.
 func (x *LapMsg) GetAvgCadence() interface{} {
 	switch x.Sport {
 	case SportRunning:
@@ -478,6 +535,10 @@ func (x *LapMsg) GetAvgCadence() interface{} {
 	}
 }
 
+// GetMaxCadence returns the appropriate MaxCadence
+// subfield if a matching reference field/value combination is found.
+// If none of the reference field/value combinations are true
+// then the main field is returned.
 func (x *LapMsg) GetMaxCadence() interface{} {
 	switch x.Sport {
 	case SportRunning:
@@ -487,6 +548,7 @@ func (x *LapMsg) GetMaxCadence() interface{} {
 	}
 }
 
+// Length represents the length FIT message type.
 type LengthMsg struct {
 	MessageIndex       MessageIndex
 	Timestamp          time.Time
@@ -508,6 +570,7 @@ type LengthMsg struct {
 	ZoneCount          []uint16 // zone number used as the index
 }
 
+// Record represents the record FIT message type.
 type RecordMsg struct {
 	Timestamp                     time.Time
 	PositionLat                   Latitude
@@ -559,6 +622,7 @@ type RecordMsg struct {
 	EnhancedAltitude              float64
 }
 
+// Event represents the event FIT message type.
 type EventMsg struct {
 	Timestamp     time.Time
 	Event         Event
@@ -574,6 +638,10 @@ type EventMsg struct {
 	RearGear      uint8  // Do not populate directly.  Autogenerated by decoder for gear_change subfield components.  Number of rear teeth.
 }
 
+// GetData returns the appropriate Data
+// subfield if a matching reference field/value combination is found.
+// If none of the reference field/value combinations are true
+// then the main field is returned.
 func (x *EventMsg) GetData() interface{} {
 	switch x.Event {
 	case EventTimer:
@@ -617,6 +685,7 @@ func (x *EventMsg) GetData() interface{} {
 	}
 }
 
+// DeviceInfo represents the device_info FIT message type.
 type DeviceInfoMsg struct {
 	Timestamp           time.Time
 	DeviceIndex         DeviceIndex
@@ -638,6 +707,10 @@ type DeviceInfoMsg struct {
 	ProductName         string // Optional free form string to indicate the devices name or model
 }
 
+// GetDeviceType returns the appropriate DeviceType
+// subfield if a matching reference field/value combination is found.
+// If none of the reference field/value combinations are true
+// then the main field is returned.
 func (x *DeviceInfoMsg) GetDeviceType() interface{} {
 	switch x.SourceType {
 	case SourceTypeAntplus:
@@ -649,6 +722,10 @@ func (x *DeviceInfoMsg) GetDeviceType() interface{} {
 	}
 }
 
+// GetProduct returns the appropriate Product
+// subfield if a matching reference field/value combination is found.
+// If none of the reference field/value combinations are true
+// then the main field is returned.
 func (x *DeviceInfoMsg) GetProduct() interface{} {
 	switch x.Manufacturer {
 	case ManufacturerGarmin, ManufacturerDynastream, ManufacturerDynastreamOem:
@@ -658,6 +735,7 @@ func (x *DeviceInfoMsg) GetProduct() interface{} {
 	}
 }
 
+// TrainingFile represents the training_file FIT message type.
 type TrainingFileMsg struct {
 	Timestamp    time.Time
 	Type         File
@@ -667,6 +745,10 @@ type TrainingFileMsg struct {
 	TimeCreated  time.Time
 }
 
+// GetProduct returns the appropriate Product
+// subfield if a matching reference field/value combination is found.
+// If none of the reference field/value combinations are true
+// then the main field is returned.
 func (x *TrainingFileMsg) GetProduct() interface{} {
 	switch x.Manufacturer {
 	case ManufacturerGarmin, ManufacturerDynastream, ManufacturerDynastreamOem:
@@ -676,34 +758,43 @@ func (x *TrainingFileMsg) GetProduct() interface{} {
 	}
 }
 
+// Hrv represents the hrv FIT message type.
 type HrvMsg struct {
 	Time []float64 // Time between beats
 }
 
+// CameraEvent represents the camera_event FIT message type.
 type CameraEventMsg struct {
 }
 
+// GyroscopeData represents the gyroscope_data FIT message type.
 type GyroscopeDataMsg struct {
 }
 
+// AccelerometerData represents the accelerometer_data FIT message type.
 type AccelerometerDataMsg struct {
 }
 
+// ThreeDSensorCalibration represents the three_d_sensor_calibration FIT message type.
 type ThreeDSensorCalibrationMsg struct {
 }
 
+// VideoFrame represents the video_frame FIT message type.
 type VideoFrameMsg struct {
 }
 
+// ObdiiData represents the obdii_data FIT message type.
 type ObdiiDataMsg struct {
 }
 
+// NmeaSentence represents the nmea_sentence FIT message type.
 type NmeaSentenceMsg struct {
 	Timestamp   time.Time // Timestamp message was output
 	TimestampMs uint16    // Fractional part of timestamp, added to timestamp
 	Sentence    string    // NMEA sentence
 }
 
+// AviationAttitude represents the aviation_attitude FIT message type.
 type AviationAttitudeMsg struct {
 	Timestamp             time.Time // Timestamp message was output
 	TimestampMs           uint16    // Fractional part of timestamp, added to timestamp
@@ -719,30 +810,36 @@ type AviationAttitudeMsg struct {
 	Validity              []AttitudeValidity
 }
 
+// Video represents the video FIT message type.
 type VideoMsg struct {
 }
 
+// VideoTitle represents the video_title FIT message type.
 type VideoTitleMsg struct {
 	MessageIndex MessageIndex // Long titles will be split into multiple parts
 	MessageCount uint16       // Total number of title parts
 	Text         string
 }
 
+// VideoDescription represents the video_description FIT message type.
 type VideoDescriptionMsg struct {
 	MessageIndex MessageIndex // Long descriptions will be split into multiple parts
 	MessageCount uint16       // Total number of description parts
 	Text         string
 }
 
+// VideoClip represents the video_clip FIT message type.
 type VideoClipMsg struct {
 }
 
+// Course represents the course FIT message type.
 type CourseMsg struct {
 	Sport        Sport
 	Name         string
 	Capabilities CourseCapabilities
 }
 
+// CoursePoint represents the course_point FIT message type.
 type CoursePointMsg struct {
 	MessageIndex MessageIndex
 	Timestamp    time.Time
@@ -754,6 +851,7 @@ type CoursePointMsg struct {
 	Favorite     Bool
 }
 
+// SegmentId represents the segment_id FIT message type.
 type SegmentIdMsg struct {
 	Name                  string               // Friendly name assigned to segment
 	Uuid                  string               // UUID of the segment
@@ -766,6 +864,7 @@ type SegmentIdMsg struct {
 	SelectionType         SegmentSelectionType // Indicates how the segment was selected to be sent to the device
 }
 
+// SegmentLeaderboardEntry represents the segment_leaderboard_entry FIT message type.
 type SegmentLeaderboardEntryMsg struct {
 	MessageIndex    MessageIndex
 	Name            string                 // Friendly name assigned to leader
@@ -775,6 +874,7 @@ type SegmentLeaderboardEntryMsg struct {
 	SegmentTime     float64                // Segment Time (includes pauses)
 }
 
+// SegmentPoint represents the segment_point FIT message type.
 type SegmentPointMsg struct {
 	MessageIndex MessageIndex
 	PositionLat  Latitude
@@ -784,6 +884,7 @@ type SegmentPointMsg struct {
 	LeaderTime   []float64 // Accumualted time each leader board member required to reach the described point. This value is zero for all leader board members at the starting point of the segment.
 }
 
+// SegmentLap represents the segment_lap FIT message type.
 type SegmentLapMsg struct {
 	MessageIndex                MessageIndex
 	Timestamp                   time.Time // Lap end time.
@@ -860,6 +961,10 @@ type SegmentLapMsg struct {
 	RearGearShiftCount          uint16
 }
 
+// GetTotalCycles returns the appropriate TotalCycles
+// subfield if a matching reference field/value combination is found.
+// If none of the reference field/value combinations are true
+// then the main field is returned.
 func (x *SegmentLapMsg) GetTotalCycles() interface{} {
 	switch x.Sport {
 	case SportCycling:
@@ -869,6 +974,7 @@ func (x *SegmentLapMsg) GetTotalCycles() interface{} {
 	}
 }
 
+// SegmentFile represents the segment_file FIT message type.
 type SegmentFileMsg struct {
 	MessageIndex          MessageIndex
 	FileUuid              string                   // UUID of the segment file
@@ -879,6 +985,7 @@ type SegmentFileMsg struct {
 	LeaderActivityId      []uint32                 // Activity ID of each leader in the segment file
 }
 
+// Workout represents the workout FIT message type.
 type WorkoutMsg struct {
 	Sport         Sport
 	Capabilities  WorkoutCapabilities
@@ -886,6 +993,7 @@ type WorkoutMsg struct {
 	WktName       string
 }
 
+// WorkoutStep represents the workout_step FIT message type.
 type WorkoutStepMsg struct {
 	MessageIndex          MessageIndex
 	WktStepName           string
@@ -898,6 +1006,10 @@ type WorkoutStepMsg struct {
 	Intensity             Intensity
 }
 
+// GetDurationValue returns the appropriate DurationValue
+// subfield if a matching reference field/value combination is found.
+// If none of the reference field/value combinations are true
+// then the main field is returned.
 func (x *WorkoutStepMsg) GetDurationValue() interface{} {
 	switch x.DurationType {
 	case WktStepDurationTime, WktStepDurationRepetitionTime:
@@ -917,6 +1029,10 @@ func (x *WorkoutStepMsg) GetDurationValue() interface{} {
 	}
 }
 
+// GetTargetValue returns the appropriate TargetValue
+// subfield if a matching reference field/value combination is found.
+// If none of the reference field/value combinations are true
+// then the main field is returned.
 func (x *WorkoutStepMsg) GetTargetValue() interface{} {
 	switch {
 	case x.TargetType == WktStepTargetHeartRate:
@@ -944,6 +1060,10 @@ func (x *WorkoutStepMsg) GetTargetValue() interface{} {
 	}
 }
 
+// GetCustomTargetValueLow returns the appropriate CustomTargetValueLow
+// subfield if a matching reference field/value combination is found.
+// If none of the reference field/value combinations are true
+// then the main field is returned.
 func (x *WorkoutStepMsg) GetCustomTargetValueLow() interface{} {
 	switch x.TargetType {
 	case WktStepTargetSpeed:
@@ -959,6 +1079,10 @@ func (x *WorkoutStepMsg) GetCustomTargetValueLow() interface{} {
 	}
 }
 
+// GetCustomTargetValueHigh returns the appropriate CustomTargetValueHigh
+// subfield if a matching reference field/value combination is found.
+// If none of the reference field/value combinations are true
+// then the main field is returned.
 func (x *WorkoutStepMsg) GetCustomTargetValueHigh() interface{} {
 	switch x.TargetType {
 	case WktStepTargetSpeed:
@@ -974,6 +1098,7 @@ func (x *WorkoutStepMsg) GetCustomTargetValueHigh() interface{} {
 	}
 }
 
+// Schedule represents the schedule FIT message type.
 type ScheduleMsg struct {
 	Manufacturer  Manufacturer // Corresponds to file_id of scheduled workout / course.
 	Product       uint16       // Corresponds to file_id of scheduled workout / course.
@@ -984,6 +1109,10 @@ type ScheduleMsg struct {
 	ScheduledTime time.Time
 }
 
+// GetProduct returns the appropriate Product
+// subfield if a matching reference field/value combination is found.
+// If none of the reference field/value combinations are true
+// then the main field is returned.
 func (x *ScheduleMsg) GetProduct() interface{} {
 	switch x.Manufacturer {
 	case ManufacturerGarmin, ManufacturerDynastream, ManufacturerDynastreamOem:
@@ -993,6 +1122,7 @@ func (x *ScheduleMsg) GetProduct() interface{} {
 	}
 }
 
+// Totals represents the totals FIT message type.
 type TotalsMsg struct {
 	MessageIndex MessageIndex
 	Timestamp    time.Time
@@ -1005,6 +1135,7 @@ type TotalsMsg struct {
 	ActiveTime   uint32
 }
 
+// WeightScale represents the weight_scale FIT message type.
 type WeightScaleMsg struct {
 	Timestamp         time.Time
 	Weight            float64
@@ -1021,6 +1152,7 @@ type WeightScaleMsg struct {
 	UserProfileIndex  MessageIndex // Associates this weight scale message to a user.  This corresponds to the index of the user profile message in the weight scale file.
 }
 
+// BloodPressure represents the blood_pressure FIT message type.
 type BloodPressureMsg struct {
 	Timestamp            time.Time
 	SystolicPressure     uint16
@@ -1035,11 +1167,13 @@ type BloodPressureMsg struct {
 	UserProfileIndex     MessageIndex // Associates this blood pressure message to a user.  This corresponds to the index of the user profile message in the blood pressure file.
 }
 
+// MonitoringInfo represents the monitoring_info FIT message type.
 type MonitoringInfoMsg struct {
 	Timestamp      time.Time
 	LocalTimestamp time.Time // Use to convert activity timestamps to local time if device does not support time zone and daylight savings time correction.
 }
 
+// Monitoring represents the monitoring FIT message type.
 type MonitoringMsg struct {
 	Timestamp       time.Time   // Must align to logging interval, for example, time must be 00:00:00 for daily log.
 	DeviceIndex     DeviceIndex // Associates this data to device_info message.  Not required for file with single device (sensor).
@@ -1055,6 +1189,10 @@ type MonitoringMsg struct {
 	LocalTimestamp  time.Time // Must align to logging interval, for example, time must be 00:00:00 for daily log.
 }
 
+// GetCycles returns the appropriate Cycles
+// subfield if a matching reference field/value combination is found.
+// If none of the reference field/value combinations are true
+// then the main field is returned.
 func (x *MonitoringMsg) GetCycles() interface{} {
 	switch x.ActivityType {
 	case ActivityTypeCycling, ActivityTypeSwimming:
@@ -1064,5 +1202,6 @@ func (x *MonitoringMsg) GetCycles() interface{} {
 	}
 }
 
+// MemoGlob represents the memo_glob FIT message type.
 type MemoGlobMsg struct {
 }

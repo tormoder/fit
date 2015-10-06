@@ -2,10 +2,11 @@
 // program found in 'cmd/fitgen/main.go'
 // DO NOT EDIT.
 // SDK Version: 16.10
-// Generation time: Mon Sep 28 11:04:08 UTC 2015
+// Generation time: Tue Oct  6 17:37:03 UTC 2015
 
 package fit
 
+// ActivityClass represents the activity_class FIT type.
 type ActivityClass byte
 
 const (
@@ -15,6 +16,7 @@ const (
 	ActivityClassInvalid  ActivityClass = 0xFF
 )
 
+// ActivityLevel represents the activity_level FIT type.
 type ActivityLevel byte
 
 const (
@@ -24,6 +26,7 @@ const (
 	ActivityLevelInvalid ActivityLevel = 0xFF
 )
 
+// ActivityMode represents the activity FIT type.
 type ActivityMode byte
 
 const (
@@ -32,6 +35,7 @@ const (
 	ActivityModeInvalid        ActivityMode = 0xFF
 )
 
+// ActivitySubtype represents the activity_subtype FIT type.
 type ActivitySubtype byte
 
 const (
@@ -58,6 +62,7 @@ const (
 	ActivitySubtypeInvalid       ActivitySubtype = 0xFF
 )
 
+// ActivityType represents the activity_type FIT type.
 type ActivityType byte
 
 const (
@@ -72,6 +77,7 @@ const (
 	ActivityTypeInvalid          ActivityType = 0xFF
 )
 
+// AntNetwork represents the ant_network FIT type.
 type AntNetwork byte
 
 const (
@@ -82,6 +88,7 @@ const (
 	AntNetworkInvalid AntNetwork = 0xFF
 )
 
+// AntplusDeviceType represents the antplus_device_type FIT type.
 type AntplusDeviceType uint8
 
 const (
@@ -105,6 +112,7 @@ const (
 	AntplusDeviceTypeInvalid                 AntplusDeviceType = 0xFF
 )
 
+// AttitudeStage represents the attitude_stage FIT type.
 type AttitudeStage byte
 
 const (
@@ -115,6 +123,7 @@ const (
 	AttitudeStageInvalid  AttitudeStage = 0xFF
 )
 
+// AttitudeValidity represents the attitude_validity FIT type.
 type AttitudeValidity uint16
 
 const (
@@ -134,6 +143,7 @@ const (
 	AttitudeValidityInvalid                AttitudeValidity = 0xFFFF
 )
 
+// AutolapTrigger represents the autolap_trigger FIT type.
 type AutolapTrigger byte
 
 const (
@@ -147,6 +157,7 @@ const (
 	AutolapTriggerInvalid          AutolapTrigger = 0xFF
 )
 
+// BatteryStatus represents the battery_status FIT type.
 type BatteryStatus uint8
 
 const (
@@ -159,6 +170,7 @@ const (
 	BatteryStatusInvalid  BatteryStatus = 0xFF
 )
 
+// BodyLocation represents the body_location FIT type.
 type BodyLocation byte
 
 const (
@@ -201,6 +213,7 @@ const (
 	BodyLocationInvalid               BodyLocation = 0xFF
 )
 
+// BpStatus represents the bp_status FIT type.
 type BpStatus byte
 
 const (
@@ -212,6 +225,7 @@ const (
 	BpStatusInvalid                 BpStatus = 0xFF
 )
 
+// CameraEventType represents the camera_event_type FIT type.
 type CameraEventType byte
 
 const (
@@ -227,6 +241,7 @@ const (
 	CameraEventTypeInvalid                     CameraEventType = 0xFF
 )
 
+// CameraOrientationType represents the camera_orientation_type FIT type.
 type CameraOrientationType byte
 
 const (
@@ -237,6 +252,7 @@ const (
 	CameraOrientationTypeInvalid              CameraOrientationType = 0xFF
 )
 
+// Checksum represents the checksum FIT type.
 type Checksum uint8
 
 const (
@@ -245,6 +261,7 @@ const (
 	ChecksumInvalid Checksum = 0xFF
 )
 
+// CommTimeoutType represents the comm_timeout_type FIT type.
 type CommTimeoutType uint16
 
 const (
@@ -255,6 +272,7 @@ const (
 	CommTimeoutTypeInvalid                CommTimeoutType = 0xFFFF
 )
 
+// ConnectivityCapabilities represents the connectivity_capabilities FIT type.
 type ConnectivityCapabilities uint32
 
 const (
@@ -275,6 +293,7 @@ const (
 	ConnectivityCapabilitiesInvalid                         ConnectivityCapabilities = 0x00000000
 )
 
+// CourseCapabilities represents the course_capabilities FIT type.
 type CourseCapabilities uint32
 
 const (
@@ -292,6 +311,7 @@ const (
 	CourseCapabilitiesInvalid    CourseCapabilities = 0x00000000
 )
 
+// CoursePoint represents the course_point FIT type.
 type CoursePoint byte
 
 const (
@@ -322,6 +342,7 @@ const (
 	CoursePointInvalid        CoursePoint = 0xFF
 )
 
+// DeviceIndex represents the device_index FIT type.
 type DeviceIndex uint8
 
 const (
@@ -329,6 +350,7 @@ const (
 	DeviceIndexInvalid DeviceIndex = 0xFF
 )
 
+// DisplayHeart represents the display_heart FIT type.
 type DisplayHeart byte
 
 const (
@@ -338,6 +360,7 @@ const (
 	DisplayHeartInvalid DisplayHeart = 0xFF
 )
 
+// DisplayMeasure represents the display_measure FIT type.
 type DisplayMeasure byte
 
 const (
@@ -346,6 +369,7 @@ const (
 	DisplayMeasureInvalid DisplayMeasure = 0xFF
 )
 
+// DisplayPosition represents the display_position FIT type.
 type DisplayPosition byte
 
 const (
@@ -394,6 +418,7 @@ const (
 	DisplayPositionInvalid              DisplayPosition = 0xFF
 )
 
+// DisplayPower represents the display_power FIT type.
 type DisplayPower byte
 
 const (
@@ -402,6 +427,7 @@ const (
 	DisplayPowerInvalid    DisplayPower = 0xFF
 )
 
+// Event represents the event FIT type.
 type Event byte
 
 const (
@@ -444,6 +470,7 @@ const (
 	EventInvalid               Event = 0xFF
 )
 
+// EventType represents the event_type FIT type.
 type EventType byte
 
 const (
@@ -460,6 +487,7 @@ const (
 	EventTypeInvalid                EventType = 0xFF
 )
 
+// File represents the file FIT type.
 type File byte
 
 const (
@@ -485,6 +513,7 @@ const (
 	FileInvalid         File = 0xFF
 )
 
+// FileFlags represents the file_flags FIT type.
 type FileFlags uint8
 
 const (
@@ -494,6 +523,7 @@ const (
 	FileFlagsInvalid FileFlags = 0x00
 )
 
+// FitnessEquipmentState represents the fitness_equipment_state FIT type.
 type FitnessEquipmentState byte
 
 const (
@@ -504,6 +534,7 @@ const (
 	FitnessEquipmentStateInvalid FitnessEquipmentState = 0xFF
 )
 
+// GarminProduct represents the garmin_product FIT type.
 type GarminProduct uint16
 
 const (
@@ -635,6 +666,7 @@ const (
 	GarminProductInvalid                   GarminProduct = 0xFFFF
 )
 
+// Gender represents the gender FIT type.
 type Gender byte
 
 const (
@@ -643,6 +675,7 @@ const (
 	GenderInvalid Gender = 0xFF
 )
 
+// Goal represents the goal FIT type.
 type Goal byte
 
 const (
@@ -654,6 +687,7 @@ const (
 	GoalInvalid   Goal = 0xFF
 )
 
+// GoalRecurrence represents the goal_recurrence FIT type.
 type GoalRecurrence byte
 
 const (
@@ -666,6 +700,7 @@ const (
 	GoalRecurrenceInvalid GoalRecurrence = 0xFF
 )
 
+// HrType represents the hr_type FIT type.
 type HrType byte
 
 const (
@@ -674,6 +709,7 @@ const (
 	HrTypeInvalid   HrType = 0xFF
 )
 
+// HrZoneCalc represents the hr_zone_calc FIT type.
 type HrZoneCalc byte
 
 const (
@@ -683,6 +719,7 @@ const (
 	HrZoneCalcInvalid      HrZoneCalc = 0xFF
 )
 
+// Intensity represents the intensity FIT type.
 type Intensity byte
 
 const (
@@ -693,6 +730,7 @@ const (
 	IntensityInvalid  Intensity = 0xFF
 )
 
+// Language represents the language FIT type.
 type Language byte
 
 const (
@@ -726,6 +764,7 @@ const (
 	LanguageInvalid    Language = 0xFF
 )
 
+// LapTrigger represents the lap_trigger FIT type.
 type LapTrigger byte
 
 const (
@@ -741,6 +780,7 @@ const (
 	LapTriggerInvalid          LapTrigger = 0xFF
 )
 
+// LeftRightBalance represents the left_right_balance FIT type.
 type LeftRightBalance uint8
 
 const (
@@ -749,6 +789,7 @@ const (
 	LeftRightBalanceInvalid LeftRightBalance = 0xFF
 )
 
+// LeftRightBalance100 represents the left_right_balance_100 FIT type.
 type LeftRightBalance100 uint16
 
 const (
@@ -757,6 +798,7 @@ const (
 	LeftRightBalance100Invalid LeftRightBalance100 = 0xFFFF
 )
 
+// LengthType represents the length_type FIT type.
 type LengthType byte
 
 const (
@@ -765,6 +807,7 @@ const (
 	LengthTypeInvalid LengthType = 0xFF
 )
 
+// Manufacturer represents the manufacturer FIT type.
 type Manufacturer uint16
 
 const (
@@ -874,6 +917,7 @@ const (
 	ManufacturerInvalid                Manufacturer = 0xFFFF
 )
 
+// MesgCount represents the mesg_count FIT type.
 type MesgCount byte
 
 const (
@@ -883,6 +927,7 @@ const (
 	MesgCountInvalid        MesgCount = 0xFF
 )
 
+// MesgNum represents the mesg_num FIT type.
 type MesgNum uint16
 
 const (
@@ -952,6 +997,7 @@ const (
 	MesgNumInvalid                 MesgNum = 0xFFFF
 )
 
+// MessageIndex represents the message_index FIT type.
 type MessageIndex uint16
 
 const (
@@ -961,6 +1007,7 @@ const (
 	MessageIndexInvalid  MessageIndex = 0xFFFF
 )
 
+// PowerPhaseType represents the power_phase_type FIT type.
 type PowerPhaseType byte
 
 const (
@@ -971,6 +1018,7 @@ const (
 	PowerPhaseTypeInvalid              PowerPhaseType = 0xFF
 )
 
+// PwrZoneCalc represents the pwr_zone_calc FIT type.
 type PwrZoneCalc byte
 
 const (
@@ -979,6 +1027,7 @@ const (
 	PwrZoneCalcInvalid    PwrZoneCalc = 0xFF
 )
 
+// RiderPositionType represents the rider_position_type FIT type.
 type RiderPositionType byte
 
 const (
@@ -987,6 +1036,7 @@ const (
 	RiderPositionTypeInvalid  RiderPositionType = 0xFF
 )
 
+// Schedule represents the schedule FIT type.
 type Schedule byte
 
 const (
@@ -995,6 +1045,7 @@ const (
 	ScheduleInvalid Schedule = 0xFF
 )
 
+// SegmentDeleteStatus represents the segment_delete_status FIT type.
 type SegmentDeleteStatus byte
 
 const (
@@ -1004,6 +1055,7 @@ const (
 	SegmentDeleteStatusInvalid     SegmentDeleteStatus = 0xFF
 )
 
+// SegmentLapStatus represents the segment_lap_status FIT type.
 type SegmentLapStatus byte
 
 const (
@@ -1012,6 +1064,7 @@ const (
 	SegmentLapStatusInvalid SegmentLapStatus = 0xFF
 )
 
+// SegmentLeaderboardType represents the segment_leaderboard_type FIT type.
 type SegmentLeaderboardType byte
 
 const (
@@ -1029,6 +1082,7 @@ const (
 	SegmentLeaderboardTypeInvalid      SegmentLeaderboardType = 0xFF
 )
 
+// SegmentSelectionType represents the segment_selection_type FIT type.
 type SegmentSelectionType byte
 
 const (
@@ -1037,6 +1091,7 @@ const (
 	SegmentSelectionTypeInvalid   SegmentSelectionType = 0xFF
 )
 
+// SensorType represents the sensor_type FIT type.
 type SensorType byte
 
 const (
@@ -1046,6 +1101,7 @@ const (
 	SensorTypeInvalid       SensorType = 0xFF
 )
 
+// SessionTrigger represents the session_trigger FIT type.
 type SessionTrigger byte
 
 const (
@@ -1056,6 +1112,7 @@ const (
 	SessionTriggerInvalid          SessionTrigger = 0xFF
 )
 
+// SourceType represents the source_type FIT type.
 type SourceType byte
 
 const (
@@ -1068,6 +1125,7 @@ const (
 	SourceTypeInvalid            SourceType = 0xFF
 )
 
+// Sport represents the sport FIT type.
 type Sport byte
 
 const (
@@ -1120,6 +1178,7 @@ const (
 	SportInvalid               Sport = 0xFF
 )
 
+// SportBits0 represents the sport_bits_0 FIT type.
 type SportBits0 uint8
 
 const (
@@ -1134,6 +1193,7 @@ const (
 	SportBits0Invalid          SportBits0 = 0x00
 )
 
+// SportBits1 represents the sport_bits_1 FIT type.
 type SportBits1 uint8
 
 const (
@@ -1148,6 +1208,7 @@ const (
 	SportBits1Invalid            SportBits1 = 0x00
 )
 
+// SportBits2 represents the sport_bits_2 FIT type.
 type SportBits2 uint8
 
 const (
@@ -1162,6 +1223,7 @@ const (
 	SportBits2Invalid        SportBits2 = 0x00
 )
 
+// SportBits3 represents the sport_bits_3 FIT type.
 type SportBits3 uint8
 
 const (
@@ -1176,6 +1238,7 @@ const (
 	SportBits3Invalid         SportBits3 = 0x00
 )
 
+// SportBits4 represents the sport_bits_4 FIT type.
 type SportBits4 uint8
 
 const (
@@ -1190,6 +1253,7 @@ const (
 	SportBits4Invalid               SportBits4 = 0x00
 )
 
+// SportBits5 represents the sport_bits_5 FIT type.
 type SportBits5 uint8
 
 const (
@@ -1201,6 +1265,7 @@ const (
 	SportBits5Invalid     SportBits5 = 0x00
 )
 
+// SportEvent represents the sport_event FIT type.
 type SportEvent byte
 
 const (
@@ -1216,6 +1281,7 @@ const (
 	SportEventInvalid        SportEvent = 0xFF
 )
 
+// StrokeType represents the stroke_type FIT type.
 type StrokeType byte
 
 const (
@@ -1228,6 +1294,7 @@ const (
 	StrokeTypeInvalid  StrokeType = 0xFF
 )
 
+// SubSport represents the sub_sport FIT type.
 type SubSport byte
 
 const (
@@ -1277,6 +1344,7 @@ const (
 	SubSportInvalid              SubSport = 0xFF
 )
 
+// SwimStroke represents the swim_stroke FIT type.
 type SwimStroke byte
 
 const (
@@ -1290,6 +1358,7 @@ const (
 	SwimStrokeInvalid      SwimStroke = 0xFF
 )
 
+// TimeZone represents the time_zone FIT type.
 type TimeZone byte
 
 const (
@@ -1402,6 +1471,7 @@ const (
 	TimeZoneInvalid                  TimeZone = 0xFF
 )
 
+// TimerTrigger represents the timer_trigger FIT type.
 type TimerTrigger byte
 
 const (
@@ -1411,6 +1481,7 @@ const (
 	TimerTriggerInvalid          TimerTrigger = 0xFF
 )
 
+// UserLocalId represents the user_local_id FIT type.
 type UserLocalId uint16
 
 const (
@@ -1423,6 +1494,7 @@ const (
 	UserLocalIdInvalid       UserLocalId = 0xFFFF
 )
 
+// Weight represents the weight FIT type.
 type Weight uint16
 
 const (
@@ -1430,6 +1502,7 @@ const (
 	WeightInvalid     Weight = 0xFFFF
 )
 
+// WktStepDuration represents the wkt_step_duration FIT type.
 type WktStepDuration byte
 
 const (
@@ -1453,6 +1526,7 @@ const (
 	WktStepDurationInvalid                     WktStepDuration = 0xFF
 )
 
+// WktStepTarget represents the wkt_step_target FIT type.
 type WktStepTarget byte
 
 const (
@@ -1466,6 +1540,7 @@ const (
 	WktStepTargetInvalid    WktStepTarget = 0xFF
 )
 
+// WorkoutCapabilities represents the workout_capabilities FIT type.
 type WorkoutCapabilities uint32
 
 const (
@@ -1486,6 +1561,7 @@ const (
 	WorkoutCapabilitiesInvalid          WorkoutCapabilities = 0x00000000
 )
 
+// WorkoutHr represents the workout_hr FIT type.
 type WorkoutHr uint32
 
 const (
@@ -1493,6 +1569,7 @@ const (
 	WorkoutHrInvalid   WorkoutHr = 0xFFFFFFFF
 )
 
+// WorkoutPower represents the workout_power FIT type.
 type WorkoutPower uint32
 
 const (

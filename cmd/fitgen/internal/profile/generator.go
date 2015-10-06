@@ -202,6 +202,10 @@ func (g *Generator) genDynamicGetter(msg *GoMsg, fieldIdx int) {
 
 	nRefs := len(refFieldNameToType)
 
+	g.p("// Get", field.CamelCaseName, " returns the appropriate ", field.CamelCaseName)
+	g.p("// subfield if a matching reference field/value combination is found.")
+	g.p("// If none of the reference field/value combinations are true")
+	g.p("// then the main field is returned.")
 	g.p("func (", "x", " *", msg.CamelCaseName, "Msg) Get", field.CamelCaseName, "() interface{} {")
 
 	if nRefs == 1 {

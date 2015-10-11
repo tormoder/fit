@@ -117,6 +117,10 @@ func BenchmarkDecodeActivityLarge(b *testing.B) {
 	benchmarkDecode(b, activityLarge, "Full")
 }
 
+func BenchmarkDecodeActivityWithComponents(b *testing.B) {
+	benchmarkDecode(b, activityComponents, "Full")
+}
+
 func BenchmarkDecodeHeader(b *testing.B) {
 	benchmarkDecode(b, activitySmall, "Header")
 }
@@ -192,8 +196,9 @@ const (
 
 // Baseline activities.
 var (
-	activitySmall = filepath.Join(tfolder, me, "activity-small-fenix2-run.fit")
-	activityLarge = filepath.Join(tfolder, me, "activity-large-fenxi2-multisport.fit")
+	activitySmall      = filepath.Join(tfolder, me, "activity-small-fenix2-run.fit")
+	activityLarge      = filepath.Join(tfolder, me, "activity-large-fenxi2-multisport.fit")
+	activityComponents = filepath.Join(tfolder, dcrain, testsDCRain[0])
 )
 
 // Example files from FIT SDK.

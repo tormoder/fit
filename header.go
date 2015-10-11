@@ -32,7 +32,7 @@ func (d *decoder) decodeHeader() error {
 	}
 	d.h.Size = size
 
-	if err := d.readFull(d.tmp[0 : size-1]); err != nil {
+	if err := d.readFull(d.tmp[:size-1]); err != nil {
 		return err
 	}
 
@@ -59,7 +59,7 @@ func (d *decoder) decodeHeader() error {
 
 	checksum := dyncrc16.New()
 	checksum.Write([]byte{size})
-	checksum.Write(d.tmp[0 : size-1])
+	checksum.Write(d.tmp[:size-1])
 
 	if checksum.Sum16() != 0x0000 {
 		return errHdrCRC

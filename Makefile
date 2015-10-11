@@ -47,12 +47,12 @@ lint:
 style: fmt vet lint
 
 fitgen:
-	go install github.com/tormoder/gofit/cmd/fitgen
+	go install github.com/tormoder/fit/cmd/fitgen
 
 gofuzz:
 	go get -u github.com/dvyukov/go-fuzz/go-fuzz
 	go get -u github.com/dvyukov/go-fuzz/go-fuzz-build
-	go-fuzz-build github.com/tormoder/gofit
+	go-fuzz-build github.com/tormoder/fit
 
 gofuzzclean: gofuzz
 	rm -rf workdir/
@@ -70,18 +70,18 @@ clean:
 
 profcpu:
 	go test -run=NONE -bench=ActivitySmall -cpuprofile cpu.prof
-	go tool pprof gofit.test cpu.prof
+	go tool pprof fit.test cpu.prof
 
 profmem:
 	go test -run=NONE -bench=ActivitySmall -memprofile allocmem.prof
-	go tool pprof -alloc_space gofit.test allocmem.prof
+	go tool pprof -alloc_space fit.test allocmem.prof
 
 profobj:
 	go test -run=NONE -bench=ActivitySmall -memprofile allocobj.prof
-	go tool pprof -alloc_objects gofit.test allocobj.prof
+	go tool pprof -alloc_objects fit.test allocobj.prof
 
 mdgen:
-	godoc2md github.com/tormoder/gofit Fit Header CheckIntegrity > MainApiReference.md
+	godoc2md github.com/tormoder/fit Fit Header CheckIntegrity > MainApiReference.md
 
 get:
 	go get -v ./...

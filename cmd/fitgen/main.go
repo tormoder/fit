@@ -15,11 +15,11 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/tormoder/gofit/cmd/fitgen/internal/profile"
+	"github.com/tormoder/fit/cmd/fitgen/internal/profile"
 )
 
 const (
-	gofitPkgImportPath = "github.com/tormoder/gofit"
+	fitPkgImportPath = "github.com/tormoder/fit"
 
 	types    = "types"
 	msgs     = "messages"
@@ -65,12 +65,12 @@ func main() {
 		log.Fatal("can't find python3 in $PATH, needed for xls to csv conversion")
 	}
 
-	gofitSrcDir, err := goPackagePath(gofitPkgImportPath)
+	fitSrcDir, err := goPackagePath(fitPkgImportPath)
 	if err != nil {
-		log.Fatal("can't find gofit package root src directory")
+		log.Fatal("can't find fit package root src directory")
 	}
-	log.Println("root src directory:", gofitSrcDir)
-	profileDir := filepath.Join(gofitSrcDir, "profile")
+	log.Println("root src directory:", fitSrcDir)
+	profileDir := filepath.Join(fitSrcDir, "profile")
 
 	var (
 		isZip         bool
@@ -81,14 +81,14 @@ func main() {
 		goTypes map[string]*profile.Type
 		goMsgs  []*profile.Msg
 
-		pyScript         = filepath.Join(gofitSrcDir, "lib/python/xls_to_csv.py")
+		pyScript         = filepath.Join(fitSrcDir, "lib/python/xls_to_csv.py")
 		typesCSVOut      = filepath.Join(profileDir, types+".csv")
 		msgsCSVOut       = filepath.Join(profileDir, msgs+".csv")
-		msgsGoOut        = filepath.Join(gofitSrcDir, msgs+".go")
-		typesGoOut       = filepath.Join(gofitSrcDir, types+".go")
-		profileGoOut     = filepath.Join(gofitSrcDir, profilef+".go")
-		typesStringGoOut = filepath.Join(gofitSrcDir, types+"_string.go")
-		stringerPath     = filepath.Join(gofitSrcDir, "cmd/stringer/stringer.go")
+		msgsGoOut        = filepath.Join(fitSrcDir, msgs+".go")
+		typesGoOut       = filepath.Join(fitSrcDir, types+".go")
+		profileGoOut     = filepath.Join(fitSrcDir, profilef+".go")
+		typesStringGoOut = filepath.Join(fitSrcDir, types+"_string.go")
+		stringerPath     = filepath.Join(fitSrcDir, "cmd/stringer/stringer.go")
 	)
 
 	input := flag.Arg(0)
@@ -139,12 +139,12 @@ func main() {
 		goto fatal
 	}
 
-	err = runStringerOnTypes(stringerPath, gofitSrcDir, typesStringGoOut, stringerInput)
+	err = runStringerOnTypes(stringerPath, fitSrcDir, typesStringGoOut, stringerInput)
 	if err != nil {
 		goto fatal
 	}
 
-	err = runAllTests(gofitPkgImportPath)
+	err = runAllTests(fitPkgImportPath)
 	if err != nil {
 		goto fatal
 	}
@@ -349,7 +349,7 @@ func generateProfile(sdkVersion string, types map[string]*profile.Type, msgs []*
 	log.Println("profilegen: success")
 	return nil
 }
-func runStringerOnTypes(stringerPath, goFitSrcDir, goTypesStringOut, fitTypes string) error {
+func runStringerOnTypes(stringerPath, fitSrcDir, goTypesStringOut, fitTypes string) error {
 	stringerCmd := exec.Command(
 		"go",
 		"run",
@@ -358,7 +358,7 @@ func runStringerOnTypes(stringerPath, goFitSrcDir, goTypesStringOut, fitTypes st
 		"-type", fitTypes,
 		"-output",
 		goTypesStringOut,
-		goFitSrcDir,
+		fitSrcDir,
 	)
 
 	output, err := stringerCmd.CombinedOutput()

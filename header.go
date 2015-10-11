@@ -3,7 +3,7 @@ package fit
 import (
 	"fmt"
 
-	"github.com/tormoder/gofit/dyncrc16"
+	"github.com/tormoder/fit/dyncrc16"
 )
 
 // Header represents a FIT file header.

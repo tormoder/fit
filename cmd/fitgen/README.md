@@ -1,10 +1,10 @@
 # fitgen
 
 ```fitgen``` is a program that given a FIT profile generates Go code for
-[gofit](https://github.com/tormoder/gofit). It takes as input the official FIT profile
+[fit](https://github.com/tormoder/fit). It takes as input the official FIT profile
 specification workbook and outputs Go type, message and profile definitions.
 
-Consult the [Wiki](https://github.com/tormoder/gofit/wiki/Profile-Generation)
+Consult the [Wiki](https://github.com/tormoder/fit/wiki/Profile-Generation)
 for information about profile generation.
 
 ```fitgen``` has only been tested on Linux x86-64.

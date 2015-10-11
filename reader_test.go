@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/tormoder/gofit"
+	"github.com/tormoder/fit"
 )
 
 func TestDecodeHeaderActivity(t *testing.T) {

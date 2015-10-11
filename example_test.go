@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"path/filepath"
 
-	"github.com/tormoder/gofit"
+	"github.com/tormoder/fit"
 )
 
 func Example() {

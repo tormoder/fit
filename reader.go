@@ -14,7 +14,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/tormoder/gofit/dyncrc16"
+	"github.com/tormoder/fit/dyncrc16"
 )
 
 var debug, _ = strconv.ParseBool(os.Getenv("GOFIT_DEBUG"))

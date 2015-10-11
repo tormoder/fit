@@ -20,6 +20,7 @@ cycling computers, such as the Forerunner/Edge/Fenix series.
 ### Features
 
 * Supports all FIT file types.
+* Accessors for scaled fields.
 * Accessors for dynamic fields.
 * Field components expansion.
 * Go code generation for custom FIT product profiles.

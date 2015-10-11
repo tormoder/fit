@@ -768,7 +768,7 @@ func (d *decoder) parseDataFields(dm *defmsg, knownMsg bool, msgv reflect.Value)
 				fieldv.Set(slicev)
 			}
 		case timeutc:
-			u32 := dm.arch.Uint32(d.tmp[0:4])
+			u32 := dm.arch.Uint32(d.tmp[:fitUint32.size()])
 			t := decodeDateTime(u32)
 			d.timestamp = u32
 			d.lastTimeOffset = int32(d.timestamp & compressedTimeMask)

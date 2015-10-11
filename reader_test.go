@@ -226,6 +226,7 @@ var testsFitparse = []string{
 	"garmin-edge-500-activitiy.fit",
 	"sample-activity-indoor-trainer.fit",
 	"compressed-speed-distance.fit",
+	"antfs-dump.63.fit",
 }
 
 // Examples from fit_json (Sram/Quarq)

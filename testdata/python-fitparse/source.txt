@@ -1,3 +1,5 @@
 https://github.com/dtcooper/python-fitparse/tree/ng/tests/files
 
 https://github.com/key/python-fitparse/tree/master/tests/data
+
+https://github.com/dtcooper/python-fitparse/issues/6

@@ -17,7 +17,7 @@ import (
 	"github.com/tormoder/fit/dyncrc16"
 )
 
-var debug, _ = strconv.ParseBool(os.Getenv("GOFIT_DEBUG"))
+var debug, _ = strconv.ParseBool(os.Getenv("FIT_DEBUG"))
 
 var (
 	le = binary.LittleEndian

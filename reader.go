@@ -785,11 +785,11 @@ func (d *decoder) parseDataFields(dm *defmsg, knownMsg bool, msgv reflect.Value)
 			fieldv.Set(reflect.ValueOf(local))
 		case lat:
 			i32 := dm.arch.Uint32(d.tmp[:fitSint32.size()])
-			lat := NewLatitudeSemicircles(int32(i32))
+			lat := NewLatitude(int32(i32))
 			fieldv.Set(reflect.ValueOf(lat))
 		case lng:
 			i32 := dm.arch.Uint32(d.tmp[:fitSint32.size()])
-			lng := NewLongitudeSemicircles(int32(i32))
+			lng := NewLongitude(int32(i32))
 			fieldv.Set(reflect.ValueOf(lng))
 		default:
 			panic("parseDataFields: unreachable")

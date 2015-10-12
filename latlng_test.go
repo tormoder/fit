@@ -5,70 +5,233 @@ import (
 	"testing"
 )
 
-var semicirclesTests = []struct {
-	lat  Latitude
-	lng  Longitude
-	semi int32
+var latlngSemiTests = []struct {
+	semi             int32
+	latsemi, lngsemi int32
+	latstr, lngstr   string
 }{
 	{
-		Latitude(0),
-		Longitude(0),
 		0,
+		0,
+		0,
+		"0.00000",
+		"0.00000",
 	},
 	{
-		Latitude(58.969975942745805),
-		Longitude(58.969975942745805),
 		703539217,
+		703539217,
+		703539217,
+		"58.96997",
+		"58.96997",
 	},
 	{
-		Latitude(5.733106937259436),
-		Longitude(5.733106937259436),
 		68398630,
+		68398630,
+		68398630,
+		"5.73311",
+		"5.73311",
 	},
 	{
-		Latitude(61.6361899394542),
-		Longitude(61.6361899394542),
-		735348389,
-	},
-	{
-		Latitude(8.312469916418195),
-		Longitude(8.312469916418195),
-		99171629,
-	},
-	{
-		Latitude(-54.43249996751547),
-		Longitude(-54.43249996751547),
 		-649405020,
+		-649405020,
+		-649405020,
+		"-54.43250",
+		"-54.43250",
 	},
+
 	{
-		Latitude(3.418399952352047),
-		Longitude(3.418399952352047),
-		40783100,
-	},
-	{
-		Latitude(179.99999991618097),
-		Longitude(179.99999991618097),
 		math.MaxInt32,
+		sint32Invalid,
+		sint32Invalid,
+		"Invalid",
+		"Invalid",
+	},
+	{
+		math.MaxInt32 - 1,
+		sint32Invalid,
+		math.MaxInt32 - 1,
+		"Invalid",
+		"180.00000",
+	},
+	{
+		math.MaxInt32 / 2,
+		math.MaxInt32 / 2,
+		math.MaxInt32 / 2,
+		"90.00000",
+		"90.00000",
+	},
+	{
+		(math.MaxInt32 / 2) + 1,
+		sint32Invalid,
+		(math.MaxInt32 / 2) + 1,
+		"Invalid",
+		"90.00000",
+	},
+	{
+		(math.MaxInt32 / 2) - 1,
+		(math.MaxInt32 / 2) - 1,
+		(math.MaxInt32 / 2) - 1,
+		"90.00000",
+		"90.00000",
+	},
+
+	{
+		math.MinInt32,
+		sint32Invalid,
+		math.MinInt32,
+		"Invalid",
+		"-180.00000",
+	},
+	{
+		math.MinInt32 / 2,
+		math.MinInt32 / 2,
+		math.MinInt32 / 2,
+		"-90.00000",
+		"-90.00000",
+	},
+	{
+		(math.MinInt32 / 2) + 1,
+		(math.MinInt32 / 2) + 1,
+		(math.MinInt32 / 2) + 1,
+		"-90.00000",
+		"-90.00000",
+	},
+	{
+		(math.MaxInt32 / 2) + 1,
+		sint32Invalid,
+		(math.MaxInt32 / 2) + 1,
+		"Invalid",
+		"90.00000",
+	},
+	{
+		sint32Invalid,
+		sint32Invalid,
+		sint32Invalid,
+		"Invalid",
+		"Invalid",
 	},
 }
 
-func TestSemicirclesEncDec(t *testing.T) {
-	for i, sct := range semicirclesTests {
-		semilat := sct.lat.toSemicircles()
-		if semilat != sct.semi {
-			t.Errorf("%d: got %d, want %d from Latitude toSemicircles", i, semilat, sct.semi)
+func TestLatLngFromSemicircles(t *testing.T) {
+	for i, test := range latlngSemiTests {
+		latFromSemi := NewLatitude(test.latsemi)
+		if latFromSemi.Semicircles() != test.latsemi {
+			t.Errorf("%d lat semi: got %d, want %d", i, latFromSemi.Semicircles(), test.latsemi)
 		}
-		lat := NewLatitudeSemicircles(sct.semi)
-		if lat != sct.lat {
-			t.Errorf("%d: , got %v, want %v from NewLatitudeSemicircles", i, lat, sct.semi)
+		if latFromSemi.String() != test.latstr {
+			t.Errorf("%d lat str: got %q, want %q", i, latFromSemi.String(), test.latstr)
 		}
-		semilng := sct.lng.toSemicircles()
-		if semilng != sct.semi {
-			t.Errorf("%d: got %d, want %d from Longitude toSemicircles", i, semilng, sct.semi)
+
+		lngFromSemi := NewLongitude(test.semi)
+		if lngFromSemi.Semicircles() != test.lngsemi {
+			t.Errorf("%d lng semi: got %d, want %d", i, lngFromSemi.Semicircles(), test.lngsemi)
 		}
-		lng := NewLongitudeSemicircles(sct.semi)
-		if lat != sct.lat {
-			t.Errorf("%d: , got %v, want %v from NewLongitudeSemicircles", i, lng, sct.semi)
+		if lngFromSemi.String() != test.lngstr {
+			t.Errorf("%d lng str: got %q, want %q", i, lngFromSemi.String(), test.lngstr)
+		}
+	}
+}
+
+var latlngDegTests = []struct {
+	deg              float64
+	latsemi, lngsemi int32
+	latstr, lngstr   string
+}{
+	{
+		0,
+		0,
+		0,
+		"0.00000",
+		"0.00000",
+	},
+	{
+		58.96997,
+		703539146,
+		703539146,
+		"58.96997",
+		"58.96997",
+	},
+	{
+		5.73311,
+		68398666,
+		68398666,
+		"5.73311",
+		"5.73311",
+	},
+	{
+		-54.43250,
+		-649405020,
+		-649405020,
+		"-54.43250",
+		"-54.43250",
+	},
+	{
+		180.00001,
+		sint32Invalid,
+		sint32Invalid,
+		"Invalid",
+		"Invalid",
+	},
+	{
+		180.00000,
+		sint32Invalid,
+		sint32Invalid,
+		"Invalid",
+		"Invalid",
+	},
+	{
+		179.99999,
+		sint32Invalid,
+		2147483528,
+		"Invalid",
+		"179.99998",
+	},
+	{
+		90.00001,
+		sint32Invalid,
+		1073741943,
+		"Invalid",
+		"90.00001",
+	},
+	{
+		90.00000,
+		sint32Invalid,
+		1073741824,
+		"Invalid",
+		"90.00000",
+	},
+	{
+		89.99999,
+		1073741704,
+		1073741704,
+		"89.99999",
+		"89.99999",
+	},
+	{
+		math.MaxFloat64,
+		sint32Invalid,
+		sint32Invalid,
+		"Invalid",
+		"Invalid",
+	},
+}
+
+func TestLatLngFromDegrees(t *testing.T) {
+	for i, test := range latlngDegTests {
+		latFromDeg := NewLatitudeDegrees(test.deg)
+		if latFromDeg.Semicircles() != test.latsemi {
+			t.Errorf("%d lat semi: got %d, want %d", i, latFromDeg.Semicircles(), test.latsemi)
+		}
+		if latFromDeg.String() != test.latstr {
+			t.Errorf("%d lat str: got %q, want %q", i, latFromDeg.String(), test.latstr)
+		}
+
+		lngFromDeg := NewLongitudeDegrees(test.deg)
+		if lngFromDeg.Semicircles() != test.lngsemi {
+			t.Errorf("%d lng semi: got %d, want %d", i, lngFromDeg.Semicircles(), test.lngsemi)
+		}
+		if lngFromDeg.String() != test.lngstr {
+			t.Errorf("%d lng str: got %q, want %q", i, lngFromDeg.String(), test.lngstr)
 		}
 	}
 }

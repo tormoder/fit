@@ -163,11 +163,11 @@ func (f *Field) parseType(types map[string]*Type) error {
 	case strings.HasSuffix(f.Name, "_lat"):
 		f.Type = "Latitude"
 		f.GoType = "lat"
-		f.GoInvalid = "0x7FFFFFFF"
+		f.GoInvalid = "NewLatitudeInvalid()"
 	case strings.HasSuffix(f.Name, "_long"):
 		f.Type = "Longitude"
 		f.GoType = "lng"
-		f.GoInvalid = "0x7FFFFFFF"
+		f.GoInvalid = "NewLongitudeInvalid()"
 	default:
 		ft := f.data[mFTYPE]
 		_, found := timestampTypes[ft]

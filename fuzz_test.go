@@ -110,11 +110,18 @@ var goFuzzCrasherInputs = [...]string{
 		"\a\x12\x1d\x85a.\xcb\xfb\xb4\x97\x1d\x85a\x00\x00\x12\xcb\xfb\xb2W" +
 		"\x00\x005\xb5\x00\x005\xb5\x00\x00\x02=\x00\x00\x00\x00",
 
-	// Appending to slice using reflection were not done correctly for some
+	// Appending to a slice using reflection was not done correctly for some
 	// fields. Led to refactor of array handling in general.
 	"\f\x10000000.FIT@0\x01\x00\x00\x050\x04" +
 		"\x8c0\x04\x860\x02\x840\x02\x84\x00\x01\x000000000" +
 		"000000\n@0\x01\x00\xb2\x01\n\x02\x84000",
+
+	// Floats and and signed integers of equal size is not compatible base
+	// types. Reflection panic.
+	"\f\x10000000.FIT@0\x01\x00\x00\x050\x04" +
+		"\x8c0\x04\x860\x02\x840\x02\x84\x00\x01\x000000000" +
+		"000000\x02B0\x01\x00\x14\x06\xfd\x04\x86\v\x04\x88\x01" +
+		"\x04\x85\x05\x04\x86\x02\x02\x84\x06\x02\x84\xcb00000000",
 }
 
 func TestFuzzCrasherInputs(t *testing.T) {

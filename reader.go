@@ -430,8 +430,7 @@ func (d *decoder) validateFieldDef(gmsgnum MesgNum, dfield fieldDef) error {
 	if dfield.btype.nr() > len(fitBaseTypes)-1 {
 		return fmt.Errorf(
 			"field %d: unknown base type 0X%X",
-			dfield.num, dfield.btype,
-		)
+			dfield.num, dfield.btype)
 	}
 
 	var pfield *field
@@ -449,8 +448,7 @@ func (d *decoder) validateFieldDef(gmsgnum MesgNum, dfield fieldDef) error {
 		}
 		return fmt.Errorf(
 			"field %d: field base type is string, but profile lists it as %v, not compatible",
-			dfield.num, pfield.btype,
-		)
+			dfield.num, pfield.btype)
 	}
 
 	// Verify that field definition size is not less than field definition
@@ -458,60 +456,60 @@ func (d *decoder) validateFieldDef(gmsgnum MesgNum, dfield fieldDef) error {
 	if int(dfield.size) < dfield.btype.size() {
 		return fmt.Errorf(
 			"field %d: size (%d) is less than base type size (%d)",
-			dfield.num, dfield.size, dfield.btype.size(),
-		)
+			dfield.num, dfield.size, dfield.btype.size())
 	}
 
 	if !pfound {
 		return nil
 	}
 
-	// This is a profile field. Verify that (if not an profile array field)
-	// the field size is not greater than the profile base type size.
-	// A smaller size is allowed because of dynamic fields.
+	// Profile field.
 	if pfield.array == 0 {
+
+		// Profile field not an array. Verify that the field size is
+		// not greater than the profile base type size. A smaller size
+		// is allowed due to dynamic fields.
 		switch {
+
 		case int(dfield.size) > pfield.btype.size():
 			return fmt.Errorf(
 				"field %d: size (%d) is greater than size of profile base type %v (%d)",
 				dfield.num, dfield.size, dfield.btype, dfield.btype.size(),
 			)
+
 		case int(dfield.size) <= pfield.btype.size() && dfield.btype != pfield.btype:
 			// Size is less or equal, but we can only allow
-			// "compatible" types that will not panic when settings
+			// "compatible" types that will not panic when setting
 			// fields using reflection.
-			if pfield.btype.signed() != dfield.btype.signed() {
+			switch {
+			case pfield.btype.signed() != dfield.btype.signed():
+				fallthrough
+			case dfield.btype.float() && !pfield.btype.float():
+				fallthrough
+			case pfield.btype == fitString && dfield.btype != fitString:
 				return fmt.Errorf(
 					"field %d: type %v is not compatible with profile type %v",
-					dfield.num, dfield.btype, pfield.btype,
-				)
+					dfield.num, dfield.btype, pfield.btype)
 			}
-			if pfield.btype == fitString && dfield.btype != fitString {
-				return fmt.Errorf(
-					"field %d: profile has base type %v, but definition has %v, incompatible",
-					dfield.num, pfield.btype, dfield.btype,
-				)
-			}
-			fallthrough
-		default:
-			return nil
 		}
+
+		return nil
 	}
 
-	// Field is an array.
+	// Profile field is an array.
 	switch {
 	case (int(dfield.size) % dfield.btype.size()) != 0:
 		return fmt.Errorf(
-			"field %d: is array, but size (%d) is not a multiple of base type %v size (%d)",
+			"field %d: array, but size (%d) is not a multiple of base type %v size (%d)",
 			dfield.num, dfield.size, dfield.btype, dfield.btype.size(),
 		)
 	case dfield.btype != pfield.btype:
-		// Require correct base type if an array. I have not seen an
-		// dynamic field that is an array, and can have a smaller base
-		// type. Maybe allow equal sized compatible types later if
-		// needed (like for non-array fields).
+		// Require correct base type if an array. I have not seen a
+		// dynamic field that is an array and have a smaller base type
+		// for array elements. Maybe allow equal sized compatible types
+		// later if needed (like for non-array fields).
 		return fmt.Errorf(
-			"field %d: is array, but definition (%v) and profile (%v) base types differ",
+			"field %d: array, but definition (%v) and profile (%v) base types differ",
 			dfield.num, dfield.btype, dfield.btype.size(),
 		)
 	default:

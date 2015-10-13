@@ -413,8 +413,7 @@ func (d *decoder) parseDefinitionMessage(recordHeader byte) (*defmsg, error) {
 		if err = d.validateFieldDef(dm.globalMsgNum, fd); err != nil {
 			return nil, fmt.Errorf(
 				"validating %v failed: %v",
-				dm.globalMsgNum, err,
-			)
+				dm.globalMsgNum, err)
 		}
 		dm.fieldDefs[i] = fd
 	}
@@ -474,8 +473,7 @@ func (d *decoder) validateFieldDef(gmsgnum MesgNum, dfield fieldDef) error {
 		case int(dfield.size) > pfield.btype.size():
 			return fmt.Errorf(
 				"field %d: size (%d) is greater than size of profile base type %v (%d)",
-				dfield.num, dfield.size, dfield.btype, dfield.btype.size(),
-			)
+				dfield.num, dfield.size, dfield.btype, dfield.btype.size())
 
 		case int(dfield.size) <= pfield.btype.size() && dfield.btype != pfield.btype:
 			// Size is less or equal, but we can only allow
@@ -501,8 +499,7 @@ func (d *decoder) validateFieldDef(gmsgnum MesgNum, dfield fieldDef) error {
 	case (int(dfield.size) % dfield.btype.size()) != 0:
 		return fmt.Errorf(
 			"field %d: array, but size (%d) is not a multiple of base type %v size (%d)",
-			dfield.num, dfield.size, dfield.btype, dfield.btype.size(),
-		)
+			dfield.num, dfield.size, dfield.btype, dfield.btype.size())
 	case dfield.btype != pfield.btype:
 		// Require correct base type if an array. I have not seen a
 		// dynamic field that is an array and have a smaller base type
@@ -510,8 +507,7 @@ func (d *decoder) validateFieldDef(gmsgnum MesgNum, dfield fieldDef) error {
 		// later if needed (like for non-array fields).
 		return fmt.Errorf(
 			"field %d: array, but definition (%v) and profile (%v) base types differ",
-			dfield.num, dfield.btype, dfield.btype.size(),
-		)
+			dfield.num, dfield.btype, dfield.btype.size())
 	default:
 		return nil
 	}
@@ -524,8 +520,7 @@ func (d *decoder) parseDataMessage(recordHeader byte) (reflect.Value, error) {
 	if dm == nil {
 		return reflect.Value{}, fmt.Errorf(
 			"missing data definition message for local message number %d",
-			localMsgNum,
-		)
+			localMsgNum)
 	}
 
 	var msgv reflect.Value
@@ -546,8 +541,7 @@ func (d *decoder) parseCompressedTimestampHeader(recordHeader byte) (reflect.Val
 	if dm == nil { // use as nil check: we don't accept zero fields when parsing def message
 		return reflect.Value{}, fmt.Errorf(
 			"missing data definition message for local message number %d",
-			localMsgNum,
-		)
+			localMsgNum)
 	}
 
 	var msgv reflect.Value
@@ -603,8 +597,7 @@ func (d *decoder) parseDataFields(dm *defmsg, knownMsg bool, msgv reflect.Value)
 		if err != nil {
 			return reflect.Value{}, fmt.Errorf(
 				"error parsing data message: %v (field %d [%v] for [%v])",
-				err, i, dfield, dm,
-			)
+				err, i, dfield, dm)
 		}
 
 		if padding != 0 {
@@ -669,8 +662,7 @@ func (d *decoder) parseDataFields(dm *defmsg, knownMsg bool, msgv reflect.Value)
 					return reflect.Value{},
 						fmt.Errorf(
 							"unknown base type %d for %dth field %v in definition message %v",
-							dbt, i, dfield, dm,
-						)
+							dbt, i, dfield, dm)
 				}
 			} else {
 				if dbt == fitByte {
@@ -760,8 +752,7 @@ func (d *decoder) parseDataFields(dm *defmsg, knownMsg bool, msgv reflect.Value)
 					return reflect.Value{},
 						fmt.Errorf(
 							"unknown base type %d for %dth field %v in definition message %v",
-							dbt, i, dfield, dm,
-						)
+							dbt, i, dfield, dm)
 				}
 				fieldv.Set(slicev)
 			}

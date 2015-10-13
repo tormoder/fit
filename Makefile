@@ -57,9 +57,7 @@ gofuzz:
 gofuzzclean: gofuzz
 	rm -rf workdir/
 	mkdir -p workdir/corpus
-	cp testdata/me/activity-small-fenix2-run.fit workdir/corpus/
-	cp testdata/fitsdk/Activity.fit workdir/corpus/
-	cp testdata/fitsdk/Settings.fit workdir/corpus/
+	find testdata -name \*.fit -exec cp {} workdir/corpus/ \;
 
 clean:
 	rm -rf profile/*.csv

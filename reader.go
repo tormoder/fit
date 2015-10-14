@@ -149,7 +149,7 @@ func (d *decoder) decode(r io.Reader, headerOnly, fileIDOnly, crcOnly bool) erro
 		switch {
 
 		case (b & compressedHeaderMask) == compressedHeaderMask:
-			msg, err = d.parseCompressedTimestampHeader(b)
+			msg, err = d.parseDataMessage(b, true)
 			if err != nil {
 				return fmt.Errorf("compressed timestamp message: %v", err)
 			}
@@ -160,7 +160,7 @@ func (d *decoder) decode(r io.Reader, headerOnly, fileIDOnly, crcOnly bool) erro
 			}
 			d.defmsgs[dm.localMsgType] = dm
 		case (b & mesgHeaderMask) == mesgHeaderMask:
-			msg, err = d.parseDataMessage(b)
+			msg, err = d.parseDataMessage(b, false)
 			if err != nil {
 				return fmt.Errorf("parsing data message: %v", err)
 			}
@@ -268,7 +268,7 @@ func (d *decoder) parseFileIdMsg() error {
 	if !((b & mesgHeaderMask) == mesgHeaderMask) {
 		return fmt.Errorf("expected record header byte for data message, got %#x - %8b", b, b)
 	}
-	msg, err := d.parseDataMessage(b)
+	msg, err := d.parseDataMessage(b, false)
 	if err != nil {
 		return fmt.Errorf("error reading data message:  %v", err)
 	}
@@ -513,8 +513,13 @@ func (d *decoder) validateFieldDef(gmsgnum MesgNum, dfield fieldDef) error {
 	}
 }
 
-func (d *decoder) parseDataMessage(recordHeader byte) (reflect.Value, error) {
-	localMsgNum := recordHeader & localMesgNumMask
+func (d *decoder) parseDataMessage(recordHeader byte, compressed bool) (reflect.Value, error) {
+	var localMsgNum byte
+	if compressed {
+		localMsgNum = (recordHeader & compressedLocalMesgNumMask) >> 5
+	} else {
+		localMsgNum = recordHeader & localMesgNumMask
+	}
 
 	dm := d.defmsgs[localMsgNum]
 	if dm == nil {
@@ -531,27 +536,11 @@ func (d *decoder) parseDataMessage(recordHeader byte) (reflect.Value, error) {
 		d.fit.UnknownMessages[dm.globalMsgNum]++
 	}
 
-	return d.parseDataFields(dm, knownMsg, msgv)
-}
-
-func (d *decoder) parseCompressedTimestampHeader(recordHeader byte) (reflect.Value, error) {
-	localMsgNum := (recordHeader & compressedLocalMesgNumMask) >> 5
-
-	dm := d.defmsgs[localMsgNum]
-	if dm == nil { // use as nil check: we don't accept zero fields when parsing def message
-		return reflect.Value{}, fmt.Errorf(
-			"missing data definition message for local message number %d",
-			localMsgNum)
+	if !compressed {
+		return d.parseDataFields(dm, knownMsg, msgv)
 	}
 
-	var msgv reflect.Value
-	knownMsg := knownMsgNums[dm.globalMsgNum]
-	if knownMsg {
-		msgv = getMesgAllInvalid(dm.globalMsgNum)
-	} else {
-		d.fit.UnknownMessages[dm.globalMsgNum]++
-	}
-
+	// Data message has compressed timestamp header.
 	if d.timestamp == 0 {
 		if debug {
 			log.Println(

@@ -19,6 +19,11 @@ import (
 
 var debug, _ = strconv.ParseBool(os.Getenv("FIT_DEBUG"))
 
+func init() {
+	log.SetPrefix("fit: ")
+	log.SetFlags(0)
+}
+
 var (
 	le = binary.LittleEndian
 	be = binary.BigEndian

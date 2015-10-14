@@ -561,6 +561,14 @@ func (d *decoder) parseDataMessage(recordHeader byte, compressed bool) (reflect.
 		fieldval := msgv.Field(fieldTimestamp.sindex)
 		t := decodeDateTime(d.timestamp)
 		fieldval.Set(reflect.ValueOf(t))
+		return d.parseDataFields(dm, knownMsg, msgv)
+	}
+
+	if debug {
+		log.Printf(
+			"warning: parsing message with compressed timestamp header,",
+			"but did not find timestamp field in message (%v)", dm.globalMsgNum)
+
 	}
 
 	return d.parseDataFields(dm, knownMsg, msgv)

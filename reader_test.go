@@ -255,6 +255,7 @@ var testsDCRain = []string{
 // Miscellaneous fit files found online.
 var testsMisc = []string{
 	"2013-02-06-12-11-14.fit",
+	"2015-10-13-08-43-15.fit",
 }
 
 // Intentionally corrupted fit files.

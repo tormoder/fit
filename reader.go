@@ -555,9 +555,9 @@ func (d *decoder) parseDataMessage(recordHeader byte, compressed bool) (reflect.
 		return d.parseDataFields(dm, knownMsg, msgv)
 	}
 
-	toffset := int32(recordHeader & compressedTimeMask)
-	d.timestamp = uint32((toffset - d.lastTimeOffset) & compressedTimeMask)
-	d.lastTimeOffset = toffset
+	timeOffset := int32(recordHeader & compressedTimeMask)
+	d.timestamp += uint32((timeOffset - d.lastTimeOffset) & compressedTimeMask)
+	d.lastTimeOffset = timeOffset
 
 	fieldTimestamp, found := getField(dm.globalMsgNum, fieldNumTimeStamp)
 	if found {
@@ -568,9 +568,9 @@ func (d *decoder) parseDataMessage(recordHeader byte, compressed bool) (reflect.
 	}
 
 	if debug {
-		log.Printf(
+		log.Println(
 			"warning: parsing message with compressed timestamp header,",
-			"but did not find timestamp field in message (%v)", dm.globalMsgNum)
+			"but did not find timestamp field in message of type", dm.globalMsgNum)
 
 	}
 
@@ -756,32 +756,55 @@ func (d *decoder) parseDataFields(dm *defmsg, knownMsg bool, msgv reflect.Value)
 				}
 				fieldv.Set(slicev)
 			}
-		case timeutc:
+		case timeutc, timelocal:
 			u32 := dm.arch.Uint32(d.tmp[:fitUint32.size()])
-			t := decodeDateTime(u32)
-			d.timestamp = u32
-			d.lastTimeOffset = int32(d.timestamp & compressedTimeMask)
-			fieldv.Set(reflect.ValueOf(t))
-		case timelocal:
-			/*
-				TODO(tormoder): Improve. This is not so easy...
-				We have offset from UTC, but getting actual
-				timezone is complex. Could take GPS
-				coordinates into account, but ugh...
+			if u32 == 0xFFFFFFFF {
+				continue
+			}
+			if u32 < systemTimeMarker {
+				if debug {
+					log.Println("parsing time: seconds from device power on")
+				}
+			}
 
-				Update - this actually exists for Go
-				https://github.com/bradfitz/latlong
+			if pfield.t == timeutc {
+				if pfield.num == fieldNumTimeStamp {
+					d.timestamp = u32
+					d.lastTimeOffset = int32(d.timestamp & compressedTimeMask)
+				}
+				t := decodeDateTime(u32)
+				fieldv.Set(reflect.ValueOf(t))
+				continue
+			}
 
-				For now use a custom timezone with the
-				calculated offset to indicated that it is not
-				UTC.
-			*/
-			u32 := dm.arch.Uint32(d.tmp[:fitUint32.size()])
-			local := decodeDateTime(u32)
-			utc := decodeDateTime(d.timestamp)
-			offsetDur := local.Sub(utc)
-			tzone := time.FixedZone("FITLOCAL", int(offsetDur.Seconds()))
-			local = utc.In(tzone)
+			// Local timestamp.
+			//
+			// TODO(tormoder): Improve. We may have offset from
+			// UTC, but getting actual timezone is complex. Could
+			// take GPS coordinates into account, but
+			// complicated...
+			//
+			// Update - this actually exists for Go
+			// https://github.com/bradfitz/latlong
+			//
+			// For now use a custom timezone with the calculated
+			// offset to indicated that it is not UTC.
+			var local time.Time
+			switch {
+			case d.timestamp == 0, d.timestamp < systemTimeMarker:
+				// No time reference.
+				// Set local with zero offset.
+				d.timestamp = u32
+				tzone := time.FixedZone(localZoneName, 0)
+				local = decodeDateTime(u32)
+				local = local.In(tzone)
+			default:
+				local = decodeDateTime(u32)
+				utc := decodeDateTime(d.timestamp)
+				offsetDur := local.Sub(utc)
+				tzone := time.FixedZone(localZoneName, int(offsetDur.Seconds()))
+				local = utc.In(tzone)
+			}
 			fieldv.Set(reflect.ValueOf(local))
 		case lat:
 			i32 := dm.arch.Uint32(d.tmp[:fitSint32.size()])
@@ -797,4 +820,8 @@ func (d *decoder) parseDataFields(dm *defmsg, knownMsg bool, msgv reflect.Value)
 	}
 
 	return msgv, nil
+}
+
+func (d *decoder) setTimestamp(ts uint32) {
+
 }

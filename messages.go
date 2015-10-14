@@ -2,7 +2,7 @@
 // program found in 'cmd/fitgen/main.go'
 // DO NOT EDIT.
 // SDK Version: 16.10
-// Generation time: Wed Oct 14 15:15:39 UTC 2015
+// Generation time: Thu Oct 15 19:15:19 UTC 2015
 
 package fit
 
@@ -1079,19 +1079,29 @@ func (x *SessionMsg) GetMaxCadence() interface{} {
 
 func (x *SessionMsg) expandComponents() {
 	if x.AvgSpeed != 0xFFFF {
-		x.EnhancedAvgSpeed = uint32((x.AvgSpeed >> 0) & ((1 << 16) - 1))
+		x.EnhancedAvgSpeed = uint32(
+			(x.AvgSpeed >> 0) & ((1 << 16) - 1),
+		)
 	}
 	if x.MaxSpeed != 0xFFFF {
-		x.EnhancedMaxSpeed = uint32((x.MaxSpeed >> 0) & ((1 << 16) - 1))
+		x.EnhancedMaxSpeed = uint32(
+			(x.MaxSpeed >> 0) & ((1 << 16) - 1),
+		)
 	}
 	if x.AvgAltitude != 0xFFFF {
-		x.EnhancedAvgAltitude = uint32((x.AvgAltitude >> 0) & ((1 << 16) - 1))
+		x.EnhancedAvgAltitude = uint32(
+			(x.AvgAltitude >> 0) & ((1 << 16) - 1),
+		)
 	}
 	if x.MaxAltitude != 0xFFFF {
-		x.EnhancedMaxAltitude = uint32((x.MaxAltitude >> 0) & ((1 << 16) - 1))
+		x.EnhancedMaxAltitude = uint32(
+			(x.MaxAltitude >> 0) & ((1 << 16) - 1),
+		)
 	}
 	if x.MinAltitude != 0xFFFF {
-		x.EnhancedMinAltitude = uint32((x.MinAltitude >> 0) & ((1 << 16) - 1))
+		x.EnhancedMinAltitude = uint32(
+			(x.MinAltitude >> 0) & ((1 << 16) - 1),
+		)
 	}
 }
 
@@ -1692,19 +1702,29 @@ func (x *LapMsg) GetMaxCadence() interface{} {
 
 func (x *LapMsg) expandComponents() {
 	if x.AvgSpeed != 0xFFFF {
-		x.EnhancedAvgSpeed = uint32((x.AvgSpeed >> 0) & ((1 << 16) - 1))
+		x.EnhancedAvgSpeed = uint32(
+			(x.AvgSpeed >> 0) & ((1 << 16) - 1),
+		)
 	}
 	if x.MaxSpeed != 0xFFFF {
-		x.EnhancedMaxSpeed = uint32((x.MaxSpeed >> 0) & ((1 << 16) - 1))
+		x.EnhancedMaxSpeed = uint32(
+			(x.MaxSpeed >> 0) & ((1 << 16) - 1),
+		)
 	}
 	if x.AvgAltitude != 0xFFFF {
-		x.EnhancedAvgAltitude = uint32((x.AvgAltitude >> 0) & ((1 << 16) - 1))
+		x.EnhancedAvgAltitude = uint32(
+			(x.AvgAltitude >> 0) & ((1 << 16) - 1),
+		)
 	}
 	if x.MaxAltitude != 0xFFFF {
-		x.EnhancedMaxAltitude = uint32((x.MaxAltitude >> 0) & ((1 << 16) - 1))
+		x.EnhancedMaxAltitude = uint32(
+			(x.MaxAltitude >> 0) & ((1 << 16) - 1),
+		)
 	}
 	if x.MinAltitude != 0xFFFF {
-		x.EnhancedMinAltitude = uint32((x.MinAltitude >> 0) & ((1 << 16) - 1))
+		x.EnhancedMinAltitude = uint32(
+			(x.MinAltitude >> 0) & ((1 << 16) - 1),
+		)
 	}
 }
 
@@ -2150,10 +2170,14 @@ func (x *RecordMsg) GetDistanceFromCompressedSpeedDistance() float64 {
 
 func (x *RecordMsg) expandComponents() {
 	if x.Altitude != 0xFFFF {
-		x.EnhancedAltitude = uint32((x.Altitude >> 0) & ((1 << 16) - 1))
+		x.EnhancedAltitude = uint32(
+			(x.Altitude >> 0) & ((1 << 16) - 1),
+		)
 	}
 	if x.Speed != 0xFFFF {
-		x.EnhancedSpeed = uint32((x.Speed >> 0) & ((1 << 16) - 1))
+		x.EnhancedSpeed = uint32(
+			(x.Speed >> 0) & ((1 << 16) - 1),
+		)
 	}
 	expand := false
 	if len(x.CompressedSpeedDistance) == 3 {
@@ -2165,14 +2189,33 @@ func (x *RecordMsg) expandComponents() {
 		}
 	}
 	if expand {
-		x.Speed = uint16(x.CompressedSpeedDistance[0] | ((x.CompressedSpeedDistance[1] & 0x0F) << 8))
-		x.Distance = uint32((x.CompressedSpeedDistance[1] >> 4) | (x.CompressedSpeedDistance[2] << 4))
+		x.Speed = uint16(x.CompressedSpeedDistance[0]) | uint16(x.CompressedSpeedDistance[1]&0x0F)<<8
+		if accumuDistance == nil {
+			accumuDistance = uint32NewAccumulator(12)
+		}
+		x.Distance = accumuDistance.accumulate(
+			uint32(x.CompressedSpeedDistance[1]>>4) | uint32(x.CompressedSpeedDistance[2]<<4),
+		)
 	}
 	if x.Cycles != 0xFF {
-		x.TotalCycles = uint32((x.Cycles >> 0) & ((1 << 8) - 1))
+		if accumuTotalCycles == nil {
+			accumuTotalCycles = new(uint32Accumulator)
+		}
+		x.TotalCycles = accumuTotalCycles.accumulate(
+			uint32(
+				(x.Cycles >> 0) & ((1 << 8) - 1),
+			),
+		)
 	}
 	if x.CompressedAccumulatedPower != 0xFFFF {
-		x.AccumulatedPower = uint32((x.CompressedAccumulatedPower >> 0) & ((1 << 16) - 1))
+		if accumuAccumulatedPower == nil {
+			accumuAccumulatedPower = new(uint32Accumulator)
+		}
+		x.AccumulatedPower = accumuAccumulatedPower.accumulate(
+			uint32(
+				(x.CompressedAccumulatedPower >> 0) & ((1 << 16) - 1),
+			),
+		)
 	}
 }
 
@@ -2241,18 +2284,32 @@ func (x *EventMsg) GetData() interface{} {
 
 func (x *EventMsg) expandComponents() {
 	if x.Data16 != 0xFFFF {
-		x.Data = uint32((x.Data16 >> 0) & ((1 << 16) - 1))
+		x.Data = uint32(
+			(x.Data16 >> 0) & ((1 << 16) - 1),
+		)
 	}
 	if x.Data != 0xFFFFFFFF {
 		switch x.Event {
 		case EventSportPoint:
-			x.Score = uint16((x.Data >> 0) & ((1 << 16) - 1))
-			x.OpponentScore = uint16((x.Data >> 16) & ((1 << 16) - 1))
+			x.Score = uint16(
+				(x.Data >> 0) & ((1 << 16) - 1),
+			)
+			x.OpponentScore = uint16(
+				(x.Data >> 16) & ((1 << 16) - 1),
+			)
 		case EventFrontGearChange, EventRearGearChange:
-			x.RearGearNum = uint8((x.Data >> 0) & ((1 << 8) - 1))
-			x.RearGear = uint8((x.Data >> 8) & ((1 << 8) - 1))
-			x.FrontGearNum = uint8((x.Data >> 16) & ((1 << 8) - 1))
-			x.FrontGear = uint8((x.Data >> 24) & ((1 << 8) - 1))
+			x.RearGearNum = uint8(
+				(x.Data >> 0) & ((1 << 8) - 1),
+			)
+			x.RearGear = uint8(
+				(x.Data >> 8) & ((1 << 8) - 1),
+			)
+			x.FrontGearNum = uint8(
+				(x.Data >> 16) & ((1 << 8) - 1),
+			)
+			x.FrontGear = uint8(
+				(x.Data >> 24) & ((1 << 8) - 1),
+			)
 		}
 	}
 }

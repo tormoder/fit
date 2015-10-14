@@ -384,7 +384,7 @@ func (g *Generator) genGetterForComponents(msg *Msg, compFieldIndices []int) {
 		for _, comp := range f.Components {
 			targetf, found := msg.FieldByName[comp.Name]
 			if !found {
-				panic("target field for component not found")
+				panic("genGetterForComponents: target field for component not found")
 			}
 			if comp.Scale == "" || comp.Scale == "1" {
 				continue
@@ -467,7 +467,8 @@ func (g *Generator) genExpandComponentsReg(msg *Msg, field *Field) {
 }
 
 func (g *Generator) genExpandComponentsArray(field *Field) {
-	// Handle this as a special case for now.
+	// Handle every byte array manually for now.
+	// One case in the SDK per version 16.10.
 	switch field.CCName {
 	case "CompressedSpeedDistance":
 		g.p("expand := false")
@@ -480,8 +481,13 @@ func (g *Generator) genExpandComponentsArray(field *Field) {
 		g.p("}")
 		g.p("}")
 		g.p("if expand {")
-		g.p("x.Speed = uint16(x.", field.CCName, "[0] | ((x.", field.CCName, "[1]", "& 0x0F) << 8))")
-		g.p("x.Distance = uint32((x.", field.CCName, "[1] >> 4) | (x.", field.CCName, "[2] << 4))")
+		g.p("x.Speed = uint16(x.", field.CCName, "[0]) | uint16(x.", field.CCName, "[1]", "&0x0F) << 8")
+		g.p("if accumuDistance == nil {")
+		g.p("accumuDistance = uint32NewAccumulator(12)")
+		g.p("}")
+		g.p("x.Distance = accumuDistance.accumulate(")
+		g.p("uint32(x.", field.CCName, "[1]>>4) | uint32(x.", field.CCName, "[2]<< 4),")
+		g.p(")")
 		g.p("}")
 	default:
 		panic("genExpandComponentsArray: unhandled case")
@@ -552,7 +558,21 @@ func (g *Generator) genExpandComponentsMaskShift(msg *Msg, field *Field) {
 		if !tfound {
 			panic("genExpandComponentsMaskShift: target field not found")
 		}
-		g.p("x.", comp.Name, " = ", tfield.Type, "((x.", field.CCName, " >> ", bits, ") & ((1 << ", comp.Bits, ") - 1))")
+		if comp.Accumulate {
+			accumulator := "accumu" + comp.Name
+			g.p("if ", accumulator, " == nil {")
+			g.p(accumulator, " = new(", tfield.Type, "Accumulator)")
+			g.p("}")
+			g.p("x.", comp.Name, " = ", accumulator, ".accumulate(")
+			g.p(tfield.Type, "(")
+			g.p("(x.", field.CCName, " >> ", bits, ") & ((1 << ", comp.Bits, ") - 1),")
+			g.p("),")
+			g.p(")")
+			continue
+		}
+		g.p("x.", comp.Name, " = ", tfield.Type, "(")
+		g.p("(x.", field.CCName, " >> ", bits, ") & ((1 << ", comp.Bits, ") - 1),")
+		g.p(")")
 		bits += comp.BitsInt
 	}
 }
@@ -564,7 +584,9 @@ func (g *Generator) genExpandComponentsMaskShiftDyn(msg *Msg, sfield *Field, mfi
 		if !tfound {
 			panic("genExpandComponentsMaskShift: target field not found")
 		}
-		g.p("x.", comp.Name, " = ", tfield.Type, "((x.", mfield.CCName, " >> ", bits, ") & ((1 << ", comp.Bits, ") - 1))")
+		g.p("x.", comp.Name, " = ", tfield.Type, "(")
+		g.p("(x.", mfield.CCName, " >> ", bits, ") & ((1 << ", comp.Bits, ") - 1),")
+		g.p(")")
 		bits += comp.BitsInt
 	}
 }
@@ -577,6 +599,7 @@ func (g *Generator) genProfile(types map[string]*Type, msgs []*Msg, jmptable boo
 
 	g.genFieldDef()
 	g.genKnownMsgs(types)
+	g.genAccumulators(msgs)
 
 	if jmptable {
 		g.genFieldsArray(msgs)
@@ -657,6 +680,37 @@ func (g *Generator) genKnownMsgs(types map[string]*Type) {
 		g.p("MesgNum", mnvals[i].Name, ": true,")
 	}
 	g.p("}")
+}
+
+func (g *Generator) genAccumulators(msgs []*Msg) {
+	g.p()
+	g.p("var (")
+	// For-loop hell.
+	for _, msg := range msgs {
+		for _, field := range msg.Fields {
+			for _, comp := range field.Components {
+				if comp.Accumulate {
+					g.genAccumulator(comp, msg)
+				}
+			}
+			for _, sfield := range field.Subfields {
+				for _, comp := range sfield.Components {
+					if comp.Accumulate {
+						g.genAccumulator(comp, msg)
+					}
+				}
+			}
+		}
+	}
+	g.p(")")
+}
+
+func (g *Generator) genAccumulator(comp Component, msg *Msg) {
+	targetf, found := msg.FieldByName[comp.Name]
+	if !found {
+		panic("genAccumulator: target field for component not found")
+	}
+	g.p("accumu", comp.Name, " *", targetf.Type, "Accumulator")
 }
 
 func (g *Generator) genFieldsVarsAndMap(msgs []*Msg) {

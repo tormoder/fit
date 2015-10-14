@@ -153,6 +153,9 @@ func (d *decoder) decode(r io.Reader, headerOnly, fileIDOnly, crcOnly bool) erro
 			if err != nil {
 				return fmt.Errorf("compressed timestamp message: %v", err)
 			}
+			if msg.IsValid() {
+				d.fit.add(msg)
+			}
 		case (b & headerTypeMask) == mesgDefinitionMask:
 			dm, err = d.parseDefinitionMessage(b)
 			if err != nil {

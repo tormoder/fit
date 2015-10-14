@@ -145,7 +145,7 @@ func (g *Generator) genMsgs(msgs []*Msg) {
 	g.p(")")
 	for _, msg := range msgs {
 		g.p()
-		g.p("// ", msg.CCName, " represents the ", msg.Name, " FIT message type.")
+		g.p("// ", msg.CCName, "Msg represents the ", msg.Name, " FIT message type.")
 		g.p("type ", msg.CCName, "Msg", " struct {")
 		scaledfs, dynfs, compfs, dyncompfs := g.genFields(msg)
 		for _, scaledfi := range scaledfs {

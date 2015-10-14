@@ -2,7 +2,7 @@
 // program found in 'cmd/fitgen/main.go'
 // DO NOT EDIT.
 // SDK Version: 16.10
-// Generation time: Mon Oct 12 08:36:12 UTC 2015
+// Generation time: Wed Oct 14 15:15:39 UTC 2015
 
 package fit
 
@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-// FileId represents the file_id FIT message type.
+// FileIdMsg represents the file_id FIT message type.
 type FileIdMsg struct {
 	Type         File
 	Manufacturer Manufacturer
@@ -35,17 +35,17 @@ func (x *FileIdMsg) GetProduct() interface{} {
 	}
 }
 
-// FileCreator represents the file_creator FIT message type.
+// FileCreatorMsg represents the file_creator FIT message type.
 type FileCreatorMsg struct {
 	SoftwareVersion uint16
 	HardwareVersion uint8
 }
 
-// TimestampCorrelation represents the timestamp_correlation FIT message type.
+// TimestampCorrelationMsg represents the timestamp_correlation FIT message type.
 type TimestampCorrelationMsg struct {
 }
 
-// Software represents the software FIT message type.
+// SoftwareMsg represents the software FIT message type.
 type SoftwareMsg struct {
 	MessageIndex MessageIndex
 	Version      uint16
@@ -62,7 +62,7 @@ func (x *SoftwareMsg) GetVersionScaled() float64 {
 	return float64(x.Version) / 100.0
 }
 
-// SlaveDevice represents the slave_device FIT message type.
+// SlaveDeviceMsg represents the slave_device FIT message type.
 type SlaveDeviceMsg struct {
 	Manufacturer Manufacturer
 	Product      uint16
@@ -81,7 +81,7 @@ func (x *SlaveDeviceMsg) GetProduct() interface{} {
 	}
 }
 
-// Capabilities represents the capabilities FIT message type.
+// CapabilitiesMsg represents the capabilities FIT message type.
 type CapabilitiesMsg struct {
 	Languages             []uint8      // Use language_bits_x types where x is index of array.
 	Sports                []SportBits0 // Use sport_bits_x types where x is index of array.
@@ -89,7 +89,7 @@ type CapabilitiesMsg struct {
 	ConnectivitySupported ConnectivityCapabilities
 }
 
-// FileCapabilities represents the file_capabilities FIT message type.
+// FileCapabilitiesMsg represents the file_capabilities FIT message type.
 type FileCapabilitiesMsg struct {
 	MessageIndex MessageIndex
 	Type         File
@@ -99,7 +99,7 @@ type FileCapabilitiesMsg struct {
 	MaxSize      uint32
 }
 
-// MesgCapabilities represents the mesg_capabilities FIT message type.
+// MesgCapabilitiesMsg represents the mesg_capabilities FIT message type.
 type MesgCapabilitiesMsg struct {
 	MessageIndex MessageIndex
 	File         File
@@ -125,7 +125,7 @@ func (x *MesgCapabilitiesMsg) GetCount() interface{} {
 	}
 }
 
-// FieldCapabilities represents the field_capabilities FIT message type.
+// FieldCapabilitiesMsg represents the field_capabilities FIT message type.
 type FieldCapabilitiesMsg struct {
 	MessageIndex MessageIndex
 	File         File
@@ -134,7 +134,7 @@ type FieldCapabilitiesMsg struct {
 	Count        uint16
 }
 
-// DeviceSettings represents the device_settings FIT message type.
+// DeviceSettingsMsg represents the device_settings FIT message type.
 type DeviceSettingsMsg struct {
 	ActiveTimeZone uint8  // Index into time zone arrays.
 	UtcOffset      uint32 // Offset from system time. Required to convert timestamp from system time to UTC.
@@ -155,7 +155,7 @@ func (x *DeviceSettingsMsg) GetTimeZoneOffsetScaled() []float64 {
 	return s
 }
 
-// UserProfile represents the user_profile FIT message type.
+// UserProfileMsg represents the user_profile FIT message type.
 type UserProfileMsg struct {
 	MessageIndex               MessageIndex
 	FriendlyName               string
@@ -204,7 +204,7 @@ func (x *UserProfileMsg) GetWeightScaled() float64 {
 	return float64(x.Weight) / 10.0
 }
 
-// HrmProfile represents the hrm_profile FIT message type.
+// HrmProfileMsg represents the hrm_profile FIT message type.
 type HrmProfileMsg struct {
 	MessageIndex      MessageIndex
 	Enabled           Bool
@@ -213,7 +213,7 @@ type HrmProfileMsg struct {
 	HrmAntIdTransType uint8
 }
 
-// SdmProfile represents the sdm_profile FIT message type.
+// SdmProfileMsg represents the sdm_profile FIT message type.
 type SdmProfileMsg struct {
 	MessageIndex      MessageIndex
 	Enabled           Bool
@@ -247,7 +247,7 @@ func (x *SdmProfileMsg) GetOdometerScaled() float64 {
 	return float64(x.Odometer) / 100.0
 }
 
-// BikeProfile represents the bike_profile FIT message type.
+// BikeProfileMsg represents the bike_profile FIT message type.
 type BikeProfileMsg struct {
 	MessageIndex             MessageIndex
 	Name                     string
@@ -349,7 +349,7 @@ func (x *BikeProfileMsg) GetCrankLengthScaled() float64 {
 	return float64(x.CrankLength)/2.0 - -110
 }
 
-// ZonesTarget represents the zones_target FIT message type.
+// ZonesTargetMsg represents the zones_target FIT message type.
 type ZonesTargetMsg struct {
 	MaxHeartRate             uint8
 	ThresholdHeartRate       uint8
@@ -358,21 +358,21 @@ type ZonesTargetMsg struct {
 	PwrCalcType              PwrZoneCalc
 }
 
-// Sport represents the sport FIT message type.
+// SportMsg represents the sport FIT message type.
 type SportMsg struct {
 	Sport    Sport
 	SubSport SubSport
 	Name     string
 }
 
-// HrZone represents the hr_zone FIT message type.
+// HrZoneMsg represents the hr_zone FIT message type.
 type HrZoneMsg struct {
 	MessageIndex MessageIndex
 	HighBpm      uint8
 	Name         string
 }
 
-// SpeedZone represents the speed_zone FIT message type.
+// SpeedZoneMsg represents the speed_zone FIT message type.
 type SpeedZoneMsg struct {
 	MessageIndex MessageIndex
 	HighValue    uint16
@@ -390,21 +390,21 @@ func (x *SpeedZoneMsg) GetHighValueScaled() float64 {
 	return float64(x.HighValue) / 1000.0
 }
 
-// CadenceZone represents the cadence_zone FIT message type.
+// CadenceZoneMsg represents the cadence_zone FIT message type.
 type CadenceZoneMsg struct {
 	MessageIndex MessageIndex
 	HighValue    uint8
 	Name         string
 }
 
-// PowerZone represents the power_zone FIT message type.
+// PowerZoneMsg represents the power_zone FIT message type.
 type PowerZoneMsg struct {
 	MessageIndex MessageIndex
 	HighValue    uint16
 	Name         string
 }
 
-// MetZone represents the met_zone FIT message type.
+// MetZoneMsg represents the met_zone FIT message type.
 type MetZoneMsg struct {
 	MessageIndex MessageIndex
 	HighBpm      uint8
@@ -434,7 +434,7 @@ func (x *MetZoneMsg) GetFatCaloriesScaled() float64 {
 	return float64(x.FatCalories) / 10.0
 }
 
-// Goal represents the goal FIT message type.
+// GoalMsg represents the goal FIT message type.
 type GoalMsg struct {
 	MessageIndex    MessageIndex
 	Sport           Sport
@@ -450,7 +450,7 @@ type GoalMsg struct {
 	Enabled         Bool
 }
 
-// Activity represents the activity FIT message type.
+// ActivityMsg represents the activity FIT message type.
 type ActivityMsg struct {
 	Timestamp      time.Time
 	TotalTimerTime uint32 // Exclude pauses
@@ -473,7 +473,7 @@ func (x *ActivityMsg) GetTotalTimerTimeScaled() float64 {
 	return float64(x.TotalTimerTime) / 1000.0
 }
 
-// Session represents the session FIT message type.
+// SessionMsg represents the session FIT message type.
 type SessionMsg struct {
 	MessageIndex           MessageIndex // Selected bit is set for the current session.
 	Timestamp              time.Time    // Sesson end time.
@@ -1095,7 +1095,7 @@ func (x *SessionMsg) expandComponents() {
 	}
 }
 
-// Lap represents the lap FIT message type.
+// LapMsg represents the lap FIT message type.
 type LapMsg struct {
 	MessageIndex                  MessageIndex
 	Timestamp                     time.Time // Lap end time.
@@ -1708,7 +1708,7 @@ func (x *LapMsg) expandComponents() {
 	}
 }
 
-// Length represents the length FIT message type.
+// LengthMsg represents the length FIT message type.
 type LengthMsg struct {
 	MessageIndex       MessageIndex
 	Timestamp          time.Time
@@ -1763,7 +1763,7 @@ func (x *LengthMsg) GetAvgSpeedScaled() float64 {
 	return float64(x.AvgSpeed) / 1000.0
 }
 
-// Record represents the record FIT message type.
+// RecordMsg represents the record FIT message type.
 type RecordMsg struct {
 	Timestamp                     time.Time
 	PositionLat                   Latitude
@@ -2176,7 +2176,7 @@ func (x *RecordMsg) expandComponents() {
 	}
 }
 
-// Event represents the event FIT message type.
+// EventMsg represents the event FIT message type.
 type EventMsg struct {
 	Timestamp     time.Time
 	Event         Event
@@ -2257,7 +2257,7 @@ func (x *EventMsg) expandComponents() {
 	}
 }
 
-// DeviceInfo represents the device_info FIT message type.
+// DeviceInfoMsg represents the device_info FIT message type.
 type DeviceInfoMsg struct {
 	Timestamp           time.Time
 	DeviceIndex         DeviceIndex
@@ -2328,7 +2328,7 @@ func (x *DeviceInfoMsg) GetProduct() interface{} {
 	}
 }
 
-// TrainingFile represents the training_file FIT message type.
+// TrainingFileMsg represents the training_file FIT message type.
 type TrainingFileMsg struct {
 	Timestamp    time.Time
 	Type         File
@@ -2351,7 +2351,7 @@ func (x *TrainingFileMsg) GetProduct() interface{} {
 	}
 }
 
-// Hrv represents the hrv FIT message type.
+// HrvMsg represents the hrv FIT message type.
 type HrvMsg struct {
 	Time []uint16 // Time between beats
 }
@@ -2370,38 +2370,38 @@ func (x *HrvMsg) GetTimeScaled() []float64 {
 	return s
 }
 
-// CameraEvent represents the camera_event FIT message type.
+// CameraEventMsg represents the camera_event FIT message type.
 type CameraEventMsg struct {
 }
 
-// GyroscopeData represents the gyroscope_data FIT message type.
+// GyroscopeDataMsg represents the gyroscope_data FIT message type.
 type GyroscopeDataMsg struct {
 }
 
-// AccelerometerData represents the accelerometer_data FIT message type.
+// AccelerometerDataMsg represents the accelerometer_data FIT message type.
 type AccelerometerDataMsg struct {
 }
 
-// ThreeDSensorCalibration represents the three_d_sensor_calibration FIT message type.
+// ThreeDSensorCalibrationMsg represents the three_d_sensor_calibration FIT message type.
 type ThreeDSensorCalibrationMsg struct {
 }
 
-// VideoFrame represents the video_frame FIT message type.
+// VideoFrameMsg represents the video_frame FIT message type.
 type VideoFrameMsg struct {
 }
 
-// ObdiiData represents the obdii_data FIT message type.
+// ObdiiDataMsg represents the obdii_data FIT message type.
 type ObdiiDataMsg struct {
 }
 
-// NmeaSentence represents the nmea_sentence FIT message type.
+// NmeaSentenceMsg represents the nmea_sentence FIT message type.
 type NmeaSentenceMsg struct {
 	Timestamp   time.Time // Timestamp message was output
 	TimestampMs uint16    // Fractional part of timestamp, added to timestamp
 	Sentence    string    // NMEA sentence
 }
 
-// AviationAttitude represents the aviation_attitude FIT message type.
+// AviationAttitudeMsg represents the aviation_attitude FIT message type.
 type AviationAttitudeMsg struct {
 	Timestamp             time.Time // Timestamp message was output
 	TimestampMs           uint16    // Fractional part of timestamp, added to timestamp
@@ -2501,36 +2501,36 @@ func (x *AviationAttitudeMsg) GetTrackScaled() []float64 {
 	return s
 }
 
-// Video represents the video FIT message type.
+// VideoMsg represents the video FIT message type.
 type VideoMsg struct {
 }
 
-// VideoTitle represents the video_title FIT message type.
+// VideoTitleMsg represents the video_title FIT message type.
 type VideoTitleMsg struct {
 	MessageIndex MessageIndex // Long titles will be split into multiple parts
 	MessageCount uint16       // Total number of title parts
 	Text         string
 }
 
-// VideoDescription represents the video_description FIT message type.
+// VideoDescriptionMsg represents the video_description FIT message type.
 type VideoDescriptionMsg struct {
 	MessageIndex MessageIndex // Long descriptions will be split into multiple parts
 	MessageCount uint16       // Total number of description parts
 	Text         string
 }
 
-// VideoClip represents the video_clip FIT message type.
+// VideoClipMsg represents the video_clip FIT message type.
 type VideoClipMsg struct {
 }
 
-// Course represents the course FIT message type.
+// CourseMsg represents the course FIT message type.
 type CourseMsg struct {
 	Sport        Sport
 	Name         string
 	Capabilities CourseCapabilities
 }
 
-// CoursePoint represents the course_point FIT message type.
+// CoursePointMsg represents the course_point FIT message type.
 type CoursePointMsg struct {
 	MessageIndex MessageIndex
 	Timestamp    time.Time
@@ -2553,7 +2553,7 @@ func (x *CoursePointMsg) GetDistanceScaled() float64 {
 	return float64(x.Distance) / 100.0
 }
 
-// SegmentId represents the segment_id FIT message type.
+// SegmentIdMsg represents the segment_id FIT message type.
 type SegmentIdMsg struct {
 	Name                  string               // Friendly name assigned to segment
 	Uuid                  string               // UUID of the segment
@@ -2566,7 +2566,7 @@ type SegmentIdMsg struct {
 	SelectionType         SegmentSelectionType // Indicates how the segment was selected to be sent to the device
 }
 
-// SegmentLeaderboardEntry represents the segment_leaderboard_entry FIT message type.
+// SegmentLeaderboardEntryMsg represents the segment_leaderboard_entry FIT message type.
 type SegmentLeaderboardEntryMsg struct {
 	MessageIndex    MessageIndex
 	Name            string                 // Friendly name assigned to leader
@@ -2587,7 +2587,7 @@ func (x *SegmentLeaderboardEntryMsg) GetSegmentTimeScaled() float64 {
 	return float64(x.SegmentTime) / 1000.0
 }
 
-// SegmentPoint represents the segment_point FIT message type.
+// SegmentPointMsg represents the segment_point FIT message type.
 type SegmentPointMsg struct {
 	MessageIndex MessageIndex
 	PositionLat  Latitude
@@ -2633,7 +2633,7 @@ func (x *SegmentPointMsg) GetLeaderTimeScaled() []float64 {
 	return s
 }
 
-// SegmentLap represents the segment_lap FIT message type.
+// SegmentLapMsg represents the segment_lap FIT message type.
 type SegmentLapMsg struct {
 	MessageIndex                MessageIndex
 	Timestamp                   time.Time // Lap end time.
@@ -3076,7 +3076,7 @@ func (x *SegmentLapMsg) GetTotalCycles() interface{} {
 	}
 }
 
-// SegmentFile represents the segment_file FIT message type.
+// SegmentFileMsg represents the segment_file FIT message type.
 type SegmentFileMsg struct {
 	MessageIndex          MessageIndex
 	FileUuid              string                   // UUID of the segment file
@@ -3087,7 +3087,7 @@ type SegmentFileMsg struct {
 	LeaderActivityId      []uint32                 // Activity ID of each leader in the segment file
 }
 
-// Workout represents the workout FIT message type.
+// WorkoutMsg represents the workout FIT message type.
 type WorkoutMsg struct {
 	Sport         Sport
 	Capabilities  WorkoutCapabilities
@@ -3095,7 +3095,7 @@ type WorkoutMsg struct {
 	WktName       string
 }
 
-// WorkoutStep represents the workout_step FIT message type.
+// WorkoutStepMsg represents the workout_step FIT message type.
 type WorkoutStepMsg struct {
 	MessageIndex          MessageIndex
 	WktStepName           string
@@ -3200,7 +3200,7 @@ func (x *WorkoutStepMsg) GetCustomTargetValueHigh() interface{} {
 	}
 }
 
-// Schedule represents the schedule FIT message type.
+// ScheduleMsg represents the schedule FIT message type.
 type ScheduleMsg struct {
 	Manufacturer  Manufacturer // Corresponds to file_id of scheduled workout / course.
 	Product       uint16       // Corresponds to file_id of scheduled workout / course.
@@ -3224,7 +3224,7 @@ func (x *ScheduleMsg) GetProduct() interface{} {
 	}
 }
 
-// Totals represents the totals FIT message type.
+// TotalsMsg represents the totals FIT message type.
 type TotalsMsg struct {
 	MessageIndex MessageIndex
 	Timestamp    time.Time
@@ -3237,7 +3237,7 @@ type TotalsMsg struct {
 	ActiveTime   uint32
 }
 
-// WeightScale represents the weight_scale FIT message type.
+// WeightScaleMsg represents the weight_scale FIT message type.
 type WeightScaleMsg struct {
 	Timestamp         time.Time
 	Weight            Weight
@@ -3342,7 +3342,7 @@ func (x *WeightScaleMsg) GetActiveMetScaled() float64 {
 	return float64(x.ActiveMet) / 4.0
 }
 
-// BloodPressure represents the blood_pressure FIT message type.
+// BloodPressureMsg represents the blood_pressure FIT message type.
 type BloodPressureMsg struct {
 	Timestamp            time.Time
 	SystolicPressure     uint16
@@ -3357,13 +3357,13 @@ type BloodPressureMsg struct {
 	UserProfileIndex     MessageIndex // Associates this blood pressure message to a user.  This corresponds to the index of the user profile message in the blood pressure file.
 }
 
-// MonitoringInfo represents the monitoring_info FIT message type.
+// MonitoringInfoMsg represents the monitoring_info FIT message type.
 type MonitoringInfoMsg struct {
 	Timestamp      time.Time
 	LocalTimestamp time.Time // Use to convert activity timestamps to local time if device does not support time zone and daylight savings time correction.
 }
 
-// Monitoring represents the monitoring FIT message type.
+// MonitoringMsg represents the monitoring FIT message type.
 type MonitoringMsg struct {
 	Timestamp       time.Time   // Must align to logging interval, for example, time must be 00:00:00 for daily log.
 	DeviceIndex     DeviceIndex // Associates this data to device_info message.  Not required for file with single device (sensor).
@@ -3425,6 +3425,6 @@ func (x *MonitoringMsg) GetCycles() interface{} {
 	}
 }
 
-// MemoGlob represents the memo_glob FIT message type.
+// MemoGlobMsg represents the memo_glob FIT message type.
 type MemoGlobMsg struct {
 }

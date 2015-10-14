@@ -385,9 +385,9 @@ func (d *decoder) parseDefinitionMessage(recordHeader byte) (*defmsg, error) {
 	}
 
 	switch arch {
-	case 0:
+	case littleEndian:
 		dm.arch = le
-	case 1:
+	case bigEndian:
 		dm.arch = be
 	default:
 		return nil, fmt.Errorf("unknow arch: %#x", arch)

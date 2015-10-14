@@ -8,8 +8,8 @@ const (
 	protocolVersionMajorMask       = (0x0F << protocolVersionMajorShift)
 
 	profileVersion      uint16 = ((profileMajorVersion * 100) + profileMinorVersion)
-	profileMajorVersion        = 14
-	profileMinorVersion        = 0
+	profileMajorVersion        = 16
+	profileMinorVersion        = 10
 
 	headerTypeMask             byte = 0xF0
 	compressedHeaderMask            = 0x80

@@ -423,7 +423,7 @@ func (g *Generator) genExpandComponents(msg *Msg, compFieldIndices []int, dynCom
 		return
 	}
 
-	log.Println("message should call expandComponents() on add in file_types.go:", msg.CCName)
+	log.Println("msggen:", msg.CCName, "should call expandComponents() on add in file_types.go")
 
 	g.p()
 	g.p("func (", "x", " *", msg.CCName, "Msg) expandComponents() {")

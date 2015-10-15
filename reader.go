@@ -671,8 +671,9 @@ func (d *decoder) parseDataFields(dm *defmsg, knownMsg bool, msgv reflect.Value)
 				}
 			} else {
 				if dbt == fitByte {
-					// Set directly.
-					fieldv.SetBytes(d.tmp[:dsize])
+					byteArray := make([]byte, dsize, dsize)
+					copy(byteArray, d.tmp[:dsize])
+					fieldv.SetBytes(byteArray)
 					continue
 				}
 

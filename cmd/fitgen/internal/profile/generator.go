@@ -468,24 +468,24 @@ func (g *Generator) genExpandComponentsReg(msg *Msg, field *Field) {
 
 func (g *Generator) genExpandComponentsArray(field *Field) {
 	// Handle this as a special case for now.
-	if field.CCName != "CompressedSpeedDistance" {
-		panic("genExpandComponents: only specific field " +
-			"'CompressedSpeedDistance' in Record message" +
-			"currently handled for byte arrays")
+	switch field.CCName {
+	case "CompressedSpeedDistance":
+		g.p("expand := false")
+		g.p("if len(x.", field.CCName, ") == 3 {")
+		g.p("for _, v := range x.", field.CCName, " {")
+		g.p("if v != ", field.BTInvalid, "{")
+		g.p("expand = true")
+		g.p("break")
+		g.p("}")
+		g.p("}")
+		g.p("}")
+		g.p("if expand {")
+		g.p("x.Speed = uint16(x.", field.CCName, "[0] | ((x.", field.CCName, "[1]", "& 0x0F) << 8))")
+		g.p("x.Distance = uint32((x.", field.CCName, "[1] >> 4) | (x.", field.CCName, "[2] << 4))")
+		g.p("}")
+	default:
+		panic("genExpandComponentsArray: unhandled case")
 	}
-	g.p("expand := false")
-	g.p("if len(x.", field.CCName, ") == 3 {")
-	g.p("for _, v := range x.", field.CCName, " {")
-	g.p("if v != ", field.BTInvalid, "{")
-	g.p("expand = true")
-	g.p("break")
-	g.p("}")
-	g.p("}")
-	g.p("}")
-	g.p("if expand {")
-	g.p("x.Speed = uint16(x.", field.CCName, "[0] | ((x.", field.CCName, "[1]", "& 0x0F) << 8))")
-	g.p("x.Distance = uint32((x.", field.CCName, "[1] >> 4) | (x.", field.CCName, "[2] << 4))")
-	g.p("}")
 }
 
 func (g *Generator) genExpandComponentsDyn(msg *Msg, field *Field, dcsfis []int) {

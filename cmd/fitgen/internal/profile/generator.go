@@ -592,52 +592,55 @@ func (g *Generator) genProfile(types map[string]*Type, msgs []*Msg, jmptable boo
 }
 
 func (g *Generator) genFieldDef() {
-	g.p()
-	g.p("// field represents a fit message field in the profile field lookup table.")
-	g.p("type field struct {")
-	g.p("sindex int")
-	g.p("array  uint8")
-	g.p("t      gotype")
-	g.p("num    byte")
-	g.p("btype  fitBaseType")
-	g.p("}")
-	g.p()
-	g.p("func (f field) String() string {")
-	g.p("return fmt.Sprintf(")
-	g.p("\"num: %d | btype: %v | sindex: %d | array: %d\",")
-	g.p("f.num, f.btype, f.sindex, f.array,")
-	g.p(")")
-	g.p("}")
-	g.p()
-	g.p("// gotype is used in the profile field lookup table to represent the data type")
-	g.p("// (or type category) for a field when decoded into a Go message struct.")
-	g.p("type gotype uint8")
-	g.p()
-	g.p("const (")
-	g.p("fit gotype = iota // Standard -> Fit base type/alias")
-	g.p()
-	g.p("// Special (non-profile types)")
-	g.p("	timeutc   // Time UTC 	-> time.Time")
-	g.p("	timelocal // Time Local -> time.Time with Location")
-	g.p("	lat       // Latitude 	-> fit.Latitude")
-	g.p("	lng       // Longitude 	-> fit.Longitude")
-	g.p(")")
-	g.p()
-	g.p("func (g gotype) String() string {")
-	g.p("	if int(g) > len(gotypeString) {")
-	g.p("		return fmt.Sprintf(\"gotype(%d)\", g)")
-	g.p("	}")
-	g.p("	return gotypeString[g]")
-	g.p("}")
-	g.p()
-	g.p("var gotypeString = [...]string{")
-	g.p("	\"fit\",")
-	g.p("	\"timeutc\",")
-	g.p("	\"timelocal\",")
-	g.p("	\"lat\",")
-	g.p("	\"lng\",")
-	g.p("}")
+	g.p(fieldDef)
 }
+
+const fieldDef = `
+// field represents a fit message field in the profile field lookup table.
+type field struct {
+	sindex int
+	array  uint8
+	t      gotype
+	num    byte
+	btype  fitBaseType
+}
+
+func (f field) String() string {
+	return fmt.Sprintf(
+		"num: %d | btype: %v | sindex: %d | array: %d",
+		f.num, f.btype, f.sindex, f.array,
+	)
+}
+
+// gotype is used in the profile field lookup table to represent the data type
+// (or type category) for a field when decoded into a Go message struct.
+type gotype uint8
+
+const (
+	fit gotype = iota // Standard -> Fit base type/alias
+
+	// Special (non-profile types)
+	timeutc   // Time UTC 	-> time.Time
+	timelocal // Time Local -> time.Time with Location
+	lat       // Latitude 	-> fit.Latitude
+	lng       // Longitude 	-> fit.Longitude
+)
+
+func (g gotype) String() string {
+	if int(g) > len(gotypeString) {
+		return fmt.Sprintf("gotype(%d)", g)
+	}
+	return gotypeString[g]
+}
+
+var gotypeString = [...]string{
+	"fit",
+	"timeutc",
+	"timelocal",
+	"lat",
+	"lng",
+}
+`
 
 func (g *Generator) genKnownMsgs(types map[string]*Type) {
 	mesgNums, found := types["MesgNum"]

@@ -1147,7 +1147,7 @@ func (i LengthType) String() string {
 const (
 	_Manufacturer_name_0 = "GarminGarminFr405AntfsZephyrDaytonIdtSrmQuarqIbikeSarisSparkHkTanitaEchowellDynastreamOemNautilusDynastreamTimexMetrigearXelicBeurerCardiosportAAndDHmmSuuntoThitaElektronikGpulseCleanMobilePedalBrainPeakswareSaxonarLemondFitnessDexcomWahooFitnessOctaneFitnessArchinoeticsTheHurtBoxCitizenSystemsMagellanOsynceHoluxConcept2"
 	_Manufacturer_name_1 = "OneGiantLeapAceSensorBrimBrothersXplovaPerceptionDigitalBf1systemsPioneerSpantecMetalogics4iiiisSeikoEpsonSeikoEpsonOemIforPowellMaxwellGuiderStarTracBreakawayAlatechTechnologyLtdMioTechnologyEuropeRotorGeonauteIdBikeSpecializedWtekPhysicalEnterprisesNorthPoleEngineeringBkoolCateyeStagesCyclingSigmasportTomtomPeripedalWattbike"
-	_Manufacturer_name_2 = "MoxyCiclosportPowerbahnAcornProjectsApsLifebeamBontragerWellgoScoscheMaguraWoodwayEliteNielsenKellermanDkCityTacxDirectionTechnologyMagtonic1partcarbonInsideRideTechnologiesSoundOfMotionStryd"
+	_Manufacturer_name_2 = "MoxyCiclosportPowerbahnAcornProjectsApsLifebeamBontragerWellgoScoscheMaguraWoodwayEliteNielsenKellermanDkCityTacxDirectionTechnologyMagtonic1partcarbonInsideRideTechnologiesSoundOfMotionStrydIcgMiPulseBsxAthleticsLook"
 	_Manufacturer_name_3 = "Development"
 	_Manufacturer_name_4 = "HealthandlifeLezyneScribeLabsZwiftWatteamReconFaveroElectronicsDynoveloStrava"
 	_Manufacturer_name_5 = "Actigraphcorp"
@@ -1157,7 +1157,7 @@ const (
 var (
 	_Manufacturer_index_0 = [...]uint16{0, 6, 22, 28, 34, 37, 40, 45, 50, 55, 62, 68, 76, 89, 97, 107, 112, 121, 126, 132, 143, 148, 151, 157, 172, 178, 189, 199, 208, 215, 228, 234, 246, 259, 271, 281, 295, 303, 309, 314, 322}
 	_Manufacturer_index_1 = [...]uint16{0, 12, 21, 33, 39, 56, 66, 73, 80, 90, 96, 106, 119, 129, 142, 150, 159, 179, 198, 203, 211, 217, 228, 232, 251, 271, 276, 282, 295, 305, 311, 320, 328}
-	_Manufacturer_index_2 = [...]uint8{0, 4, 14, 23, 39, 47, 56, 62, 69, 75, 82, 87, 103, 109, 113, 132, 140, 151, 173, 186, 191}
+	_Manufacturer_index_2 = [...]uint8{0, 4, 14, 23, 39, 47, 56, 62, 69, 75, 82, 87, 103, 109, 113, 132, 140, 151, 173, 186, 191, 194, 201, 213, 217}
 	_Manufacturer_index_3 = [...]uint8{0, 11}
 	_Manufacturer_index_4 = [...]uint8{0, 13, 19, 29, 34, 41, 46, 63, 71, 77}
 	_Manufacturer_index_5 = [...]uint8{0, 13}
@@ -1172,7 +1172,7 @@ func (i Manufacturer) String() string {
 	case 42 <= i && i <= 73:
 		i -= 42
 		return _Manufacturer_name_1[_Manufacturer_index_1[i]:_Manufacturer_index_1[i+1]]
-	case 76 <= i && i <= 95:
+	case 76 <= i && i <= 99:
 		i -= 76
 		return _Manufacturer_name_2[_Manufacturer_index_2[i]:_Manufacturer_index_2[i+1]]
 	case i == 255:

@@ -1,8 +1,8 @@
 // This file is auto-generated using the
 // program found in 'cmd/fitgen/main.go'
 // DO NOT EDIT.
-// SDK Version: 16.10
-// Generation time: Thu Oct 15 19:15:19 UTC 2015
+// SDK Version: 16.20
+// Generation time: Fri Oct 16 15:58:20 UTC 2015
 
 package fit
 
@@ -903,6 +903,10 @@ const (
 	ManufacturerInsideRideTechnologies Manufacturer = 93
 	ManufacturerSoundOfMotion          Manufacturer = 94
 	ManufacturerStryd                  Manufacturer = 95
+	ManufacturerIcg                    Manufacturer = 96 // Indoorcycling Group
+	ManufacturerMiPulse                Manufacturer = 97
+	ManufacturerBsxAthletics           Manufacturer = 98
+	ManufacturerLook                   Manufacturer = 99
 	ManufacturerDevelopment            Manufacturer = 255
 	ManufacturerHealthandlife          Manufacturer = 257
 	ManufacturerLezyne                 Manufacturer = 258

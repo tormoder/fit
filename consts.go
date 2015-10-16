@@ -9,7 +9,7 @@ const (
 
 	profileVersion      uint16 = ((profileMajorVersion * 100) + profileMinorVersion)
 	profileMajorVersion        = 16
-	profileMinorVersion        = 10
+	profileMinorVersion        = 20
 
 	headerTypeMask             byte = 0xF0
 	compressedHeaderMask            = 0x80

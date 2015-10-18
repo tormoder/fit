@@ -56,7 +56,7 @@ func (t *Type) transform() (skip bool, err error) {
 	for _, f := range t.data.Fields {
 		vt := ValueTriple{
 			Name:    toCamelCase(f[tVALNAME]),
-			Value:   trimFloat(f[tVAL]),
+			Value:   f[tVAL],
 			Comment: f[tCOMMENT],
 		}
 		t.Values = append(t.Values, vt)
@@ -125,7 +125,7 @@ func (f *Field) transform(subfield bool, types map[string]*Type) (skip bool, err
 		return true, nil
 	}
 
-	f.DefNum = trimFloat(f.data[mFDEFN])
+	f.DefNum = f.data[mFDEFN]
 	f.Name = f.data[mFNAME]
 	f.CCName = toCamelCase(f.Name)
 
@@ -139,7 +139,7 @@ func (f *Field) transform(subfield bool, types map[string]*Type) (skip bool, err
 
 	f.Units = f.data[mUNITS]
 	f.Comment = f.data[mCOMMENT]
-	f.Example = trimFloat(f.data[mEXAMPLE])
+	f.Example = f.data[mEXAMPLE]
 
 	if subfield {
 		f.parseRefFields()
@@ -284,7 +284,7 @@ func (f *Field) parseScaleOffset() {
 	}
 	f.Scale = f.data[mSCALE]
 	if f.data[mOFFSET] != "" {
-		f.Offset = trimFloat(f.data[mOFFSET])
+		f.Offset = f.data[mOFFSET]
 	}
 }
 
@@ -341,7 +341,6 @@ func (f *Field) parseComponents(types map[string]*Type) error {
 		f.Components[i].Name = strings.TrimSpace(comp)
 		f.Components[i].Name = toCamelCase(f.Components[i].Name)
 		f.Components[i].Bits = strings.TrimSpace(bits[i])
-		f.Components[i].Bits = trimFloat(f.Components[i].Bits)
 		f.Components[i].BitsInt, err = strconv.Atoi(f.Components[i].Bits)
 		if err != nil {
 			return fmt.Errorf("parseComponents: error converting bit to integer: %v", err)
@@ -349,7 +348,6 @@ func (f *Field) parseComponents(types map[string]*Type) error {
 		bitsTotal += f.Components[i].BitsInt
 		if len(accumulate) == len(components) {
 			tmp := strings.TrimSpace(accumulate[i])
-			tmp = trimFloat(tmp)
 			f.Components[i].Accumulate, err = strconv.ParseBool(tmp)
 			if err != nil {
 				return fmt.Errorf("parseComponents: %v", err)

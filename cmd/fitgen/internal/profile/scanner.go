@@ -1,10 +1,5 @@
 package profile
 
-import (
-	"encoding/csv"
-	"io"
-)
-
 type Token int
 
 const (
@@ -12,7 +7,7 @@ const (
 	ILLEGAL Token = iota
 	EOF
 	EMPTY
-	CSVHDR
+	PROFILEHDR
 
 	// Types
 	THDR
@@ -29,7 +24,7 @@ var tokenString = [...]string{
 	"ILLEGAL",
 	"EOF",
 	"EMPTY",
-	"CSVHDR",
+	"PROFILEHDR",
 
 	"THDR",
 	"TFIELD",
@@ -50,28 +45,16 @@ type Scanner struct {
 	scan  func() (Token, []string)
 }
 
-func NewTypeScanner(r io.Reader) (*Scanner, error) {
-	reader := csv.NewReader(r)
-	reader.FieldsPerRecord = 5
-	data, err := reader.ReadAll()
-	if err != nil {
-		return nil, err
-	}
+func NewTypeScanner(input [][]string) (*Scanner, error) {
 	s := new(Scanner)
-	s.input = data
+	s.input = input
 	s.scan = s.tscan
 	return s, nil
 }
 
-func NewMsgScanner(r io.Reader) (*Scanner, error) {
-	reader := csv.NewReader(r)
-	reader.FieldsPerRecord = 16
-	data, err := reader.ReadAll()
-	if err != nil {
-		return nil, err
-	}
+func NewMsgScanner(input [][]string) (*Scanner, error) {
 	s := new(Scanner)
-	s.input = data
+	s.input = input
 	s.scan = s.mscan
 	return s, nil
 }
@@ -96,7 +79,7 @@ func (s *Scanner) tscan() (tok Token, lit []string) {
 	}
 	if ch[tNAME] != "" {
 		if ch[tVALNAME] != "" {
-			return CSVHDR, ch
+			return PROFILEHDR, ch
 		}
 		return THDR, ch
 	}
@@ -118,7 +101,7 @@ func (s *Scanner) mscan() (tok Token, lit []string) {
 		if ch[mFDEFN] == "" {
 			return MSGHDR, ch
 		}
-		return CSVHDR, ch
+		return PROFILEHDR, ch
 	}
 
 	if ch[mFDEFN] == "" {

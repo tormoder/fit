@@ -1,19 +1,19 @@
 package profile
 
-type csvrowpos int
+type datarowpos int
 
-// Row indexes for type csv file.
+// Row indexes for raw type data.
 const (
-	tNAME csvrowpos = iota
+	tNAME datarowpos = iota
 	tBTYPE
 	tVALNAME
 	tVAL
 	tCOMMENT
 )
 
-// Row indexes for message csv file.
+// Row indexes for raw message data.
 const (
-	mMSGNAME csvrowpos = iota
+	mMSGNAME datarowpos = iota
 	mFDEFN
 	mFNAME
 	mFTYPE

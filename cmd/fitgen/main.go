@@ -16,25 +16,50 @@ import (
 	"strings"
 
 	"github.com/tormoder/fit/cmd/fitgen/internal/profile"
+
+	"github.com/tealeg/xlsx"
 )
 
 const (
 	fitPkgImportPath = "github.com/tormoder/fit"
 
-	types    = "types"
-	msgs     = "messages"
-	profilef = "profile"
+	typesSheetIndex = 0
+	msgsSheetIndex  = 1
+	msgsNumCells    = 16
 
 	workbookNameXLS  = "Profile.xls"
 	workbookNameXLSX = "Profile.xlsx"
 )
 
+var (
+	fitSrcDir        string
+	msgsGoOut        string
+	typesGoOut       string
+	profileGoOut     string
+	typesStringGoOut string
+	stringerPath     string
+	generator        *profile.Generator
+)
+
+func init() {
+	log.SetFlags(0)
+	log.SetPrefix("fitgen:\t")
+
+	var err error
+	fitSrcDir, err = goPackagePath(fitPkgImportPath)
+	if err != nil {
+		log.Fatalf("can't find fit package root src directory for %q", fitPkgImportPath)
+	}
+	log.Println("root src directory:", fitSrcDir)
+
+	msgsGoOut = filepath.Join(fitSrcDir, "messages.go")
+	typesGoOut = filepath.Join(fitSrcDir, "types.go")
+	profileGoOut = filepath.Join(fitSrcDir, "profile.go")
+	typesStringGoOut = filepath.Join(fitSrcDir, "types_string.go")
+	stringerPath = filepath.Join(fitSrcDir, "cmd/stringer/stringer.go")
+}
+
 func main() {
-	keep := flag.Bool(
-		"keep",
-		false,
-		"don't delete intermediary workbook and csv files from profile directory",
-	)
 	sdkOverride := flag.String(
 		"sdk",
 		"",
@@ -47,7 +72,7 @@ func main() {
 	)
 
 	flag.Usage = func() {
-		fmt.Fprintf(os.Stderr, "usage: fitgenprofile [-keep] [path to sdk zip, xls or xlsx file]\n")
+		fmt.Fprintf(os.Stderr, "usage: fitgen [flags] [path to sdk zip, xls or xlsx file]\n")
 		flag.PrintDefaults()
 	}
 
@@ -57,47 +82,14 @@ func main() {
 		os.Exit(2)
 	}
 
-	log.SetFlags(0)
-	log.SetPrefix("fitgen:\t")
-
-	_, err := exec.LookPath("python3")
-	if err != nil {
-		log.Fatal("can't find python3 in $PATH, needed for xls to csv conversion")
-	}
-
-	fitSrcDir, err := goPackagePath(fitPkgImportPath)
-	if err != nil {
-		log.Fatal("can't find fit package root src directory")
-	}
-	log.Println("root src directory:", fitSrcDir)
-	profileDir := filepath.Join(fitSrcDir, "profile")
-
-	var (
-		isZip         bool
-		workbookPath  string
-		sdkVersion    string
-		stringerInput string
-
-		goTypes map[string]*profile.Type
-		goMsgs  []*profile.Msg
-
-		pyScript         = filepath.Join(fitSrcDir, "lib/python/xls_to_csv.py")
-		typesCSVOut      = filepath.Join(profileDir, types+".csv")
-		msgsCSVOut       = filepath.Join(profileDir, msgs+".csv")
-		msgsGoOut        = filepath.Join(fitSrcDir, msgs+".go")
-		typesGoOut       = filepath.Join(fitSrcDir, types+".go")
-		profileGoOut     = filepath.Join(fitSrcDir, profilef+".go")
-		typesStringGoOut = filepath.Join(fitSrcDir, types+"_string.go")
-		stringerPath     = filepath.Join(fitSrcDir, "cmd/stringer/stringer.go")
-	)
-
+	var sdkVersion string
+	isZip := false
 	input := flag.Arg(0)
 	inputExt := filepath.Ext(input)
 	switch inputExt {
 	case ".zip":
 		isZip = true
 	case ".xls", ".xlsx":
-		workbookPath = input
 	default:
 		log.Fatalln("input file must be of type [.zip | .xls | .xlsx], got:", inputExt)
 	}
@@ -112,55 +104,44 @@ func main() {
 	}
 	log.Println("sdk version:", sdkVersion)
 
-	if isZip {
-		workbookPath, err = writeWorkbookToFile(input, profileDir)
-		if err != nil {
-			log.Fatalln("write-xls-to-file:", err)
-		}
+	generator = profile.NewGenerator(sdkVersion)
+
+	typeData, msgData, err := parseProfileWorkbook(input)
+	if err != nil {
+		log.Fatal(err)
 	}
 
-	err = generateCSV(pyScript, workbookPath, typesCSVOut, msgsCSVOut)
+	goTypes, stringerInput, err := generateTypes(typeData, typesGoOut)
 	if err != nil {
-		goto fatal
+		log.Fatal(err)
 	}
 
-	goTypes, stringerInput, err = generateTypes(sdkVersion, typesCSVOut, typesGoOut)
+	goMsgs, err := generateMsgs(msgData, msgsGoOut, goTypes)
 	if err != nil {
-		goto fatal
+		log.Fatal(err)
 	}
 
-	goMsgs, err = generateMsgs(sdkVersion, msgsCSVOut, msgsGoOut, goTypes)
+	err = generateProfile(goTypes, goMsgs, profileGoOut, *jmptable)
 	if err != nil {
-		goto fatal
+		log.Fatal(err)
 	}
 
-	err = generateProfile(sdkVersion, goTypes, goMsgs, profileGoOut, *jmptable)
+	err = runStringerOnTypes(stringerPath, typesStringGoOut, stringerInput)
 	if err != nil {
-		goto fatal
-	}
-
-	err = runStringerOnTypes(stringerPath, fitSrcDir, typesStringGoOut, stringerInput)
-	if err != nil {
-		goto fatal
+		log.Fatal(err)
 	}
 
 	err = runAllTests(fitPkgImportPath)
 	if err != nil {
-		goto fatal
+		log.Fatal(err)
 	}
 
 	err = logMesgNumVsMsgs(goTypes, goMsgs)
 	if err != nil {
-		goto fatal
+		log.Fatal(err)
 	}
 
-	cleanup(workbookPath, typesCSVOut, msgsCSVOut, *keep, isZip)
 	log.Println("done")
-	os.Exit(0)
-
-fatal:
-	cleanup(workbookPath, typesCSVOut, msgsCSVOut, *keep, isZip)
-	log.Fatal(err)
 }
 
 func parseSDKVersion(zipFilePath string) string {
@@ -171,73 +152,71 @@ func parseSDKVersion(zipFilePath string) string {
 	return strings.TrimPrefix(ver, "FitSDKRelease_")
 }
 
-func writeWorkbookToFile(inputPath, profilePath string) (string, error) {
+func parseProfileWorkbook(inputPath string) (typeData, msgData [][]string, err error) {
 	r, err := zip.OpenReader(inputPath)
 	if err != nil {
-		return "", fmt.Errorf("error opening sdk zip file: %v", err)
+		return nil, nil, fmt.Errorf("error opening sdk zip file: %v", err)
 	}
 	defer r.Close()
 
-	var workbook *zip.File
+	var wfile *zip.File
 	for _, f := range r.File {
 		if f.Name == workbookNameXLS {
-			workbook = f
+			wfile = f
 			break
 		}
 		if f.Name == workbookNameXLSX {
-			workbook = f
+			wfile = f
 			break
 		}
 	}
-	if workbook == nil {
-		return "", fmt.Errorf(
+	if wfile == nil {
+		return nil, nil, fmt.Errorf(
 			"no file named %q or %q found in zip archive",
-			workbookNameXLS,
-			workbookNameXLSX,
-		)
+			workbookNameXLS, workbookNameXLSX)
 	}
 
-	rc, err := workbook.Open()
+	rc, err := wfile.Open()
 	defer rc.Close()
 	if err != nil {
-		return "", err
+		return nil, nil, err
 	}
 	b, err := ioutil.ReadAll(rc)
 	if err != nil {
-		return "", err
+		return nil, nil, err
 	}
-	fpath := filepath.Join(profilePath, workbook.Name)
-	err = ioutil.WriteFile(fpath, b, 0644)
+
+	workbook, err := xlsx.OpenBinary(b)
 	if err != nil {
-		return "", err
+		return nil, nil, fmt.Errorf("error opening profile workbook: %v", err)
 	}
-	log.Println("write-xls-to-file: done")
-	return fpath, nil
+
+	data, err := workbook.ToSlice()
+	if err != nil {
+		return nil, nil, fmt.Errorf("error reading profile workbook: %v", err)
+	}
+
+	typeData = data[typesSheetIndex]
+	msgData = data[msgsSheetIndex]
+
+	// The profile message sheet has formatting errors, resulting in errors
+	// printed in some cells. Fix those cells.
+	msgSheet := workbook.Sheet["Messages"]
+	for i, row := range msgSheet.Rows {
+		for j := 0; j < msgsNumCells; j++ {
+			v, err := row.Cells[j].SafeFormattedValue()
+			if err != nil {
+				msgData[i][j] = v
+			}
+		}
+	}
+
+	log.Println("parse workbook: done")
+	return typeData, msgData, nil
 }
 
-func generateCSV(pyScript, workbookPath, typesCSVOut, msgsCSVOut string) error {
-	cmdConvertTypes := exec.Command(pyScript, "-wb", workbookPath, "-sh", "Types", "-out", typesCSVOut)
-	output, err := cmdConvertTypes.CombinedOutput()
-	if err != nil {
-		return fmt.Errorf("error converting types from xls to csv: %v\n%s", err, output)
-	}
-	cmdConvertMsgs := exec.Command(pyScript, "-wb", workbookPath, "-sh", "Messages", "-out", msgsCSVOut)
-	output, err = cmdConvertMsgs.CombinedOutput()
-	if err != nil {
-		return fmt.Errorf("error converting messages from xls to csv: %v\n%s", err, output)
-	}
-	log.Println("xls-csv-gen: done")
-	return nil
-}
-
-func generateTypes(sdkVersion, input, output string) (map[string]*profile.Type, string, error) {
-	file, err := os.Open(input)
-	if err != nil {
-		return nil, "", fmt.Errorf("typegen: error opening input file: %v", err)
-	}
-	defer file.Close()
-
-	parser, err := profile.NewTypeParser(file)
+func generateTypes(typeData [][]string, output string) (map[string]*profile.Type, string, error) {
+	parser, err := profile.NewTypeParser(typeData)
 	if err != nil {
 		return nil, "", fmt.Errorf("typegen: error creating parser: %v", err)
 	}
@@ -259,7 +238,6 @@ func generateTypes(sdkVersion, input, output string) (map[string]*profile.Type, 
 		return nil, "", fmt.Errorf("typegen: error transforming types: %v", err)
 	}
 
-	generator := profile.NewGenerator(sdkVersion)
 	source, err := generator.GenerateTypes(types)
 	if err != nil {
 		return nil, "", fmt.Errorf("typegen: error generating source: %v", err)
@@ -290,14 +268,8 @@ func generateTypes(sdkVersion, input, output string) (map[string]*profile.Type, 
 	return types, string(allTypeNames), nil
 }
 
-func generateMsgs(sdkVersion, input, output string, types map[string]*profile.Type) ([]*profile.Msg, error) {
-	file, err := os.Open(input)
-	if err != nil {
-		return nil, fmt.Errorf("msggen: error opening input file: %v", err)
-	}
-	defer file.Close()
-
-	parser, err := profile.NewMsgParser(file)
+func generateMsgs(msgData [][]string, output string, types map[string]*profile.Type) ([]*profile.Msg, error) {
+	parser, err := profile.NewMsgParser(msgData)
 	if err != nil {
 		return nil, fmt.Errorf("msggen: error creating parser: %v", err)
 	}
@@ -319,7 +291,6 @@ func generateMsgs(sdkVersion, input, output string, types map[string]*profile.Ty
 		return nil, fmt.Errorf("msggen: error transforming msgs: %v", err)
 	}
 
-	generator := profile.NewGenerator(sdkVersion)
 	source, err := generator.GenerateMsgs(msgs)
 	if err != nil {
 		return nil, fmt.Errorf("msggen: error generating source: %v", err)
@@ -334,8 +305,7 @@ func generateMsgs(sdkVersion, input, output string, types map[string]*profile.Ty
 	return msgs, nil
 }
 
-func generateProfile(sdkVersion string, types map[string]*profile.Type, msgs []*profile.Msg, output string, jmptable bool) error {
-	generator := profile.NewGenerator(sdkVersion)
+func generateProfile(types map[string]*profile.Type, msgs []*profile.Msg, output string, jmptable bool) error {
 	source, err := generator.GenerateProfile(types, msgs, jmptable)
 	if err != nil {
 		return fmt.Errorf("profilegen: error generating source: %v", err)
@@ -349,7 +319,8 @@ func generateProfile(sdkVersion string, types map[string]*profile.Type, msgs []*
 	log.Println("profilegen: success")
 	return nil
 }
-func runStringerOnTypes(stringerPath, fitSrcDir, goTypesStringOut, fitTypes string) error {
+
+func runStringerOnTypes(stringerPath, goTypesStringOut, fitTypes string) error {
 	stringerCmd := exec.Command(
 		"go",
 		"run",
@@ -376,6 +347,7 @@ func runAllTests(pkgDir string) error {
 	if err != nil {
 		return fmt.Errorf("go test: fail: %v\n%s", err, output)
 	}
+
 	log.Println("go test: pass")
 	return nil
 }
@@ -420,18 +392,6 @@ func logMesgNumVsMsgs(types map[string]*profile.Type, msgs []*profile.Msg) error
 	log.Println("mesgnum-vs-msgs: this may be automated in the future")
 
 	return nil
-}
-
-func cleanup(workbook, types, msgs string, keep, isZip bool) {
-	if keep {
-		return
-	}
-	log.Println("cleaning up")
-	os.Remove(types)
-	os.Remove(msgs)
-	if isZip {
-		os.Remove(workbook)
-	}
 }
 
 func goPackagePath(pkg string) (path string, err error) {

@@ -31,32 +31,32 @@ type Parser struct {
 	}
 }
 
-func NewTypeParser(r io.Reader) (*Parser, error) {
-	s, err := NewTypeScanner(r)
+func NewTypeParser(input [][]string) (*Parser, error) {
+	s, err := NewTypeScanner(input)
 	if err != nil {
 		return nil, err
 	}
 	p := &Parser{s: s, typeParser: true}
 	err = p.init()
-	return p, nil
+	return p, err
 }
 
-func NewMsgParser(r io.Reader) (*Parser, error) {
-	s, err := NewMsgScanner(r)
+func NewMsgParser(input [][]string) (*Parser, error) {
+	s, err := NewMsgScanner(input)
 	if err != nil {
 		return nil, err
 	}
 	p := &Parser{s: s}
 	err = p.init()
-	return p, nil
+	return p, err
 }
 
 func (p *Parser) init() error {
 	tok, lit := p.scan()
-	if tok != CSVHDR {
+	if tok != PROFILEHDR {
 		return fmt.Errorf(
 			"got %v, expect %v as first token. Input: %s",
-			CSVHDR, tok, lit,
+			PROFILEHDR, tok, lit,
 		)
 	}
 	return nil
@@ -85,7 +85,7 @@ func (p *Parser) ParseType() (*PType, error) {
 			// One message is missing the empty row (1166).
 			p.unscan()
 			return t, nil
-		case CSVHDR, ILLEGAL:
+		case PROFILEHDR, ILLEGAL:
 			return nil, fmt.Errorf("unexpected %s when parsing type, input: %s", tok, lit)
 		case EMPTY, EOF:
 			if len(t.Fields) == 0 {
@@ -101,7 +101,7 @@ func (p *Parser) ParseMsg() (*PMsg, error) {
 		return nil, errors.New("illegal operation: this is a type parser")
 	}
 	tok, lit := p.scan()
-	if tok == EOF {
+	if tok == EOF || tok == EMPTY {
 		return nil, io.EOF
 	}
 	if tok == FMSGSHDR {
@@ -126,7 +126,7 @@ func (p *Parser) ParseMsg() (*PMsg, error) {
 				return nil, fmt.Errorf("unexpected %s due to no seen field for message yet, input: %s", tok, lit)
 			}
 			lf.Subfields = append(lf.Subfields, lit)
-		case CSVHDR, MSGHDR, FMSGSHDR, ILLEGAL:
+		case PROFILEHDR, MSGHDR, FMSGSHDR, ILLEGAL:
 			return nil, fmt.Errorf("unexpected %s when parsing message, input: %s", tok, lit)
 		case EMPTY, EOF:
 			if len(m.Header) == 0 {

@@ -827,7 +827,3 @@ func (d *decoder) parseDataFields(dm *defmsg, knownMsg bool, msgv reflect.Value)
 
 	return msgv, nil
 }
-
-func (d *decoder) setTimestamp(ts uint32) {
-
-}

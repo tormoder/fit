@@ -586,7 +586,6 @@ func (d *decoder) parseDataFields(dm *defmsg, knownMsg bool, msgv reflect.Value)
 	for i, dfield := range dm.fieldDefs {
 
 		dsize := int(dfield.size)
-		dbt := dfield.btype
 		padding := 0
 
 		pfield, pfound := getField(dm.globalMsgNum, dfield.num)
@@ -626,192 +625,16 @@ func (d *decoder) parseDataFields(dm *defmsg, knownMsg bool, msgv reflect.Value)
 		switch pfield.t {
 		case fit:
 			if pfield.array == 0 {
-				switch dbt {
-				case fitByte, fitEnum, fitUint8, fitUint8z:
-					fieldv.SetUint(uint64(d.tmp[0]))
-				case fitSint8:
-					fieldv.SetInt(int64(d.tmp[0]))
-				case fitSint16:
-					i16 := int64(dm.arch.Uint16(d.tmp[:dsize]))
-					fieldv.SetInt(i16)
-				case fitUint16, fitUint16z:
-					u16 := uint64(dm.arch.Uint16(d.tmp[:dsize]))
-					fieldv.SetUint(u16)
-				case fitSint32:
-					i32 := int64(dm.arch.Uint32(d.tmp[:dsize]))
-					fieldv.SetInt(i32)
-				case fitUint32, fitUint32z:
-					u32 := uint64(dm.arch.Uint32(d.tmp[:dsize]))
-					fieldv.SetUint(u32)
-				case fitFloat32:
-					bits := dm.arch.Uint32(d.tmp[:dsize])
-					f32 := float64(math.Float32frombits(bits))
-					fieldv.SetFloat(f32)
-				case fitFloat64:
-					bits := dm.arch.Uint64(d.tmp[:dsize])
-					f64 := float64(math.Float64frombits(bits))
-					fieldv.SetFloat(f64)
-				case fitString:
-					for j := 0; j < dsize; j++ {
-						if d.tmp[j] == 0x00 {
-							if j > 0 {
-								fieldv.SetString(string(d.tmp[:j]))
-							}
-							break
-						}
-						if j == dsize-1 {
-							fieldv.SetString(string(d.tmp[:j]))
-						}
-					}
-				default:
-					return reflect.Value{},
-						fmt.Errorf(
-							"unknown base type %d for %dth field %v in definition message %v",
-							dbt, i, dfield, dm)
-				}
+				err = d.parseFitField(dm, dfield, fieldv)
 			} else {
-				if dbt == fitByte {
-					byteArray := make([]byte, dsize, dsize)
-					copy(byteArray, d.tmp[:dsize])
-					fieldv.SetBytes(byteArray)
-					continue
-				}
-
-				slicev := reflect.MakeSlice(
-					fieldv.Type(),
-					dsize/dbt.size(),
-					dsize/dbt.size(),
-				)
-
-				switch dbt {
-				case fitUint8, fitUint8z, fitEnum:
-					for j := 0; j < dsize; j++ {
-						slicev.Index(j).SetUint(uint64(d.tmp[j]))
-					}
-				case fitSint8:
-					for j := 0; j < dsize; j++ {
-						slicev.Index(j).SetInt(int64(d.tmp[j]))
-					}
-				case fitSint16:
-					for j, k := 0, 0; j < dsize; j, k = j+dbt.size(), k+1 {
-						i16 := int64(dm.arch.Uint16(d.tmp[j : j+dbt.size()]))
-						slicev.Index(k).SetInt(i16)
-					}
-				case fitUint16, fitUint16z:
-					for j, k := 0, 0; j < dsize; j, k = j+dbt.size(), k+1 {
-						ui16 := uint64(dm.arch.Uint16(d.tmp[j : j+dbt.size()]))
-						slicev.Index(k).SetUint(ui16)
-					}
-				case fitSint32:
-					for j, k := 0, 0; j < dsize; j, k = j+dbt.size(), k+1 {
-						i32 := int64(dm.arch.Uint32(d.tmp[j : j+dbt.size()]))
-						slicev.Index(k).SetInt(i32)
-					}
-				case fitUint32, fitUint32z:
-					for j, k := 0, 0; j < dsize; j, k = j+dbt.size(), k+1 {
-						ui32 := uint64(dm.arch.Uint32(d.tmp[j : j+dbt.size()]))
-						slicev.Index(k).SetUint(ui32)
-					}
-				case fitFloat32:
-					for j, k := 0, 0; j < dsize; j, k = j+dbt.size(), k+1 {
-						bits := dm.arch.Uint32(d.tmp[j : j+dbt.size()])
-						f32 := float64(math.Float32frombits(bits))
-						slicev.Index(k).SetFloat(f32)
-					}
-				case fitFloat64:
-					for j, k := 0, 0; j < dsize; j, k = j+dbt.size(), k+1 {
-						bits := dm.arch.Uint64(d.tmp[j : j+dbt.size()])
-						f64 := float64(math.Float64frombits(bits))
-						slicev.Index(k).SetFloat(f64)
-					}
-				case fitString:
-					if dfield.size == 0 {
-						continue
-					}
-					var strings []string
-					j, k := 0, 0
-					for {
-						if d.tmp[j+k] == 0x00 {
-							if k == 0 {
-								break
-							}
-							strings = append(strings, string(d.tmp[j:j+k]))
-							j = j + k + 1
-							if j >= dsize {
-								break
-							}
-							k = 0
-						} else {
-							k++
-							if j+k >= dsize {
-								// We have not seen a 0x00 terminator,
-								// but there's no room for one.
-								// Take the string we have and exit loop.
-								strings = append(strings, string(d.tmp[j:dsize]))
-								break
-							}
-						}
-					}
-					fieldv.Set(reflect.ValueOf(strings))
-					continue // Special case: we don't want the Set after the switch.
-				default:
-					return reflect.Value{},
-						fmt.Errorf(
-							"unknown base type %d for %dth field %v in definition message %v",
-							dbt, i, dfield, dm)
-				}
-				fieldv.Set(slicev)
+				d.parseFitFieldArray(dm, dfield, fieldv)
 			}
+			if err == nil {
+				continue
+			}
+			return reflect.Value{}, fmt.Errorf("error parsing data message: %v", err)
 		case timeutc, timelocal:
-			u32 := dm.arch.Uint32(d.tmp[:fitUint32.size()])
-			if u32 == 0xFFFFFFFF {
-				continue
-			}
-			if u32 < systemTimeMarker {
-				if debug {
-					log.Println("parsing time: seconds from device power on")
-				}
-			}
-
-			if pfield.t == timeutc {
-				if pfield.num == fieldNumTimeStamp {
-					d.timestamp = u32
-					d.lastTimeOffset = int32(d.timestamp & compressedTimeMask)
-				}
-				t := decodeDateTime(u32)
-				fieldv.Set(reflect.ValueOf(t))
-				continue
-			}
-
-			// Local timestamp.
-			//
-			// TODO(tormoder): Improve. We may have offset from
-			// UTC, but getting actual timezone is complex. Could
-			// take GPS coordinates into account, but
-			// complicated...
-			//
-			// Update - this actually exists for Go
-			// https://github.com/bradfitz/latlong
-			//
-			// For now use a custom timezone with the calculated
-			// offset to indicated that it is not UTC.
-			var local time.Time
-			switch {
-			case d.timestamp == 0, d.timestamp < systemTimeMarker:
-				// No time reference.
-				// Set local with zero offset.
-				d.timestamp = u32
-				tzone := time.FixedZone(localZoneName, 0)
-				local = decodeDateTime(u32)
-				local = local.In(tzone)
-			default:
-				local = decodeDateTime(u32)
-				utc := decodeDateTime(d.timestamp)
-				offsetDur := local.Sub(utc)
-				tzone := time.FixedZone(localZoneName, int(offsetDur.Seconds()))
-				local = utc.In(tzone)
-			}
-			fieldv.Set(reflect.ValueOf(local))
+			d.parseTimeStamp(dm, fieldv, pfield)
 		case lat:
 			i32 := dm.arch.Uint32(d.tmp[:fitSint32.size()])
 			lat := NewLatitude(int32(i32))
@@ -826,4 +649,202 @@ func (d *decoder) parseDataFields(dm *defmsg, knownMsg bool, msgv reflect.Value)
 	}
 
 	return msgv, nil
+}
+
+func (d *decoder) parseFitField(dm *defmsg, dfield fieldDef, fieldv reflect.Value) error {
+	dsize := int(dfield.size)
+	switch dfield.btype {
+	case fitByte, fitEnum, fitUint8, fitUint8z:
+		fieldv.SetUint(uint64(d.tmp[0]))
+	case fitSint8:
+		fieldv.SetInt(int64(d.tmp[0]))
+	case fitSint16:
+		i16 := int64(dm.arch.Uint16(d.tmp[:dsize]))
+		fieldv.SetInt(i16)
+	case fitUint16, fitUint16z:
+		u16 := uint64(dm.arch.Uint16(d.tmp[:dsize]))
+		fieldv.SetUint(u16)
+	case fitSint32:
+		i32 := int64(dm.arch.Uint32(d.tmp[:dsize]))
+		fieldv.SetInt(i32)
+	case fitUint32, fitUint32z:
+		u32 := uint64(dm.arch.Uint32(d.tmp[:dsize]))
+		fieldv.SetUint(u32)
+	case fitFloat32:
+		bits := dm.arch.Uint32(d.tmp[:dsize])
+		f32 := float64(math.Float32frombits(bits))
+		fieldv.SetFloat(f32)
+	case fitFloat64:
+		bits := dm.arch.Uint64(d.tmp[:dsize])
+		f64 := float64(math.Float64frombits(bits))
+		fieldv.SetFloat(f64)
+	case fitString:
+		for j := 0; j < dsize; j++ {
+			if d.tmp[j] == 0x00 {
+				if j > 0 {
+					fieldv.SetString(string(d.tmp[:j]))
+				}
+				break
+			}
+			if j == dsize-1 {
+				fieldv.SetString(string(d.tmp[:j]))
+			}
+		}
+	default:
+		return fmt.Errorf(
+			"unknown base type %d for field %v in definition message %v",
+			dfield.btype, dfield, dm)
+	}
+
+	return nil
+}
+
+func (d *decoder) parseFitFieldArray(dm *defmsg, dfield fieldDef, fieldv reflect.Value) error {
+	dbt := dfield.btype
+	dsize := int(dfield.size)
+
+	if dbt == fitByte {
+		byteArray := make([]byte, dsize, dsize)
+		copy(byteArray, d.tmp[:dsize])
+		fieldv.SetBytes(byteArray)
+		return nil
+	}
+
+	slicev := reflect.MakeSlice(
+		fieldv.Type(),
+		dsize/dbt.size(),
+		dsize/dbt.size(),
+	)
+
+	switch dbt {
+	case fitUint8, fitUint8z, fitEnum:
+		for j := 0; j < dsize; j++ {
+			slicev.Index(j).SetUint(uint64(d.tmp[j]))
+		}
+	case fitSint8:
+		for j := 0; j < dsize; j++ {
+			slicev.Index(j).SetInt(int64(d.tmp[j]))
+		}
+	case fitSint16:
+		for j, k := 0, 0; j < dsize; j, k = j+dbt.size(), k+1 {
+			i16 := int64(dm.arch.Uint16(d.tmp[j : j+dbt.size()]))
+			slicev.Index(k).SetInt(i16)
+		}
+	case fitUint16, fitUint16z:
+		for j, k := 0, 0; j < dsize; j, k = j+dbt.size(), k+1 {
+			ui16 := uint64(dm.arch.Uint16(d.tmp[j : j+dbt.size()]))
+			slicev.Index(k).SetUint(ui16)
+		}
+	case fitSint32:
+		for j, k := 0, 0; j < dsize; j, k = j+dbt.size(), k+1 {
+			i32 := int64(dm.arch.Uint32(d.tmp[j : j+dbt.size()]))
+			slicev.Index(k).SetInt(i32)
+		}
+	case fitUint32, fitUint32z:
+		for j, k := 0, 0; j < dsize; j, k = j+dbt.size(), k+1 {
+			ui32 := uint64(dm.arch.Uint32(d.tmp[j : j+dbt.size()]))
+			slicev.Index(k).SetUint(ui32)
+		}
+	case fitFloat32:
+		for j, k := 0, 0; j < dsize; j, k = j+dbt.size(), k+1 {
+			bits := dm.arch.Uint32(d.tmp[j : j+dbt.size()])
+			f32 := float64(math.Float32frombits(bits))
+			slicev.Index(k).SetFloat(f32)
+		}
+	case fitFloat64:
+		for j, k := 0, 0; j < dsize; j, k = j+dbt.size(), k+1 {
+			bits := dm.arch.Uint64(d.tmp[j : j+dbt.size()])
+			f64 := float64(math.Float64frombits(bits))
+			slicev.Index(k).SetFloat(f64)
+		}
+	case fitString:
+		if dfield.size == 0 {
+			return nil
+		}
+		var strings []string
+		j, k := 0, 0
+		for {
+			if d.tmp[j+k] == 0x00 {
+				if k == 0 {
+					break
+				}
+				strings = append(strings, string(d.tmp[j:j+k]))
+				j = j + k + 1
+				if j >= dsize {
+					break
+				}
+				k = 0
+			} else {
+				k++
+				if j+k >= dsize {
+					// We have not seen a 0x00 terminator,
+					// but there's no room for one.
+					// Take the string we have and exit loop.
+					strings = append(strings, string(d.tmp[j:dsize]))
+					break
+				}
+			}
+		}
+		fieldv.Set(reflect.ValueOf(strings))
+		return nil // We don't want the Set after the switch.
+	default:
+		return fmt.Errorf(
+			"unknown base type %d for field %v in definition message %v",
+			dbt, dfield, dm)
+	}
+
+	fieldv.Set(slicev)
+	return nil
+}
+
+func (d *decoder) parseTimeStamp(dm *defmsg, fieldv reflect.Value, pfield *field) {
+	u32 := dm.arch.Uint32(d.tmp[:fitUint32.size()])
+	if u32 == 0xFFFFFFFF {
+		return
+	}
+	if u32 < systemTimeMarker {
+		if debug {
+			log.Println("parsing time: seconds from device power on")
+		}
+	}
+
+	if pfield.t == timeutc {
+		if pfield.num == fieldNumTimeStamp {
+			d.timestamp = u32
+			d.lastTimeOffset = int32(d.timestamp & compressedTimeMask)
+		}
+		t := decodeDateTime(u32)
+		fieldv.Set(reflect.ValueOf(t))
+		return
+	}
+
+	// Local timestamp.
+	//
+	// TODO(tormoder): Improve. We may have offset from
+	// UTC, but getting actual timezone is complex. Could
+	// take GPS coordinates into account, but
+	// complicated...
+	//
+	// Update - this actually exists for Go
+	// https://github.com/bradfitz/latlong
+	//
+	// For now use a custom timezone with the calculated
+	// offset to indicated that it is not UTC.
+	var local time.Time
+	switch {
+	case d.timestamp == 0, d.timestamp < systemTimeMarker:
+		// No time reference.
+		// Set local with zero offset.
+		d.timestamp = u32
+		tzone := time.FixedZone(localZoneName, 0)
+		local = decodeDateTime(u32)
+		local = local.In(tzone)
+	default:
+		local = decodeDateTime(u32)
+		utc := decodeDateTime(d.timestamp)
+		offsetDur := local.Sub(utc)
+		tzone := time.FixedZone(localZoneName, int(offsetDur.Seconds()))
+		local = utc.In(tzone)
+	}
+	fieldv.Set(reflect.ValueOf(local))
 }

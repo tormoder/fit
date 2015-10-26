@@ -13,11 +13,13 @@ type Fit struct {
 	// CRC is the FIT file CRC.
 	CRC uint16
 
+	// FileId is a message required for all FIT files.
+	FileId FileIdMsg
+
 	// Common messages for all FIT file types.
-	FileId               FileIdMsg
-	FileCreator          FileCreatorMsg
-	TimestampCorrelation TimestampCorrelationMsg
-	DeviceInfo           DeviceInfoMsg
+	FileCreator          *FileCreatorMsg
+	TimestampCorrelation *TimestampCorrelationMsg
+	DeviceInfo           *DeviceInfoMsg
 
 	// UnknownMessages is a map that maps an unknown message number to how
 	// many times the message was encountered during encoding.
@@ -65,11 +67,14 @@ func (f *Fit) add(msg reflect.Value) {
 	case FileIdMsg:
 		f.FileId = x.(FileIdMsg)
 	case FileCreatorMsg:
-		f.FileCreator = x.(FileCreatorMsg)
+		tmp := x.(FileCreatorMsg)
+		f.FileCreator = &tmp
 	case TimestampCorrelationMsg:
-		f.TimestampCorrelation = x.(TimestampCorrelationMsg)
+		tmp := x.(TimestampCorrelationMsg)
+		f.TimestampCorrelation = &tmp
 	case DeviceInfoMsg:
-		f.DeviceInfo = x.(DeviceInfoMsg)
+		tmp := x.(DeviceInfoMsg)
+		f.DeviceInfo = &tmp
 	default:
 		f.msgAdder.add(msg)
 	}

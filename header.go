@@ -81,7 +81,7 @@ func checkProtocolVersion(b byte) error {
 }
 
 // CheckIntegrity verifies the FIT header CRC.
-func (h *Header) CheckIntegrity() error {
+func (h Header) CheckIntegrity() error {
 	if err := checkProtocolVersion(h.ProtocolVersion); err != nil {
 		return err
 	}
@@ -112,7 +112,7 @@ func (h *Header) CheckIntegrity() error {
 }
 
 // MarshalJSON implements the json.Marshaler interface.
-func (h *Header) MarshalJSON() ([]byte, error) {
+func (h Header) MarshalJSON() ([]byte, error) {
 	e := newJSONEncodeState()
 	e.open()
 	e.writeFieldName("Size")

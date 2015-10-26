@@ -60,23 +60,23 @@ func CheckIntegrity(r io.Reader, headerOnly bool) error {
 
 // DecodeHeader returns the FIT file header without decoding the entire FIT
 // file.
-func DecodeHeader(r io.Reader) (*Header, error) {
+func DecodeHeader(r io.Reader) (Header, error) {
 	var d decoder
 	if err := d.decode(r, true, false, false); err != nil {
-		return &d.h, err
+		return Header{}, err
 	}
-	return &d.h, nil
+	return d.h, nil
 }
 
 // DecodeHeaderAndFileID returns the FIT file header and FileId message without
 // decoding the entire FIT file. The FileId message must be present in all FIT
 // files.
-func DecodeHeaderAndFileID(r io.Reader) (*Header, *FileIdMsg, error) {
+func DecodeHeaderAndFileID(r io.Reader) (Header, *FileIdMsg, error) {
 	var d decoder
 	if err := d.decode(r, false, true, false); err != nil {
-		return nil, nil, err
+		return Header{}, nil, err
 	}
-	return &d.h, &d.fit.FileId, nil
+	return d.h, &d.fit.FileId, nil
 }
 
 // Decode reads a FIT file from r and returns it as a *Fit.
@@ -105,7 +105,7 @@ func (d *decoder) decode(r io.Reader, headerOnly, fileIDOnly, crcOnly bool) erro
 	}
 
 	d.fit = new(Fit)
-	d.fit.Header = &d.h
+	d.fit.Header = d.h
 
 	if debug {
 		log.Println("header decoded:", d.h)

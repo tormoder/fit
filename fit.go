@@ -8,7 +8,7 @@ import (
 // Fit represents a decoded FIT file.
 type Fit struct {
 	// Header is the FIT file header.
-	Header *Header
+	Header Header
 
 	// CRC is the FIT file CRC.
 	CRC uint16

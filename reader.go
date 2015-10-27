@@ -810,16 +810,11 @@ func (d *decoder) parseTimeStamp(dm *defmsg, fieldv reflect.Value, pfield *field
 
 	// Local timestamp.
 	//
-	// TODO(tormoder): Improve. We may have offset from
-	// UTC, but getting actual timezone is complex. Could
-	// take GPS coordinates into account, but
-	// complicated...
+	// Use a custom timezone with the calculated offset to indicate that it
+	// is not UTC.
 	//
-	// Update - this actually exists for Go
-	// https://github.com/bradfitz/latlong
-	//
-	// For now use a custom timezone with the calculated
-	// offset to indicated that it is not UTC.
+	// Also see the SetLocalTimeZone function in the timeutil subpackage.
+	// For now not used due to an external dependency.
 	var local time.Time
 	switch {
 	case d.timestamp == 0, d.timestamp < systemTimeMarker:

@@ -63,6 +63,11 @@ func (l Latitude) Degrees() float64 {
 	return float64(l.semicircles) * semiToDegFactor
 }
 
+// Invalid reports whether l represents an invalid latitude.
+func (l Latitude) Invalid() bool {
+	return l.semicircles == sint32Invalid
+}
+
 // String returns a string representation of l in degrees with 5 decimal
 // places. If l is invalid then the string "Invalid" is returned.
 func (l Latitude) String() string {
@@ -110,6 +115,11 @@ func (l Longitude) Degrees() float64 {
 		return math.NaN()
 	}
 	return float64(l.semicircles) * semiToDegFactor
+}
+
+// Invalid reports whether l represents an invalid longitude.
+func (l Longitude) Invalid() bool {
+	return l.semicircles == sint32Invalid
 }
 
 // String returns a string representation of l in degrees with 5 decimal

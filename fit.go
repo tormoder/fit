@@ -90,7 +90,7 @@ type wrongFileTypeError struct {
 }
 
 func (e wrongFileTypeError) Error() string {
-	return fmt.Sprintf("fit file is type is %v, not %v", e.actual, e.requested)
+	return fmt.Sprintf("fit file type is %v, not %v", e.actual, e.requested)
 }
 
 // Activity returns f's Activity file. An error is returned if the FIT file is

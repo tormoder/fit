@@ -2,7 +2,7 @@
 // program found in 'cmd/fitgen/main.go'
 // DO NOT EDIT.
 // SDK Version: 16.20
-// Generation time: Fri Oct 16 15:58:20 UTC 2015
+// Generation time: Sat Oct 31 20:40:11 UTC 2015
 
 package fit
 
@@ -59,7 +59,7 @@ func (x *SoftwareMsg) GetVersionScaled() float64 {
 	if x.Version == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.Version) / 100.0
+	return float64(x.Version) / 100
 }
 
 // SlaveDeviceMsg represents the slave_device FIT message type.
@@ -150,7 +150,7 @@ func (x *DeviceSettingsMsg) GetTimeZoneOffsetScaled() []float64 {
 	}
 	s := make([]float64, len(x.TimeZoneOffset))
 	for i, v := range x.TimeZoneOffset {
-		s[i] = float64(v) / 4.0
+		s[i] = float64(v) / 4
 	}
 	return s
 }
@@ -190,7 +190,7 @@ func (x *UserProfileMsg) GetHeightScaled() float64 {
 	if x.Height == 0xFF {
 		return math.NaN()
 	}
-	return float64(x.Height) / 100.0
+	return float64(x.Height) / 100
 }
 
 // GetWeightScaled returns Weight
@@ -201,7 +201,7 @@ func (x *UserProfileMsg) GetWeightScaled() float64 {
 	if x.Weight == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.Weight) / 10.0
+	return float64(x.Weight) / 10
 }
 
 // HrmProfileMsg represents the hrm_profile FIT message type.
@@ -233,7 +233,7 @@ func (x *SdmProfileMsg) GetSdmCalFactorScaled() float64 {
 	if x.SdmCalFactor == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.SdmCalFactor) / 10.0
+	return float64(x.SdmCalFactor) / 10
 }
 
 // GetOdometerScaled returns Odometer
@@ -244,7 +244,7 @@ func (x *SdmProfileMsg) GetOdometerScaled() float64 {
 	if x.Odometer == 0xFFFFFFFF {
 		return math.NaN()
 	}
-	return float64(x.Odometer) / 100.0
+	return float64(x.Odometer) / 100
 }
 
 // BikeProfileMsg represents the bike_profile FIT message type.
@@ -291,7 +291,7 @@ func (x *BikeProfileMsg) GetOdometerScaled() float64 {
 	if x.Odometer == 0xFFFFFFFF {
 		return math.NaN()
 	}
-	return float64(x.Odometer) / 100.0
+	return float64(x.Odometer) / 100
 }
 
 // GetCustomWheelsizeScaled returns CustomWheelsize
@@ -302,7 +302,7 @@ func (x *BikeProfileMsg) GetCustomWheelsizeScaled() float64 {
 	if x.CustomWheelsize == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.CustomWheelsize) / 1000.0
+	return float64(x.CustomWheelsize) / 1000
 }
 
 // GetAutoWheelsizeScaled returns AutoWheelsize
@@ -313,7 +313,7 @@ func (x *BikeProfileMsg) GetAutoWheelsizeScaled() float64 {
 	if x.AutoWheelsize == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.AutoWheelsize) / 1000.0
+	return float64(x.AutoWheelsize) / 1000
 }
 
 // GetBikeWeightScaled returns BikeWeight
@@ -324,7 +324,7 @@ func (x *BikeProfileMsg) GetBikeWeightScaled() float64 {
 	if x.BikeWeight == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.BikeWeight) / 10.0
+	return float64(x.BikeWeight) / 10
 }
 
 // GetPowerCalFactorScaled returns PowerCalFactor
@@ -335,7 +335,7 @@ func (x *BikeProfileMsg) GetPowerCalFactorScaled() float64 {
 	if x.PowerCalFactor == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.PowerCalFactor) / 10.0
+	return float64(x.PowerCalFactor) / 10
 }
 
 // GetCrankLengthScaled returns CrankLength
@@ -346,7 +346,7 @@ func (x *BikeProfileMsg) GetCrankLengthScaled() float64 {
 	if x.CrankLength == 0xFF {
 		return math.NaN()
 	}
-	return float64(x.CrankLength)/2.0 - -110
+	return float64(x.CrankLength)/2 - -110
 }
 
 // ZonesTargetMsg represents the zones_target FIT message type.
@@ -387,7 +387,7 @@ func (x *SpeedZoneMsg) GetHighValueScaled() float64 {
 	if x.HighValue == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.HighValue) / 1000.0
+	return float64(x.HighValue) / 1000
 }
 
 // CadenceZoneMsg represents the cadence_zone FIT message type.
@@ -420,7 +420,7 @@ func (x *MetZoneMsg) GetCaloriesScaled() float64 {
 	if x.Calories == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.Calories) / 10.0
+	return float64(x.Calories) / 10
 }
 
 // GetFatCaloriesScaled returns FatCalories
@@ -431,7 +431,7 @@ func (x *MetZoneMsg) GetFatCaloriesScaled() float64 {
 	if x.FatCalories == 0xFF {
 		return math.NaN()
 	}
-	return float64(x.FatCalories) / 10.0
+	return float64(x.FatCalories) / 10
 }
 
 // GoalMsg represents the goal FIT message type.
@@ -470,7 +470,7 @@ func (x *ActivityMsg) GetTotalTimerTimeScaled() float64 {
 	if x.TotalTimerTime == 0xFFFFFFFF {
 		return math.NaN()
 	}
-	return float64(x.TotalTimerTime) / 1000.0
+	return float64(x.TotalTimerTime) / 1000
 }
 
 // SessionMsg represents the session FIT message type.
@@ -573,7 +573,7 @@ func (x *SessionMsg) GetTotalElapsedTimeScaled() float64 {
 	if x.TotalElapsedTime == 0xFFFFFFFF {
 		return math.NaN()
 	}
-	return float64(x.TotalElapsedTime) / 1000.0
+	return float64(x.TotalElapsedTime) / 1000
 }
 
 // GetTotalTimerTimeScaled returns TotalTimerTime
@@ -584,7 +584,7 @@ func (x *SessionMsg) GetTotalTimerTimeScaled() float64 {
 	if x.TotalTimerTime == 0xFFFFFFFF {
 		return math.NaN()
 	}
-	return float64(x.TotalTimerTime) / 1000.0
+	return float64(x.TotalTimerTime) / 1000
 }
 
 // GetTotalDistanceScaled returns TotalDistance
@@ -595,7 +595,7 @@ func (x *SessionMsg) GetTotalDistanceScaled() float64 {
 	if x.TotalDistance == 0xFFFFFFFF {
 		return math.NaN()
 	}
-	return float64(x.TotalDistance) / 100.0
+	return float64(x.TotalDistance) / 100
 }
 
 // GetAvgSpeedScaled returns AvgSpeed
@@ -606,7 +606,7 @@ func (x *SessionMsg) GetAvgSpeedScaled() float64 {
 	if x.AvgSpeed == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.AvgSpeed) / 1000.0
+	return float64(x.AvgSpeed) / 1000
 }
 
 // GetMaxSpeedScaled returns MaxSpeed
@@ -617,7 +617,7 @@ func (x *SessionMsg) GetMaxSpeedScaled() float64 {
 	if x.MaxSpeed == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.MaxSpeed) / 1000.0
+	return float64(x.MaxSpeed) / 1000
 }
 
 // GetTotalTrainingEffectScaled returns TotalTrainingEffect
@@ -627,7 +627,7 @@ func (x *SessionMsg) GetTotalTrainingEffectScaled() float64 {
 	if x.TotalTrainingEffect == 0xFF {
 		return math.NaN()
 	}
-	return float64(x.TotalTrainingEffect) / 10.0
+	return float64(x.TotalTrainingEffect) / 10
 }
 
 // GetTrainingStressScoreScaled returns TrainingStressScore
@@ -638,7 +638,7 @@ func (x *SessionMsg) GetTrainingStressScoreScaled() float64 {
 	if x.TrainingStressScore == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.TrainingStressScore) / 10.0
+	return float64(x.TrainingStressScore) / 10
 }
 
 // GetIntensityFactorScaled returns IntensityFactor
@@ -649,7 +649,7 @@ func (x *SessionMsg) GetIntensityFactorScaled() float64 {
 	if x.IntensityFactor == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.IntensityFactor) / 1000.0
+	return float64(x.IntensityFactor) / 1000
 }
 
 // GetAvgStrokeCountScaled returns AvgStrokeCount
@@ -660,7 +660,7 @@ func (x *SessionMsg) GetAvgStrokeCountScaled() float64 {
 	if x.AvgStrokeCount == 0xFFFFFFFF {
 		return math.NaN()
 	}
-	return float64(x.AvgStrokeCount) / 10.0
+	return float64(x.AvgStrokeCount) / 10
 }
 
 // GetAvgStrokeDistanceScaled returns AvgStrokeDistance
@@ -671,7 +671,7 @@ func (x *SessionMsg) GetAvgStrokeDistanceScaled() float64 {
 	if x.AvgStrokeDistance == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.AvgStrokeDistance) / 100.0
+	return float64(x.AvgStrokeDistance) / 100
 }
 
 // GetPoolLengthScaled returns PoolLength
@@ -682,7 +682,7 @@ func (x *SessionMsg) GetPoolLengthScaled() float64 {
 	if x.PoolLength == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.PoolLength) / 100.0
+	return float64(x.PoolLength) / 100
 }
 
 // GetAvgAltitudeScaled returns AvgAltitude
@@ -693,7 +693,7 @@ func (x *SessionMsg) GetAvgAltitudeScaled() float64 {
 	if x.AvgAltitude == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.AvgAltitude)/5.0 - 500
+	return float64(x.AvgAltitude)/5 - 500
 }
 
 // GetMaxAltitudeScaled returns MaxAltitude
@@ -704,7 +704,7 @@ func (x *SessionMsg) GetMaxAltitudeScaled() float64 {
 	if x.MaxAltitude == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.MaxAltitude)/5.0 - 500
+	return float64(x.MaxAltitude)/5 - 500
 }
 
 // GetAvgGradeScaled returns AvgGrade
@@ -715,7 +715,7 @@ func (x *SessionMsg) GetAvgGradeScaled() float64 {
 	if x.AvgGrade == 0x7FFF {
 		return math.NaN()
 	}
-	return float64(x.AvgGrade) / 100.0
+	return float64(x.AvgGrade) / 100
 }
 
 // GetAvgPosGradeScaled returns AvgPosGrade
@@ -726,7 +726,7 @@ func (x *SessionMsg) GetAvgPosGradeScaled() float64 {
 	if x.AvgPosGrade == 0x7FFF {
 		return math.NaN()
 	}
-	return float64(x.AvgPosGrade) / 100.0
+	return float64(x.AvgPosGrade) / 100
 }
 
 // GetAvgNegGradeScaled returns AvgNegGrade
@@ -737,7 +737,7 @@ func (x *SessionMsg) GetAvgNegGradeScaled() float64 {
 	if x.AvgNegGrade == 0x7FFF {
 		return math.NaN()
 	}
-	return float64(x.AvgNegGrade) / 100.0
+	return float64(x.AvgNegGrade) / 100
 }
 
 // GetMaxPosGradeScaled returns MaxPosGrade
@@ -748,7 +748,7 @@ func (x *SessionMsg) GetMaxPosGradeScaled() float64 {
 	if x.MaxPosGrade == 0x7FFF {
 		return math.NaN()
 	}
-	return float64(x.MaxPosGrade) / 100.0
+	return float64(x.MaxPosGrade) / 100
 }
 
 // GetMaxNegGradeScaled returns MaxNegGrade
@@ -759,7 +759,7 @@ func (x *SessionMsg) GetMaxNegGradeScaled() float64 {
 	if x.MaxNegGrade == 0x7FFF {
 		return math.NaN()
 	}
-	return float64(x.MaxNegGrade) / 100.0
+	return float64(x.MaxNegGrade) / 100
 }
 
 // GetTotalMovingTimeScaled returns TotalMovingTime
@@ -770,7 +770,7 @@ func (x *SessionMsg) GetTotalMovingTimeScaled() float64 {
 	if x.TotalMovingTime == 0xFFFFFFFF {
 		return math.NaN()
 	}
-	return float64(x.TotalMovingTime) / 1000.0
+	return float64(x.TotalMovingTime) / 1000
 }
 
 // GetAvgPosVerticalSpeedScaled returns AvgPosVerticalSpeed
@@ -781,7 +781,7 @@ func (x *SessionMsg) GetAvgPosVerticalSpeedScaled() float64 {
 	if x.AvgPosVerticalSpeed == 0x7FFF {
 		return math.NaN()
 	}
-	return float64(x.AvgPosVerticalSpeed) / 1000.0
+	return float64(x.AvgPosVerticalSpeed) / 1000
 }
 
 // GetAvgNegVerticalSpeedScaled returns AvgNegVerticalSpeed
@@ -792,7 +792,7 @@ func (x *SessionMsg) GetAvgNegVerticalSpeedScaled() float64 {
 	if x.AvgNegVerticalSpeed == 0x7FFF {
 		return math.NaN()
 	}
-	return float64(x.AvgNegVerticalSpeed) / 1000.0
+	return float64(x.AvgNegVerticalSpeed) / 1000
 }
 
 // GetMaxPosVerticalSpeedScaled returns MaxPosVerticalSpeed
@@ -803,7 +803,7 @@ func (x *SessionMsg) GetMaxPosVerticalSpeedScaled() float64 {
 	if x.MaxPosVerticalSpeed == 0x7FFF {
 		return math.NaN()
 	}
-	return float64(x.MaxPosVerticalSpeed) / 1000.0
+	return float64(x.MaxPosVerticalSpeed) / 1000
 }
 
 // GetMaxNegVerticalSpeedScaled returns MaxNegVerticalSpeed
@@ -814,7 +814,7 @@ func (x *SessionMsg) GetMaxNegVerticalSpeedScaled() float64 {
 	if x.MaxNegVerticalSpeed == 0x7FFF {
 		return math.NaN()
 	}
-	return float64(x.MaxNegVerticalSpeed) / 1000.0
+	return float64(x.MaxNegVerticalSpeed) / 1000
 }
 
 // GetTimeInHrZoneScaled returns TimeInHrZone
@@ -826,7 +826,7 @@ func (x *SessionMsg) GetTimeInHrZoneScaled() []float64 {
 	}
 	s := make([]float64, len(x.TimeInHrZone))
 	for i, v := range x.TimeInHrZone {
-		s[i] = float64(v) / 1000.0
+		s[i] = float64(v) / 1000
 	}
 	return s
 }
@@ -840,7 +840,7 @@ func (x *SessionMsg) GetTimeInSpeedZoneScaled() []float64 {
 	}
 	s := make([]float64, len(x.TimeInSpeedZone))
 	for i, v := range x.TimeInSpeedZone {
-		s[i] = float64(v) / 1000.0
+		s[i] = float64(v) / 1000
 	}
 	return s
 }
@@ -854,7 +854,7 @@ func (x *SessionMsg) GetTimeInCadenceZoneScaled() []float64 {
 	}
 	s := make([]float64, len(x.TimeInCadenceZone))
 	for i, v := range x.TimeInCadenceZone {
-		s[i] = float64(v) / 1000.0
+		s[i] = float64(v) / 1000
 	}
 	return s
 }
@@ -868,7 +868,7 @@ func (x *SessionMsg) GetTimeInPowerZoneScaled() []float64 {
 	}
 	s := make([]float64, len(x.TimeInPowerZone))
 	for i, v := range x.TimeInPowerZone {
-		s[i] = float64(v) / 1000.0
+		s[i] = float64(v) / 1000
 	}
 	return s
 }
@@ -881,7 +881,7 @@ func (x *SessionMsg) GetAvgLapTimeScaled() float64 {
 	if x.AvgLapTime == 0xFFFFFFFF {
 		return math.NaN()
 	}
-	return float64(x.AvgLapTime) / 1000.0
+	return float64(x.AvgLapTime) / 1000
 }
 
 // GetMinAltitudeScaled returns MinAltitude
@@ -892,7 +892,7 @@ func (x *SessionMsg) GetMinAltitudeScaled() float64 {
 	if x.MinAltitude == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.MinAltitude)/5.0 - 500
+	return float64(x.MinAltitude)/5 - 500
 }
 
 // GetMaxBallSpeedScaled returns MaxBallSpeed
@@ -903,7 +903,7 @@ func (x *SessionMsg) GetMaxBallSpeedScaled() float64 {
 	if x.MaxBallSpeed == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.MaxBallSpeed) / 100.0
+	return float64(x.MaxBallSpeed) / 100
 }
 
 // GetAvgBallSpeedScaled returns AvgBallSpeed
@@ -914,7 +914,7 @@ func (x *SessionMsg) GetAvgBallSpeedScaled() float64 {
 	if x.AvgBallSpeed == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.AvgBallSpeed) / 100.0
+	return float64(x.AvgBallSpeed) / 100
 }
 
 // GetAvgVerticalOscillationScaled returns AvgVerticalOscillation
@@ -925,7 +925,7 @@ func (x *SessionMsg) GetAvgVerticalOscillationScaled() float64 {
 	if x.AvgVerticalOscillation == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.AvgVerticalOscillation) / 10.0
+	return float64(x.AvgVerticalOscillation) / 10
 }
 
 // GetAvgStanceTimePercentScaled returns AvgStanceTimePercent
@@ -936,7 +936,7 @@ func (x *SessionMsg) GetAvgStanceTimePercentScaled() float64 {
 	if x.AvgStanceTimePercent == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.AvgStanceTimePercent) / 100.0
+	return float64(x.AvgStanceTimePercent) / 100
 }
 
 // GetAvgStanceTimeScaled returns AvgStanceTime
@@ -947,7 +947,7 @@ func (x *SessionMsg) GetAvgStanceTimeScaled() float64 {
 	if x.AvgStanceTime == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.AvgStanceTime) / 10.0
+	return float64(x.AvgStanceTime) / 10
 }
 
 // GetAvgFractionalCadenceScaled returns AvgFractionalCadence
@@ -958,7 +958,7 @@ func (x *SessionMsg) GetAvgFractionalCadenceScaled() float64 {
 	if x.AvgFractionalCadence == 0xFF {
 		return math.NaN()
 	}
-	return float64(x.AvgFractionalCadence) / 128.0
+	return float64(x.AvgFractionalCadence) / 128
 }
 
 // GetMaxFractionalCadenceScaled returns MaxFractionalCadence
@@ -969,7 +969,7 @@ func (x *SessionMsg) GetMaxFractionalCadenceScaled() float64 {
 	if x.MaxFractionalCadence == 0xFF {
 		return math.NaN()
 	}
-	return float64(x.MaxFractionalCadence) / 128.0
+	return float64(x.MaxFractionalCadence) / 128
 }
 
 // GetTotalFractionalCyclesScaled returns TotalFractionalCycles
@@ -980,7 +980,7 @@ func (x *SessionMsg) GetTotalFractionalCyclesScaled() float64 {
 	if x.TotalFractionalCycles == 0xFF {
 		return math.NaN()
 	}
-	return float64(x.TotalFractionalCycles) / 128.0
+	return float64(x.TotalFractionalCycles) / 128
 }
 
 // GetEnhancedAvgSpeedScaled returns EnhancedAvgSpeed
@@ -991,7 +991,7 @@ func (x *SessionMsg) GetEnhancedAvgSpeedScaled() float64 {
 	if x.EnhancedAvgSpeed == 0xFFFFFFFF {
 		return math.NaN()
 	}
-	return float64(x.EnhancedAvgSpeed) / 1000.0
+	return float64(x.EnhancedAvgSpeed) / 1000
 }
 
 // GetEnhancedMaxSpeedScaled returns EnhancedMaxSpeed
@@ -1002,7 +1002,7 @@ func (x *SessionMsg) GetEnhancedMaxSpeedScaled() float64 {
 	if x.EnhancedMaxSpeed == 0xFFFFFFFF {
 		return math.NaN()
 	}
-	return float64(x.EnhancedMaxSpeed) / 1000.0
+	return float64(x.EnhancedMaxSpeed) / 1000
 }
 
 // GetEnhancedAvgAltitudeScaled returns EnhancedAvgAltitude
@@ -1013,7 +1013,7 @@ func (x *SessionMsg) GetEnhancedAvgAltitudeScaled() float64 {
 	if x.EnhancedAvgAltitude == 0xFFFFFFFF {
 		return math.NaN()
 	}
-	return float64(x.EnhancedAvgAltitude)/5.0 - 500
+	return float64(x.EnhancedAvgAltitude)/5 - 500
 }
 
 // GetEnhancedMinAltitudeScaled returns EnhancedMinAltitude
@@ -1024,7 +1024,7 @@ func (x *SessionMsg) GetEnhancedMinAltitudeScaled() float64 {
 	if x.EnhancedMinAltitude == 0xFFFFFFFF {
 		return math.NaN()
 	}
-	return float64(x.EnhancedMinAltitude)/5.0 - 500
+	return float64(x.EnhancedMinAltitude)/5 - 500
 }
 
 // GetEnhancedMaxAltitudeScaled returns EnhancedMaxAltitude
@@ -1035,7 +1035,7 @@ func (x *SessionMsg) GetEnhancedMaxAltitudeScaled() float64 {
 	if x.EnhancedMaxAltitude == 0xFFFFFFFF {
 		return math.NaN()
 	}
-	return float64(x.EnhancedMaxAltitude)/5.0 - 500
+	return float64(x.EnhancedMaxAltitude)/5 - 500
 }
 
 // GetTotalCycles returns the appropriate TotalCycles
@@ -1199,7 +1199,7 @@ func (x *LapMsg) GetTotalElapsedTimeScaled() float64 {
 	if x.TotalElapsedTime == 0xFFFFFFFF {
 		return math.NaN()
 	}
-	return float64(x.TotalElapsedTime) / 1000.0
+	return float64(x.TotalElapsedTime) / 1000
 }
 
 // GetTotalTimerTimeScaled returns TotalTimerTime
@@ -1210,7 +1210,7 @@ func (x *LapMsg) GetTotalTimerTimeScaled() float64 {
 	if x.TotalTimerTime == 0xFFFFFFFF {
 		return math.NaN()
 	}
-	return float64(x.TotalTimerTime) / 1000.0
+	return float64(x.TotalTimerTime) / 1000
 }
 
 // GetTotalDistanceScaled returns TotalDistance
@@ -1221,7 +1221,7 @@ func (x *LapMsg) GetTotalDistanceScaled() float64 {
 	if x.TotalDistance == 0xFFFFFFFF {
 		return math.NaN()
 	}
-	return float64(x.TotalDistance) / 100.0
+	return float64(x.TotalDistance) / 100
 }
 
 // GetAvgSpeedScaled returns AvgSpeed
@@ -1232,7 +1232,7 @@ func (x *LapMsg) GetAvgSpeedScaled() float64 {
 	if x.AvgSpeed == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.AvgSpeed) / 1000.0
+	return float64(x.AvgSpeed) / 1000
 }
 
 // GetMaxSpeedScaled returns MaxSpeed
@@ -1243,7 +1243,7 @@ func (x *LapMsg) GetMaxSpeedScaled() float64 {
 	if x.MaxSpeed == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.MaxSpeed) / 1000.0
+	return float64(x.MaxSpeed) / 1000
 }
 
 // GetAvgStrokeDistanceScaled returns AvgStrokeDistance
@@ -1254,7 +1254,7 @@ func (x *LapMsg) GetAvgStrokeDistanceScaled() float64 {
 	if x.AvgStrokeDistance == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.AvgStrokeDistance) / 100.0
+	return float64(x.AvgStrokeDistance) / 100
 }
 
 // GetAvgAltitudeScaled returns AvgAltitude
@@ -1265,7 +1265,7 @@ func (x *LapMsg) GetAvgAltitudeScaled() float64 {
 	if x.AvgAltitude == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.AvgAltitude)/5.0 - 500
+	return float64(x.AvgAltitude)/5 - 500
 }
 
 // GetMaxAltitudeScaled returns MaxAltitude
@@ -1276,7 +1276,7 @@ func (x *LapMsg) GetMaxAltitudeScaled() float64 {
 	if x.MaxAltitude == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.MaxAltitude)/5.0 - 500
+	return float64(x.MaxAltitude)/5 - 500
 }
 
 // GetAvgGradeScaled returns AvgGrade
@@ -1287,7 +1287,7 @@ func (x *LapMsg) GetAvgGradeScaled() float64 {
 	if x.AvgGrade == 0x7FFF {
 		return math.NaN()
 	}
-	return float64(x.AvgGrade) / 100.0
+	return float64(x.AvgGrade) / 100
 }
 
 // GetAvgPosGradeScaled returns AvgPosGrade
@@ -1298,7 +1298,7 @@ func (x *LapMsg) GetAvgPosGradeScaled() float64 {
 	if x.AvgPosGrade == 0x7FFF {
 		return math.NaN()
 	}
-	return float64(x.AvgPosGrade) / 100.0
+	return float64(x.AvgPosGrade) / 100
 }
 
 // GetAvgNegGradeScaled returns AvgNegGrade
@@ -1309,7 +1309,7 @@ func (x *LapMsg) GetAvgNegGradeScaled() float64 {
 	if x.AvgNegGrade == 0x7FFF {
 		return math.NaN()
 	}
-	return float64(x.AvgNegGrade) / 100.0
+	return float64(x.AvgNegGrade) / 100
 }
 
 // GetMaxPosGradeScaled returns MaxPosGrade
@@ -1320,7 +1320,7 @@ func (x *LapMsg) GetMaxPosGradeScaled() float64 {
 	if x.MaxPosGrade == 0x7FFF {
 		return math.NaN()
 	}
-	return float64(x.MaxPosGrade) / 100.0
+	return float64(x.MaxPosGrade) / 100
 }
 
 // GetMaxNegGradeScaled returns MaxNegGrade
@@ -1331,7 +1331,7 @@ func (x *LapMsg) GetMaxNegGradeScaled() float64 {
 	if x.MaxNegGrade == 0x7FFF {
 		return math.NaN()
 	}
-	return float64(x.MaxNegGrade) / 100.0
+	return float64(x.MaxNegGrade) / 100
 }
 
 // GetTotalMovingTimeScaled returns TotalMovingTime
@@ -1342,7 +1342,7 @@ func (x *LapMsg) GetTotalMovingTimeScaled() float64 {
 	if x.TotalMovingTime == 0xFFFFFFFF {
 		return math.NaN()
 	}
-	return float64(x.TotalMovingTime) / 1000.0
+	return float64(x.TotalMovingTime) / 1000
 }
 
 // GetAvgPosVerticalSpeedScaled returns AvgPosVerticalSpeed
@@ -1353,7 +1353,7 @@ func (x *LapMsg) GetAvgPosVerticalSpeedScaled() float64 {
 	if x.AvgPosVerticalSpeed == 0x7FFF {
 		return math.NaN()
 	}
-	return float64(x.AvgPosVerticalSpeed) / 1000.0
+	return float64(x.AvgPosVerticalSpeed) / 1000
 }
 
 // GetAvgNegVerticalSpeedScaled returns AvgNegVerticalSpeed
@@ -1364,7 +1364,7 @@ func (x *LapMsg) GetAvgNegVerticalSpeedScaled() float64 {
 	if x.AvgNegVerticalSpeed == 0x7FFF {
 		return math.NaN()
 	}
-	return float64(x.AvgNegVerticalSpeed) / 1000.0
+	return float64(x.AvgNegVerticalSpeed) / 1000
 }
 
 // GetMaxPosVerticalSpeedScaled returns MaxPosVerticalSpeed
@@ -1375,7 +1375,7 @@ func (x *LapMsg) GetMaxPosVerticalSpeedScaled() float64 {
 	if x.MaxPosVerticalSpeed == 0x7FFF {
 		return math.NaN()
 	}
-	return float64(x.MaxPosVerticalSpeed) / 1000.0
+	return float64(x.MaxPosVerticalSpeed) / 1000
 }
 
 // GetMaxNegVerticalSpeedScaled returns MaxNegVerticalSpeed
@@ -1386,7 +1386,7 @@ func (x *LapMsg) GetMaxNegVerticalSpeedScaled() float64 {
 	if x.MaxNegVerticalSpeed == 0x7FFF {
 		return math.NaN()
 	}
-	return float64(x.MaxNegVerticalSpeed) / 1000.0
+	return float64(x.MaxNegVerticalSpeed) / 1000
 }
 
 // GetTimeInHrZoneScaled returns TimeInHrZone
@@ -1398,7 +1398,7 @@ func (x *LapMsg) GetTimeInHrZoneScaled() []float64 {
 	}
 	s := make([]float64, len(x.TimeInHrZone))
 	for i, v := range x.TimeInHrZone {
-		s[i] = float64(v) / 1000.0
+		s[i] = float64(v) / 1000
 	}
 	return s
 }
@@ -1412,7 +1412,7 @@ func (x *LapMsg) GetTimeInSpeedZoneScaled() []float64 {
 	}
 	s := make([]float64, len(x.TimeInSpeedZone))
 	for i, v := range x.TimeInSpeedZone {
-		s[i] = float64(v) / 1000.0
+		s[i] = float64(v) / 1000
 	}
 	return s
 }
@@ -1426,7 +1426,7 @@ func (x *LapMsg) GetTimeInCadenceZoneScaled() []float64 {
 	}
 	s := make([]float64, len(x.TimeInCadenceZone))
 	for i, v := range x.TimeInCadenceZone {
-		s[i] = float64(v) / 1000.0
+		s[i] = float64(v) / 1000
 	}
 	return s
 }
@@ -1440,7 +1440,7 @@ func (x *LapMsg) GetTimeInPowerZoneScaled() []float64 {
 	}
 	s := make([]float64, len(x.TimeInPowerZone))
 	for i, v := range x.TimeInPowerZone {
-		s[i] = float64(v) / 1000.0
+		s[i] = float64(v) / 1000
 	}
 	return s
 }
@@ -1453,7 +1453,7 @@ func (x *LapMsg) GetMinAltitudeScaled() float64 {
 	if x.MinAltitude == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.MinAltitude)/5.0 - 500
+	return float64(x.MinAltitude)/5 - 500
 }
 
 // GetAvgVerticalOscillationScaled returns AvgVerticalOscillation
@@ -1464,7 +1464,7 @@ func (x *LapMsg) GetAvgVerticalOscillationScaled() float64 {
 	if x.AvgVerticalOscillation == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.AvgVerticalOscillation) / 10.0
+	return float64(x.AvgVerticalOscillation) / 10
 }
 
 // GetAvgStanceTimePercentScaled returns AvgStanceTimePercent
@@ -1475,7 +1475,7 @@ func (x *LapMsg) GetAvgStanceTimePercentScaled() float64 {
 	if x.AvgStanceTimePercent == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.AvgStanceTimePercent) / 100.0
+	return float64(x.AvgStanceTimePercent) / 100
 }
 
 // GetAvgStanceTimeScaled returns AvgStanceTime
@@ -1486,7 +1486,7 @@ func (x *LapMsg) GetAvgStanceTimeScaled() float64 {
 	if x.AvgStanceTime == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.AvgStanceTime) / 10.0
+	return float64(x.AvgStanceTime) / 10
 }
 
 // GetAvgFractionalCadenceScaled returns AvgFractionalCadence
@@ -1497,7 +1497,7 @@ func (x *LapMsg) GetAvgFractionalCadenceScaled() float64 {
 	if x.AvgFractionalCadence == 0xFF {
 		return math.NaN()
 	}
-	return float64(x.AvgFractionalCadence) / 128.0
+	return float64(x.AvgFractionalCadence) / 128
 }
 
 // GetMaxFractionalCadenceScaled returns MaxFractionalCadence
@@ -1508,7 +1508,7 @@ func (x *LapMsg) GetMaxFractionalCadenceScaled() float64 {
 	if x.MaxFractionalCadence == 0xFF {
 		return math.NaN()
 	}
-	return float64(x.MaxFractionalCadence) / 128.0
+	return float64(x.MaxFractionalCadence) / 128
 }
 
 // GetTotalFractionalCyclesScaled returns TotalFractionalCycles
@@ -1519,7 +1519,7 @@ func (x *LapMsg) GetTotalFractionalCyclesScaled() float64 {
 	if x.TotalFractionalCycles == 0xFF {
 		return math.NaN()
 	}
-	return float64(x.TotalFractionalCycles) / 128.0
+	return float64(x.TotalFractionalCycles) / 128
 }
 
 // GetAvgTotalHemoglobinConcScaled returns AvgTotalHemoglobinConc
@@ -1531,7 +1531,7 @@ func (x *LapMsg) GetAvgTotalHemoglobinConcScaled() []float64 {
 	}
 	s := make([]float64, len(x.AvgTotalHemoglobinConc))
 	for i, v := range x.AvgTotalHemoglobinConc {
-		s[i] = float64(v) / 100.0
+		s[i] = float64(v) / 100
 	}
 	return s
 }
@@ -1545,7 +1545,7 @@ func (x *LapMsg) GetMinTotalHemoglobinConcScaled() []float64 {
 	}
 	s := make([]float64, len(x.MinTotalHemoglobinConc))
 	for i, v := range x.MinTotalHemoglobinConc {
-		s[i] = float64(v) / 100.0
+		s[i] = float64(v) / 100
 	}
 	return s
 }
@@ -1559,7 +1559,7 @@ func (x *LapMsg) GetMaxTotalHemoglobinConcScaled() []float64 {
 	}
 	s := make([]float64, len(x.MaxTotalHemoglobinConc))
 	for i, v := range x.MaxTotalHemoglobinConc {
-		s[i] = float64(v) / 100.0
+		s[i] = float64(v) / 100
 	}
 	return s
 }
@@ -1573,7 +1573,7 @@ func (x *LapMsg) GetAvgSaturatedHemoglobinPercentScaled() []float64 {
 	}
 	s := make([]float64, len(x.AvgSaturatedHemoglobinPercent))
 	for i, v := range x.AvgSaturatedHemoglobinPercent {
-		s[i] = float64(v) / 10.0
+		s[i] = float64(v) / 10
 	}
 	return s
 }
@@ -1587,7 +1587,7 @@ func (x *LapMsg) GetMinSaturatedHemoglobinPercentScaled() []float64 {
 	}
 	s := make([]float64, len(x.MinSaturatedHemoglobinPercent))
 	for i, v := range x.MinSaturatedHemoglobinPercent {
-		s[i] = float64(v) / 10.0
+		s[i] = float64(v) / 10
 	}
 	return s
 }
@@ -1601,7 +1601,7 @@ func (x *LapMsg) GetMaxSaturatedHemoglobinPercentScaled() []float64 {
 	}
 	s := make([]float64, len(x.MaxSaturatedHemoglobinPercent))
 	for i, v := range x.MaxSaturatedHemoglobinPercent {
-		s[i] = float64(v) / 10.0
+		s[i] = float64(v) / 10
 	}
 	return s
 }
@@ -1614,7 +1614,7 @@ func (x *LapMsg) GetEnhancedAvgSpeedScaled() float64 {
 	if x.EnhancedAvgSpeed == 0xFFFFFFFF {
 		return math.NaN()
 	}
-	return float64(x.EnhancedAvgSpeed) / 1000.0
+	return float64(x.EnhancedAvgSpeed) / 1000
 }
 
 // GetEnhancedMaxSpeedScaled returns EnhancedMaxSpeed
@@ -1625,7 +1625,7 @@ func (x *LapMsg) GetEnhancedMaxSpeedScaled() float64 {
 	if x.EnhancedMaxSpeed == 0xFFFFFFFF {
 		return math.NaN()
 	}
-	return float64(x.EnhancedMaxSpeed) / 1000.0
+	return float64(x.EnhancedMaxSpeed) / 1000
 }
 
 // GetEnhancedAvgAltitudeScaled returns EnhancedAvgAltitude
@@ -1636,7 +1636,7 @@ func (x *LapMsg) GetEnhancedAvgAltitudeScaled() float64 {
 	if x.EnhancedAvgAltitude == 0xFFFFFFFF {
 		return math.NaN()
 	}
-	return float64(x.EnhancedAvgAltitude)/5.0 - 500
+	return float64(x.EnhancedAvgAltitude)/5 - 500
 }
 
 // GetEnhancedMinAltitudeScaled returns EnhancedMinAltitude
@@ -1647,7 +1647,7 @@ func (x *LapMsg) GetEnhancedMinAltitudeScaled() float64 {
 	if x.EnhancedMinAltitude == 0xFFFFFFFF {
 		return math.NaN()
 	}
-	return float64(x.EnhancedMinAltitude)/5.0 - 500
+	return float64(x.EnhancedMinAltitude)/5 - 500
 }
 
 // GetEnhancedMaxAltitudeScaled returns EnhancedMaxAltitude
@@ -1658,7 +1658,7 @@ func (x *LapMsg) GetEnhancedMaxAltitudeScaled() float64 {
 	if x.EnhancedMaxAltitude == 0xFFFFFFFF {
 		return math.NaN()
 	}
-	return float64(x.EnhancedMaxAltitude)/5.0 - 500
+	return float64(x.EnhancedMaxAltitude)/5 - 500
 }
 
 // GetTotalCycles returns the appropriate TotalCycles
@@ -1758,7 +1758,7 @@ func (x *LengthMsg) GetTotalElapsedTimeScaled() float64 {
 	if x.TotalElapsedTime == 0xFFFFFFFF {
 		return math.NaN()
 	}
-	return float64(x.TotalElapsedTime) / 1000.0
+	return float64(x.TotalElapsedTime) / 1000
 }
 
 // GetTotalTimerTimeScaled returns TotalTimerTime
@@ -1769,7 +1769,7 @@ func (x *LengthMsg) GetTotalTimerTimeScaled() float64 {
 	if x.TotalTimerTime == 0xFFFFFFFF {
 		return math.NaN()
 	}
-	return float64(x.TotalTimerTime) / 1000.0
+	return float64(x.TotalTimerTime) / 1000
 }
 
 // GetAvgSpeedScaled returns AvgSpeed
@@ -1780,7 +1780,7 @@ func (x *LengthMsg) GetAvgSpeedScaled() float64 {
 	if x.AvgSpeed == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.AvgSpeed) / 1000.0
+	return float64(x.AvgSpeed) / 1000
 }
 
 // RecordMsg represents the record FIT message type.
@@ -1843,7 +1843,7 @@ func (x *RecordMsg) GetAltitudeScaled() float64 {
 	if x.Altitude == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.Altitude)/5.0 - 500
+	return float64(x.Altitude)/5 - 500
 }
 
 // GetDistanceScaled returns Distance
@@ -1854,7 +1854,7 @@ func (x *RecordMsg) GetDistanceScaled() float64 {
 	if x.Distance == 0xFFFFFFFF {
 		return math.NaN()
 	}
-	return float64(x.Distance) / 100.0
+	return float64(x.Distance) / 100
 }
 
 // GetSpeedScaled returns Speed
@@ -1865,7 +1865,7 @@ func (x *RecordMsg) GetSpeedScaled() float64 {
 	if x.Speed == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.Speed) / 1000.0
+	return float64(x.Speed) / 1000
 }
 
 // GetGradeScaled returns Grade
@@ -1876,7 +1876,7 @@ func (x *RecordMsg) GetGradeScaled() float64 {
 	if x.Grade == 0x7FFF {
 		return math.NaN()
 	}
-	return float64(x.Grade) / 100.0
+	return float64(x.Grade) / 100
 }
 
 // GetTimeFromCourseScaled returns TimeFromCourse
@@ -1887,7 +1887,7 @@ func (x *RecordMsg) GetTimeFromCourseScaled() float64 {
 	if x.TimeFromCourse == 0x7FFFFFFF {
 		return math.NaN()
 	}
-	return float64(x.TimeFromCourse) / 1000.0
+	return float64(x.TimeFromCourse) / 1000
 }
 
 // GetCycleLengthScaled returns CycleLength
@@ -1898,7 +1898,7 @@ func (x *RecordMsg) GetCycleLengthScaled() float64 {
 	if x.CycleLength == 0xFF {
 		return math.NaN()
 	}
-	return float64(x.CycleLength) / 100.0
+	return float64(x.CycleLength) / 100
 }
 
 // GetSpeed1sScaled returns Speed1s
@@ -1910,7 +1910,7 @@ func (x *RecordMsg) GetSpeed1sScaled() []float64 {
 	}
 	s := make([]float64, len(x.Speed1s))
 	for i, v := range x.Speed1s {
-		s[i] = float64(v) / 16.0
+		s[i] = float64(v) / 16
 	}
 	return s
 }
@@ -1923,7 +1923,7 @@ func (x *RecordMsg) GetVerticalSpeedScaled() float64 {
 	if x.VerticalSpeed == 0x7FFF {
 		return math.NaN()
 	}
-	return float64(x.VerticalSpeed) / 1000.0
+	return float64(x.VerticalSpeed) / 1000
 }
 
 // GetVerticalOscillationScaled returns VerticalOscillation
@@ -1934,7 +1934,7 @@ func (x *RecordMsg) GetVerticalOscillationScaled() float64 {
 	if x.VerticalOscillation == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.VerticalOscillation) / 10.0
+	return float64(x.VerticalOscillation) / 10
 }
 
 // GetStanceTimePercentScaled returns StanceTimePercent
@@ -1945,7 +1945,7 @@ func (x *RecordMsg) GetStanceTimePercentScaled() float64 {
 	if x.StanceTimePercent == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.StanceTimePercent) / 100.0
+	return float64(x.StanceTimePercent) / 100
 }
 
 // GetStanceTimeScaled returns StanceTime
@@ -1956,7 +1956,7 @@ func (x *RecordMsg) GetStanceTimeScaled() float64 {
 	if x.StanceTime == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.StanceTime) / 10.0
+	return float64(x.StanceTime) / 10
 }
 
 // GetLeftTorqueEffectivenessScaled returns LeftTorqueEffectiveness
@@ -1967,7 +1967,7 @@ func (x *RecordMsg) GetLeftTorqueEffectivenessScaled() float64 {
 	if x.LeftTorqueEffectiveness == 0xFF {
 		return math.NaN()
 	}
-	return float64(x.LeftTorqueEffectiveness) / 2.0
+	return float64(x.LeftTorqueEffectiveness) / 2
 }
 
 // GetRightTorqueEffectivenessScaled returns RightTorqueEffectiveness
@@ -1978,7 +1978,7 @@ func (x *RecordMsg) GetRightTorqueEffectivenessScaled() float64 {
 	if x.RightTorqueEffectiveness == 0xFF {
 		return math.NaN()
 	}
-	return float64(x.RightTorqueEffectiveness) / 2.0
+	return float64(x.RightTorqueEffectiveness) / 2
 }
 
 // GetLeftPedalSmoothnessScaled returns LeftPedalSmoothness
@@ -1989,7 +1989,7 @@ func (x *RecordMsg) GetLeftPedalSmoothnessScaled() float64 {
 	if x.LeftPedalSmoothness == 0xFF {
 		return math.NaN()
 	}
-	return float64(x.LeftPedalSmoothness) / 2.0
+	return float64(x.LeftPedalSmoothness) / 2
 }
 
 // GetRightPedalSmoothnessScaled returns RightPedalSmoothness
@@ -2000,7 +2000,7 @@ func (x *RecordMsg) GetRightPedalSmoothnessScaled() float64 {
 	if x.RightPedalSmoothness == 0xFF {
 		return math.NaN()
 	}
-	return float64(x.RightPedalSmoothness) / 2.0
+	return float64(x.RightPedalSmoothness) / 2
 }
 
 // GetCombinedPedalSmoothnessScaled returns CombinedPedalSmoothness
@@ -2011,7 +2011,7 @@ func (x *RecordMsg) GetCombinedPedalSmoothnessScaled() float64 {
 	if x.CombinedPedalSmoothness == 0xFF {
 		return math.NaN()
 	}
-	return float64(x.CombinedPedalSmoothness) / 2.0
+	return float64(x.CombinedPedalSmoothness) / 2
 }
 
 // GetTime128Scaled returns Time128
@@ -2022,7 +2022,7 @@ func (x *RecordMsg) GetTime128Scaled() float64 {
 	if x.Time128 == 0xFF {
 		return math.NaN()
 	}
-	return float64(x.Time128) / 128.0
+	return float64(x.Time128) / 128
 }
 
 // GetBallSpeedScaled returns BallSpeed
@@ -2033,7 +2033,7 @@ func (x *RecordMsg) GetBallSpeedScaled() float64 {
 	if x.BallSpeed == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.BallSpeed) / 100.0
+	return float64(x.BallSpeed) / 100
 }
 
 // GetCadence256Scaled returns Cadence256
@@ -2044,7 +2044,7 @@ func (x *RecordMsg) GetCadence256Scaled() float64 {
 	if x.Cadence256 == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.Cadence256) / 256.0
+	return float64(x.Cadence256) / 256
 }
 
 // GetFractionalCadenceScaled returns FractionalCadence
@@ -2055,7 +2055,7 @@ func (x *RecordMsg) GetFractionalCadenceScaled() float64 {
 	if x.FractionalCadence == 0xFF {
 		return math.NaN()
 	}
-	return float64(x.FractionalCadence) / 128.0
+	return float64(x.FractionalCadence) / 128
 }
 
 // GetTotalHemoglobinConcScaled returns TotalHemoglobinConc
@@ -2066,7 +2066,7 @@ func (x *RecordMsg) GetTotalHemoglobinConcScaled() float64 {
 	if x.TotalHemoglobinConc == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.TotalHemoglobinConc) / 100.0
+	return float64(x.TotalHemoglobinConc) / 100
 }
 
 // GetTotalHemoglobinConcMinScaled returns TotalHemoglobinConcMin
@@ -2077,7 +2077,7 @@ func (x *RecordMsg) GetTotalHemoglobinConcMinScaled() float64 {
 	if x.TotalHemoglobinConcMin == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.TotalHemoglobinConcMin) / 100.0
+	return float64(x.TotalHemoglobinConcMin) / 100
 }
 
 // GetTotalHemoglobinConcMaxScaled returns TotalHemoglobinConcMax
@@ -2088,7 +2088,7 @@ func (x *RecordMsg) GetTotalHemoglobinConcMaxScaled() float64 {
 	if x.TotalHemoglobinConcMax == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.TotalHemoglobinConcMax) / 100.0
+	return float64(x.TotalHemoglobinConcMax) / 100
 }
 
 // GetSaturatedHemoglobinPercentScaled returns SaturatedHemoglobinPercent
@@ -2099,7 +2099,7 @@ func (x *RecordMsg) GetSaturatedHemoglobinPercentScaled() float64 {
 	if x.SaturatedHemoglobinPercent == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.SaturatedHemoglobinPercent) / 10.0
+	return float64(x.SaturatedHemoglobinPercent) / 10
 }
 
 // GetSaturatedHemoglobinPercentMinScaled returns SaturatedHemoglobinPercentMin
@@ -2110,7 +2110,7 @@ func (x *RecordMsg) GetSaturatedHemoglobinPercentMinScaled() float64 {
 	if x.SaturatedHemoglobinPercentMin == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.SaturatedHemoglobinPercentMin) / 10.0
+	return float64(x.SaturatedHemoglobinPercentMin) / 10
 }
 
 // GetSaturatedHemoglobinPercentMaxScaled returns SaturatedHemoglobinPercentMax
@@ -2121,7 +2121,7 @@ func (x *RecordMsg) GetSaturatedHemoglobinPercentMaxScaled() float64 {
 	if x.SaturatedHemoglobinPercentMax == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.SaturatedHemoglobinPercentMax) / 10.0
+	return float64(x.SaturatedHemoglobinPercentMax) / 10
 }
 
 // GetEnhancedSpeedScaled returns EnhancedSpeed
@@ -2132,7 +2132,7 @@ func (x *RecordMsg) GetEnhancedSpeedScaled() float64 {
 	if x.EnhancedSpeed == 0xFFFFFFFF {
 		return math.NaN()
 	}
-	return float64(x.EnhancedSpeed) / 1000.0
+	return float64(x.EnhancedSpeed) / 1000
 }
 
 // GetEnhancedAltitudeScaled returns EnhancedAltitude
@@ -2143,7 +2143,7 @@ func (x *RecordMsg) GetEnhancedAltitudeScaled() float64 {
 	if x.EnhancedAltitude == 0xFFFFFFFF {
 		return math.NaN()
 	}
-	return float64(x.EnhancedAltitude)/5.0 - 500
+	return float64(x.EnhancedAltitude)/5 - 500
 }
 
 // GetSpeedFromCompressedSpeedDistance returns
@@ -2246,17 +2246,17 @@ func (x *EventMsg) GetData() interface{} {
 	case EventCoursePoint:
 		return MessageIndex(x.Data)
 	case EventBattery:
-		return float64(x.Data) / 1000.0
+		return float64(x.Data) / 1000
 	case EventVirtualPartnerPace:
-		return float64(x.Data) / 1000.0
+		return float64(x.Data) / 1000
 	case EventHrHighAlert:
 		return uint8(x.Data)
 	case EventHrLowAlert:
 		return uint8(x.Data)
 	case EventSpeedHighAlert:
-		return float64(x.Data) / 1000.0
+		return float64(x.Data) / 1000
 	case EventSpeedLowAlert:
-		return float64(x.Data) / 1000.0
+		return float64(x.Data) / 1000
 	case EventCadHighAlert:
 		return uint16(x.Data)
 	case EventCadLowAlert:
@@ -2266,9 +2266,9 @@ func (x *EventMsg) GetData() interface{} {
 	case EventPowerLowAlert:
 		return uint16(x.Data)
 	case EventTimeDurationAlert:
-		return float64(x.Data) / 1000.0
+		return float64(x.Data) / 1000
 	case EventDistanceDurationAlert:
-		return float64(x.Data) / 100.0
+		return float64(x.Data) / 100
 	case EventCalorieDurationAlert:
 		return uint32(x.Data)
 	case EventFitnessEquipment:
@@ -2343,7 +2343,7 @@ func (x *DeviceInfoMsg) GetSoftwareVersionScaled() float64 {
 	if x.SoftwareVersion == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.SoftwareVersion) / 100.0
+	return float64(x.SoftwareVersion) / 100
 }
 
 // GetBatteryVoltageScaled returns BatteryVoltage
@@ -2354,7 +2354,7 @@ func (x *DeviceInfoMsg) GetBatteryVoltageScaled() float64 {
 	if x.BatteryVoltage == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.BatteryVoltage) / 256.0
+	return float64(x.BatteryVoltage) / 256
 }
 
 // GetDeviceType returns the appropriate DeviceType
@@ -2422,7 +2422,7 @@ func (x *HrvMsg) GetTimeScaled() []float64 {
 	}
 	s := make([]float64, len(x.Time))
 	for i, v := range x.Time {
-		s[i] = float64(v) / 1000.0
+		s[i] = float64(v) / 1000
 	}
 	return s
 }
@@ -2483,7 +2483,7 @@ func (x *AviationAttitudeMsg) GetPitchScaled() []float64 {
 	}
 	s := make([]float64, len(x.Pitch))
 	for i, v := range x.Pitch {
-		s[i] = float64(v) / 10430.38
+		s[i] = float64(v) / 10430.379999999999
 	}
 	return s
 }
@@ -2497,7 +2497,7 @@ func (x *AviationAttitudeMsg) GetRollScaled() []float64 {
 	}
 	s := make([]float64, len(x.Roll))
 	for i, v := range x.Roll {
-		s[i] = float64(v) / 10430.38
+		s[i] = float64(v) / 10430.379999999999
 	}
 	return s
 }
@@ -2511,7 +2511,7 @@ func (x *AviationAttitudeMsg) GetAccelLateralScaled() []float64 {
 	}
 	s := make([]float64, len(x.AccelLateral))
 	for i, v := range x.AccelLateral {
-		s[i] = float64(v) / 100.0
+		s[i] = float64(v) / 100
 	}
 	return s
 }
@@ -2525,7 +2525,7 @@ func (x *AviationAttitudeMsg) GetAccelNormalScaled() []float64 {
 	}
 	s := make([]float64, len(x.AccelNormal))
 	for i, v := range x.AccelNormal {
-		s[i] = float64(v) / 100.0
+		s[i] = float64(v) / 100
 	}
 	return s
 }
@@ -2539,7 +2539,7 @@ func (x *AviationAttitudeMsg) GetTurnRateScaled() []float64 {
 	}
 	s := make([]float64, len(x.TurnRate))
 	for i, v := range x.TurnRate {
-		s[i] = float64(v) / 1024.0
+		s[i] = float64(v) / 1024
 	}
 	return s
 }
@@ -2553,7 +2553,7 @@ func (x *AviationAttitudeMsg) GetTrackScaled() []float64 {
 	}
 	s := make([]float64, len(x.Track))
 	for i, v := range x.Track {
-		s[i] = float64(v) / 10430.38
+		s[i] = float64(v) / 10430.379999999999
 	}
 	return s
 }
@@ -2607,7 +2607,7 @@ func (x *CoursePointMsg) GetDistanceScaled() float64 {
 	if x.Distance == 0xFFFFFFFF {
 		return math.NaN()
 	}
-	return float64(x.Distance) / 100.0
+	return float64(x.Distance) / 100
 }
 
 // SegmentIdMsg represents the segment_id FIT message type.
@@ -2641,7 +2641,7 @@ func (x *SegmentLeaderboardEntryMsg) GetSegmentTimeScaled() float64 {
 	if x.SegmentTime == 0xFFFFFFFF {
 		return math.NaN()
 	}
-	return float64(x.SegmentTime) / 1000.0
+	return float64(x.SegmentTime) / 1000
 }
 
 // SegmentPointMsg represents the segment_point FIT message type.
@@ -2662,7 +2662,7 @@ func (x *SegmentPointMsg) GetDistanceScaled() float64 {
 	if x.Distance == 0xFFFFFFFF {
 		return math.NaN()
 	}
-	return float64(x.Distance) / 100.0
+	return float64(x.Distance) / 100
 }
 
 // GetAltitudeScaled returns Altitude
@@ -2673,7 +2673,7 @@ func (x *SegmentPointMsg) GetAltitudeScaled() float64 {
 	if x.Altitude == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.Altitude)/5.0 - 500
+	return float64(x.Altitude)/5 - 500
 }
 
 // GetLeaderTimeScaled returns LeaderTime
@@ -2685,7 +2685,7 @@ func (x *SegmentPointMsg) GetLeaderTimeScaled() []float64 {
 	}
 	s := make([]float64, len(x.LeaderTime))
 	for i, v := range x.LeaderTime {
-		s[i] = float64(v) / 1000.0
+		s[i] = float64(v) / 1000
 	}
 	return s
 }
@@ -2775,7 +2775,7 @@ func (x *SegmentLapMsg) GetTotalElapsedTimeScaled() float64 {
 	if x.TotalElapsedTime == 0xFFFFFFFF {
 		return math.NaN()
 	}
-	return float64(x.TotalElapsedTime) / 1000.0
+	return float64(x.TotalElapsedTime) / 1000
 }
 
 // GetTotalTimerTimeScaled returns TotalTimerTime
@@ -2786,7 +2786,7 @@ func (x *SegmentLapMsg) GetTotalTimerTimeScaled() float64 {
 	if x.TotalTimerTime == 0xFFFFFFFF {
 		return math.NaN()
 	}
-	return float64(x.TotalTimerTime) / 1000.0
+	return float64(x.TotalTimerTime) / 1000
 }
 
 // GetTotalDistanceScaled returns TotalDistance
@@ -2797,7 +2797,7 @@ func (x *SegmentLapMsg) GetTotalDistanceScaled() float64 {
 	if x.TotalDistance == 0xFFFFFFFF {
 		return math.NaN()
 	}
-	return float64(x.TotalDistance) / 100.0
+	return float64(x.TotalDistance) / 100
 }
 
 // GetAvgSpeedScaled returns AvgSpeed
@@ -2808,7 +2808,7 @@ func (x *SegmentLapMsg) GetAvgSpeedScaled() float64 {
 	if x.AvgSpeed == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.AvgSpeed) / 1000.0
+	return float64(x.AvgSpeed) / 1000
 }
 
 // GetMaxSpeedScaled returns MaxSpeed
@@ -2819,7 +2819,7 @@ func (x *SegmentLapMsg) GetMaxSpeedScaled() float64 {
 	if x.MaxSpeed == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.MaxSpeed) / 1000.0
+	return float64(x.MaxSpeed) / 1000
 }
 
 // GetAvgAltitudeScaled returns AvgAltitude
@@ -2830,7 +2830,7 @@ func (x *SegmentLapMsg) GetAvgAltitudeScaled() float64 {
 	if x.AvgAltitude == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.AvgAltitude)/5.0 - 500
+	return float64(x.AvgAltitude)/5 - 500
 }
 
 // GetMaxAltitudeScaled returns MaxAltitude
@@ -2841,7 +2841,7 @@ func (x *SegmentLapMsg) GetMaxAltitudeScaled() float64 {
 	if x.MaxAltitude == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.MaxAltitude)/5.0 - 500
+	return float64(x.MaxAltitude)/5 - 500
 }
 
 // GetAvgGradeScaled returns AvgGrade
@@ -2852,7 +2852,7 @@ func (x *SegmentLapMsg) GetAvgGradeScaled() float64 {
 	if x.AvgGrade == 0x7FFF {
 		return math.NaN()
 	}
-	return float64(x.AvgGrade) / 100.0
+	return float64(x.AvgGrade) / 100
 }
 
 // GetAvgPosGradeScaled returns AvgPosGrade
@@ -2863,7 +2863,7 @@ func (x *SegmentLapMsg) GetAvgPosGradeScaled() float64 {
 	if x.AvgPosGrade == 0x7FFF {
 		return math.NaN()
 	}
-	return float64(x.AvgPosGrade) / 100.0
+	return float64(x.AvgPosGrade) / 100
 }
 
 // GetAvgNegGradeScaled returns AvgNegGrade
@@ -2874,7 +2874,7 @@ func (x *SegmentLapMsg) GetAvgNegGradeScaled() float64 {
 	if x.AvgNegGrade == 0x7FFF {
 		return math.NaN()
 	}
-	return float64(x.AvgNegGrade) / 100.0
+	return float64(x.AvgNegGrade) / 100
 }
 
 // GetMaxPosGradeScaled returns MaxPosGrade
@@ -2885,7 +2885,7 @@ func (x *SegmentLapMsg) GetMaxPosGradeScaled() float64 {
 	if x.MaxPosGrade == 0x7FFF {
 		return math.NaN()
 	}
-	return float64(x.MaxPosGrade) / 100.0
+	return float64(x.MaxPosGrade) / 100
 }
 
 // GetMaxNegGradeScaled returns MaxNegGrade
@@ -2896,7 +2896,7 @@ func (x *SegmentLapMsg) GetMaxNegGradeScaled() float64 {
 	if x.MaxNegGrade == 0x7FFF {
 		return math.NaN()
 	}
-	return float64(x.MaxNegGrade) / 100.0
+	return float64(x.MaxNegGrade) / 100
 }
 
 // GetTotalMovingTimeScaled returns TotalMovingTime
@@ -2907,7 +2907,7 @@ func (x *SegmentLapMsg) GetTotalMovingTimeScaled() float64 {
 	if x.TotalMovingTime == 0xFFFFFFFF {
 		return math.NaN()
 	}
-	return float64(x.TotalMovingTime) / 1000.0
+	return float64(x.TotalMovingTime) / 1000
 }
 
 // GetAvgPosVerticalSpeedScaled returns AvgPosVerticalSpeed
@@ -2918,7 +2918,7 @@ func (x *SegmentLapMsg) GetAvgPosVerticalSpeedScaled() float64 {
 	if x.AvgPosVerticalSpeed == 0x7FFF {
 		return math.NaN()
 	}
-	return float64(x.AvgPosVerticalSpeed) / 1000.0
+	return float64(x.AvgPosVerticalSpeed) / 1000
 }
 
 // GetAvgNegVerticalSpeedScaled returns AvgNegVerticalSpeed
@@ -2929,7 +2929,7 @@ func (x *SegmentLapMsg) GetAvgNegVerticalSpeedScaled() float64 {
 	if x.AvgNegVerticalSpeed == 0x7FFF {
 		return math.NaN()
 	}
-	return float64(x.AvgNegVerticalSpeed) / 1000.0
+	return float64(x.AvgNegVerticalSpeed) / 1000
 }
 
 // GetMaxPosVerticalSpeedScaled returns MaxPosVerticalSpeed
@@ -2940,7 +2940,7 @@ func (x *SegmentLapMsg) GetMaxPosVerticalSpeedScaled() float64 {
 	if x.MaxPosVerticalSpeed == 0x7FFF {
 		return math.NaN()
 	}
-	return float64(x.MaxPosVerticalSpeed) / 1000.0
+	return float64(x.MaxPosVerticalSpeed) / 1000
 }
 
 // GetMaxNegVerticalSpeedScaled returns MaxNegVerticalSpeed
@@ -2951,7 +2951,7 @@ func (x *SegmentLapMsg) GetMaxNegVerticalSpeedScaled() float64 {
 	if x.MaxNegVerticalSpeed == 0x7FFF {
 		return math.NaN()
 	}
-	return float64(x.MaxNegVerticalSpeed) / 1000.0
+	return float64(x.MaxNegVerticalSpeed) / 1000
 }
 
 // GetTimeInHrZoneScaled returns TimeInHrZone
@@ -2963,7 +2963,7 @@ func (x *SegmentLapMsg) GetTimeInHrZoneScaled() []float64 {
 	}
 	s := make([]float64, len(x.TimeInHrZone))
 	for i, v := range x.TimeInHrZone {
-		s[i] = float64(v) / 1000.0
+		s[i] = float64(v) / 1000
 	}
 	return s
 }
@@ -2977,7 +2977,7 @@ func (x *SegmentLapMsg) GetTimeInSpeedZoneScaled() []float64 {
 	}
 	s := make([]float64, len(x.TimeInSpeedZone))
 	for i, v := range x.TimeInSpeedZone {
-		s[i] = float64(v) / 1000.0
+		s[i] = float64(v) / 1000
 	}
 	return s
 }
@@ -2991,7 +2991,7 @@ func (x *SegmentLapMsg) GetTimeInCadenceZoneScaled() []float64 {
 	}
 	s := make([]float64, len(x.TimeInCadenceZone))
 	for i, v := range x.TimeInCadenceZone {
-		s[i] = float64(v) / 1000.0
+		s[i] = float64(v) / 1000
 	}
 	return s
 }
@@ -3005,7 +3005,7 @@ func (x *SegmentLapMsg) GetTimeInPowerZoneScaled() []float64 {
 	}
 	s := make([]float64, len(x.TimeInPowerZone))
 	for i, v := range x.TimeInPowerZone {
-		s[i] = float64(v) / 1000.0
+		s[i] = float64(v) / 1000
 	}
 	return s
 }
@@ -3018,7 +3018,7 @@ func (x *SegmentLapMsg) GetMinAltitudeScaled() float64 {
 	if x.MinAltitude == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.MinAltitude)/5.0 - 500
+	return float64(x.MinAltitude)/5 - 500
 }
 
 // GetActiveTimeScaled returns ActiveTime
@@ -3029,7 +3029,7 @@ func (x *SegmentLapMsg) GetActiveTimeScaled() float64 {
 	if x.ActiveTime == 0xFFFFFFFF {
 		return math.NaN()
 	}
-	return float64(x.ActiveTime) / 1000.0
+	return float64(x.ActiveTime) / 1000
 }
 
 // GetAvgLeftTorqueEffectivenessScaled returns AvgLeftTorqueEffectiveness
@@ -3040,7 +3040,7 @@ func (x *SegmentLapMsg) GetAvgLeftTorqueEffectivenessScaled() float64 {
 	if x.AvgLeftTorqueEffectiveness == 0xFF {
 		return math.NaN()
 	}
-	return float64(x.AvgLeftTorqueEffectiveness) / 2.0
+	return float64(x.AvgLeftTorqueEffectiveness) / 2
 }
 
 // GetAvgRightTorqueEffectivenessScaled returns AvgRightTorqueEffectiveness
@@ -3051,7 +3051,7 @@ func (x *SegmentLapMsg) GetAvgRightTorqueEffectivenessScaled() float64 {
 	if x.AvgRightTorqueEffectiveness == 0xFF {
 		return math.NaN()
 	}
-	return float64(x.AvgRightTorqueEffectiveness) / 2.0
+	return float64(x.AvgRightTorqueEffectiveness) / 2
 }
 
 // GetAvgLeftPedalSmoothnessScaled returns AvgLeftPedalSmoothness
@@ -3062,7 +3062,7 @@ func (x *SegmentLapMsg) GetAvgLeftPedalSmoothnessScaled() float64 {
 	if x.AvgLeftPedalSmoothness == 0xFF {
 		return math.NaN()
 	}
-	return float64(x.AvgLeftPedalSmoothness) / 2.0
+	return float64(x.AvgLeftPedalSmoothness) / 2
 }
 
 // GetAvgRightPedalSmoothnessScaled returns AvgRightPedalSmoothness
@@ -3073,7 +3073,7 @@ func (x *SegmentLapMsg) GetAvgRightPedalSmoothnessScaled() float64 {
 	if x.AvgRightPedalSmoothness == 0xFF {
 		return math.NaN()
 	}
-	return float64(x.AvgRightPedalSmoothness) / 2.0
+	return float64(x.AvgRightPedalSmoothness) / 2
 }
 
 // GetAvgCombinedPedalSmoothnessScaled returns AvgCombinedPedalSmoothness
@@ -3084,7 +3084,7 @@ func (x *SegmentLapMsg) GetAvgCombinedPedalSmoothnessScaled() float64 {
 	if x.AvgCombinedPedalSmoothness == 0xFF {
 		return math.NaN()
 	}
-	return float64(x.AvgCombinedPedalSmoothness) / 2.0
+	return float64(x.AvgCombinedPedalSmoothness) / 2
 }
 
 // GetAvgFractionalCadenceScaled returns AvgFractionalCadence
@@ -3095,7 +3095,7 @@ func (x *SegmentLapMsg) GetAvgFractionalCadenceScaled() float64 {
 	if x.AvgFractionalCadence == 0xFF {
 		return math.NaN()
 	}
-	return float64(x.AvgFractionalCadence) / 128.0
+	return float64(x.AvgFractionalCadence) / 128
 }
 
 // GetMaxFractionalCadenceScaled returns MaxFractionalCadence
@@ -3106,7 +3106,7 @@ func (x *SegmentLapMsg) GetMaxFractionalCadenceScaled() float64 {
 	if x.MaxFractionalCadence == 0xFF {
 		return math.NaN()
 	}
-	return float64(x.MaxFractionalCadence) / 128.0
+	return float64(x.MaxFractionalCadence) / 128
 }
 
 // GetTotalFractionalCyclesScaled returns TotalFractionalCycles
@@ -3117,7 +3117,7 @@ func (x *SegmentLapMsg) GetTotalFractionalCyclesScaled() float64 {
 	if x.TotalFractionalCycles == 0xFF {
 		return math.NaN()
 	}
-	return float64(x.TotalFractionalCycles) / 128.0
+	return float64(x.TotalFractionalCycles) / 128
 }
 
 // GetTotalCycles returns the appropriate TotalCycles
@@ -3172,9 +3172,9 @@ type WorkoutStepMsg struct {
 func (x *WorkoutStepMsg) GetDurationValue() interface{} {
 	switch x.DurationType {
 	case WktStepDurationTime, WktStepDurationRepetitionTime:
-		return float64(x.DurationValue) / 1000.0
+		return float64(x.DurationValue) / 1000
 	case WktStepDurationDistance:
-		return float64(x.DurationValue) / 100.0
+		return float64(x.DurationValue) / 100
 	case WktStepDurationHrLessThan, WktStepDurationHrGreaterThan:
 		return WorkoutHr(x.DurationValue)
 	case WktStepDurationCalories:
@@ -3201,9 +3201,9 @@ func (x *WorkoutStepMsg) GetTargetValue() interface{} {
 	case x.DurationType == WktStepDurationRepeatUntilStepsCmplt:
 		return uint32(x.TargetValue)
 	case x.DurationType == WktStepDurationRepeatUntilTime:
-		return float64(x.TargetValue) / 1000.0
+		return float64(x.TargetValue) / 1000
 	case x.DurationType == WktStepDurationRepeatUntilDistance:
-		return float64(x.TargetValue) / 100.0
+		return float64(x.TargetValue) / 100
 	case x.DurationType == WktStepDurationRepeatUntilCalories:
 		return uint32(x.TargetValue)
 	case x.DurationType == WktStepDurationRepeatUntilHrLessThan:
@@ -3226,7 +3226,7 @@ func (x *WorkoutStepMsg) GetTargetValue() interface{} {
 func (x *WorkoutStepMsg) GetCustomTargetValueLow() interface{} {
 	switch x.TargetType {
 	case WktStepTargetSpeed:
-		return float64(x.CustomTargetValueLow) / 1000.0
+		return float64(x.CustomTargetValueLow) / 1000
 	case WktStepTargetHeartRate:
 		return WorkoutHr(x.CustomTargetValueLow)
 	case WktStepTargetCadence:
@@ -3245,7 +3245,7 @@ func (x *WorkoutStepMsg) GetCustomTargetValueLow() interface{} {
 func (x *WorkoutStepMsg) GetCustomTargetValueHigh() interface{} {
 	switch x.TargetType {
 	case WktStepTargetSpeed:
-		return float64(x.CustomTargetValueHigh) / 1000.0
+		return float64(x.CustomTargetValueHigh) / 1000
 	case WktStepTargetHeartRate:
 		return WorkoutHr(x.CustomTargetValueHigh)
 	case WktStepTargetCadence:
@@ -3319,7 +3319,7 @@ func (x *WeightScaleMsg) GetWeightScaled() float64 {
 	if x.Weight == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.Weight) / 100.0
+	return float64(x.Weight) / 100
 }
 
 // GetPercentFatScaled returns PercentFat
@@ -3330,7 +3330,7 @@ func (x *WeightScaleMsg) GetPercentFatScaled() float64 {
 	if x.PercentFat == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.PercentFat) / 100.0
+	return float64(x.PercentFat) / 100
 }
 
 // GetPercentHydrationScaled returns PercentHydration
@@ -3341,7 +3341,7 @@ func (x *WeightScaleMsg) GetPercentHydrationScaled() float64 {
 	if x.PercentHydration == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.PercentHydration) / 100.0
+	return float64(x.PercentHydration) / 100
 }
 
 // GetVisceralFatMassScaled returns VisceralFatMass
@@ -3352,7 +3352,7 @@ func (x *WeightScaleMsg) GetVisceralFatMassScaled() float64 {
 	if x.VisceralFatMass == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.VisceralFatMass) / 100.0
+	return float64(x.VisceralFatMass) / 100
 }
 
 // GetBoneMassScaled returns BoneMass
@@ -3363,7 +3363,7 @@ func (x *WeightScaleMsg) GetBoneMassScaled() float64 {
 	if x.BoneMass == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.BoneMass) / 100.0
+	return float64(x.BoneMass) / 100
 }
 
 // GetMuscleMassScaled returns MuscleMass
@@ -3374,7 +3374,7 @@ func (x *WeightScaleMsg) GetMuscleMassScaled() float64 {
 	if x.MuscleMass == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.MuscleMass) / 100.0
+	return float64(x.MuscleMass) / 100
 }
 
 // GetBasalMetScaled returns BasalMet
@@ -3385,7 +3385,7 @@ func (x *WeightScaleMsg) GetBasalMetScaled() float64 {
 	if x.BasalMet == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.BasalMet) / 4.0
+	return float64(x.BasalMet) / 4
 }
 
 // GetActiveMetScaled returns ActiveMet
@@ -3396,7 +3396,7 @@ func (x *WeightScaleMsg) GetActiveMetScaled() float64 {
 	if x.ActiveMet == 0xFFFF {
 		return math.NaN()
 	}
-	return float64(x.ActiveMet) / 4.0
+	return float64(x.ActiveMet) / 4
 }
 
 // BloodPressureMsg represents the blood_pressure FIT message type.
@@ -3444,7 +3444,7 @@ func (x *MonitoringMsg) GetDistanceScaled() float64 {
 	if x.Distance == 0xFFFFFFFF {
 		return math.NaN()
 	}
-	return float64(x.Distance) / 100.0
+	return float64(x.Distance) / 100
 }
 
 // GetCyclesScaled returns Cycles
@@ -3455,7 +3455,7 @@ func (x *MonitoringMsg) GetCyclesScaled() float64 {
 	if x.Cycles == 0xFFFFFFFF {
 		return math.NaN()
 	}
-	return float64(x.Cycles) / 2.0
+	return float64(x.Cycles) / 2
 }
 
 // GetActiveTimeScaled returns ActiveTime
@@ -3466,7 +3466,7 @@ func (x *MonitoringMsg) GetActiveTimeScaled() float64 {
 	if x.ActiveTime == 0xFFFFFFFF {
 		return math.NaN()
 	}
-	return float64(x.ActiveTime) / 1000.0
+	return float64(x.ActiveTime) / 1000
 }
 
 // GetCycles returns the appropriate Cycles
@@ -3476,7 +3476,7 @@ func (x *MonitoringMsg) GetActiveTimeScaled() float64 {
 func (x *MonitoringMsg) GetCycles() interface{} {
 	switch x.ActivityType {
 	case ActivityTypeCycling, ActivityTypeSwimming:
-		return float64(x.Cycles) / 2.0
+		return float64(x.Cycles) / 2
 	default:
 		return x.Cycles
 	}

@@ -71,12 +71,12 @@ func DecodeHeader(r io.Reader) (Header, error) {
 // DecodeHeaderAndFileID returns the FIT file header and FileId message without
 // decoding the entire FIT file. The FileId message must be present in all FIT
 // files.
-func DecodeHeaderAndFileID(r io.Reader) (Header, *FileIdMsg, error) {
+func DecodeHeaderAndFileID(r io.Reader) (Header, FileIdMsg, error) {
 	var d decoder
 	if err := d.decode(r, false, true, false); err != nil {
-		return Header{}, nil, err
+		return Header{}, FileIdMsg{}, err
 	}
-	return d.h, &d.fit.FileId, nil
+	return d.h, d.fit.FileId, nil
 }
 
 // Decode reads a FIT file from r and returns it as a *Fit.

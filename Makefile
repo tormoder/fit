@@ -19,20 +19,23 @@
 
 all: get fmt vet test testrace
 
-test:
-	go test -v ./...
-
-testrace: test
-	go test -v -race ./...
-
-bench:
-	go test -v -run NONE -bench .
+get:
+	go get -v ./...
 
 fmt:
 	gofmt -l -s . dyncrc16 cmd/fitgen cmd/fitgen/internal/profile
 
 vet:
 	go vet ./...
+
+test:
+	go test -v -cpu=2 ./...
+
+testrace: test
+	go test -v -cpu=1,2,4 -race ./...
+
+bench:
+	go test -v -run NONE -bench .
 
 lint:
 	golint . | \
@@ -80,6 +83,3 @@ profobj:
 
 mdgen:
 	godoc2md github.com/tormoder/fit Fit Header CheckIntegrity > MainApiReference.md
-
-get:
-	go get -v ./...

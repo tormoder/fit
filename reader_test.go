@@ -54,7 +54,7 @@ func TestDecode(t *testing.T) {
 		}
 		b64sum := base64.StdEncoding.EncodeToString(sum.Sum(nil))
 		if b64sum != file.gobSHA1 {
-			t.Errorf("%q: SHA-1 for gob encoded fit file differs")
+			t.Errorf("%q: SHA-1 for gob encoded fit file differs", fpath)
 			// TODO(tormoder): Diff using goon?
 		}
 	}
@@ -83,7 +83,7 @@ func TestDecodeHeader(t *testing.T) {
 		t.Errorf("%q: DecodeHeader failed: %v", activitySmall, err)
 	}
 	if gotHeader != wantHeader {
-		t.Errorf("%q: got header:\n%#v\nwant header: %#v", gotHeader, wantHeader)
+		t.Errorf("got header:\n%#v\nwant header: %#v", gotHeader, wantHeader)
 	}
 }
 

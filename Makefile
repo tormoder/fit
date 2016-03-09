@@ -1,3 +1,5 @@
+FIT_PKGS := $(shell go list ./... | grep -v /vendor/)
+
 .PHONY: \
 	all \
 	test \
@@ -26,13 +28,13 @@ vet:
 	go vet ./...
 
 test:
-	go test -v -cpu=2 ./...
+	go test -v -cpu=2 $(FIT_PKGS)
 
 testrace: test
-	go test -v -cpu=1,2,4 -race ./...
+	go test -v -cpu=1,2,4 -race $(FIT_PKGS)
 
 bench:
-	go test -v -run NONE -bench .
+	go test -v -run NONE -bench $(FIT_PKGS)
 
 lint:
 	golint . | \

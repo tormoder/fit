@@ -342,8 +342,26 @@ func runStringerOnTypes(stringerPath, goTypesStringOut, fitTypes string) error {
 }
 
 func runAllTests(pkgDir string) error {
-	testCmd := exec.Command("go", "test", pkgDir+"/...")
-	output, err := testCmd.CombinedOutput()
+	listCmd := exec.Command("go", "list", pkgDir+"/...")
+	output, err := listCmd.CombinedOutput()
+	if err != nil {
+		return fmt.Errorf("go list: fail: %v\n%s", err, output)
+	}
+
+	splitted := strings.Split(string(output), "\n")
+	var goTestArgs []string
+	// Command
+	goTestArgs = append(goTestArgs, "test")
+	// Pacakges
+	for _, s := range splitted {
+		if strings.Contains(s, "/vendor/") {
+			continue
+		}
+		goTestArgs = append(goTestArgs, s)
+	}
+
+	testCmd := exec.Command("go", goTestArgs...)
+	output, err = testCmd.CombinedOutput()
 	if err != nil {
 		return fmt.Errorf("go test: fail: %v\n%s", err, output)
 	}

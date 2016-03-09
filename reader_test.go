@@ -141,11 +141,13 @@ func BenchmarkDecodeHeaderAndFileID(b *testing.B) {
 }
 
 func BenchmarkDecodeActivityLargeParallel(b *testing.B) {
-	b.ReportAllocs()
 	data, err := ioutil.ReadFile(activityLarge)
 	if err != nil {
 		b.Fatal(err)
 	}
+	b.ReportAllocs()
+	b.SetBytes(int64(len(data)))
+	b.ResetTimer()
 	b.RunParallel(func(pb *testing.PB) {
 		for pb.Next() {
 			_, err := fit.Decode(bytes.NewReader(data))
@@ -157,15 +159,15 @@ func BenchmarkDecodeActivityLargeParallel(b *testing.B) {
 }
 
 func benchmarkDecode(b *testing.B, filename string, bench string) {
-	b.ReportAllocs()
-	b.StopTimer()
 	data, err := ioutil.ReadFile(filename)
 	if err != nil {
 		b.Fatal(err)
 	}
+	b.ReportAllocs()
+	b.SetBytes(int64(len(data)))
 	switch bench {
 	case "Full":
-		b.StartTimer()
+		b.ResetTimer()
 		for i := 0; i < b.N; i++ {
 			_, err := fit.Decode(bytes.NewReader(data))
 			if err != nil {
@@ -173,7 +175,7 @@ func benchmarkDecode(b *testing.B, filename string, bench string) {
 			}
 		}
 	case "Header":
-		b.StartTimer()
+		b.ResetTimer()
 		for i := 0; i < b.N; i++ {
 			_, err := fit.DecodeHeader(bytes.NewReader(data))
 			if err != nil {
@@ -181,7 +183,7 @@ func benchmarkDecode(b *testing.B, filename string, bench string) {
 			}
 		}
 	case "HeaderAndFileID":
-		b.StartTimer()
+		b.ResetTimer()
 		for i := 0; i < b.N; i++ {
 			_, _, err := fit.DecodeHeaderAndFileID(bytes.NewReader(data))
 			if err != nil {

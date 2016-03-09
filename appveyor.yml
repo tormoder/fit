@@ -6,13 +6,13 @@ clone_folder: c:\gopath\src\github.com\tormoder\fit
 
 environment:
   GOPATH: c:\gopath
+  GO15VENDOREXPERIMENT: 1
 
 install:
   - echo %PATH%
   - echo %GOPATH%
   - go version
   - go env
-  - go get -d ./...
 
 build_script:
  - go test -v -cpu=2 ./...

@@ -17,10 +17,7 @@
 	mdgen \
 	get \
 
-all: get fmt vet test testrace
-
-get:
-	go get -v ./...
+all: fmt vet test testrace
 
 fmt:
 	gofmt -l -s . dyncrc16 cmd/fitgen cmd/fitgen/internal/profile

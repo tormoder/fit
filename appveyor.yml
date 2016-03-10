@@ -1,6 +1,6 @@
 version: "{build}"
 
-os: Windows Server 2012 R2
+os: unstable
 
 clone_folder: c:\gopath\src\github.com\tormoder\fit
 
@@ -15,5 +15,4 @@ install:
   - go env
 
 build_script:
- - go test -v -cpu=2 ./...
- - go test -cpu=1,2,4 -race ./...
+ - make

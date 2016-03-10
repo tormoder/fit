@@ -15,4 +15,6 @@ install:
   - go env
 
 build_script:
- - make
+   - C:\MinGW\msys\1.0\bin\sh --login -c "
+       make
+       "

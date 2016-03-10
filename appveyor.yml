@@ -16,5 +16,5 @@ install:
 
 build_script:
    - C:\MinGW\msys\1.0\bin\sh --login -c "
-       make
+       make all
        "

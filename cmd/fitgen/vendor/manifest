@@ -4,7 +4,7 @@
 		{
 			"importpath": "github.com/tealeg/xlsx",
 			"repository": "https://github.com/tealeg/xlsx",
-			"revision": "825564ccee17cdf09765833f6567a059a1367678",
+			"revision": "711ead9e3d2a46410e8618f2f2ad33b0266edf6d",
 			"branch": "master"
 		}
 	]

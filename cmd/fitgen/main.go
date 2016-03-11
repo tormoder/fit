@@ -191,25 +191,30 @@ func parseProfileWorkbook(inputPath string) (typeData, msgData [][]string, err e
 		return nil, nil, fmt.Errorf("error opening profile workbook: %v", err)
 	}
 
-	data, err := workbook.ToSlice()
-	if err != nil {
-		return nil, nil, fmt.Errorf("error reading profile workbook: %v", err)
-	}
-
-	typeData = data[typesSheetIndex]
-	msgData = data[msgsSheetIndex]
-
-	// The profile message sheet has formatting errors, resulting in errors
-	// printed in some cells. Fix those cells.
-	msgSheet := workbook.Sheet["Messages"]
-	for i, row := range msgSheet.Rows {
-		for j := 0; j < msgsNumCells; j++ {
-			v, err := row.Cells[j].SafeFormattedValue()
-			if err != nil {
-				msgData[i][j] = v
+	// file.ToSlice from the xlsx library adjusted to ignore formatting errors.
+	var output = [][][]string{}
+	for _, sheet := range workbook.Sheets {
+		s := [][]string{}
+		for _, row := range sheet.Rows {
+			if row == nil {
+				continue
 			}
+			r := []string{}
+			for _, cell := range row.Cells {
+				str, err := cell.String()
+				if err != nil {
+					// The profile message sheet has formatting errors.
+					// Ignore those cells and use the raw values.
+				}
+				r = append(r, str)
+			}
+			s = append(s, r)
 		}
+		output = append(output, s)
 	}
+
+	typeData = output[typesSheetIndex]
+	msgData = output[msgsSheetIndex]
 
 	log.Println("parse workbook: done")
 	return typeData, msgData, nil

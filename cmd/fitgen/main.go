@@ -25,7 +25,6 @@ const (
 
 	typesSheetIndex = 0
 	msgsSheetIndex  = 1
-	msgsNumCells    = 16
 
 	workbookNameXLS  = "Profile.xls"
 	workbookNameXLSX = "Profile.xlsx"

@@ -1,8 +1,7 @@
 // Package dyncrc16 implements the Dynastream CRC-16 checksum.
 package dyncrc16
 
-// The size of a Dynastream CRC-16 checksum in bytes.
-const Size = 2
+const size = 2
 
 var crcTable = [...]uint16{
 	0x0000, 0xCC01, 0xD801, 0x1400,
@@ -29,7 +28,7 @@ func (c *crc16) Reset() {
 }
 
 func (c *crc16) Size() int {
-	return Size
+	return size
 }
 
 func (c *crc16) BlockSize() int {

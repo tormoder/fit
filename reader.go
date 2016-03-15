@@ -676,7 +676,7 @@ func (d *decoder) parseFitField(dm *defmsg, dfield fieldDef, fieldv reflect.Valu
 		fieldv.SetFloat(f32)
 	case fitFloat64:
 		bits := dm.arch.Uint64(d.tmp[:dsize])
-		f64 := float64(math.Float64frombits(bits))
+		f64 := math.Float64frombits(bits)
 		fieldv.SetFloat(f64)
 	case fitString:
 		for j := 0; j < dsize; j++ {
@@ -754,7 +754,7 @@ func (d *decoder) parseFitFieldArray(dm *defmsg, dfield fieldDef, fieldv reflect
 	case fitFloat64:
 		for j, k := 0, 0; j < dsize; j, k = j+dbt.size(), k+1 {
 			bits := dm.arch.Uint64(d.tmp[j : j+dbt.size()])
-			f64 := float64(math.Float64frombits(bits))
+			f64 := math.Float64frombits(bits)
 			slicev.Index(k).SetFloat(f64)
 		}
 	case fitString:

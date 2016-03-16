@@ -627,7 +627,7 @@ func (d *decoder) parseDataFields(dm *defmsg, knownMsg bool, msgv reflect.Value)
 			if pfield.array == 0 {
 				err = d.parseFitField(dm, dfield, fieldv)
 			} else {
-				d.parseFitFieldArray(dm, dfield, fieldv)
+				err = d.parseFitFieldArray(dm, dfield, fieldv)
 			}
 			if err == nil {
 				continue

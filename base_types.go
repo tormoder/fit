@@ -25,10 +25,6 @@ func (b fitBaseType) nr() int {
 	return int(b & baseTypeNumMask)
 }
 
-func (b fitBaseType) endianAbility() bool {
-	return bsize[b.nr()] > 0
-}
-
 func (b fitBaseType) float() bool {
 	return !b.integer() && b.signed()
 }

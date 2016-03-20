@@ -7,6 +7,7 @@ import (
 
 const (
 	sint32Invalid = 0x7FFFFFFF
+	stringInvalid = "Invalid"
 	precision     = 5 // 1.1 m
 )
 
@@ -72,7 +73,7 @@ func (l Latitude) Invalid() bool {
 // places. If l is invalid then the string "Invalid" is returned.
 func (l Latitude) String() string {
 	if l.semicircles == sint32Invalid {
-		return "Invalid"
+		return stringInvalid
 	}
 	return strconv.FormatFloat(l.Degrees(), 'f', precision, 32)
 }
@@ -126,7 +127,7 @@ func (l Longitude) Invalid() bool {
 // places. If l is invalid then the string "Invalid" is returned.
 func (l Longitude) String() string {
 	if l.semicircles == sint32Invalid {
-		return "Invalid"
+		return stringInvalid
 	}
 	return strconv.FormatFloat(l.Degrees(), 'f', precision, 32)
 }

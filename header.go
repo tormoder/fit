@@ -32,7 +32,7 @@ func (d *decoder) decodeHeader() error {
 	}
 	d.h.Size = size
 
-	if err := d.readFull(d.tmp[:size-1]); err != nil {
+	if err = d.readFull(d.tmp[:size-1]); err != nil {
 		return err
 	}
 

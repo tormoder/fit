@@ -81,6 +81,10 @@ getchecktools:
 	go get -u github.com/gordonklaus/ineffassign
 	go get -u github.com/mdempsky/unconvert
 	go get -u honnef.co/go/unused/cmd/unused
+	go get -u honnef.co/go/simple/cmd/gosimple
+	go get -u github.com/mvdan/interfacer/cmd/interfacer
+	go get -u github.com/client9/misspell/cmd/misspell
+	go get -u honnef.co/go/staticcheck/cmd/staticcheck
 
 .PHONY: check
 check:
@@ -112,7 +116,7 @@ checkfull:
 		goconst $$dir ; \
 	done
 	@echo "errcheck"
-	@errcheck -ignore '' $(FIT_PKGS)
+	@errcheck -ignore 'bytes:Write*,archive/zip:Close,io:Close' -ignorepkg 'github.com/tormoder/fit/dyncrc16' $(FIT_PKGS)
 	@echo "ineffassign"
 	@for dir in $(FIT_DIRS); do \
 		ineffassign -n $$dir ; \
@@ -121,3 +125,13 @@ checkfull:
 	@! unconvert $(FIT_PKGS) | grep -vF 'messages.go'
 	@echo "unused"
 	@unused $(FIT_PKGS)
+	@echo "gosimple"
+	@for pkg in $(FIT_PKGS); do \
+		gosimple $$pkg ; \
+	done
+	@echo "interfacer"
+	@interfacer $(FIT_PKGS)
+	@echo "misspell"
+	@ ! misspell ./**/* | grep -vE '(messages.go|/vendor/)'
+	@echo "staticcheck"
+	@staticcheck $(GORUMS_PKGS)

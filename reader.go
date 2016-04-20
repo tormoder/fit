@@ -179,9 +179,7 @@ func (d *decoder) decode(r io.Reader, headerOnly, fileIDOnly, crcOnly bool) erro
 
 crc:
 	if err = binary.Read(d.r, binary.LittleEndian, &d.fit.CRC); err != nil {
-		if err == io.EOF {
-			err = io.ErrUnexpectedEOF
-		}
+		err = noEOF(err)
 		return fmt.Errorf("error parsing file CRC: %v", err)
 	}
 
@@ -198,9 +196,7 @@ func (d *decoder) readByte() (c byte, err error) {
 		d.n++
 		return c, nil
 	}
-	if err == io.EOF {
-		err = io.ErrUnexpectedEOF
-	}
+	err = noEOF(err)
 	return c, err
 }
 
@@ -215,9 +211,7 @@ func (d *decoder) readFull(buf []byte) error {
 		d.n += uint32(n)
 		return nil
 	}
-	if err == io.EOF {
-		err = io.ErrUnexpectedEOF
-	}
+	err = noEOF(err)
 	return err
 }
 
@@ -844,4 +838,11 @@ func (d *decoder) parseTimeStamp(dm *defmsg, fieldv reflect.Value, pfield *field
 		local = utc.In(tzone)
 	}
 	fieldv.Set(reflect.ValueOf(local))
+}
+
+func noEOF(err error) error {
+	if err == io.EOF {
+		return io.ErrUnexpectedEOF
+	}
+	return err
 }

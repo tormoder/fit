@@ -1,8 +1,10 @@
-// Manually generated types.
-
 package fit
 
 import "fmt"
+
+// Manually generated types: The 'Bool' type is not found in the SDK
+// specification, so it won't be auto-generated, but it is also not a base
+// type.
 
 type Bool byte
 
@@ -18,7 +20,6 @@ const (
 
 var (
 	_Bool_index_0 = [...]uint8{0, 5, 9}
-	_Bool_index_1 = [...]uint8{0, 7}
 )
 
 func (i Bool) String() string {

@@ -29,12 +29,6 @@ func (j *jsonEncodeState) writeFieldName(s string) {
 	j.WriteByte(':')
 }
 
-func (j *jsonEncodeState) writeString(s string) {
-	j.WriteByte('"')
-	j.WriteString(s)
-	j.WriteByte('"')
-}
-
 func (j *jsonEncodeState) writeStringBytes(b []byte) {
 	j.WriteByte('"')
 	j.Write(b)

@@ -9,6 +9,11 @@ var timestampTypes = map[string]bool{
 	"local_date_time": true,
 }
 
+var knownMesgNumButNoMsg = map[string]bool{
+	"Pad":         true,
+	"GpsMetadata": true,
+}
+
 var baseTypeToGoType = map[string]string{
 	"enum":    "byte",
 	"sint8":   "int8",
@@ -26,23 +31,6 @@ var baseTypeToGoType = map[string]string{
 	"byte":    "byte",
 }
 
-var baseTypeToInvalidValue = map[string]string{
-	"enum":    "0xFF",
-	"sint8":   "0x7F",
-	"uint8":   "0xFF",
-	"sint16":  "0x7FFF",
-	"uint16":  "0xFFFF",
-	"sint32":  "0x7FFFFFFF",
-	"uint32":  "0xFFFFFFFF",
-	"string":  "0x00",
-	"float32": "0xFFFFFFFF",
-	"float64": "0xFFFFFFFFFFFFFFFF",
-	"uint8z":  "0x00",
-	"uint16z": "0x0000",
-	"uint32z": "0x00000000",
-	"byte":    "0xFF",
-}
-
 var goBaseTypeToInvalidValue = map[string]string{
 	"int8":    "0x7F",
 	"uint8":   "0xFF",
@@ -54,9 +42,4 @@ var goBaseTypeToInvalidValue = map[string]string{
 	"float32": "0xFFFFFFFF",
 	"float64": "0xFFFFFFFFFFFFFFFF",
 	"byte":    "0xFF",
-}
-
-var knownMesgNumButNoMsg = map[string]bool{
-	"Pad":         true,
-	"GpsMetadata": true,
 }

@@ -1,73 +1,52 @@
 package main
 
 import (
-	"archive/zip"
-	"bytes"
-	"errors"
 	"flag"
 	"fmt"
-	"io"
 	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
-	"sort"
 	"strings"
 
 	"github.com/tormoder/fit/cmd/fitgen/internal/profile"
-
-	"github.com/tealeg/xlsx"
 )
 
-const (
-	fitPkgImportPath = "github.com/tormoder/fit"
+const fitPkgImportPath = "github.com/tormoder/fit"
 
-	typesSheetIndex = 0
-	msgsSheetIndex  = 1
-
-	workbookNameXLS  = "Profile.xls"
-	workbookNameXLSX = "Profile.xlsx"
-)
-
-var (
-	fitSrcDir        string
-	msgsGoOut        string
-	typesGoOut       string
-	profileGoOut     string
-	typesStringGoOut string
-	stringerPath     string
-	generator        *profile.Generator
-)
-
-func init() {
+func main() {
 	log.SetFlags(0)
 	log.SetPrefix("fitgen:\t")
 
-	var err error
-	fitSrcDir, err = goPackagePath(fitPkgImportPath)
+	fitSrcDir, err := goPackagePath(fitPkgImportPath)
 	if err != nil {
 		log.Fatalf("can't find fit package root src directory for %q", fitPkgImportPath)
 	}
 	log.Println("root src directory:", fitSrcDir)
 
-	msgsGoOut = filepath.Join(fitSrcDir, "messages.go")
-	typesGoOut = filepath.Join(fitSrcDir, "types.go")
-	profileGoOut = filepath.Join(fitSrcDir, "profile.go")
-	typesStringGoOut = filepath.Join(fitSrcDir, "types_string.go")
-	stringerPath = filepath.Join(fitSrcDir, "cmd/stringer/stringer.go")
-}
+	var (
+		messagesOut    = filepath.Join(fitSrcDir, "messages.go")
+		typesOut       = filepath.Join(fitSrcDir, "types.go")
+		profileOut     = filepath.Join(fitSrcDir, "profile.go")
+		stringerPath   = filepath.Join(fitSrcDir, "cmd/stringer/stringer.go")
+		typesStringOut = filepath.Join(fitSrcDir, "types_string.go")
+	)
 
-func main() {
 	sdkOverride := flag.String(
 		"sdk",
 		"",
 		"provide or override SDK version printed in generated code",
 	)
-	jmptable := flag.Bool(
+	switches := flag.Bool(
 		"jmptable",
+		false,
+		"use switches instead jump tables for profile message and field lookups",
+	)
+	timestamp := flag.Bool(
+		"timestamp",
 		true,
-		"use jump tables for profile message and field lookups, otherwise use switches",
+		"add generation timestamp to generated code",
 	)
 
 	flag.Usage = func() {
@@ -81,51 +60,46 @@ func main() {
 		os.Exit(2)
 	}
 
-	var sdkVersion string
-	isZip := false
 	input := flag.Arg(0)
 	inputExt := filepath.Ext(input)
 	switch inputExt {
-	case ".zip":
-		isZip = true
-	case ".xls", ".xlsx":
+	case ".zip", ".xls", ".xlsx":
 	default:
 		log.Fatalln("input file must be of type [.zip | .xls | .xlsx], got:", inputExt)
 	}
 
-	switch {
-	case *sdkOverride != "":
-		sdkVersion = *sdkOverride
-	case isZip:
-		sdkVersion = parseSDKVersion(input)
-	default:
-		sdkVersion = "Unknown"
+	var genOptions []profile.GeneratorOption
+	genOptions = append(genOptions, profile.WithGenerationTimestamp(*timestamp))
+	if *sdkOverride != "" {
+		genOptions = append(genOptions, profile.WithSDKVersionOverride(*sdkOverride))
 	}
-	log.Println("sdk version:", sdkVersion)
+	if *switches {
+		genOptions = append(genOptions, profile.WithSDKVersionOverride(*sdkOverride))
+	}
 
-	generator = profile.NewGenerator(sdkVersion)
-
-	typeData, msgData, err := parseProfileWorkbook(input)
+	generator, err := profile.NewGenerator(input, genOptions...)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	goTypes, stringerInput, err := generateTypes(typeData, typesGoOut)
+	fitProfile, err := generator.GenerateProfile()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	goMsgs, err := generateMsgs(msgData, msgsGoOut, goTypes)
-	if err != nil {
-		log.Fatal(err)
+	if err = ioutil.WriteFile(typesOut, fitProfile.TypesSource, 0644); err != nil {
+		log.Fatalf("typegen: error writing types output file: %v", err)
 	}
 
-	err = generateProfile(goTypes, goMsgs, profileGoOut, *jmptable)
-	if err != nil {
-		log.Fatal(err)
+	if err = ioutil.WriteFile(messagesOut, fitProfile.MessagesSource, 0644); err != nil {
+		log.Fatalf("typegen: error writing messages output file: %v", err)
 	}
 
-	err = runStringerOnTypes(stringerPath, typesStringGoOut, stringerInput)
+	if err = ioutil.WriteFile(profileOut, fitProfile.ProfileSource, 0644); err != nil {
+		log.Fatalf("typegen: error writing profile output file: %v", err)
+	}
+
+	err = runStringerOnTypes(stringerPath, fitSrcDir, typesStringOut, fitProfile.StringerInput)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -135,196 +109,14 @@ func main() {
 		log.Fatal(err)
 	}
 
-	err = logMesgNumVsMsgs(goTypes, goMsgs)
-	if err != nil {
-		log.Fatal(err)
-	}
+	logMesgNumVsMessages(fitProfile.MesgNumsWithoutMessage)
 
 	log.Println("done")
 }
 
-func parseSDKVersion(zipFilePath string) string {
-	// Brittle.
-	// TODO: Maybe parse 'c/fit.h' with regexp instead.
-	_, file := filepath.Split(zipFilePath)
-	ver := strings.TrimSuffix(file, ".zip")
-	return strings.TrimPrefix(ver, "FitSDKRelease_")
-}
+func runStringerOnTypes(stringerPath, fitSrcDir, typesStringOut, fitTypes string) error {
+	log.Println("running stringer")
 
-func parseProfileWorkbook(inputPath string) (typeData, msgData [][]string, err error) {
-	r, err := zip.OpenReader(inputPath)
-	if err != nil {
-		return nil, nil, fmt.Errorf("error opening sdk zip file: %v", err)
-	}
-	defer r.Close()
-
-	var wfile *zip.File
-	for _, f := range r.File {
-		if f.Name == workbookNameXLS {
-			wfile = f
-			break
-		}
-		if f.Name == workbookNameXLSX {
-			wfile = f
-			break
-		}
-	}
-	if wfile == nil {
-		return nil, nil, fmt.Errorf(
-			"no file named %q or %q found in zip archive",
-			workbookNameXLS, workbookNameXLSX)
-	}
-
-	rc, err := wfile.Open()
-	defer rc.Close()
-	if err != nil {
-		return nil, nil, err
-	}
-	b, err := ioutil.ReadAll(rc)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	workbook, err := xlsx.OpenBinary(b)
-	if err != nil {
-		return nil, nil, fmt.Errorf("error opening profile workbook: %v", err)
-	}
-
-	// file.ToSlice from the xlsx library adjusted to ignore formatting errors.
-	var output = [][][]string{}
-	for _, sheet := range workbook.Sheets {
-		s := [][]string{}
-		for _, row := range sheet.Rows {
-			if row == nil {
-				continue
-			}
-			r := []string{}
-			for _, cell := range row.Cells {
-				str, err := cell.String()
-				if err != nil {
-					// The profile message sheet has formatting errors.
-					// Ignore those cells and use the raw values.
-				}
-				r = append(r, str)
-			}
-			s = append(s, r)
-		}
-		output = append(output, s)
-	}
-
-	typeData = output[typesSheetIndex]
-	msgData = output[msgsSheetIndex]
-
-	log.Println("parse workbook: done")
-	return typeData, msgData, nil
-}
-
-func generateTypes(typeData [][]string, output string) (map[string]*profile.Type, string, error) {
-	parser, err := profile.NewTypeParser(typeData)
-	if err != nil {
-		return nil, "", fmt.Errorf("typegen: error creating parser: %v", err)
-	}
-
-	var ptypes []*profile.PType
-	for {
-		t, perr := parser.ParseType()
-		if perr == io.EOF {
-			break
-		}
-		if perr != nil {
-			return nil, "", fmt.Errorf("typegen: error parsing types: %v", perr)
-		}
-		ptypes = append(ptypes, t)
-	}
-
-	types, err := profile.TransformTypes(ptypes)
-	if err != nil {
-		return nil, "", fmt.Errorf("typegen: error transforming types: %v", err)
-	}
-
-	source, err := generator.GenerateTypes(types)
-	if err != nil {
-		return nil, "", fmt.Errorf("typegen: error generating source: %v", err)
-
-	}
-
-	if err = ioutil.WriteFile(output, source, 0644); err != nil {
-		return nil, "", fmt.Errorf("typegen: error writing output file: %v", err)
-	}
-
-	tkeys := make([]string, 0, len(types))
-	for tkey := range types {
-		tkeys = append(tkeys, tkey)
-	}
-	sort.Strings(tkeys)
-
-	var atn bytes.Buffer
-	for _, tkey := range tkeys {
-		t := types[tkey]
-		atn.WriteString(t.CCName)
-		atn.WriteByte(',')
-	}
-
-	allTypeNames := atn.Bytes()
-	allTypeNames = allTypeNames[:len(allTypeNames)-1] // last comma
-
-	log.Println("typegen: success")
-	return types, string(allTypeNames), nil
-}
-
-func generateMsgs(msgData [][]string, output string, types map[string]*profile.Type) ([]*profile.Msg, error) {
-	parser, err := profile.NewMsgParser(msgData)
-	if err != nil {
-		return nil, fmt.Errorf("msggen: error creating parser: %v", err)
-	}
-
-	var pmsgs []*profile.PMsg
-	for {
-		m, perr := parser.ParseMsg()
-		if perr == io.EOF {
-			break
-		}
-		if perr != nil {
-			return nil, fmt.Errorf("msggen: error parsing msgs: %v", perr)
-		}
-		pmsgs = append(pmsgs, m)
-	}
-
-	msgs, err := profile.TransformMsgs(pmsgs, types)
-	if err != nil {
-		return nil, fmt.Errorf("msggen: error transforming msgs: %v", err)
-	}
-
-	source, err := generator.GenerateMsgs(msgs)
-	if err != nil {
-		return nil, fmt.Errorf("msggen: error generating source: %v", err)
-
-	}
-
-	if err = ioutil.WriteFile(output, source, 0644); err != nil {
-		return nil, fmt.Errorf("msggen: error writing output file: %v", err)
-	}
-
-	log.Println("msggen: success")
-	return msgs, nil
-}
-
-func generateProfile(types map[string]*profile.Type, msgs []*profile.Msg, output string, jmptable bool) error {
-	source, err := generator.GenerateProfile(types, msgs, jmptable)
-	if err != nil {
-		return fmt.Errorf("profilegen: error generating source: %v", err)
-
-	}
-
-	if err = ioutil.WriteFile(output, source, 0644); err != nil {
-		return fmt.Errorf("profilegen: error writing output file: %v", err)
-	}
-
-	log.Println("profilegen: success")
-	return nil
-}
-
-func runStringerOnTypes(stringerPath, goTypesStringOut, fitTypes string) error {
 	stringerCmd := exec.Command(
 		"go",
 		"run",
@@ -332,7 +124,7 @@ func runStringerOnTypes(stringerPath, goTypesStringOut, fitTypes string) error {
 		"-trimprefix",
 		"-type", fitTypes,
 		"-output",
-		goTypesStringOut,
+		typesStringOut,
 		fitSrcDir,
 	)
 
@@ -356,7 +148,7 @@ func runAllTests(pkgDir string) error {
 	var goTestArgs []string
 	// Command
 	goTestArgs = append(goTestArgs, "test")
-	// Pacakges
+	// Packages
 	for _, s := range splitted {
 		if strings.Contains(s, "/vendor/") {
 			continue
@@ -374,46 +166,16 @@ func runAllTests(pkgDir string) error {
 	return nil
 }
 
-func logMesgNumVsMsgs(types map[string]*profile.Type, msgs []*profile.Msg) error {
-	mesgNum, found := types["MesgNum"]
-	if !found {
-		return errors.New("mesgnum-vs-#msgs: can't find MesgNum type")
+func logMesgNumVsMessages(msgs []string) {
+	if len(msgs) == 0 {
+		return
 	}
-
-	nMesgNum := len(mesgNum.Values) - 2 // Skip range min/max
-	diff := nMesgNum - len(msgs)
-
-	log.Println("mesgnum-vs-msgs: #mesgnum values:", nMesgNum)
-	log.Println("mesgnum-vs-msgs: #generated messages:", len(msgs))
-
-	if diff == 0 {
-		return nil
-	}
-
-	msgsMap := make(map[string]*profile.Msg)
-	for _, msg := range msgs {
-		msgsMap[msg.CCName] = msg
-	}
-
-	var mdiff []string
-	for _, mnv := range mesgNum.Values {
-		if strings.HasPrefix(mnv.Name, "MfgRange") {
-			continue
-		}
-		_, ok := msgsMap[mnv.Name]
-		if !ok {
-			mdiff = append(mdiff, mnv.Name)
-		}
-	}
-
-	log.Println("mesgnum-vs-msgs: #mesgnum values != #generated messages, diff:", diff)
+	log.Println("mesgnum-vs-msgs: implementation detail below, this may be automated in the future")
+	log.Println("mesgnum-vs-msgs: #mesgnum values != #generated messages, diff:", len(msgs))
 	log.Println("mesgnum-vs-msgs: remember to verify map in mappings.go for the following message(s):")
-	for _, mvn := range mdiff {
-		log.Printf("mesgnum-vs-msgs: ----> mesgnum %q has no corresponding message\n", mvn)
+	for _, msg := range msgs {
+		log.Printf("mesgnum-vs-msgs: ----> mesgnum %q has no corresponding message\n", msg)
 	}
-	log.Println("mesgnum-vs-msgs: this may be automated in the future")
-
-	return nil
 }
 
 func goPackagePath(pkg string) (path string, err error) {

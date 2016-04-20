@@ -49,6 +49,10 @@ clean:
 	rm -f *.prof
 	rm -f *.test
 
+.PHONY: gcoprofile 
+gcoprofile:
+	git checkout types.go messages.go profile.go
+
 .PHONY: profcpu
 profcpu:
 	go test -run=NONE -bench=ActivitySmall -cpuprofile cpu.prof

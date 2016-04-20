@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+
+	"github.com/tormoder/fit/internal/base"
 )
 
 func TransformTypes(ptypes []*PType) (map[string]*Type, error) {
@@ -39,18 +41,10 @@ func (t *Type) transform() (skip bool, err error) {
 	t.CCName = toCamelCase(t.Name)
 
 	t.PkgName = strings.ToLower(t.CCName)
-	t.BaseType = t.data.Header[tBTYPE]
-	t.GoBaseType, found = baseTypeToGoType[t.BaseType]
-	if !found {
-		return false, fmt.Errorf(
-			"no go type found for base type: %q",
-			t.data.Header[tBTYPE])
-	}
-	t.InvalidValue, found = baseTypeToInvalidValue[t.BaseType]
-	if !found {
-		return false, fmt.Errorf(
-			"no invalid value found for base type: %q",
-			t.BaseType)
+
+	t.BaseType, err = base.TypeFromString(t.data.Header[tBTYPE])
+	if err != nil {
+		return false, err
 	}
 
 	for _, f := range t.data.Fields {
@@ -129,7 +123,11 @@ func (f *Field) transform(subfield bool, types map[string]*Type) (skip bool, err
 	f.Name = f.data[mFNAME]
 	f.CCName = toCamelCase(f.Name)
 
-	f.parseBaseType(types)
+	err = f.parseBaseType(types)
+	if err != nil {
+		return false, err
+	}
+
 	err = f.parseType(types)
 	if err != nil {
 		return false, err
@@ -150,12 +148,7 @@ func (f *Field) transform(subfield bool, types map[string]*Type) (skip bool, err
 		return false, nil
 	}
 
-	err = f.parseComponents(types)
-	if err != nil {
-		return false, err
-	}
-
-	return false, nil
+	return false, f.parseComponents(types)
 }
 
 func (f *Field) parseType(types map[string]*Type) error {
@@ -196,12 +189,12 @@ func (f *Field) parseType(types map[string]*Type) error {
 
 		tdef, tfound := types[f.Type]
 		if tfound {
-			f.GoInvalid = tdef.InvalidValue
+			f.GoInvalid = tdef.BaseType.GoInvalidValue()
 			return nil
 		}
 
 		if f.Type == "Bool" { // Special case for now.
-			f.GoInvalid = "0xFF"
+			f.GoInvalid = base.Enum.GoInvalidValue()
 			return nil
 		}
 
@@ -212,6 +205,7 @@ func (f *Field) parseType(types map[string]*Type) error {
 				"base type for type %q not found",
 				f.Type,
 			)
+
 		}
 		f.GoInvalid = val
 		f.BTInvalid = val // GoInvalid may be overwritten in parseArray.
@@ -220,24 +214,29 @@ func (f *Field) parseType(types map[string]*Type) error {
 	return nil
 }
 
-func (f *Field) parseBaseType(types map[string]*Type) {
+func (f *Field) parseBaseType(types map[string]*Type) error {
 	typeName := f.data[mFTYPE]
 	if rewrite, tfound := typeQuirks[typeName]; tfound {
 		typeName = rewrite
 	}
 	typeDef, found := types[toCamelCase(typeName)]
 	if found {
-		f.BaseType = "fit" + toCamelCase(typeDef.BaseType)
+		f.BaseType = typeDef.BaseType
 	} else {
 		_, found = timestampTypes[typeName]
 		if found {
-			f.BaseType = "fitUint32"
+			f.BaseType = base.Uint32
 		} else if typeName == "bool" {
-			f.BaseType = "fitEnum"
+			f.BaseType = base.Enum
 		} else {
-			f.BaseType = "fit" + toCamelCase(typeName)
+			var err error
+			f.BaseType, err = base.TypeFromString(typeName)
+			if err != nil {
+				return err
+			}
 		}
 	}
+	return nil
 }
 
 func (f *Field) parseArray() {
@@ -296,9 +295,9 @@ func (f *Field) parseComponents(types map[string]*Type) error {
 	debugln("parsing components for field", f.CCName)
 
 	switch f.BaseType {
-	case "fitUint8", "fitUint16", "fitUint32":
-	case "fitByte":
-		if f.Array == "0" {
+	case base.Uint8, base.Uint16, base.Uint32:
+	case base.Byte:
+		if !f.IsArray() {
 			return fmt.Errorf("parseComponents: base type was byte but not an array")
 		}
 	default:

@@ -15,6 +15,7 @@ import (
 	"time"
 
 	"github.com/tormoder/fit/dyncrc16"
+	"github.com/tormoder/fit/internal/base"
 )
 
 var debug, _ = strconv.ParseBool(os.Getenv("FIT_DEBUG"))
@@ -233,7 +234,7 @@ func (dm defmsg) String() string {
 type fieldDef struct {
 	num   byte
 	size  byte
-	btype fitBaseType
+	btype base.Type
 }
 
 func (fd fieldDef) String() string {
@@ -408,7 +409,7 @@ func (d *decoder) parseDefinitionMessage(recordHeader byte) (*defmsg, error) {
 	for i, fd := range dm.fieldDefs {
 		fd.num = d.tmp[i*3]
 		fd.size = d.tmp[(i*3)+1]
-		fd.btype = fitBaseType(d.tmp[(i*3)+2])
+		fd.btype = base.Type(d.tmp[(i*3)+2])
 		if err = d.validateFieldDef(dm.globalMsgNum, fd); err != nil {
 			return nil, fmt.Errorf(
 				"validating %v failed: %v",
@@ -425,10 +426,8 @@ func (d *decoder) parseDefinitionMessage(recordHeader byte) (*defmsg, error) {
 }
 
 func (d *decoder) validateFieldDef(gmsgnum MesgNum, dfield fieldDef) error {
-	if dfield.btype.nr() > len(fitBaseTypes)-1 {
-		return fmt.Errorf(
-			"field %d: unknown base type 0X%X",
-			dfield.num, dfield.btype)
+	if !dfield.btype.Known() {
+		return fmt.Errorf("field %d: unknown base type 0X%X", dfield.num, dfield.btype)
 	}
 
 	var pfield *field
@@ -437,7 +436,7 @@ func (d *decoder) validateFieldDef(gmsgnum MesgNum, dfield fieldDef) error {
 		pfield, pfound = getField(gmsgnum, dfield.num)
 	}
 
-	if dfield.btype == fitString {
+	if dfield.btype == base.String {
 		if !pfound {
 			return nil
 		}
@@ -451,10 +450,10 @@ func (d *decoder) validateFieldDef(gmsgnum MesgNum, dfield fieldDef) error {
 
 	// Verify that field definition size is not less than field definition
 	// base type size.
-	if int(dfield.size) < dfield.btype.size() {
+	if int(dfield.size) < dfield.btype.Size() {
 		return fmt.Errorf(
 			"field %d: size (%d) is less than base type size (%d)",
-			dfield.num, dfield.size, dfield.btype.size())
+			dfield.num, dfield.size, dfield.btype.Size())
 	}
 
 	if !pfound {
@@ -469,21 +468,21 @@ func (d *decoder) validateFieldDef(gmsgnum MesgNum, dfield fieldDef) error {
 		// is allowed due to dynamic fields.
 		switch {
 
-		case int(dfield.size) > pfield.btype.size():
+		case int(dfield.size) > pfield.btype.Size():
 			return fmt.Errorf(
 				"field %d: size (%d) is greater than size of profile base type %v (%d)",
-				dfield.num, dfield.size, dfield.btype, dfield.btype.size())
+				dfield.num, dfield.size, dfield.btype, dfield.btype.Size())
 
-		case int(dfield.size) <= pfield.btype.size() && dfield.btype != pfield.btype:
+		case int(dfield.size) <= pfield.btype.Size() && dfield.btype != pfield.btype:
 			// Size is less or equal, but we can only allow
 			// "compatible" types that will not panic when setting
 			// fields using reflection.
 			switch {
-			case pfield.btype.signed() != dfield.btype.signed():
+			case pfield.btype.Signed() != dfield.btype.Signed():
 				fallthrough
-			case dfield.btype.float() && !pfield.btype.float():
+			case dfield.btype.Float() && !pfield.btype.Float():
 				fallthrough
-			case pfield.btype == fitString && dfield.btype != fitString:
+			case pfield.btype == base.String && dfield.btype != base.String:
 				return fmt.Errorf(
 					"field %d: type %v is not compatible with profile type %v",
 					dfield.num, dfield.btype, pfield.btype)
@@ -495,10 +494,10 @@ func (d *decoder) validateFieldDef(gmsgnum MesgNum, dfield fieldDef) error {
 
 	// Profile field is an array.
 	switch {
-	case (int(dfield.size) % dfield.btype.size()) != 0:
+	case (int(dfield.size) % dfield.btype.Size()) != 0:
 		return fmt.Errorf(
 			"field %d: array, but size (%d) is not a multiple of base type %v size (%d)",
-			dfield.num, dfield.size, dfield.btype, dfield.btype.size())
+			dfield.num, dfield.size, dfield.btype, dfield.btype.Size())
 	case dfield.btype != pfield.btype:
 		// Require correct base type if an array. I have not seen a
 		// dynamic field that is an array and have a smaller base type
@@ -506,7 +505,7 @@ func (d *decoder) validateFieldDef(gmsgnum MesgNum, dfield fieldDef) error {
 		// later if needed (like for non-array fields).
 		return fmt.Errorf(
 			"field %d: array, but definition (%v) and profile (%v) base types differ",
-			dfield.num, dfield.btype, dfield.btype.size())
+			dfield.num, dfield.btype, dfield.btype.Size())
 	default:
 		return nil
 	}
@@ -581,8 +580,8 @@ func (d *decoder) parseDataFields(dm *defmsg, knownMsg bool, msgv reflect.Value)
 
 		pfield, pfound := getField(dm.globalMsgNum, dfield.num)
 		if pfound {
-			if pfield.btype != fitString && pfield.array == 0 {
-				padding = pfield.btype.size() - dsize
+			if pfield.btype != base.String && pfield.array == 0 {
+				padding = pfield.btype.Size() - dsize
 			}
 		} else {
 			d.fit.UnknownFields[UnknownField{dm.globalMsgNum, dfield.num}]++
@@ -597,11 +596,11 @@ func (d *decoder) parseDataFields(dm *defmsg, knownMsg bool, msgv reflect.Value)
 
 		if padding != 0 {
 			if dm.arch == le {
-				for j := dsize; j < pfield.btype.size(); j++ {
+				for j := dsize; j < pfield.btype.Size(); j++ {
 					d.tmp[j] = 0x00
 				}
 			} else {
-				for j := 0; j < pfield.btype.size(); j++ {
+				for j := 0; j < pfield.btype.Size(); j++ {
 					d.tmp[j], d.tmp[j+padding] = 0x00, d.tmp[j]
 				}
 			}
@@ -627,11 +626,11 @@ func (d *decoder) parseDataFields(dm *defmsg, knownMsg bool, msgv reflect.Value)
 		case timeutc, timelocal:
 			d.parseTimeStamp(dm, fieldv, pfield)
 		case lat:
-			i32 := dm.arch.Uint32(d.tmp[:fitSint32.size()])
+			i32 := dm.arch.Uint32(d.tmp[:base.Sint32.Size()])
 			lat := NewLatitude(int32(i32))
 			fieldv.Set(reflect.ValueOf(lat))
 		case lng:
-			i32 := dm.arch.Uint32(d.tmp[:fitSint32.size()])
+			i32 := dm.arch.Uint32(d.tmp[:base.Sint32.Size()])
 			lng := NewLongitude(int32(i32))
 			fieldv.Set(reflect.ValueOf(lng))
 		default:
@@ -645,31 +644,31 @@ func (d *decoder) parseDataFields(dm *defmsg, knownMsg bool, msgv reflect.Value)
 func (d *decoder) parseFitField(dm *defmsg, dfield fieldDef, fieldv reflect.Value) error {
 	dsize := int(dfield.size)
 	switch dfield.btype {
-	case fitByte, fitEnum, fitUint8, fitUint8z:
+	case base.Byte, base.Enum, base.Uint8, base.Uint8z:
 		fieldv.SetUint(uint64(d.tmp[0]))
-	case fitSint8:
+	case base.Sint8:
 		fieldv.SetInt(int64(d.tmp[0]))
-	case fitSint16:
+	case base.Sint16:
 		i16 := int64(dm.arch.Uint16(d.tmp[:dsize]))
 		fieldv.SetInt(i16)
-	case fitUint16, fitUint16z:
+	case base.Uint16, base.Uint16z:
 		u16 := uint64(dm.arch.Uint16(d.tmp[:dsize]))
 		fieldv.SetUint(u16)
-	case fitSint32:
+	case base.Sint32:
 		i32 := int64(dm.arch.Uint32(d.tmp[:dsize]))
 		fieldv.SetInt(i32)
-	case fitUint32, fitUint32z:
+	case base.Uint32, base.Uint32z:
 		u32 := uint64(dm.arch.Uint32(d.tmp[:dsize]))
 		fieldv.SetUint(u32)
-	case fitFloat32:
+	case base.Float32:
 		bits := dm.arch.Uint32(d.tmp[:dsize])
 		f32 := float64(math.Float32frombits(bits))
 		fieldv.SetFloat(f32)
-	case fitFloat64:
+	case base.Float64:
 		bits := dm.arch.Uint64(d.tmp[:dsize])
 		f64 := math.Float64frombits(bits)
 		fieldv.SetFloat(f64)
-	case fitString:
+	case base.String:
 		for j := 0; j < dsize; j++ {
 			if d.tmp[j] == 0x00 {
 				if j > 0 {
@@ -694,7 +693,7 @@ func (d *decoder) parseFitFieldArray(dm *defmsg, dfield fieldDef, fieldv reflect
 	dbt := dfield.btype
 	dsize := int(dfield.size)
 
-	if dbt == fitByte {
+	if dbt == base.Byte {
 		byteArray := make([]byte, dsize, dsize)
 		copy(byteArray, d.tmp[:dsize])
 		fieldv.SetBytes(byteArray)
@@ -703,52 +702,52 @@ func (d *decoder) parseFitFieldArray(dm *defmsg, dfield fieldDef, fieldv reflect
 
 	slicev := reflect.MakeSlice(
 		fieldv.Type(),
-		dsize/dbt.size(),
-		dsize/dbt.size(),
+		dsize/dbt.Size(),
+		dsize/dbt.Size(),
 	)
 
 	switch dbt {
-	case fitUint8, fitUint8z, fitEnum:
+	case base.Uint8, base.Uint8z, base.Enum:
 		for j := 0; j < dsize; j++ {
 			slicev.Index(j).SetUint(uint64(d.tmp[j]))
 		}
-	case fitSint8:
+	case base.Sint8:
 		for j := 0; j < dsize; j++ {
 			slicev.Index(j).SetInt(int64(d.tmp[j]))
 		}
-	case fitSint16:
-		for j, k := 0, 0; j < dsize; j, k = j+dbt.size(), k+1 {
-			i16 := int64(dm.arch.Uint16(d.tmp[j : j+dbt.size()]))
+	case base.Sint16:
+		for j, k := 0, 0; j < dsize; j, k = j+dbt.Size(), k+1 {
+			i16 := int64(dm.arch.Uint16(d.tmp[j : j+dbt.Size()]))
 			slicev.Index(k).SetInt(i16)
 		}
-	case fitUint16, fitUint16z:
-		for j, k := 0, 0; j < dsize; j, k = j+dbt.size(), k+1 {
-			ui16 := uint64(dm.arch.Uint16(d.tmp[j : j+dbt.size()]))
+	case base.Uint16, base.Uint16z:
+		for j, k := 0, 0; j < dsize; j, k = j+dbt.Size(), k+1 {
+			ui16 := uint64(dm.arch.Uint16(d.tmp[j : j+dbt.Size()]))
 			slicev.Index(k).SetUint(ui16)
 		}
-	case fitSint32:
-		for j, k := 0, 0; j < dsize; j, k = j+dbt.size(), k+1 {
-			i32 := int64(dm.arch.Uint32(d.tmp[j : j+dbt.size()]))
+	case base.Sint32:
+		for j, k := 0, 0; j < dsize; j, k = j+dbt.Size(), k+1 {
+			i32 := int64(dm.arch.Uint32(d.tmp[j : j+dbt.Size()]))
 			slicev.Index(k).SetInt(i32)
 		}
-	case fitUint32, fitUint32z:
-		for j, k := 0, 0; j < dsize; j, k = j+dbt.size(), k+1 {
-			ui32 := uint64(dm.arch.Uint32(d.tmp[j : j+dbt.size()]))
+	case base.Uint32, base.Uint32z:
+		for j, k := 0, 0; j < dsize; j, k = j+dbt.Size(), k+1 {
+			ui32 := uint64(dm.arch.Uint32(d.tmp[j : j+dbt.Size()]))
 			slicev.Index(k).SetUint(ui32)
 		}
-	case fitFloat32:
-		for j, k := 0, 0; j < dsize; j, k = j+dbt.size(), k+1 {
-			bits := dm.arch.Uint32(d.tmp[j : j+dbt.size()])
+	case base.Float32:
+		for j, k := 0, 0; j < dsize; j, k = j+dbt.Size(), k+1 {
+			bits := dm.arch.Uint32(d.tmp[j : j+dbt.Size()])
 			f32 := float64(math.Float32frombits(bits))
 			slicev.Index(k).SetFloat(f32)
 		}
-	case fitFloat64:
-		for j, k := 0, 0; j < dsize; j, k = j+dbt.size(), k+1 {
-			bits := dm.arch.Uint64(d.tmp[j : j+dbt.size()])
+	case base.Float64:
+		for j, k := 0, 0; j < dsize; j, k = j+dbt.Size(), k+1 {
+			bits := dm.arch.Uint64(d.tmp[j : j+dbt.Size()])
 			f64 := math.Float64frombits(bits)
 			slicev.Index(k).SetFloat(f64)
 		}
-	case fitString:
+	case base.String:
 		if dfield.size == 0 {
 			return nil
 		}
@@ -789,7 +788,7 @@ func (d *decoder) parseFitFieldArray(dm *defmsg, dfield fieldDef, fieldv reflect
 }
 
 func (d *decoder) parseTimeStamp(dm *defmsg, fieldv reflect.Value, pfield *field) {
-	u32 := dm.arch.Uint32(d.tmp[:fitUint32.size()])
+	u32 := dm.arch.Uint32(d.tmp[:base.Uint32.Size()])
 	if u32 == 0xFFFFFFFF {
 		return
 	}

@@ -127,7 +127,7 @@ func (s *Scanner) mscan() (tok Token, lit []string) {
 }
 
 func isempty(ss []string) bool {
-	if ss == nil || len(ss) == 0 {
+	if len(ss) == 0 {
 		return true
 	}
 	for _, s := range ss {

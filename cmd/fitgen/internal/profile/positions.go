@@ -1,32 +1,30 @@
 package profile
 
-type datarowpos int
-
 // Row indexes for raw type data.
 const (
-	tNAME datarowpos = iota
-	tBTYPE
-	tVALNAME
-	tVAL
-	tCOMMENT
+	tNAME    = 0
+	tBTYPE   = 1
+	tVALNAME = 2
+	tVAL     = 3
+	tCOMMENT = 4
 )
 
 // Row indexes for raw message data.
 const (
-	mMSGNAME datarowpos = iota
-	mFDEFN
-	mFNAME
-	mFTYPE
-	mARRAY
-	mCOMPS
-	mSCALE
-	mOFFSET
-	mUNITS
-	mBITS
-	mACCUMU
-	mRFNAME
-	mRFVAL
-	mCOMMENT
-	mPRODS
-	mEXAMPLE
+	mMSGNAME = 0
+	mFDEFN   = 1
+	mFNAME   = 2
+	mFTYPE   = 3
+	mARRAY   = 4
+	mCOMPS   = 5
+	mSCALE   = 6
+	mOFFSET  = 7
+	mUNITS   = 8
+	mBITS    = 9
+	mACCUMU  = 10
+	mRFNAME  = 11
+	mRFVAL   = 12
+	mCOMMENT = 13
+	_        // mPRODS
+	mEXAMPLE = 15
 )

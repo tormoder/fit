@@ -127,6 +127,6 @@ var goFuzzCrasherInputs = [...]string{
 func TestFuzzCrasherInputs(t *testing.T) {
 	for i, input := range goFuzzCrasherInputs {
 		t.Logf("Crasher input: %d", i)
-		Decode(bytes.NewReader([]byte(input)))
+		_, _ = Decode(bytes.NewReader([]byte(input)))
 	}
 }

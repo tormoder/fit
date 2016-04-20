@@ -52,10 +52,7 @@ type decoder struct {
 // verified if headerOnly is true.
 func CheckIntegrity(r io.Reader, headerOnly bool) error {
 	var d decoder
-	if err := d.decode(r, headerOnly, false, true); err != nil {
-		return err
-	}
-	return nil
+	return d.decode(r, headerOnly, false, true)
 }
 
 // DecodeHeader returns the FIT file header without decoding the entire FIT

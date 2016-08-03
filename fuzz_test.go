@@ -116,7 +116,7 @@ var goFuzzCrasherInputs = [...]string{
 		"\x8c0\x04\x860\x02\x840\x02\x84\x00\x01\x000000000" +
 		"000000\n@0\x01\x00\xb2\x01\n\x02\x84000",
 
-	// Floats and and signed integers of equal size is not compatible base
+	// Floats and signed integers of equal size are not compatible base
 	// types. Reflection panic.
 	"\f\x10000000.FIT@0\x01\x00\x00\x050\x04" +
 		"\x8c0\x04\x860\x02\x840\x02\x84\x00\x01\x000000000" +

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"archive/zip"
 	"flag"
 	"fmt"
 	"io/ioutil"
@@ -15,15 +16,19 @@ import (
 
 const fitPkgImportPath = "github.com/tormoder/fit"
 
+const (
+	workbookNameXLS  = "Profile.xls"
+	workbookNameXLSX = "Profile.xlsx"
+)
+
 func main() {
-	log.SetFlags(0)
-	log.SetPrefix("fitgen:\t")
+	l := log.New(os.Stdout, "fitgen:\t", 0)
 
 	fitSrcDir, err := goPackagePath(fitPkgImportPath)
 	if err != nil {
-		log.Fatalf("can't find fit package root src directory for %q", fitPkgImportPath)
+		l.Fatalf("can't find fit package root src directory for %q", fitPkgImportPath)
 	}
-	log.Println("root src directory:", fitSrcDir)
+	l.Println("root src directory:", fitSrcDir)
 
 	var (
 		messagesOut    = filepath.Join(fitSrcDir, "messages.go")
@@ -60,16 +65,30 @@ func main() {
 		os.Exit(2)
 	}
 
-	input := flag.Arg(0)
-	inputExt := filepath.Ext(input)
+	var (
+		inputData []byte
+		input     = flag.Arg(0)
+		inputExt  = filepath.Ext(input)
+	)
+
 	switch inputExt {
-	case ".zip", ".xls", ".xlsx":
+	case ".zip":
+		inputData, err = readDataFromZIP(input)
+	case ".xls", ".xlsx":
+		inputData, err = readDataFromXLSX(input)
 	default:
-		log.Fatalln("input file must be of type [.zip | .xls | .xlsx], got:", inputExt)
+		l.Fatalln("input file must be of type [.zip | .xls | .xlsx], got:", inputExt)
+	}
+	if err != nil {
+		l.Fatal(err)
 	}
 
 	var genOptions []profile.GeneratorOption
-	genOptions = append(genOptions, profile.WithGenerationTimestamp(*timestamp))
+	genOptions = append(
+		genOptions,
+		profile.WithGenerationTimestamp(*timestamp),
+		profile.WithLogger(l),
+	)
 	if *sdkOverride != "" {
 		genOptions = append(genOptions, profile.WithSDKVersionOverride(*sdkOverride))
 	}
@@ -77,45 +96,47 @@ func main() {
 		genOptions = append(genOptions, profile.WithSDKVersionOverride(*sdkOverride))
 	}
 
-	generator, err := profile.NewGenerator(input, genOptions...)
+	generator, err := profile.NewGenerator(input, inputData, genOptions...)
 	if err != nil {
-		log.Fatal(err)
+		l.Fatal(err)
 	}
 
 	fitProfile, err := generator.GenerateProfile()
 	if err != nil {
-		log.Fatal(err)
+		l.Fatal(err)
 	}
 
 	if err = ioutil.WriteFile(typesOut, fitProfile.TypesSource, 0644); err != nil {
-		log.Fatalf("typegen: error writing types output file: %v", err)
+		l.Fatalf("typegen: error writing types output file: %v", err)
 	}
 
 	if err = ioutil.WriteFile(messagesOut, fitProfile.MessagesSource, 0644); err != nil {
-		log.Fatalf("typegen: error writing messages output file: %v", err)
+		l.Fatalf("typegen: error writing messages output file: %v", err)
 	}
 
 	if err = ioutil.WriteFile(profileOut, fitProfile.ProfileSource, 0644); err != nil {
-		log.Fatalf("typegen: error writing profile output file: %v", err)
+		l.Fatalf("typegen: error writing profile output file: %v", err)
 	}
 
+	l.Println("running stringer")
 	err = runStringerOnTypes(stringerPath, fitSrcDir, typesStringOut, fitProfile.StringerInput)
 	if err != nil {
-		log.Fatal(err)
+		l.Fatal(err)
 	}
+	l.Println("stringer: types done")
 
 	err = runAllTests(fitPkgImportPath)
 	if err != nil {
-		log.Fatal(err)
+		l.Fatal(err)
 	}
+	l.Println("go test: pass")
 
-	logMesgNumVsMessages(fitProfile.MesgNumsWithoutMessage)
+	logMesgNumVsMessages(fitProfile.MesgNumsWithoutMessage, l)
 
-	log.Println("done")
+	l.Println("done")
 }
 
 func runStringerOnTypes(stringerPath, fitSrcDir, typesStringOut, fitTypes string) error {
-	log.Println("running stringer")
 
 	stringerCmd := exec.Command(
 		"go",
@@ -133,7 +154,6 @@ func runStringerOnTypes(stringerPath, fitSrcDir, typesStringOut, fitTypes string
 		return fmt.Errorf("stringer: error running on types: %v\n%s", err, output)
 	}
 
-	log.Println("stringer: types done")
 	return nil
 }
 
@@ -162,19 +182,18 @@ func runAllTests(pkgDir string) error {
 		return fmt.Errorf("go test: fail: %v\n%s", err, output)
 	}
 
-	log.Println("go test: pass")
 	return nil
 }
 
-func logMesgNumVsMessages(msgs []string) {
+func logMesgNumVsMessages(msgs []string, l *log.Logger) {
 	if len(msgs) == 0 {
 		return
 	}
-	log.Println("mesgnum-vs-msgs: implementation detail below, this may be automated in the future")
-	log.Println("mesgnum-vs-msgs: #mesgnum values != #generated messages, diff:", len(msgs))
-	log.Println("mesgnum-vs-msgs: remember to verify map in mappings.go for the following message(s):")
+	l.Println("mesgnum-vs-msgs: implementation detail below, this may be automated in the future")
+	l.Println("mesgnum-vs-msgs: #mesgnum values != #generated messages, diff:", len(msgs))
+	l.Println("mesgnum-vs-msgs: remember to verify map in mappings.go for the following message(s):")
 	for _, msg := range msgs {
-		log.Printf("mesgnum-vs-msgs: ----> mesgnum %q has no corresponding message\n", msg)
+		l.Printf("mesgnum-vs-msgs: ----> mesgnum %q has no corresponding message\n", msg)
 	}
 }
 
@@ -198,4 +217,47 @@ func goPackagePath(pkg string) (path string, err error) {
 		return dir, nil
 	}
 	return path, os.ErrNotExist
+}
+
+func readDataFromZIP(path string) ([]byte, error) {
+	r, err := zip.OpenReader(path)
+	if err != nil {
+		return nil, fmt.Errorf("error opening sdk zip file: %v", err)
+	}
+	defer r.Close()
+
+	var wfile *zip.File
+	for _, f := range r.File {
+		if f.Name == workbookNameXLS {
+			wfile = f
+			break
+		}
+		if f.Name == workbookNameXLSX {
+			wfile = f
+			break
+		}
+	}
+	if wfile == nil {
+		return nil, fmt.Errorf(
+			"no file named %q or %q found in zip archive",
+			workbookNameXLS, workbookNameXLSX,
+		)
+	}
+
+	rc, err := wfile.Open()
+	if err != nil {
+		return nil, fmt.Errorf("error opening zip archive: %v", err)
+	}
+	defer rc.Close()
+
+	data, err := ioutil.ReadAll(rc)
+	if err != nil {
+		return nil, fmt.Errorf("error reading %q from archive: %v", wfile.Name, err)
+	}
+
+	return data, nil
+}
+
+func readDataFromXLSX(path string) ([]byte, error) {
+	return ioutil.ReadFile(path)
 }

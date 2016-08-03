@@ -7,7 +7,6 @@ import (
 	"go/parser"
 	"go/printer"
 	"go/token"
-	"log"
 	"sort"
 	"strings"
 	"time"
@@ -427,7 +426,7 @@ func (g *codeGenerator) genExpandComponents(msg *Msg, compFieldIndices []int, dy
 		return
 	}
 
-	log.Println("msggen:", msg.CCName, "should call expandComponents() on add in file_types.go")
+	debugln("msggen:", msg.CCName, "should call expandComponents() on add in file_types.go")
 
 	g.p()
 	g.p("func (", "x", " *", msg.CCName, "Msg) expandComponents() {")

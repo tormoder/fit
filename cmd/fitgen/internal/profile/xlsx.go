@@ -1,65 +1,18 @@
 package profile
 
 import (
-	"archive/zip"
 	"fmt"
-	"io/ioutil"
-	"path/filepath"
-	"strings"
 
 	"github.com/tealeg/xlsx"
 )
 
-func parseSDKVersionFromZipFile(zipFilePath string) string {
-	// Brittle.
-	// TODO: Maybe parse 'c/fit.h' with regexp instead.
-	_, file := filepath.Split(zipFilePath)
-	ver := strings.TrimSuffix(file, ".zip")
-	return strings.TrimPrefix(ver, "FitSDKRelease_")
-}
-
 const (
-	workbookNameXLS  = "Profile.xls"
-	workbookNameXLSX = "Profile.xlsx"
-	typesSheetIndex  = 0
-	msgsSheetIndex   = 1
+	typesSheetIndex = 0
+	msgsSheetIndex  = 1
 )
 
-func parseWorkbook(inputPath string) (typeData, msgData [][]string, err error) {
-	r, err := zip.OpenReader(inputPath)
-	if err != nil {
-		return nil, nil, fmt.Errorf("error opening sdk zip file: %v", err)
-	}
-	defer r.Close()
-
-	var wfile *zip.File
-	for _, f := range r.File {
-		if f.Name == workbookNameXLS {
-			wfile = f
-			break
-		}
-		if f.Name == workbookNameXLSX {
-			wfile = f
-			break
-		}
-	}
-	if wfile == nil {
-		return nil, nil, fmt.Errorf(
-			"no file named %q or %q found in zip archive",
-			workbookNameXLS, workbookNameXLSX)
-	}
-
-	rc, err := wfile.Open()
-	if err != nil {
-		return nil, nil, err
-	}
-	defer rc.Close()
-	b, err := ioutil.ReadAll(rc)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	workbook, err := xlsx.OpenBinary(b)
+func parseWorkbook(inputData []byte) (typeData, msgData [][]string, err error) {
+	workbook, err := xlsx.OpenBinary(inputData)
 	if err != nil {
 		return nil, nil, fmt.Errorf("error opening profile workbook: %v", err)
 	}

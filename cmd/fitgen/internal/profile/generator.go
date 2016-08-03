@@ -13,14 +13,6 @@ import (
 	"strings"
 )
 
-var debugfg, _ = strconv.ParseBool(os.Getenv("FITGEN_DEBUG"))
-
-func debugln(v ...interface{}) {
-	if debugfg {
-		log.Println(v...)
-	}
-}
-
 type Profile struct {
 	TypesSource            []byte
 	MessagesSource         []byte
@@ -33,6 +25,7 @@ type generatorOptions struct {
 	genTimestamp bool
 	sdkVersion   string
 	useSwitches  bool
+	logger       *log.Logger
 }
 
 type GeneratorOption func(*generatorOptions)
@@ -55,6 +48,12 @@ func WithUseSwitches(s bool) GeneratorOption {
 	}
 }
 
+func WithLogger(logger *log.Logger) GeneratorOption {
+	return func(o *generatorOptions) {
+		o.logger = logger
+	}
+}
+
 type Generator struct {
 	opts generatorOptions
 
@@ -67,7 +66,7 @@ type Generator struct {
 	p *Profile
 }
 
-func NewGenerator(input string, opts ...GeneratorOption) (*Generator, error) {
+func NewGenerator(inputPath string, workbookData []byte, opts ...GeneratorOption) (*Generator, error) {
 	g := new(Generator)
 	g.p = new(Profile)
 
@@ -76,18 +75,18 @@ func NewGenerator(input string, opts ...GeneratorOption) (*Generator, error) {
 	}
 
 	if g.opts.sdkVersion == "" {
-		switch filepath.Ext(input) {
+		switch filepath.Ext(inputPath) {
 		case ".zip":
-			g.opts.sdkVersion = parseSDKVersionFromZipFile(input)
+			g.opts.sdkVersion = parseSDKVersionFromZipFilePath(inputPath)
 		default:
 			g.opts.sdkVersion = "Unknown"
 		}
 	}
 
-	log.Println("sdk version:", g.opts.sdkVersion)
-	log.Println("parsing workbook")
+	g.logln("sdk version:", g.opts.sdkVersion)
+	g.logln("parsing workbook")
 	var err error
-	g.typesData, g.msgsData, err = parseWorkbook(input)
+	g.typesData, g.msgsData, err = parseWorkbook(workbookData)
 	if err != nil {
 		return nil, fmt.Errorf("error creating generator: %v", err)
 	}
@@ -115,7 +114,7 @@ func (g *Generator) GenerateProfile() (*Profile, error) {
 }
 
 func (g *Generator) parseTypes() error {
-	log.Println("parsing types")
+	g.logln("parsing types")
 
 	parser, err := NewTypeParser(g.typesData)
 	if err != nil {
@@ -143,7 +142,7 @@ func (g *Generator) parseTypes() error {
 }
 
 func (g *Generator) parseMsgs() error {
-	log.Println("parsing messages")
+	g.logln("parsing messages")
 
 	parser, err := NewMsgParser(g.msgsData)
 	if err != nil {
@@ -171,7 +170,7 @@ func (g *Generator) parseMsgs() error {
 }
 
 func (g *Generator) genCode() error {
-	log.Println("generating code")
+	g.logln("generating code")
 
 	var err error
 	codeg := newCodeGenerator(g.opts.sdkVersion, g.opts.genTimestamp)
@@ -188,7 +187,7 @@ func (g *Generator) genCode() error {
 }
 
 func (g *Generator) genStringerTypeInput() error {
-	log.Println("generating stringer input")
+	g.logln("generating stringer input")
 
 	tkeys := make([]string, 0, len(g.types))
 	for tkey := range g.types {
@@ -210,7 +209,7 @@ func (g *Generator) genStringerTypeInput() error {
 }
 
 func (g *Generator) genMsgNumsVsMsgs() error {
-	log.Println("generating messages nums vs messages")
+	g.logln("generating messages nums vs messages")
 
 	mesgNum, found := g.types["MesgNum"]
 	if !found {
@@ -240,4 +239,26 @@ func (g *Generator) genMsgNumsVsMsgs() error {
 	g.p.MesgNumsWithoutMessage = diff
 
 	return nil
+}
+
+func (g *Generator) logln(v ...interface{}) {
+	if g.opts.logger != nil {
+		g.opts.logger.Println(v...)
+	}
+}
+
+var debugfg, _ = strconv.ParseBool(os.Getenv("FITGEN_DEBUG"))
+
+func debugln(v ...interface{}) {
+	if debugfg {
+		fmt.Println(v...)
+	}
+}
+
+func parseSDKVersionFromZipFilePath(path string) string {
+	// Brittle.
+	// TODO: Maybe parse 'c/fit.h' with regexp instead.
+	_, file := filepath.Split(path)
+	ver := strings.TrimSuffix(file, ".zip")
+	return strings.TrimPrefix(ver, "FitSDKRelease_")
 }

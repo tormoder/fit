@@ -22,7 +22,7 @@ testrace:
 
 .PHONY: bench
 bench:
-	go test -v -run NONE -bench $(FIT_PKGS)
+	go test -v -run=$$$$ -bench=. $(FIT_PKGS)
 
 .PHONY: fitgen
 fitgen:

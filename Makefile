@@ -44,8 +44,8 @@ gofuzzclean: gofuzz
 clean:
 	go clean -i ./...
 	rm -f fit-fuzz.zip
-	rm -f *.prof
-	rm -f *.test
+	find . -name '*.prof' -type f -exec rm -f {} \;
+	find . -name '*.test' -type f -exec rm -f {} \;
 
 .PHONY: gcoprofile 
 gcoprofile:
@@ -118,7 +118,7 @@ checkfull:
 		goconst $$dir ; \
 	done
 	@echo "errcheck"
-	@errcheck -ignore 'bytes:Write*,archive/zip:Close,io:Close' -ignorepkg 'github.com/tormoder/fit/dyncrc16' $(FIT_PKGS)
+	@errcheck -ignore 'bytes:Write*,archive/zip:Close,io:Close,Write' $(FIT_PKGS)
 	@echo "ineffassign"
 	@for dir in $(FIT_DIRS); do \
 		ineffassign -n $$dir ; \
@@ -134,6 +134,6 @@ checkfull:
 	@echo "interfacer"
 	@interfacer $(FIT_PKGS)
 	@echo "misspell"
-	@ ! misspell ./**/* | grep -vE '(messages.go|/vendor/)'
+	@ ! misspell ./**/* | grep -vE '(messages.go|/vendor/|profile/testdata)'
 	@echo "staticcheck"
 	@staticcheck $(GORUMS_PKGS)

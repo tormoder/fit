@@ -42,9 +42,9 @@ func WithSDKVersionOverride(version string) GeneratorOption {
 	}
 }
 
-func WithUseSwitches(s bool) GeneratorOption {
+func WithUseSwitches() GeneratorOption {
 	return func(o *generatorOptions) {
-		o.useSwitches = s
+		o.useSwitches = true
 	}
 }
 

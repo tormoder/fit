@@ -25,7 +25,6 @@ var currentSDK = sdks[0]
 
 var defGenOpts = []GeneratorOption{
 	WithGenerationTimestamp(false),
-	WithUseSwitches(false),
 }
 
 func relPath(sdkVersion string) string {

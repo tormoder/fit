@@ -44,7 +44,7 @@ func main() {
 		"provide or override SDK version printed in generated code",
 	)
 	switches := flag.Bool(
-		"jmptable",
+		"switches",
 		false,
 		"use switches instead jump tables for profile message and field lookups",
 	)
@@ -93,7 +93,7 @@ func main() {
 		genOptions = append(genOptions, profile.WithSDKVersionOverride(*sdkOverride))
 	}
 	if *switches {
-		genOptions = append(genOptions, profile.WithSDKVersionOverride(*sdkOverride))
+		genOptions = append(genOptions, profile.WithUseSwitches())
 	}
 
 	generator, err := profile.NewGenerator(input, inputData, genOptions...)

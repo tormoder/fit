@@ -7,9 +7,5 @@ os:
   - osx
 
 go:
-  - 1.5
-  - 1.6
+  - 1.7
   - tip
-
-env:
-  - GO15VENDOREXPERIMENT=1

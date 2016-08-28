@@ -240,6 +240,7 @@ func (f *Field) parseBaseType(types map[string]*Type) error {
 }
 
 func (f *Field) parseArray() {
+	const nilString = "nil"
 	arrayStr := strings.TrimFunc(
 		f.data[mARRAY], func(r rune) bool {
 			if r == '[' || r == ']' {
@@ -252,10 +253,10 @@ func (f *Field) parseArray() {
 		f.Array = "0"
 	case "N":
 		f.Array = "255"
-		f.GoInvalid = "nil"
+		f.GoInvalid = nilString
 	default:
 		f.Array = arrayStr
-		f.GoInvalid = "nil"
+		f.GoInvalid = nilString
 	}
 }
 

@@ -43,8 +43,6 @@ gofuzzclean: gofuzz
 .PHONY: clean
 clean:
 	go clean -i ./...
-	rm -rf profile/*.csv
-	rm -rf profile/*.xlsx
 	rm -f fit-fuzz.zip
 	rm -f *.prof
 	rm -f *.test
@@ -55,17 +53,17 @@ gcoprofile:
 
 .PHONY: profcpu
 profcpu:
-	go test -run=NONE -bench=ActivitySmall -cpuprofile cpu.prof
+	go test -run=$$$$ -bench=ActivitySmall -cpuprofile=cpu.prof
 	go tool pprof fit.test cpu.prof
 
 .PHONY: profmem
 profmem:
-	go test -run=NONE -bench=ActivitySmall -memprofile allocmem.prof
+	go test -run=$$$$-bench=ActivitySmall -memprofile=allocmem.prof
 	go tool pprof -alloc_space fit.test allocmem.prof
 
 .PHONY: profobj
 profobj:
-	go test -run=NONE -bench=ActivitySmall -memprofile allocobj.prof
+	go test -run=NONE -bench=ActivitySmall -memprofile=allocobj.prof
 	go tool pprof -alloc_objects fit.test allocobj.prof
 
 .PHONY: mdgen

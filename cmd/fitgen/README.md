@@ -10,14 +10,16 @@ for information about profile generation.
 ## Prerequisites
 
 * ```$GOPATH``` set.
-* FIT SDK Zip file available.
+* FIT SDK Zip or workbook file available.
 
 ## Usage
 
 ```shell
 usage: fitgen [flags] [path to sdk zip, xls or xlsx file]
-  -jmptable
-	use jump tables for profile message and field lookups, otherwise use switches (default true)
   -sdk string
 	provide or override SDK version printed in generated code
+  -switches
+	use switches instead jump tables for profile message and field lookups
+  -timestamp
+	add generation timestamp to generated code (default true)
 ```

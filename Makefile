@@ -5,24 +5,30 @@ FIT_DIRS 	:= $(shell find . -type d -not -path "*vendor*" -not -path "./.git*" -
 FIT_PKG_PATH 	:= github.com/tormoder/fit
 FITGEN_PKG_PATH := $(FIT_PKG_PATH)/cmd/fitgen
 GOFUZZ_PKG_PATH := github.com/dvyukov/go-fuzz
+LATLONG_PKG_PATH:= github.com/bradfitz/latlong
 
 .PHONY: all
-all: build test testrace check
+all: deps build test testrace check
+
+.PHONY: deps
+deps:
+	@echo "go get:"
+	go get $(LATLONG_PKG_PATH)
 
 .PHONY: build
 build:
 	@echo "go build:"
-	@go build -v -i $(FIT_PKGS)
+	go build -v -i $(FIT_PKGS)
 
 .PHONY: test
 test:
 	@echo "go test:"
-	@go test -v -cpu=2 $(FIT_PKGS)
+	go test -v -cpu=2 $(FIT_PKGS)
 
 .PHONY: testrace
 testrace:
 	@echo "go test -race:"
-	@go test -v -cpu=1,2,4 -race $(FIT_PKGS)
+	go test -v -cpu=1,2,4 -race $(FIT_PKGS)
 
 .PHONY: bench
 bench:

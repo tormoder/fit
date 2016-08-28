@@ -2,6 +2,10 @@ FIT_PKGS 	:= $(shell go list ./... | grep -v /vendor/)
 FIT_FILES	:= $(shell find . -name '*.go' -not -path "*vendor*")
 FIT_DIRS 	:= $(shell find . -type d -not -path "*vendor*" -not -path "./.git*" -not -path "*testdata*")
 
+FIT_PKG_PATH 	:= github.com/tormoder/fit
+FITGEN_PKG_PATH := $(FIT_PKG_PATH)/cmd/fitgen
+GOFUZZ_PKG_PATH := github.com/dvyukov/go-fuzz
+
 .PHONY: all
 all: build test testrace check
 
@@ -26,13 +30,13 @@ bench:
 
 .PHONY: fitgen
 fitgen:
-	go install github.com/tormoder/fit/cmd/fitgen
+	go install $(FITGEN_PKG_PATH)
 
 .PHONY: gofuzz
 gofuzz:
-	go get -u github.com/dvyukov/go-fuzz/go-fuzz
-	go get -u github.com/dvyukov/go-fuzz/go-fuzz-build
-	go-fuzz-build github.com/tormoder/fit
+	go get -u $(GOFUZZ_PKG_PATH)/go-fuzz
+	go get -u $(GOFUZZ_PKG_PATH)/go-fuzz-build
+	go-fuzz-build $(FIT_PKG_PATH)
 
 .PHONY: gofuzzclean
 gofuzzclean: gofuzz
@@ -68,7 +72,7 @@ profobj:
 
 .PHONY: mdgen
 mdgen:
-	godoc2md github.com/tormoder/fit Fit Header CheckIntegrity > MainApiReference.md
+	godoc2md $(FIT_PKG_PATH) Fit Header CheckIntegrity > MainApiReference.md
 
 .PHONY: getgvt
 getgvt:

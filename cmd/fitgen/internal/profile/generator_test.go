@@ -3,12 +3,12 @@ package profile_test
 import (
 	"bytes"
 	"flag"
-	"hash/fnv"
 	"io"
 	"io/ioutil"
 	"path/filepath"
 	"testing"
 
+	"github.com/cespare/xxhash"
 	"github.com/tormoder/fit/cmd/fitgen/internal/profile"
 )
 
@@ -66,19 +66,19 @@ func writeProfileToFile(p *profile.Profile, path string) error {
 	return ioutil.WriteFile(path, buf.Bytes(), 0644)
 }
 
-func profileFingerprint(p *profile.Profile) uint32 {
-	h := fnv.New32a()
+func profileFingerprint(p *profile.Profile) uint64 {
+	h := xxhash.New()
 	_ = writeProfile(p, h)
-	return h.Sum32()
+	return h.Sum64()
 }
 
 type sdk struct {
 	version           string
-	goldenFingerprint uint32
+	goldenFingerprint uint64
 }
 
 var sdks = []sdk{
-	{"16.20", 381665006},
+	{"16.20", 6287234501948102829},
 }
 
 func TestGenerator(t *testing.T) {

@@ -142,10 +142,7 @@ checkfull: getchecktools
 	@echo "vet --shadow"
 	@! go tool vet --shadow $(FIT_DIRS) 2>&1 | grep -vF 'vendor/'
 	@echo "golint"
-	@for pkg in $(FIT_PKGS); do \
-		! golint $$pkg | \
-		grep -vE '(FileId|SegmentId|messages.go|types.*.\go|fitgen/internal|cmd/stringer)' ; \
-	done
+	@! golint $(FIT_PKGS) | grep -vE '(FileId|SegmentId|messages.go|types.*.\go|fitgen/internal|cmd/stringer)'
 	@echo "goconst"
 	@for dir in $(FIT_DIRS); do \
 		goconst $$dir ; \

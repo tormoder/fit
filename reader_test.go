@@ -56,8 +56,8 @@ const (
 
 func TestDecode(t *testing.T) {
 	regenTestTable := struct {
-		sync.Mutex
-		val bool
+		sync.Mutex // Protects val and decodeTestFiles slice in reader_util_test.go.
+		val        bool
 	}{}
 
 	t.Run("Group", func(t *testing.T) {

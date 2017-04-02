@@ -215,4 +215,7 @@ var baseStringToType = map[string]Base{
 	"sint64":  BaseSint64,
 	"uint64":  BaseUint64,
 	"uint64z": BaseUint64z,
+
+	// Typo in SDK 20.14:
+	"unit8": BaseUint8,
 }

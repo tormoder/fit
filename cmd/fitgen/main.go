@@ -53,6 +53,11 @@ func main() {
 		false,
 		"run all tests in fit repository after code has been generated",
 	)
+	runInstall := flag.Bool(
+		"install",
+		false,
+		"run go install before invoking stringer (go/types related, see golang issue #11415)",
+	)
 
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "usage: fitgen [flags] [path to sdk zip, xls or xlsx file]\n")
@@ -115,10 +120,12 @@ func main() {
 		l.Fatalf("typegen: error writing profile output file: %v", err)
 	}
 
-	l.Println("running go install (for go/types in stringer)")
-	err = runGoInstall(fitPkgImportPath)
-	if err != nil {
-		l.Fatal(err)
+	if *runInstall {
+		l.Println("running go install (for go/types in stringer)")
+		err = runGoInstall(fitPkgImportPath)
+		if err != nil {
+			l.Fatal(err)
+		}
 	}
 
 	l.Println("running stringer")

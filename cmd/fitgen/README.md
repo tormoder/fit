@@ -16,10 +16,12 @@ for information about profile generation.
 
 ```shell
 usage: fitgen [flags] [path to sdk zip, xls or xlsx file]
+  -install
+        run go install before invoking stringer (go/types related, see golang issue #11415)
   -sdk string
-	provide or override SDK version printed in generated code
+        provide or override SDK version printed in generated code
   -test
         run all tests in fit repository after code has been generated
   -timestamp
-	add generation timestamp to generated code (default true)
+        add generation timestamp to generated code (default true)
 ```

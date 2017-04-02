@@ -32,13 +32,13 @@ all: deps testdeps build test testrace checkfull
 .PHONY: deps
 deps:
 	@echo "go get:"
-	go get $(LATLONG_PKG_PATH)
+	go get -u $(LATLONG_PKG_PATH)
 
 .PHONY: testdeps
 testdeps:
-	@echo "go get:"
-	go get $(UTTER_PKG_PATH)
-	go get $(XXHASH_PKG_PATH)
+	@echo "go get -u:"
+	go get -u $(UTTER_PKG_PATH)
+	go get -u $(XXHASH_PKG_PATH)
 
 .PHONY: build
 build:

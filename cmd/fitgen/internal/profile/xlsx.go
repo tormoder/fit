@@ -27,11 +27,9 @@ func parseWorkbook(inputData []byte) (typeData, msgData [][]string, err error) {
 			}
 			r := []string{}
 			for _, cell := range row.Cells {
-				str, err := cell.String()
-				if err != nil {
-					// The profile message sheet has formatting errors.
-					// Ignore those cells and use the raw values.
-				}
+				// The profile message sheet has formatting errors.
+				// Ignore those cells and use the raw values.
+				str, _ := cell.String()
 				r = append(r, str)
 			}
 			s = append(s, r)

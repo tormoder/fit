@@ -20,8 +20,8 @@ var decodeHeaderTests = []struct {
 	{[]byte{12, 0}, errReadData, Header{}},
 	{[]byte{14, 0}, errReadData, Header{}},
 	{
-		[]byte{14, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-		NotSupportedError("protocol version 2.x not supported by sdk protocol version 1.0"),
+		[]byte{14, 0x30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		NotSupportedError("protocol version 3.0 not supported by sdk protocol version 2.0"),
 		Header{},
 	},
 	{[]byte{14, 0, 0, 0, 0, 0, 0, 0, '.', 'G', 'I', 'T', 0, 0}, errNotFit, Header{}},

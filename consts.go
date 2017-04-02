@@ -1,17 +1,52 @@
 package fit
 
+import "fmt"
+
 // ProfileVersion is the current supported profile version of the FIT SDK.
 const ProfileVersion uint16 = ((ProfileMajorVersion * 100) + ProfileMinorVersion)
 
-// ProtocolVersion is the current supported FIT protocol version.
-const ProtocolVersion byte = ((protocolMajorVersion << protocolVersionMajorShift) + protocolMinorVersion)
+var currentProtocolVersion = V20
+
+// CurrentProtocolVersion returns the current supported FIT protocol version.
+func CurrentProtocolVersion() ProtocolVersion {
+	return currentProtocolVersion
+}
+
+// ProtocolVersion represents the FIT protocol version.
+type ProtocolVersion byte
+
+// FIT protocol versions.
+const (
+	V10 ProtocolVersion = 0x10
+	V20 ProtocolVersion = 0x20
+)
+
+// Version returns the full FIT protocol version encoded as a single byte.
+func (p ProtocolVersion) Version() byte {
+	return byte(p)
+}
+
+// Major returns the major FIT protocol version.
+func (p ProtocolVersion) Major() byte {
+	return byte(p&protocolVersionMajorMask) >> protocolVersionMajorShift
+}
+
+// Minor returns the minor FIT protocol version.
+func (p ProtocolVersion) Minor() byte {
+	return byte(p & protocolVersionMinorMask)
+}
+
+func (p ProtocolVersion) String() string {
+	return fmt.Sprintf("%d.%d", p.Major(), p.Minor())
+}
 
 const (
-	protocolMajorVersion      = 1
-	protocolMinorVersion      = 0
 	protocolVersionMajorShift = 4
-	protocolVersionMajorMask  = (0x0F << protocolVersionMajorShift)
+	protocolVersionMajorMask  = 0x0F << protocolVersionMajorShift
+	protocolVersionMinorMask  = 0x0F
+)
 
+const (
 	headerTypeMask             byte = 0xF0
 	compressedHeaderMask            = 0x80
 	compressedTimeMask              = 0x1F
@@ -35,16 +70,3 @@ const (
 
 	fieldNumTimeStamp = 253
 )
-
-// Constants taken from offical SDK code but unused.
-// TODO(tormoder): Check if they can be used somewhere or remove.
-/*
-const (
-	mesgDefinitionReserved byte = 0x00
-	maxMesgSize   byte = 255
-	fieldNumInvalid byte = 255
-	subfieldIndexMainField      uint16 = subfieldIndexActiveSubfield + 1
-	subfieldIndexActiveSubfield        = 0xFFFE
-	subfieldNameMainField       string = ""
-)
-*/

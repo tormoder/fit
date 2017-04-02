@@ -78,12 +78,13 @@ func (d *decoder) decodeHeader() error {
 }
 
 func checkProtocolVersion(b byte) error {
-	if (b & protocolVersionMajorMask) > (protocolMajorVersion << protocolVersionMajorShift) {
+	fileProtoVer := ProtocolVersion(b)
+	if fileProtoVer.Major() > CurrentProtocolVersion().Major() {
 		err := fmt.Sprintf(
-			"protocol version %d.x not supported by sdk protocol version %d.%d",
-			(b&protocolVersionMajorMask)>>protocolVersionMajorShift,
-			protocolMajorVersion,
-			protocolMinorVersion)
+			"protocol version %v not supported by sdk protocol version %v",
+			fileProtoVer,
+			CurrentProtocolVersion(),
+		)
 		return NotSupportedError(err)
 	}
 	return nil

@@ -73,7 +73,7 @@ func DecodeHeaderAndFileID(r io.Reader) (Header, FileIdMsg, error) {
 	return d.h, d.file.FileId, nil
 }
 
-// Decode reads a FIT file from r and returns it as a *Fit.
+// Decode reads a FIT file from r and returns it as a *File.
 // If error is non-nil, all data decoded before the error was
 // encountered is also returned.
 func Decode(r io.Reader, opts ...DecodeOption) (*File, error) {

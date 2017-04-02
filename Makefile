@@ -168,4 +168,4 @@ checkfull: getchecktools
 	@echo "misspell"
 	@ ! misspell ./**/* | grep -vE '(messages.go|/vendor/|profile/testdata)'
 	@echo "staticcheck"
-	@staticcheck $(GORUMS_PKGS)
+	@staticcheck $(FIT_PKGS)

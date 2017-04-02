@@ -21,13 +21,13 @@ type Fit struct {
 	TimestampCorrelation *TimestampCorrelationMsg
 	DeviceInfo           *DeviceInfoMsg
 
-	// UnknownMessages is a map that maps an unknown message number to how
-	// many times the message was encountered during encoding.
-	UnknownMessages map[MesgNum]int
+	// UnknownMessages is a slice of unknown messages encountered during
+	// decoding. It is sorted by message number.
+	UnknownMessages []UnknownMessage
 
-	// UnknownFields is a map that maps an unknown field to how many times
-	// the field was encountered during encoding.
-	UnknownFields map[UnknownField]int
+	// UnknownFields is a slice of unknown fields for known messages
+	// encountered during decoding. It is sorted by message number.
+	UnknownFields []UnknownField
 
 	msgAdder msgAdder
 
@@ -48,13 +48,6 @@ type Fit struct {
 	monitoringB     *MonitoringBFile
 	segment         *SegmentFile
 	segmentList     *SegmentListFile
-}
-
-// UnknownField represents an unknown FIT message field not found in the
-// official profile. It contains the global message and field number.
-type UnknownField struct {
-	MesgNum  MesgNum
-	FieldNum byte
 }
 
 type msgAdder interface {

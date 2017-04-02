@@ -11,6 +11,7 @@ import (
 	"math"
 	"os"
 	"reflect"
+	"sort"
 	"strconv"
 	"time"
 
@@ -46,6 +47,9 @@ type decoder struct {
 	lastTimeOffset int32
 
 	opts decodeOptions
+
+	unknownFields   map[unknownField]int
+	unknownMessages map[MesgNum]int
 
 	h   Header
 	fit *Fit
@@ -126,8 +130,8 @@ func (d *decoder) decode(r io.Reader, headerOnly, fileIDOnly, crcOnly bool) erro
 		goto crc
 	}
 
-	d.fit.UnknownMessages = make(map[MesgNum]int)
-	d.fit.UnknownFields = make(map[UnknownField]int)
+	d.unknownMessages = make(map[MesgNum]int)
+	d.unknownFields = make(map[unknownField]int)
 
 	err = d.parseFileIdMsg()
 	if err != nil {
@@ -181,6 +185,13 @@ func (d *decoder) decode(r io.Reader, headerOnly, fileIDOnly, crcOnly bool) erro
 		default:
 			return fmt.Errorf("unknown record header, got: %#x", b)
 		}
+	}
+
+	if d.opts.unknownFields {
+		d.handleUnknownFields()
+	}
+	if d.opts.unknownMessages {
+		d.handleUnknownMessages()
 	}
 
 crc:
@@ -535,8 +546,8 @@ func (d *decoder) parseDataMessage(recordHeader byte, compressed bool) (reflect.
 	knownMsg := knownMsgNums[dm.globalMsgNum]
 	if knownMsg {
 		msgv = getMesgAllInvalid(dm.globalMsgNum)
-	} else {
-		d.fit.UnknownMessages[dm.globalMsgNum]++
+	} else if d.opts.unknownMessages {
+		d.unknownMessages[dm.globalMsgNum]++
 	}
 
 	if !compressed {
@@ -588,8 +599,8 @@ func (d *decoder) parseDataFields(dm *defmsg, knownMsg bool, msgv reflect.Value)
 			if pfield.btype != base.String && pfield.array == 0 {
 				padding = pfield.btype.Size() - dsize
 			}
-		} else {
-			d.fit.UnknownFields[UnknownField{dm.globalMsgNum, dfield.num}]++
+		} else if d.opts.unknownFields {
+			d.unknownFields[unknownField{dm.globalMsgNum, dfield.num}]++
 		}
 
 		err := d.readFull(d.tmp[0:dsize])
@@ -844,4 +855,27 @@ func noEOF(err error) error {
 		return io.ErrUnexpectedEOF
 	}
 	return err
+}
+
+func (d *decoder) handleUnknownFields() {
+	d.fit.UnknownFields = make([]UnknownField, 0, len(d.unknownFields))
+	for field, count := range d.unknownFields {
+		d.fit.UnknownFields = append(d.fit.UnknownFields, UnknownField{
+			MesgNum:  field.mesgNum,
+			FieldNum: field.fieldNum,
+			Count:    count,
+		})
+	}
+	sort.Sort(unknownFieldSlice(d.fit.UnknownFields))
+}
+
+func (d *decoder) handleUnknownMessages() {
+	d.fit.UnknownMessages = make([]UnknownMessage, 0, len(d.unknownMessages))
+	for mesgNum, count := range d.unknownMessages {
+		d.fit.UnknownMessages = append(d.fit.UnknownMessages, UnknownMessage{
+			MesgNum: mesgNum,
+			Count:   count,
+		})
+	}
+	sort.Sort(unknownMessageSlice(d.fit.UnknownMessages))
 }

@@ -48,6 +48,11 @@ func main() {
 		false,
 		"add generation timestamp to generated code",
 	)
+	runTests := flag.Bool(
+		"test",
+		false,
+		"run all tests in fit repository after code has been generated",
+	)
 
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "usage: fitgen [flags] [path to sdk zip, xls or xlsx file]\n")
@@ -117,19 +122,20 @@ func main() {
 	}
 	l.Println("stringer: types done")
 
-	err = runAllTests(fitPkgImportPath)
-	if err != nil {
-		l.Fatal(err)
-	}
-	l.Println("go test: pass")
-
 	logMesgNumVsMessages(fitProfile.MesgNumsWithoutMessage, l)
+
+	if *runTests {
+		err = runAllTests(fitPkgImportPath)
+		if err != nil {
+			l.Fatal(err)
+		}
+		l.Println("go test: pass")
+	}
 
 	l.Println("done")
 }
 
 func runStringerOnTypes(stringerPath, fitSrcDir, typesStringOut, fitTypes string) error {
-
 	stringerCmd := exec.Command(
 		"go",
 		"run",

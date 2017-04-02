@@ -18,6 +18,8 @@ for information about profile generation.
 usage: fitgen [flags] [path to sdk zip, xls or xlsx file]
   -sdk string
 	provide or override SDK version printed in generated code
+  -test
+        run all tests in fit repository after code has been generated
   -timestamp
 	add generation timestamp to generated code (default true)
 ```

@@ -8,6 +8,8 @@ GOFUZZ_PKG_PATH := github.com/dvyukov/go-fuzz
 LATLONG_PKG_PATH:= github.com/bradfitz/latlong
 UTTER_PKG_PATH	:= github.com/kortschak/utter
 
+DECODE_BENCH_NAME := DecodeActivity$$/Small
+DECODE_BENCH_TIME := 5s
 
 .PHONY: all
 all: deps build test testrace check
@@ -35,7 +37,7 @@ testrace:
 
 .PHONY: bench
 bench:
-	go test -v -run=$$$$ -bench=. $(FIT_PKGS)
+	go test -v -run=XXX -bench=. $(FIT_PKGS) -benchtime=5s
 
 .PHONY: fitgen
 fitgen:
@@ -68,17 +70,17 @@ gcoprofile:
 
 .PHONY: profcpu
 profcpu:
-	go test -run=$$$$ -bench=ActivitySmall -cpuprofile=cpu.prof
+	go test -run=XXX -cpuprofile=cpu.prof -bench=$(DECODE_BENCH_NAME) -benchtime=$(DECODE_BENCH_TIME)
 	go tool pprof fit.test cpu.prof
 
 .PHONY: profmem
 profmem:
-	go test -run=$$$$-bench=ActivitySmall -memprofile=allocmem.prof
+	go test -run=XXX -memprofile=allocmem.prof -bench=$(DECODE_BENCH_NAME) -benchtime=$(DECODE_BENCH_TIME)
 	go tool pprof -alloc_space fit.test allocmem.prof
 
 .PHONY: profobj
 profobj:
-	go test -run=NONE -bench=ActivitySmall -memprofile=allocobj.prof
+	go test -run=XXX -memprofile=allocobj.prof -bench=$(DECODE_BENCH_NAME) -benchtime=$(DECODE_BENCH_TIME)
 	go tool pprof -alloc_objects fit.test allocobj.prof
 
 .PHONY: mdgen

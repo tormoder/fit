@@ -23,7 +23,8 @@ CHECK_TOOLS :=	golang.org/x/tools/cmd/goimports \
 		github.com/client9/misspell/cmd/misspell \
 		honnef.co/go/unused/cmd/unused \
 		honnef.co/go/simple/cmd/gosimple \
-		honnef.co/go/staticcheck/cmd/staticcheck
+		honnef.co/go/staticcheck/cmd/staticcheck \
+		github.com/mvdan/unparam
 
 .PHONY: all
 all: deps testdeps build test testrace check
@@ -169,3 +170,5 @@ checkfull: getchecktools
 	@ ! misspell ./**/* | grep -vE '(messages.go|/vendor/|profile/testdata)'
 	@echo "staticcheck"
 	@staticcheck $(FIT_PKGS)
+	@echo "unparam"
+	@unparam $(FIT_PKGS)

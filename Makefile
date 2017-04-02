@@ -6,6 +6,8 @@ FIT_PKG_PATH 	:= github.com/tormoder/fit
 FITGEN_PKG_PATH := $(FIT_PKG_PATH)/cmd/fitgen
 GOFUZZ_PKG_PATH := github.com/dvyukov/go-fuzz
 LATLONG_PKG_PATH:= github.com/bradfitz/latlong
+UTTER_PKG_PATH	:= github.com/kortschak/utter
+
 
 .PHONY: all
 all: deps build test testrace check
@@ -14,6 +16,7 @@ all: deps build test testrace check
 deps:
 	@echo "go get:"
 	go get $(LATLONG_PKG_PATH)
+	go get $(UTTER_PKG_PATH)
 
 .PHONY: build
 build:

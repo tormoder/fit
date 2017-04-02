@@ -2,70 +2,345 @@ package fit_test
 
 import (
 	"bytes"
-	"crypto/sha1"
-	"encoding/base64"
-	"encoding/gob"
+	"compress/gzip"
+	"flag"
 	"fmt"
+	"hash/fnv"
+	"io"
 	"io/ioutil"
+	"log"
 	"os"
 	"path/filepath"
+	"sync"
 	"testing"
 	"time"
 
+	"github.com/kortschak/utter"
 	"github.com/tormoder/fit"
 )
 
-func TestMain(m *testing.M) {
-	err := parseActivitySmallData()
-	if err != nil {
-		fmt.Println("parseActivitySmallData failed:", err)
-		os.Exit(2)
-	}
-	os.Exit(m.Run())
+var update = flag.Bool("update", false, "update .golden output for decode test files")
+
+func init() { flag.Parse() }
+
+func fitFingerprint(fit *fit.Fit) uint32 {
+	h := fnv.New32a()
+	utter.Fdump(h, fit)
+	return h.Sum32()
 }
 
+func fitUtterDump(fit *fit.Fit, path string, compressed bool) error {
+	f, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE, 0644)
+	if err != nil {
+		return err
+	}
+	var w io.WriteCloser
+	if compressed {
+		w = gzip.NewWriter(f)
+	} else {
+		w = f
+	}
+
+	utter.Fdump(w, fit)
+
+	if !compressed {
+		return f.Close()
+	}
+
+	err = w.Close()
+	if err != nil {
+		_ = f.Close()
+		return err
+	}
+	return f.Close()
+}
+
+var (
+	loggerMu      sync.Mutex
+	loggerOnce    sync.Once
+	devNullLogger *log.Logger
+)
+
+func nullLogger() *log.Logger {
+	loggerMu.Lock()
+	defer loggerMu.Unlock()
+	loggerOnce.Do(func() {
+		devNullLogger = log.New(ioutil.Discard, "", 0)
+	})
+	return devNullLogger
+}
+
+var (
+	activitySmallMu   sync.Mutex
+	activitySmallOnce sync.Once
+	activitySmallData []byte
+)
+
+func activitySmall() []byte {
+	activitySmallMu.Lock()
+	defer activitySmallMu.Unlock()
+	activitySmallOnce.Do(func() {
+		asd, err := ioutil.ReadFile(activitySmallPath)
+		if err != nil {
+			errDesc := fmt.Sprintf("parseActivitySmallData failed: %v", err)
+			panic(errDesc)
+		}
+		activitySmallData = asd
+	})
+	return activitySmallData
+}
+
+var (
+	activitySmallPath      = filepath.Join(tfolder, me, "activity-small-fenix2-run.fit")
+	activityLargePath      = filepath.Join(tfolder, me, "activity-large-fenxi2-multisport.fit")
+	activityComponentsPath = filepath.Join(tfolder, dcrain, "Edge810-Vector-2013-08-16-15-35-10.fit")
+)
+
+const (
+	goldenSuffix  = ".golden"
+	currentSuffix = ".current"
+	gzSuffix      = ".gz"
+)
+
+const (
+	tfolder  = "testdata"
+	me       = "me"
+	fitsdk   = "fitsdk"
+	fitparse = "python-fitparse"
+	sram     = "sram"
+	dcrain   = "dcrainmaker"
+	misc     = "misc"
+	corrupt  = "corrupt"
+)
+
 func TestDecode(t *testing.T) {
+	testFiles := [...]struct {
+		folder      string
+		name        string
+		wantErr     bool
+		fingerprint uint32
+		compress    bool
+		dopts       []fit.DecodeOption
+	}{
+		{
+			me,
+			"activity-small-fenix2-run.fit",
+			false,
+			3178178376,
+			true,
+			[]fit.DecodeOption{
+				fit.WithUnknownFields(),
+				fit.WithUnknownMessages(),
+				fit.WithLogger(nullLogger()), // For test coverage.
+			},
+		},
+		{
+			fitsdk,
+			"Activity.fit",
+			false,
+			2378254580,
+			true,
+			nil,
+		},
+		{
+			fitsdk,
+			"MonitoringFile.fit",
+			false,
+			455757959,
+			true,
+			nil,
+		},
+		{
+			fitsdk,
+			"Settings.fit",
+			false,
+			300677984,
+			true,
+			nil,
+		},
+
+		{
+			fitsdk,
+			"WeightScaleMultiUser.fit",
+			false,
+			1007605680,
+			true,
+			nil,
+		},
+		{
+			fitsdk,
+			"WorkoutCustomTargetValues.fit",
+			false,
+			407208810,
+			true,
+			nil,
+		},
+		{
+			fitsdk,
+			"WorkoutIndividualSteps.fit",
+			false,
+			1159208415,
+			true,
+			nil,
+		},
+		{
+			fitsdk,
+			"WorkoutRepeatGreaterThanStep.fit",
+			false,
+			3635471829,
+			true,
+			nil,
+		},
+		{
+			fitsdk,
+			"WorkoutRepeatSteps.fit",
+			false,
+			2404845921,
+			true,
+			nil,
+		},
+		{
+			fitparse,
+			"garmin-edge-500-activitiy.fit",
+			false,
+			0,
+			false,
+			nil,
+		},
+		{
+			fitparse,
+			"sample-activity-indoor-trainer.fit",
+			false,
+			0,
+			false,
+			nil,
+		},
+		{
+			fitparse,
+			"compressed-speed-distance.fit",
+			false,
+			0,
+			false,
+			nil,
+		},
+		{
+			fitparse,
+			"antfs-dump.63.fit",
+			false,
+			0,
+			false,
+			nil,
+		},
+		{
+			sram,
+			"Settings.fit",
+			false,
+			0,
+			false,
+			nil,
+		},
+		{
+			sram,
+			"Settings2.fit",
+			false,
+			0,
+			false,
+			nil,
+		},
+		{
+			dcrain,
+			"Edge810-Vector-2013-08-16-15-35-10.fit",
+			false,
+			0,
+			false,
+			nil,
+		},
+		{
+			misc,
+			"2013-02-06-12-11-14.fit",
+			false,
+			0,
+			false,
+			nil,
+		},
+		{
+			misc,
+			"2015-10-13-08-43-15.fit",
+			false,
+			0,
+			false,
+			nil,
+		},
+		{
+			corrupt,
+			"activity-filecrc.fit",
+			true,
+			0,
+			false,
+			nil,
+		},
+		{
+			corrupt,
+			"activity-unexpected-eof.fit",
+			true,
+			0,
+			false,
+			nil,
+		},
+	}
 	for _, file := range testFiles {
-		fpath := filepath.Join(tfolder, file.folder, file.name)
-		t.Logf("decoding %q", fpath)
-
-		data, err := ioutil.ReadFile(fpath)
-		if err != nil {
-			t.Fatalf("%q: reading file failed: %v", fpath, err)
-		}
-
-		fitFile, err := fit.Decode(bytes.NewReader(data))
-		if !file.wantErr && err != nil {
-			t.Errorf("%q: got error %v, want no error", fpath, err)
-		}
-		if file.wantErr && err == nil {
-			t.Errorf("%q: got no error, want error", fpath)
-		}
-
-		if file.gobSHA1 == "" {
-			continue
-		}
-
-		sum := sha1.New()
-		enc := gob.NewEncoder(sum)
-		err = enc.Encode(fitFile)
-		if err != nil {
-			t.Fatalf("%q: gob encode failed:", err)
-		}
-		b64sum := base64.StdEncoding.EncodeToString(sum.Sum(nil))
-		if b64sum != file.gobSHA1 {
-			t.Errorf("%q: SHA-1 for gob encoded fit file differs", fpath)
-			// TODO(tormoder): Diff using goon?
-		}
+		file := file
+		t.Run(fmt.Sprintf("%s/%s", file.folder, file.name), func(t *testing.T) {
+			t.Parallel()
+			fpath := filepath.Join(tfolder, file.folder, file.name)
+			data, err := ioutil.ReadFile(fpath)
+			if err != nil {
+				t.Fatalf("reading file failed: %v", err)
+			}
+			fitFile, err := fit.Decode(bytes.NewReader(data), file.dopts...)
+			if !file.wantErr && err != nil {
+				t.Errorf("got error %v, want no error", err)
+			}
+			if file.wantErr && err == nil {
+				t.Error("got no error, want error")
+			}
+			if file.fingerprint == 0 || file.wantErr {
+				return
+			}
+			fp := fitFingerprint(fitFile)
+			if fp == file.fingerprint {
+				return
+			}
+			t.Errorf("fit file fingerprint differs: got: %d, want: %d", fp, file.fingerprint)
+			if !*update {
+				fpath = fpath + currentSuffix
+			} else {
+				fpath = fpath + goldenSuffix
+			}
+			if file.compress {
+				fpath = fpath + gzSuffix
+			}
+			err = fitUtterDump(fitFile, fpath, file.compress)
+			if err != nil {
+				t.Fatalf("error writing output: %v", err)
+			}
+			if !*update {
+				t.Logf("current output written to: %s", fpath)
+				t.Logf("use a diff tool to compare (e.g. zdiff if compressed)")
+			} else {
+				t.Logf("%q has been updated", fpath)
+				t.Logf("new fingerprint is: %d, update test case in reader_test.go", fp)
+			}
+		})
 	}
 }
 
 func TestCheckIntegrity(t *testing.T) {
 	// Implicitly tested for all files in TestDecode.
 	// One example here.
-	err := fit.CheckIntegrity(bytes.NewReader(activitySmallData), false)
+	err := fit.CheckIntegrity(bytes.NewReader(activitySmall()), false)
 	if err != nil {
-		t.Errorf("%q: CheckIntegrity failed: %v", activitySmall, err)
+		t.Errorf("%q: failed: %v", activitySmallPath, err)
 	}
 }
 
@@ -78,9 +353,9 @@ func TestDecodeHeader(t *testing.T) {
 		DataType:        [4]uint8{0x2e, 0x46, 0x49, 0x54},
 		CRC:             0x1ec4,
 	}
-	gotHeader, err := fit.DecodeHeader(bytes.NewReader(activitySmallData))
+	gotHeader, err := fit.DecodeHeader(bytes.NewReader(activitySmall()))
 	if err != nil {
-		t.Errorf("%q: DecodeHeader failed: %v", activitySmall, err)
+		t.Errorf("%q: failed: %v", activitySmallPath, err)
 	}
 	if gotHeader != wantHeader {
 		t.Errorf("got header:\n%#v\nwant header: %#v", gotHeader, wantHeader)
@@ -108,40 +383,47 @@ func TestDecodeHeaderAndFileID(t *testing.T) {
 		ProductName:  "",
 	}
 
-	gotHeader, gotFileId, err := fit.DecodeHeaderAndFileID(bytes.NewReader(activitySmallData))
+	gotHeader, gotFileId, err := fit.DecodeHeaderAndFileID(bytes.NewReader(activitySmall()))
 	if err != nil {
-		t.Errorf("%q: DecodeHeaderAndFileId failed: %v", activitySmall, err)
+		t.Errorf("%q: failed: %v", activitySmallPath, err)
 	}
 	if gotHeader != wantHeader {
-		t.Errorf("%q:\ngot header:\n%#v\nwant header:\n%#v", activitySmall, gotHeader, wantHeader)
+		t.Errorf("%q:\ngot header:\n%#v\nwant header:\n%#v", activitySmallPath, gotHeader, wantHeader)
 	}
 	if gotFileId != wantFileId {
-		t.Errorf("%q:\ngot FileIdMsg:\n%v\nwant FileIdMsg:\n%v", activitySmall, gotFileId, wantFileId)
+		t.Errorf("%q:\ngot FileIdMsg:\n%v\nwant FileIdMsg:\n%v", activitySmallPath, gotFileId, wantFileId)
 	}
 }
 
-func BenchmarkDecodeActivitySmall(b *testing.B) {
-	benchmarkDecode(b, activitySmall, "Full")
-}
-
-func BenchmarkDecodeActivityLarge(b *testing.B) {
-	benchmarkDecode(b, activityLarge, "Full")
-}
-
-func BenchmarkDecodeActivityWithComponents(b *testing.B) {
-	benchmarkDecode(b, activityComponents, "Full")
-}
-
-func BenchmarkDecodeHeader(b *testing.B) {
-	benchmarkDecode(b, activitySmall, "Header")
-}
-
-func BenchmarkDecodeHeaderAndFileID(b *testing.B) {
-	benchmarkDecode(b, activitySmall, "HeaderAndFileID")
+func BenchmarkDecodeActivity(b *testing.B) {
+	files := []struct {
+		desc, path string
+	}{
+		{"Small", activitySmallPath},
+		{"Large", activityLargePath},
+		{"WithComponents", activityComponentsPath},
+	}
+	for _, file := range files {
+		b.Run(file.desc, func(b *testing.B) {
+			data, err := ioutil.ReadFile(file.path)
+			if err != nil {
+				b.Fatalf("%q: error reading file: %v", file.path, err)
+			}
+			b.ReportAllocs()
+			b.SetBytes(int64(len(data)))
+			b.ResetTimer()
+			for i := 0; i < b.N; i++ {
+				_, err := fit.Decode(bytes.NewReader(data))
+				if err != nil {
+					b.Fatalf("%q: error decoding file: %v", file.path, err)
+				}
+			}
+		})
+	}
 }
 
 func BenchmarkDecodeActivityLargeParallel(b *testing.B) {
-	data, err := ioutil.ReadFile(activityLarge)
+	data, err := ioutil.ReadFile(activityLargePath)
 	if err != nil {
 		b.Fatal(err)
 	}
@@ -158,205 +440,29 @@ func BenchmarkDecodeActivityLargeParallel(b *testing.B) {
 	})
 }
 
-func benchmarkDecode(b *testing.B, filename string, bench string) {
-	data, err := ioutil.ReadFile(filename)
-	if err != nil {
-		b.Fatal(err)
-	}
+func BenchmarkDecodeHeader(b *testing.B) {
+	data := activitySmall()
 	b.ReportAllocs()
 	b.SetBytes(int64(len(data)))
-	switch bench {
-	case "Full":
-		b.ResetTimer()
-		for i := 0; i < b.N; i++ {
-			_, err := fit.Decode(bytes.NewReader(data))
-			if err != nil {
-				b.Fatal(err)
-			}
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, err := fit.DecodeHeader(bytes.NewReader(data))
+		if err != nil {
+			b.Fatalf("%q: error decoding header: %v", activitySmallPath, err)
 		}
-	case "Header":
-		b.ResetTimer()
-		for i := 0; i < b.N; i++ {
-			_, err := fit.DecodeHeader(bytes.NewReader(data))
-			if err != nil {
-				b.Fatal(err)
-			}
-		}
-	case "HeaderAndFileID":
-		b.ResetTimer()
-		for i := 0; i < b.N; i++ {
-			_, _, err := fit.DecodeHeaderAndFileID(bytes.NewReader(data))
-			if err != nil {
-				b.Fatal(err)
-			}
-		}
-	default:
-		panic("benchmarkDecode: unknown benchmark")
 	}
+
 }
 
-const (
-	tfolder = "testdata" // root
-
-	me       = "me"
-	fitsdk   = "fitsdk"
-	fitparse = "python-fitparse"
-	sram     = "sram"
-	dcrain   = "dcrainmaker"
-	misc     = "misc"
-	corrupt  = "corrupt"
-)
-
-var (
-	activitySmall      = filepath.Join(tfolder, me, "activity-small-fenix2-run.fit")
-	activityLarge      = filepath.Join(tfolder, me, "activity-large-fenxi2-multisport.fit")
-	activityComponents = filepath.Join(tfolder, dcrain, "Edge810-Vector-2013-08-16-15-35-10.fit")
-	activitySmallData  []byte
-)
-
-func parseActivitySmallData() error {
-	var err error
-	activitySmallData, err = ioutil.ReadFile(activitySmall)
-	return err
-}
-
-var testFiles = [...]struct {
-	folder  string
-	name    string
-	wantErr bool
-	gobSHA1 string
-}{
-	{
-		me,
-		"activity-small-fenix2-run.fit",
-		false,
-		"",
-	},
-	{
-		fitsdk,
-		"Activity.fit",
-		false,
-		"",
-	},
-	{
-		fitsdk,
-		"MonitoringFile.fit",
-		false,
-		"",
-	},
-	{
-		fitsdk,
-		"Settings.fit",
-		false,
-		"",
-	},
-
-	{
-		fitsdk,
-		"WeightScaleMultiUser.fit",
-		false,
-		"",
-	},
-	{
-		fitsdk,
-		"WorkoutCustomTargetValues.fit",
-		false,
-		"",
-	},
-	{
-		fitsdk,
-		"WorkoutIndividualSteps.fit",
-		false,
-		"",
-	},
-	{
-		fitsdk,
-		"WorkoutRepeatGreaterThanStep.fit",
-		false,
-		"",
-	},
-	{
-		fitsdk,
-		"WorkoutRepeatSteps.fit",
-		false,
-		"",
-	},
-	{
-		fitparse,
-		"garmin-edge-500-activitiy.fit",
-		false,
-		"",
-	},
-	{
-		fitparse,
-		"sample-activity-indoor-trainer.fit",
-		false,
-		"",
-	},
-	{
-		fitparse,
-		"compressed-speed-distance.fit",
-		false,
-		"",
-	},
-	{
-		fitparse,
-		"antfs-dump.63.fit",
-		false,
-		"",
-	},
-	{
-		sram,
-		"Settings.fit",
-		false,
-		"",
-	},
-	{
-		sram,
-		"Settings2.fit",
-		false,
-		"",
-	},
-	{
-		dcrain,
-		"Edge810-Vector-2013-08-16-15-35-10.fit",
-		false,
-		"",
-	},
-	{
-		misc,
-		"2013-02-06-12-11-14.fit",
-		false,
-		"",
-	},
-	{
-		misc,
-		"2015-10-13-08-43-15.fit",
-		false,
-		"",
-	},
-	{
-		corrupt,
-		"activity-filecrc.fit",
-		true,
-		"",
-	},
-	{
-		corrupt,
-		"activity-unexpected-eof.fit",
-		true,
-		"",
-	},
-	/*
-		{
-		// TODO(tormoder): Investigate why this file fails.
-		// "Decode failed for "testdata/fitsdk/WeightScaleSingleUser.fit": parsing
-		// data message: missing data definition message for local message number
-		// 1."
-		fitsdk,
-		"WeightScaleSingleUser.fit",
-		false,
-		"",
-		},
-	*/
+func BenchmarkDecodeHeaderAndFileID(b *testing.B) {
+	data := activitySmall()
+	b.ReportAllocs()
+	b.SetBytes(int64(len(data)))
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _, err := fit.DecodeHeaderAndFileID(bytes.NewReader(data))
+		if err != nil {
+			b.Fatalf("%q: error decoding header/fileid: %v", activitySmallPath, err)
+		}
+	}
 }

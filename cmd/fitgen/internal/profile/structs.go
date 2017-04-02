@@ -1,13 +1,12 @@
 package profile
 
-import "github.com/tormoder/fit/internal/base"
+import "github.com/tormoder/fit/internal/types"
 
 type Type struct {
 	Name     string
 	CCName   string
 	OrigName string
-	PkgName  string
-	BaseType base.Type
+	BaseType types.Base
 	Values   []ValueTriple
 
 	data *PType
@@ -28,11 +27,13 @@ type Field struct {
 	DefNum string
 	Name   string
 	CCName string
-	Type   string
 	Array  string // 255=N
 	Scale  string
 	Offset string
 	Units  string
+
+	TypeName string
+	FType    types.Fit
 
 	Components []Component
 
@@ -43,20 +44,11 @@ type Field struct {
 	Comment string
 	Example string
 
-	BaseType  base.Type
-	BTInvalid string
-	GoType    string
-	GoInvalid string
-
 	data []string
 }
 
 func (f *Field) HasOffset() bool {
 	return !(f.Offset == "0" || f.Offset == "")
-}
-
-func (f *Field) IsArray() bool {
-	return f.Array != "0"
 }
 
 func (f *Field) HasComment() bool {

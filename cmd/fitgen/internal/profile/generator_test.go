@@ -78,7 +78,7 @@ type sdk struct {
 }
 
 var sdks = []sdk{
-	{"16.20", 2084410945},
+	{"16.20", 1263490466},
 }
 
 func TestGenerator(t *testing.T) {

@@ -2,11 +2,46 @@ package profile
 
 import (
 	"fmt"
+	"regexp"
 	"strconv"
 	"strings"
 
-	"github.com/tormoder/fit/internal/base"
+	"github.com/tormoder/fit/internal/types"
 )
+
+var camelRegex = regexp.MustCompile("[0-9A-Za-z]+")
+
+func toCamelCase(s string) string {
+	chunks := camelRegex.FindAllString(s, -1)
+	for i, val := range chunks {
+		chunks[i] = strings.Title(val)
+	}
+	return strings.Join(chunks, "")
+}
+
+var typeQuirks = map[string]string{
+	"activity": "activity_mode",
+}
+
+func isTimestamp(name string) (types.Kind, bool) {
+	if name == "date_time" {
+		return types.TimeUTC, true
+	}
+	if name == "local_date_time" {
+		return types.TimeLocal, true
+	}
+	return 0, false
+}
+
+func isCoordinate(name string) (types.Kind, bool) {
+	if strings.HasSuffix(name, "_lat") {
+		return types.Lat, true
+	}
+	if strings.HasSuffix(name, "_long") {
+		return types.Lng, true
+	}
+	return 0, false
+}
 
 func TransformTypes(ptypes []*PType) (map[string]*Type, error) {
 	types := make(map[string]*Type)
@@ -26,8 +61,8 @@ func TransformTypes(ptypes []*PType) (map[string]*Type, error) {
 }
 
 func (t *Type) transform() (skip bool, err error) {
-	_, found := timestampTypes[t.data.Header[tNAME]]
-	if found {
+	_, isTS := isTimestamp(t.data.Header[tNAME])
+	if isTS {
 		return true, nil
 	}
 
@@ -40,9 +75,7 @@ func (t *Type) transform() (skip bool, err error) {
 	t.OrigName = t.Name
 	t.CCName = toCamelCase(t.Name)
 
-	t.PkgName = strings.ToLower(t.CCName)
-
-	t.BaseType, err = base.TypeFromString(t.data.Header[tBTYPE])
+	t.BaseType, err = types.BaseFromString(t.data.Header[tBTYPE])
 	if err != nil {
 		return false, err
 	}
@@ -59,13 +92,12 @@ func (t *Type) transform() (skip bool, err error) {
 	if renamed, found := typeQuirks[t.Name]; found {
 		t.Name = renamed
 		t.CCName = toCamelCase(t.Name)
-		t.PkgName = strings.ToLower(t.CCName)
 	}
 
 	return false, nil
 }
 
-func TransformMsgs(pmsgs []*PMsg, types map[string]*Type) ([]*Msg, error) {
+func TransformMsgs(pmsgs []*PMsg, ftypes map[string]*Type) ([]*Msg, error) {
 	var msgs []*Msg
 	for _, pmsg := range pmsgs {
 		msg := Msg{
@@ -83,7 +115,7 @@ func TransformMsgs(pmsgs []*PMsg, types map[string]*Type) ([]*Msg, error) {
 
 		for _, pfield := range pmsg.Fields {
 			f := &Field{data: pfield.Field}
-			skip, err := f.transform(false, types)
+			skip, err := f.transform(false, ftypes)
 			if err != nil {
 				return nil, err
 			}
@@ -98,7 +130,7 @@ func TransformMsgs(pmsgs []*PMsg, types map[string]*Type) ([]*Msg, error) {
 
 			for _, sfield := range pfield.Subfields {
 				sf := &Field{data: sfield}
-				skip, err := sf.transform(true, types)
+				skip, err := sf.transform(true, ftypes)
 				if err != nil {
 					return nil, fmt.Errorf("error parsing subfield: %v", err)
 				}
@@ -114,7 +146,7 @@ func TransformMsgs(pmsgs []*PMsg, types map[string]*Type) ([]*Msg, error) {
 	return msgs, nil
 }
 
-func (f *Field) transform(subfield bool, types map[string]*Type) (skip bool, err error) {
+func (f *Field) transform(subfield bool, ftypes map[string]*Type) (skip bool, err error) {
 	if f.data[mEXAMPLE] == "" {
 		return true, nil
 	}
@@ -123,17 +155,12 @@ func (f *Field) transform(subfield bool, types map[string]*Type) (skip bool, err
 	f.Name = f.data[mFNAME]
 	f.CCName = toCamelCase(f.Name)
 
-	err = f.parseBaseType(types)
-	if err != nil {
-		return false, err
-	}
-
-	err = f.parseType(types)
-	if err != nil {
-		return false, err
-	}
-
 	f.parseArray()
+
+	err = f.parseType(ftypes)
+	if err != nil {
+		return false, err
+	}
 
 	f.Units = f.data[mUNITS]
 	f.Comment = f.data[mCOMMENT]
@@ -148,99 +175,10 @@ func (f *Field) transform(subfield bool, types map[string]*Type) (skip bool, err
 		return false, nil
 	}
 
-	return false, f.parseComponents(types)
-}
-
-func (f *Field) parseType(types map[string]*Type) error {
-	switch {
-	case strings.HasSuffix(f.Name, "_lat"):
-		f.Type = "Latitude"
-		f.GoType = "lat"
-		f.GoInvalid = "NewLatitudeInvalid()"
-	case strings.HasSuffix(f.Name, "_long"):
-		f.Type = "Longitude"
-		f.GoType = "lng"
-		f.GoInvalid = "NewLongitudeInvalid()"
-	default:
-		ft := f.data[mFTYPE]
-		_, found := timestampTypes[ft]
-		if found {
-			f.Type = "time.Time"
-			f.GoInvalid = "timeBase"
-			if strings.HasPrefix(ft, "local") {
-				f.GoType = "timelocal"
-			} else {
-				f.GoType = "timeutc"
-			}
-			return nil
-		}
-
-		f.GoType = "fit"
-
-		if renamed, shouldRename := typeQuirks[ft]; shouldRename {
-			f.Type = toCamelCase(renamed)
-		} else {
-			if btype, isBaseType := baseTypeToGoType[ft]; isBaseType {
-				f.Type = btype
-			} else {
-				f.Type = toCamelCase(ft)
-			}
-		}
-
-		tdef, tfound := types[f.Type]
-		if tfound {
-			f.GoInvalid = tdef.BaseType.GoInvalidValue()
-			return nil
-		}
-
-		if f.Type == "Bool" { // Special case for now.
-			f.GoInvalid = base.Enum.GoInvalidValue()
-			return nil
-		}
-
-		// Assume base type.
-		val, vfound := goBaseTypeToInvalidValue[f.Type]
-		if !vfound {
-			return fmt.Errorf(
-				"base type for type %q not found",
-				f.Type,
-			)
-
-		}
-		f.GoInvalid = val
-		f.BTInvalid = val // GoInvalid may be overwritten in parseArray.
-	}
-
-	return nil
-}
-
-func (f *Field) parseBaseType(types map[string]*Type) error {
-	typeName := f.data[mFTYPE]
-	if rewrite, tfound := typeQuirks[typeName]; tfound {
-		typeName = rewrite
-	}
-	typeDef, found := types[toCamelCase(typeName)]
-	if found {
-		f.BaseType = typeDef.BaseType
-	} else {
-		_, found = timestampTypes[typeName]
-		if found {
-			f.BaseType = base.Uint32
-		} else if typeName == "bool" {
-			f.BaseType = base.Enum
-		} else {
-			var err error
-			f.BaseType, err = base.TypeFromString(typeName)
-			if err != nil {
-				return err
-			}
-		}
-	}
-	return nil
+	return false, f.parseComponents(ftypes)
 }
 
 func (f *Field) parseArray() {
-	const nilString = "nil"
 	arrayStr := strings.TrimFunc(
 		f.data[mARRAY], func(r rune) bool {
 			if r == '[' || r == ']' {
@@ -253,11 +191,58 @@ func (f *Field) parseArray() {
 		f.Array = "0"
 	case "N":
 		f.Array = "255"
-		f.GoInvalid = nilString
 	default:
 		f.Array = arrayStr
-		f.GoInvalid = nilString
 	}
+}
+
+func (f *Field) parseType(ftypes map[string]*Type) error {
+	array := f.Array != "0"
+
+	coordKind, isCoord := isCoordinate(f.Name)
+	if isCoord {
+		f.FType = types.Make(coordKind, array)
+		f.TypeName = f.FType.GoType()
+		return nil
+	}
+
+	originalTypeName := f.data[mFTYPE]
+	if rewritten, tfound := typeQuirks[originalTypeName]; tfound {
+		f.TypeName = toCamelCase(rewritten)
+	} else {
+		f.TypeName = toCamelCase(originalTypeName)
+	}
+
+	tsKind, isTimestamp := isTimestamp(originalTypeName)
+	if isTimestamp {
+		f.FType = types.Make(tsKind, array)
+		f.TypeName = f.FType.GoType()
+		return nil
+	}
+
+	if f.TypeName == "Bool" {
+		f.FType = types.MakeNative(types.BaseEnum, array)
+		return nil
+	}
+
+	typeDef, found := ftypes[f.TypeName]
+	if found {
+		f.FType = types.MakeNative(typeDef.BaseType, array)
+		if array {
+			f.TypeName = "[]" + f.TypeName
+		}
+		return nil
+	}
+
+	// Assume base type.
+	baseType, err := types.BaseFromString(originalTypeName)
+	if err != nil {
+		return err
+	}
+	f.FType = types.MakeNative(baseType, array)
+	f.TypeName = f.FType.GoType()
+
+	return nil
 }
 
 func (f *Field) parseRefFields() {
@@ -288,23 +273,23 @@ func (f *Field) parseScaleOffset() {
 	}
 }
 
-func (f *Field) parseComponents(types map[string]*Type) error {
+func (f *Field) parseComponents(ftypes map[string]*Type) error {
 	if f.data[mCOMPS] == "" {
 		return nil
 	}
 
 	debugln("parsing components for field", f.CCName)
 
-	switch f.BaseType {
-	case base.Uint8, base.Uint16, base.Uint32:
-	case base.Byte:
-		if !f.IsArray() {
+	switch f.FType.BaseType() {
+	case types.BaseUint8, types.BaseUint16, types.BaseUint32:
+	case types.BaseByte:
+		if !f.FType.Array() {
 			return fmt.Errorf("parseComponents: base type was byte but not an array")
 		}
 	default:
 		return fmt.Errorf(
 			"parseComponents: unhandled base type (%s) for field %s",
-			f.BaseType, f.CCName)
+			f.FType.BaseType(), f.CCName)
 	}
 
 	components := strings.Split(f.data[mCOMPS], ",")

@@ -10,8 +10,13 @@ import (
 	"sort"
 	"time"
 
-	"github.com/tormoder/fit/internal/base"
+	"github.com/tormoder/fit/internal/types"
 )
+
+var knownMesgNumButNoMsg = map[string]bool{
+	"Pad":         true,
+	"GpsMetadata": true,
+}
 
 type codeGenerator struct {
 	*bytes.Buffer
@@ -94,7 +99,8 @@ func (g *codeGenerator) p(str ...interface{}) {
 		case int:
 			g.WriteString(fmt.Sprintf("%d", s))
 		default:
-			panic("unknown type in generator printer")
+			err := fmt.Sprintf("unknown type in generator printer: %T", s)
+			panic(err)
 		}
 	}
 	g.WriteByte('\n')
@@ -113,7 +119,7 @@ func (g *codeGenerator) genHeader() {
 }
 
 func (g *codeGenerator) genTypes(types map[string]*Type) {
-	// sort for determinstic print order
+	// Sort for determinstic print order.
 	tkeys := make([]string, 0, len(types))
 	for tkey := range types {
 		tkeys = append(tkeys, tkey)
@@ -164,18 +170,12 @@ func (g *codeGenerator) genMsgs(msgs []*Msg) {
 func (g *codeGenerator) genFields(msg *Msg) (scaledfi, dynfi, compfi []int, dyncompfi map[int][]int) {
 	dyncompfi = make(map[int][]int)
 	for i, f := range msg.Fields {
-		switch {
-		case !f.HasComment() && !f.IsArray():
-			g.p(f.CCName, " ", f.Type)
-		case f.HasComment() && !f.IsArray():
-			g.p(f.CCName, " ", f.Type, " // ", f.Comment)
-		case !f.HasComment() && f.IsArray():
-			g.p(f.CCName, " []", f.Type)
-		case f.HasComment() && f.IsArray():
-			g.p(f.CCName, " []", f.Type, " // ", f.Comment)
-		default:
-			panic("genFields: unreachable")
+		if !f.HasComment() {
+			g.p(f.CCName, " ", f.TypeName)
+		} else {
+			g.p(f.CCName, " ", f.TypeName, " // ", f.Comment)
 		}
+
 		if len(f.Scale) > 0 {
 			scaledfi = append(scaledfi, i)
 		}
@@ -203,7 +203,7 @@ func (g *codeGenerator) genFields(msg *Msg) (scaledfi, dynfi, compfi []int, dync
 func (g *codeGenerator) genScaledGetter(msg *Msg, fieldIndex int) {
 	f := msg.Fields[fieldIndex]
 	g.p()
-	if !f.IsArray() {
+	if !f.FType.Array() {
 		g.genScaledGetterReg(msg, f)
 	} else {
 		g.genScaledGetterArray(msg, f)
@@ -221,7 +221,7 @@ func (g *codeGenerator) genScaledGetterReg(msg *Msg, f *Field) {
 
 	g.p("func (x *", msg.CCName, "Msg) Get", f.CCName, "Scaled() float64 {")
 
-	g.p("if x.", f.CCName, " == ", f.GoInvalid, " {")
+	g.p("if x.", f.CCName, " == ", f.FType.GoInvalidValue(), " {")
 	g.p("return math.NaN()")
 	g.p("}")
 
@@ -273,7 +273,7 @@ func (g *codeGenerator) genDynamicGetter(msg *Msg, fieldIndex int) {
 	for rfn := range refFieldNamesSet {
 		for _, f := range msg.Fields {
 			if f.CCName == rfn {
-				refFieldNameToType[rfn] = f.Type
+				refFieldNameToType[rfn] = f.TypeName
 				break
 			}
 		}
@@ -325,7 +325,7 @@ func (g *codeGenerator) genDynamicGetter(msg *Msg, fieldIndex int) {
 				}
 				g.p(out.String())
 			} else {
-				g.p("return ", sf.Type, "(x.", field.CCName, ")")
+				g.p("return ", sf.TypeName, "(x.", field.CCName, ")")
 			}
 		}
 	} else {
@@ -352,7 +352,7 @@ func (g *codeGenerator) genDynamicGetter(msg *Msg, fieldIndex int) {
 					}
 					g.p(out.String())
 				} else {
-					g.p("return ", sf.Type, "(x.", field.CCName, ")")
+					g.p("return ", sf.TypeName, "(x.", field.CCName, ")")
 				}
 			}
 		}
@@ -398,7 +398,7 @@ func (g *codeGenerator) genGetterForComponents(msg *Msg, compFieldIndices []int)
 
 				g.p("func (x *", msg.CCName, "Msg) Get", targetf.CCName, "From", f.CCName, "() float64 {")
 
-				g.p("if x.", targetf.CCName, " == ", targetf.GoInvalid, " {")
+				g.p("if x.", targetf.CCName, " == ", targetf.FType.GoInvalidValue(), " {")
 				g.p("return math.NaN()")
 				g.p("}")
 
@@ -430,15 +430,16 @@ func (g *codeGenerator) genExpandComponents(msg *Msg, compFieldIndices []int, dy
 
 	for _, cfi := range compFieldIndices {
 		field := msg.Fields[cfi]
-		switch field.BaseType {
-		case base.Byte, base.Uint8, base.Uint16, base.Uint32:
+		switch field.FType.BaseType() {
+		case types.BaseByte, types.BaseUint8, types.BaseUint16, types.BaseUint32:
 		default:
 			panic("genExpandComponents: unhandled base type")
 		}
 
 		debugln("expand components: msg:", msg.CCName, "- field:", field.CCName)
+		debugln("FType.Array():", field.FType.Array())
 
-		if !field.IsArray() {
+		if !field.FType.Array() {
 			g.genExpandComponentsReg(msg, field)
 		} else {
 			g.genExpandComponentsArray(field)
@@ -447,9 +448,9 @@ func (g *codeGenerator) genExpandComponents(msg *Msg, compFieldIndices []int, dy
 
 	for dcfi, dcsfis := range dynCompFieldIndices {
 		field := msg.Fields[dcfi]
-		switch field.BaseType {
-		case base.Uint8, base.Uint16, base.Uint32:
-		case base.Byte:
+		switch field.FType.BaseType() {
+		case types.BaseUint8, types.BaseUint16, types.BaseUint32:
+		case types.BaseByte:
 			panic("genExpandComponentsDyn: unhandled base type when array")
 		default:
 			panic("genExpandComponentsDyn: unhandled base type")
@@ -461,7 +462,7 @@ func (g *codeGenerator) genExpandComponents(msg *Msg, compFieldIndices []int, dy
 }
 
 func (g *codeGenerator) genExpandComponentsReg(msg *Msg, field *Field) {
-	g.p("if x.", field.CCName, " != ", field.GoInvalid, " {")
+	g.p("if x.", field.CCName, " != ", field.FType.GoInvalidValue(), " {")
 	g.genExpandComponentsMaskShift(msg, field)
 	g.p("}")
 }
@@ -474,7 +475,7 @@ func (g *codeGenerator) genExpandComponentsArray(field *Field) {
 		g.p("expand := false")
 		g.p("if len(x.", field.CCName, ") == 3 {")
 		g.p("for _, v := range x.", field.CCName, " {")
-		g.p("if v != ", field.BTInvalid, "{")
+		g.p("if v != ", field.FType.BaseType().GoInvalidValue(), "{")
 		g.p("expand = true")
 		g.p("break")
 		g.p("}")
@@ -508,7 +509,7 @@ func (g *codeGenerator) genExpandComponentsDyn(msg *Msg, field *Field, dcsfis []
 	for rfn := range refFieldNamesSet {
 		for _, f := range msg.Fields {
 			if f.CCName == rfn {
-				refFieldNameToType[rfn] = f.Type
+				refFieldNameToType[rfn] = f.TypeName
 				break
 			}
 		}
@@ -521,7 +522,7 @@ func (g *codeGenerator) genExpandComponentsDyn(msg *Msg, field *Field, dcsfis []
 		panic("genExpandComponentsDyn: unhandled case, more than one reference field name")
 	}
 
-	g.p("if x.", field.CCName, " != ", field.GoInvalid, " {")
+	g.p("if x.", field.CCName, " != ", field.FType.GoInvalidValue(), " {")
 
 	var refField, refType string
 	for rf, ty := range refFieldNameToType {
@@ -561,16 +562,16 @@ func (g *codeGenerator) genExpandComponentsMaskShift(msg *Msg, field *Field) {
 		if comp.Accumulate {
 			accumulator := "accumu" + comp.Name
 			g.p("if ", accumulator, " == nil {")
-			g.p(accumulator, " = new(", tfield.Type, "Accumulator)")
+			g.p(accumulator, " = new(", tfield.FType.GoType(), "Accumulator)")
 			g.p("}")
 			g.p("x.", comp.Name, " = ", accumulator, ".accumulate(")
-			g.p(tfield.Type, "(")
+			g.p(tfield.FType.GoType(), "(")
 			g.p("(x.", field.CCName, " >> ", bits, ") & ((1 << ", comp.Bits, ") - 1),")
 			g.p("),")
 			g.p(")")
 			continue
 		}
-		g.p("x.", comp.Name, " = ", tfield.Type, "(")
+		g.p("x.", comp.Name, " = ", tfield.FType.GoType(), "(")
 		g.p("(x.", field.CCName, " >> ", bits, ") & ((1 << ", comp.Bits, ") - 1),")
 		g.p(")")
 		bits += comp.BitsInt
@@ -584,7 +585,7 @@ func (g *codeGenerator) genExpandComponentsMaskShiftDyn(msg *Msg, sfield *Field,
 		if !tfound {
 			panic("genExpandComponentsMaskShift: target field not found")
 		}
-		g.p("x.", comp.Name, " = ", tfield.Type, "(")
+		g.p("x.", comp.Name, " = ", tfield.FType.GoType(), "(")
 		g.p("(x.", mfield.CCName, " >> ", bits, ") & ((1 << ", comp.Bits, ") - 1),")
 		g.p(")")
 		bits += comp.BitsInt
@@ -593,13 +594,11 @@ func (g *codeGenerator) genExpandComponentsMaskShiftDyn(msg *Msg, sfield *Field,
 
 func (g *codeGenerator) genProfile(types map[string]*Type, msgs []*Msg) {
 	g.p("import (")
-	g.p("\"fmt\"")
 	g.p("\"reflect\"")
 	g.p()
-	g.p("\"github.com/tormoder/fit/internal/base\"")
+	g.p("\"github.com/tormoder/fit/internal/types\"")
 	g.p(")")
 
-	g.genFieldDef()
 	g.genKnownMsgs(types)
 	g.genAccumulators(msgs)
 	g.genFieldsArray(msgs)
@@ -608,57 +607,6 @@ func (g *codeGenerator) genProfile(types map[string]*Type, msgs []*Msg) {
 	g.genZeroValueMsgsArray(msgs)
 	g.genGetZeroValueMsgsArrayLookup(msgs)
 }
-
-func (g *codeGenerator) genFieldDef() {
-	g.p(fieldDef)
-}
-
-const fieldDef = `
-// field represents a fit message field in the profile field lookup table.
-type field struct {
-	sindex int
-	array  uint8
-	t      gotype
-	num    byte
-	btype  base.Type
-}
-
-func (f field) String() string {
-	return fmt.Sprintf(
-		"num: %d | btype: %v | sindex: %d | array: %d",
-		f.num, f.btype, f.sindex, f.array,
-	)
-}
-
-// gotype is used in the profile field lookup table to represent the data type
-// (or type category) for a field when decoded into a Go message struct.
-type gotype uint8
-
-const (
-	fit gotype = iota // Standard -> Fit base type/alias
-
-	// Special (non-profile types)
-	timeutc   // Time UTC 	-> time.Time
-	timelocal // Time Local -> time.Time with Location
-	lat       // Latitude 	-> fit.Latitude
-	lng       // Longitude 	-> fit.Longitude
-)
-
-func (g gotype) String() string {
-	if int(g) > len(gotypeString) {
-		return fmt.Sprintf("gotype(%d)", g)
-	}
-	return gotypeString[g]
-}
-
-var gotypeString = [...]string{
-	"fit",
-	"timeutc",
-	"timelocal",
-	"lat",
-	"lng",
-}
-`
 
 func (g *codeGenerator) genKnownMsgs(types map[string]*Type) {
 	mesgNums, found := types["MesgNum"]
@@ -705,7 +653,7 @@ func (g *codeGenerator) genAccumulator(comp Component, msg *Msg) {
 	if !found {
 		panic("genAccumulator: target field for component not found")
 	}
-	g.p("accumu", comp.Name, " *", targetf.Type, "Accumulator")
+	g.p("accumu", comp.Name, " *", targetf.FType.GoType(), "Accumulator")
 }
 
 func (g *codeGenerator) genFieldsArray(msgs []*Msg) {
@@ -717,7 +665,7 @@ func (g *codeGenerator) genFieldsArray(msgs []*Msg) {
 		g.p("MesgNum", msg.CCName, ": {")
 		for i := 0; i < len(msg.Fields); i++ {
 			f := msg.Fields[i]
-			g.p(f.DefNum, ": {", i, ", ", f.Array, ", ", f.GoType, ", ", f.DefNum, ", ", f.BaseType.PkgString(), "},")
+			g.p(f.DefNum, ": {", i, ", ", f.DefNum, ", ", f.FType.ValueString(), "},")
 		}
 		g.p("},")
 		g.p()
@@ -746,7 +694,7 @@ func (g *codeGenerator) genZeroValueMsgsArray(msgs []*Msg) {
 
 		g.p("MesgNum", msg.CCName, ": reflect.ValueOf(", msg.CCName, "Msg{")
 		for _, f := range msg.Fields {
-			g.p(f.GoInvalid, ",")
+			g.p(f.FType.GoInvalidValue(), ",")
 		}
 		g.p("}),")
 	}

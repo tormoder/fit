@@ -13,21 +13,21 @@ const (
 	Enum    Type = 0x00
 	Sint8   Type = 0x01 // 2's complement format
 	Uint8   Type = 0x02
-	Sint16  Type = 0x83 // 2's complement format
-	Uint16  Type = 0x84
-	Sint32  Type = 0x85 // 2's complement format
-	Uint32  Type = 0x86
+	Sint16  Type = 0x03 // 2's complement format
+	Uint16  Type = 0x04
+	Sint32  Type = 0x05 // 2's complement format
+	Uint32  Type = 0x06
 	String  Type = 0x07 // Null terminated string encoded in UTF-8
-	Float32 Type = 0x88
-	Float64 Type = 0x89
+	Float32 Type = 0x08
+	Float64 Type = 0x09
 	Uint8z  Type = 0x0A
-	Uint16z Type = 0x8B
-	Uint32z Type = 0x8C
+	Uint16z Type = 0x0B
+	Uint32z Type = 0x0C
 	Byte    Type = 0x0D // Array of bytes. Field is invalid if all bytes are invalid
 )
 
-func (t Type) nr() int {
-	return int(t & typeNumMask)
+func Decode(b byte) Type {
+	return Type(b & typeNumMask)
 }
 
 func (t Type) Float() bool {
@@ -35,19 +35,19 @@ func (t Type) Float() bool {
 }
 
 func (t Type) GoInvalidValue() string {
-	return tinvalid[t.nr()]
+	return tinvalid[t]
 }
 
 func (t Type) GoType() string {
-	return tgotype[t.nr()]
+	return tgotype[t]
 }
 
 func (t Type) Integer() bool {
-	return tinteger[t.nr()]
+	return tinteger[t]
 }
 
 func (t Type) Known() bool {
-	return t.nr() < len(tname) && t.nr() >= 0
+	return int(t) < len(tname) && t >= 0
 }
 
 func (t Type) PkgString() string {
@@ -55,15 +55,15 @@ func (t Type) PkgString() string {
 }
 
 func (t Type) Signed() bool {
-	return tsigned[t.nr()]
+	return tsigned[t]
 }
 
 func (t Type) Size() int {
-	return tsize[t.nr()]
+	return tsize[t]
 }
 
 func (t Type) String() string {
-	return tname[t.nr()]
+	return tname[t]
 }
 
 var tsize = [...]int{

@@ -420,7 +420,7 @@ func (d *decoder) parseDefinitionMessage(recordHeader byte) (*defmsg, error) {
 	for i, fd := range dm.fieldDefs {
 		fd.num = d.tmp[i*3]
 		fd.size = d.tmp[(i*3)+1]
-		fd.btype = base.Type(d.tmp[(i*3)+2])
+		fd.btype = base.Decode(d.tmp[(i*3)+2])
 		if err = d.validateFieldDef(dm.globalMsgNum, fd); err != nil {
 			return nil, fmt.Errorf(
 				"validating %v failed: %v",

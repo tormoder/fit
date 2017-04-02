@@ -120,6 +120,67 @@ func TestDecode(t *testing.T) {
 	}
 }
 
+func TestDecodeChained(t *testing.T) {
+	chainedTestFiles := []struct {
+		fpath   string
+		dfiles  int
+		wantErr bool
+		desc    string
+	}{
+		{
+			filepath.Join(tdfolder, "fitsdk", "Activity.fit"),
+			1,
+			false,
+			"single valid fit file",
+		},
+		{
+			filepath.Join(tdfolder, "chained", "activity-settings.fit"),
+			2,
+			false,
+			"two valid chained fit files",
+		},
+		{
+			filepath.Join(tdfolder, "chained", "activity-activity-filecrc.fit"),
+			2,
+			true,
+			"one valid fit file + one fit file with wrong crc",
+		},
+		{
+			filepath.Join(tdfolder, "chained", "activity-settings-corruptheader.fit"),
+			1,
+			true,
+			"one valid fit file + one fit file with corrupt header",
+		},
+		{
+			filepath.Join(tdfolder, "chained", "activity-settings-nodata.fit"),
+			2,
+			true,
+			"one valid fit file + one fit file with ok header but no data",
+		},
+	}
+
+	for _, ctf := range chainedTestFiles {
+		ctf := ctf
+		t.Run(ctf.fpath, func(t *testing.T) {
+			t.Parallel()
+			data, err := ioutil.ReadFile(ctf.fpath)
+			if err != nil {
+				t.Fatalf("reading file data failed: %v", err)
+			}
+			fitFiles, err := fit.DecodeChained(bytes.NewReader(data))
+			if !ctf.wantErr && err != nil {
+				t.Fatalf("got error, want none; error is: %v", err)
+			}
+			if ctf.wantErr && err == nil {
+				t.Fatalf("got no error, want error")
+			}
+			if len(fitFiles) != ctf.dfiles {
+				t.Fatalf("got %d decoded fit file(s), want %d", len(fitFiles), ctf.dfiles)
+			}
+		})
+	}
+}
+
 func TestCheckIntegrity(t *testing.T) {
 	t.Run("ActivitySmall", func(t *testing.T) {
 		err := fit.CheckIntegrity(bytes.NewReader(activitySmall()), false)

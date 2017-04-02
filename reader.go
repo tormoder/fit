@@ -85,6 +85,34 @@ func Decode(r io.Reader, opts ...DecodeOption) (*Fit, error) {
 	return d.fit, err
 }
 
+// DecodeChained reads chained FIT files from r until an error is encountered
+// or no more data is available. If error is non-nil, all data decoded before
+// the error was encountered is also returned for the last file read.
+func DecodeChained(r io.Reader, opts ...DecodeOption) ([]*Fit, error) {
+	var fitFiles []*Fit
+	var i int
+	for {
+		var d decoder
+		for _, opt := range opts {
+			opt(&d.opts)
+		}
+		err := d.decode(r, false, false, false)
+		if err != nil {
+			if d.h.Size == 0 && i != 0 {
+				// Header not read, and not first file:
+				// EOF, no more data.
+				return fitFiles, nil
+			}
+			if d.fit != nil {
+				fitFiles = append(fitFiles, d.fit)
+			}
+			return fitFiles, fmt.Errorf("error parsing chained fit: file #%d: %v", i+1, err)
+		}
+		fitFiles = append(fitFiles, d.fit)
+		i++
+	}
+}
+
 func (d *decoder) decode(r io.Reader, headerOnly, fileIDOnly, crcOnly bool) error {
 	if d.opts.logger != nil {
 		d.debug = true

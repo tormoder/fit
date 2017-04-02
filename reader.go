@@ -140,11 +140,27 @@ func (d *decoder) decode(r io.Reader, headerOnly, fileIDOnly, crcOnly bool) erro
 		return err
 	}
 
+	err = d.decodeFileData()
+	if err != nil {
+		return err
+	}
+
+	// Check invariant pre-read CRC:
+	if !crcOnly && d.bytes.n != d.bytes.limit {
+		fatalErr := fmt.Sprintf("internal decoder error: pre-crc check: data size limit is %d, but n is %d", d.bytes.limit, d.bytes.n)
+		panic(fatalErr)
+	}
+
+	return d.checkCRC()
+}
+
+func (d *decoder) decodeFileData() error {
 	for d.bytes.n < d.bytes.limit {
 		var (
 			b   byte
 			dm  *defmsg
 			msg reflect.Value
+			err error
 		)
 
 		b, err = d.readByte()
@@ -181,13 +197,7 @@ func (d *decoder) decode(r io.Reader, headerOnly, fileIDOnly, crcOnly bool) erro
 		}
 	}
 
-	// Check invariant pre-read CRC:
-	if !crcOnly && d.bytes.n != d.bytes.limit {
-		fatalErr := fmt.Sprintf("internal decoder error: pre-crc check: data size limit is %d, but n is %d", d.bytes.limit, d.bytes.n)
-		panic(fatalErr)
-	}
-
-	return d.checkCRC()
+	return nil
 }
 
 func (d *decoder) checkCRC() error {

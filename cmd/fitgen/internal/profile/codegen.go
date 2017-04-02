@@ -437,7 +437,6 @@ func (g *codeGenerator) genExpandComponents(msg *Msg, compFieldIndices []int, dy
 		}
 
 		debugln("expand components: msg:", msg.CCName, "- field:", field.CCName)
-		debugln("FType.Array():", field.FType.Array())
 
 		if !field.FType.Array() {
 			g.genExpandComponentsReg(msg, field)

@@ -56,6 +56,7 @@ type testingDecodeOpts int
 const (
 	tdoNone testingDecodeOpts = iota
 	tdoAllWithNullLogger
+	tdoStderrLogger
 )
 
 func (tdo testingDecodeOpts) opts() []fit.DecodeOption {
@@ -69,6 +70,9 @@ var tdoOpts = [...][]fit.DecodeOption{
 		fit.WithUnknownMessages(),
 		fit.WithLogger(nullLogger()), // For test coverage.
 	},
+	{
+		fit.WithLogger(log.New(os.Stderr, "", 0)), // For debugging.
+	},
 }
 
 func (tdo testingDecodeOpts) String() string {
@@ -78,6 +82,7 @@ func (tdo testingDecodeOpts) String() string {
 var tdoString = [...]string{
 	"tdoNone",
 	"tdoAllWithNullLogger",
+	"tdoStderrLogger",
 }
 
 var (

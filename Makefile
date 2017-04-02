@@ -150,7 +150,7 @@ checkfull:
 	@echo "unconvert"
 	@! unconvert $(FIT_PKGS) | grep -vF 'messages.go'
 	@echo "unused"
-	@unused $(FIT_PKGS)
+	@! unused $(FIT_PKGS) | grep -vE '(tdoStderrLogger)'
 	@echo "gosimple"
 	@for pkg in $(FIT_PKGS); do \
 		gosimple $$pkg ; \

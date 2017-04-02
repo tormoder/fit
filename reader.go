@@ -201,8 +201,8 @@ crc:
 	return nil
 }
 
-func (d *decoder) readByte() (c byte, err error) {
-	c, err = d.r.ReadByte()
+func (d *decoder) readByte() (byte, error) {
+	c, err := d.r.ReadByte()
 	if err == nil {
 		d.n++
 		return c, nil

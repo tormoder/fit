@@ -353,7 +353,11 @@ func (f *Field) parseComponents(ftypes map[string]*Type) error {
 		return nil
 	}
 
-	cscale := strings.Split(f.data[mSCALE], ",")
+	cscaleFull := f.data[mSCALE]
+	if new, rewrite := scaleRewrite[cscaleFull]; rewrite {
+		cscaleFull = new
+	}
+	cscale := strings.Split(cscaleFull, ",")
 	coffset := strings.Split(f.data[mOFFSET], ",")
 
 	if len(coffset) == 1 && coffset[0] == "" {
@@ -386,4 +390,9 @@ var bitsRewrite = map[string]string{
 	"88888888": "8,8,8,8,8,8,8,8",
 	"53":       "5,3",
 	"44":       "4,4",
+}
+
+var scaleRewrite = map[string]string{
+	"11":   "1,1",
+	"1111": "1,1,1,1",
 }

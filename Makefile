@@ -21,9 +21,9 @@ CHECK_TOOLS :=	golang.org/x/tools/cmd/goimports \
 		github.com/mdempsky/unconvert \
 		github.com/mvdan/interfacer/cmd/interfacer \
 		github.com/client9/misspell/cmd/misspell \
-		honnef.co/go/unused/cmd/unused \
-		honnef.co/go/simple/cmd/gosimple \
-		honnef.co/go/staticcheck/cmd/staticcheck \
+		honnef.co/go/tools/cmd/unused/ \
+		honnef.co/go/tools/cmd/gosimple \
+		honnef.co/go/tools/cmd/staticcheck \
 		github.com/mvdan/unparam
 
 .PHONY: all

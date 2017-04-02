@@ -1,5 +1,7 @@
 package fit
 
+import "fmt"
+
 // An IntegrityError reports that a header or file CRC check failed.
 type IntegrityError string
 
@@ -20,4 +22,13 @@ type NotSupportedError string
 
 func (e NotSupportedError) Error() string {
 	return "not supported: " + string(e)
+}
+
+type ioError struct {
+	op  string
+	err error
+}
+
+func (e ioError) Error() string {
+	return fmt.Sprintf("%s: %v", e.op, e.err)
 }

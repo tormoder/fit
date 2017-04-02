@@ -2,6 +2,7 @@ package fit
 
 import (
 	"fmt"
+	"io"
 
 	"github.com/tormoder/fit/dyncrc16"
 )
@@ -20,12 +21,17 @@ var (
 	errNotFit     = FormatError("header data type was not '.FIT'")
 	errHeaderSize = FormatError("illegal header size")
 	errHdrCRC     = IntegrityError("header checksum failed")
+	errReadSize   = ioError{op: "read size", err: io.ErrUnexpectedEOF}
+	errReadData   = ioError{op: "read data", err: io.ErrUnexpectedEOF}
 )
 
 func (d *decoder) decodeHeader() error {
 	size, err := d.r.ReadByte()
 	if err != nil {
-		return err
+		if err == io.EOF {
+			return errReadSize
+		}
+		return ioError{"reading size", err}
 	}
 	if size != headerSizeCRC && size != headerSizeNoCRC {
 		return errHeaderSize
@@ -33,7 +39,10 @@ func (d *decoder) decodeHeader() error {
 	d.h.Size = size
 
 	if err = d.readFull(d.tmp[:size-1]); err != nil {
-		return err
+		if err == io.EOF || err == io.ErrUnexpectedEOF {
+			return errReadData
+		}
+		return ioError{"reading data", err}
 	}
 
 	if err = checkProtocolVersion(d.tmp[0]); err != nil {

@@ -2,7 +2,6 @@ package fit
 
 import (
 	"bytes"
-	"io"
 	"testing"
 )
 
@@ -12,12 +11,12 @@ var decodeHeaderTests = []struct {
 	h   Header
 }{
 	{[]byte{11}, errHeaderSize, Header{}},
-	{[]byte{12}, io.ErrUnexpectedEOF, Header{}},
+	{[]byte{12}, errReadData, Header{}},
 	{[]byte{13}, errHeaderSize, Header{}},
-	{[]byte{14}, io.ErrUnexpectedEOF, Header{}},
+	{[]byte{14}, errReadData, Header{}},
 	{[]byte{15}, errHeaderSize, Header{}},
-	{[]byte{12, 0}, io.ErrUnexpectedEOF, Header{}},
-	{[]byte{14, 0}, io.ErrUnexpectedEOF, Header{}},
+	{[]byte{12, 0}, errReadData, Header{}},
+	{[]byte{14, 0}, errReadData, Header{}},
 	{
 		[]byte{14, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		NotSupportedError("protocol version 2.x not supported by sdk protocol version 1.0"),

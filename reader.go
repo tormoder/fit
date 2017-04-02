@@ -356,7 +356,7 @@ func (d *decoder) parseFileIdMsg() error {
 		return fmt.Errorf("error parsing definition message: %v", err)
 	}
 	if dm.globalMsgNum != MesgNumFileId {
-		return errors.New("parsed definiton message was not for file_id")
+		return fmt.Errorf("parsed definiton message was not for file_id (was %v)", dm.globalMsgNum)
 	}
 	d.defmsgs[dm.localMsgType] = dm
 

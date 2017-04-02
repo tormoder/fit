@@ -204,7 +204,7 @@ func logMesgNumVsMessages(msgs []string, l *log.Logger) {
 	}
 	l.Println("mesgnum-vs-msgs: implementation detail below, this may be automated in the future")
 	l.Println("mesgnum-vs-msgs: #mesgnum values != #generated messages, diff:", len(msgs))
-	l.Println("mesgnum-vs-msgs: remember to verify map in mappings.go for the following message(s):")
+	l.Println("mesgnum-vs-msgs: remember to verify map in codegen.go for the following message(s):")
 	for _, msg := range msgs {
 		l.Printf("mesgnum-vs-msgs: ----> mesgnum %q has no corresponding message\n", msg)
 	}

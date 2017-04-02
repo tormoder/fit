@@ -22,7 +22,7 @@ func (p unknownFieldSlice) Swap(i, j int) { p[i], p[j] = p[j], p[i] }
 func (p unknownFieldSlice) Less(i, j int) bool {
 	if p[i].MesgNum < p[j].MesgNum {
 		return true
-	} else if p[i].MesgNum < p[j].MesgNum {
+	} else if p[i].MesgNum > p[j].MesgNum {
 		return false
 	}
 	return p[i].FieldNum < p[j].FieldNum

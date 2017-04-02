@@ -280,11 +280,7 @@ func (f *Field) parseComponents(ftypes map[string]*Type) error {
 	debugln("parsing components for field", f.CCName)
 
 	switch f.FType.BaseType() {
-	case types.BaseUint8, types.BaseUint16, types.BaseUint32:
-	case types.BaseByte:
-		if !f.FType.Array() {
-			return fmt.Errorf("parseComponents: base type was byte but not an array")
-		}
+	case types.BaseUint8, types.BaseUint16, types.BaseUint32, types.BaseByte:
 	default:
 		return fmt.Errorf(
 			"parseComponents: unhandled base type (%s) for field %s",
@@ -358,12 +354,16 @@ func (f *Field) parseComponents(ftypes map[string]*Type) error {
 		cscaleFull = new
 	}
 	cscale := strings.Split(cscaleFull, ",")
-	coffset := strings.Split(f.data[mOFFSET], ",")
+	if len(cscale) == 1 && cscale[0] == "" {
+		cscale = nil
+	}
 
+	coffset := strings.Split(f.data[mOFFSET], ",")
 	if len(coffset) == 1 && coffset[0] == "" {
 		coffset = nil
 	}
-	if len(cscale) != len(components) {
+
+	if len(cscale) != 0 && len(cscale) != len(components) {
 		return fmt.Errorf(
 			"parseComponents: number of components (%d) and scales (%d) differ",
 			len(components), len(cscale))
@@ -375,6 +375,9 @@ func (f *Field) parseComponents(ftypes map[string]*Type) error {
 	}
 
 	for i := range f.Components {
+		if len(cscale) == 0 {
+			continue
+		}
 		f.Components[i].Scale = strings.TrimSpace(cscale[i])
 		if len(coffset) == 0 {
 			continue

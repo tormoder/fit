@@ -489,8 +489,13 @@ func (g *codeGenerator) genExpandComponentsArray(field *Field) {
 		g.p("uint32(x.", field.CCName, "[1]>>4) | uint32(x.", field.CCName, "[2]<< 4),")
 		g.p(")")
 		g.p("}")
+	case "EventTimestamp12":
+		g.p("// TODO")
+	case "MesgData":
+		g.p("// TODO")
 	default:
-		panic("genExpandComponentsArray: unhandled case")
+		fatalErr := fmt.Sprintf("genExpandComponentsArray: unhandled case for field %q", field.CCName)
+		panic(fatalErr)
 	}
 }
 
@@ -552,6 +557,9 @@ func (g *codeGenerator) genExpandComponentsDyn(msg *Msg, field *Field, dcsfis []
 }
 
 func (g *codeGenerator) genExpandComponentsMaskShift(msg *Msg, field *Field) {
+	if msg.CCName == "Hr" {
+		return
+	}
 	bits := 0
 	for _, comp := range field.Components {
 		tfield, tfound := msg.FieldByName[comp.Name]
@@ -629,6 +637,9 @@ func (g *codeGenerator) genAccumulators(msgs []*Msg) {
 	g.p("var (")
 	// For-loop hell.
 	for _, msg := range msgs {
+		if msg.CCName == "Hr" {
+			continue
+		}
 		for _, field := range msg.Fields {
 			for _, comp := range field.Components {
 				if comp.Accumulate {

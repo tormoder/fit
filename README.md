@@ -19,7 +19,18 @@ The two latest versions of Go is supported. The core decoding package has no
 external dependencies. The latest release of Go and a few external dependencies
 are required for running the full test suite and benchmarks.
 
-**Current supported FIT SDK version:** 16.20
+### FIT SDK Version Support
+
+**Current supported FIT SDK version:** 20.27
+
+**Warning:** Data Developers Fields are not yet supported (#21).
+
+Older supported profile versions:
+
+* 20.14
+* 16.20
+
+Other profile versions may work, but have not been tested.
 
 ### Features
 

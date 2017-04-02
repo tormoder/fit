@@ -376,7 +376,7 @@ func (d *decoder) parseDefinitionMessage(recordHeader byte) (*defmsg, error) {
 		return nil, FormatError("illegal local message number")
 	}
 
-	// next byte reserved
+	// Next byte reserved.
 	if err := d.skipByte(); err != nil {
 		return nil, err
 	}

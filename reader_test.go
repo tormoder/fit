@@ -121,12 +121,23 @@ func TestDecode(t *testing.T) {
 }
 
 func TestCheckIntegrity(t *testing.T) {
-	// Implicitly tested for all files in TestDecode.
-	// One example here.
-	err := fit.CheckIntegrity(bytes.NewReader(activitySmall()), false)
-	if err != nil {
-		t.Errorf("%q: failed: %v", activitySmallPath, err)
-	}
+	t.Run("ActivitySmall", func(t *testing.T) {
+		err := fit.CheckIntegrity(bytes.NewReader(activitySmall()), false)
+		if err != nil {
+			t.Errorf("%q: failed: %v", activitySmallPath, err)
+		}
+	})
+	t.Run("ActivitySDK", func(t *testing.T) {
+		fpath := filepath.Join(tdfolder, "fitsdk", "Activity.fit")
+		data, err := ioutil.ReadFile(fpath)
+		if err != nil {
+			t.Fatalf("reading %q failed: %v", fpath, err)
+		}
+		err = fit.CheckIntegrity(bytes.NewReader(data), false)
+		if err != nil {
+			t.Errorf("%q: failed: %v", fpath, err)
+		}
+	})
 }
 
 func TestDecodeHeader(t *testing.T) {

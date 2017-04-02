@@ -15,9 +15,9 @@ format designed for storing and sharing data from sport, fitness and health
 devices". Fit files are created by newer GPS enabled Garmin sport watches and
 cycling computers, such as the Forerunner/Edge/Fenix series.
 
-The core decoding package requires Go version 1.5 or higher and has no external
-dependencies. At least Go version 1.7 and a few external dependencies are
-required for running the test suite and benchmarks.
+The two latest versions of Go is supported. The core decoding package has no
+external dependencies. The latest release of Go and a few external dependencies
+are required for running the full test suite and benchmarks.
 
 **Current supported FIT SDK version:** 16.20
 

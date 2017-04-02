@@ -1,4 +1,4 @@
-package profile
+package profile_test
 
 import (
 	"bytes"
@@ -8,6 +8,8 @@ import (
 	"io/ioutil"
 	"path/filepath"
 	"testing"
+
+	"github.com/tormoder/fit/cmd/fitgen/internal/profile"
 )
 
 const (
@@ -23,22 +25,21 @@ func init() { flag.Parse() }
 
 var currentSDK = sdks[0]
 
-var defGenOpts = []GeneratorOption{
-	WithGenerationTimestamp(false),
+var defGenOpts = []profile.GeneratorOption{
+	profile.WithGenerationTimestamp(false),
 }
 
 func relPath(sdkVersion string) string {
 	return filepath.Join(testdata, sdkVersion+fileExt)
 }
 
-func (p *Profile) WriteTo(w io.Writer) (int64, error) {
+func writeProfile(p *profile.Profile, w io.Writer) error {
 	var err error
-	var n int
 	write := func(buf []byte) {
 		if err != nil {
 			return
 		}
-		n, err = w.Write(buf)
+		_, err = w.Write(buf)
 	}
 	write([]byte("// TYPES\n"))
 	write(p.TypesSource)
@@ -53,21 +54,21 @@ func (p *Profile) WriteTo(w io.Writer) (int64, error) {
 		write([]byte(mn))
 		write([]byte{'\n'})
 	}
-	return int64(n), err
+	return err
 }
 
-func (p *Profile) WriteToFile(path string) error {
+func writeProfileToFile(p *profile.Profile, path string) error {
 	buf := new(bytes.Buffer)
-	_, err := p.WriteTo(buf)
+	err := writeProfile(p, buf)
 	if err != nil {
 		return err
 	}
 	return ioutil.WriteFile(path, buf.Bytes(), 0644)
 }
 
-func (p *Profile) FnvHash() uint32 {
+func profileFingerprint(p *profile.Profile) uint32 {
 	h := fnv.New32a()
-	_, _ = p.WriteTo(h)
+	_ = writeProfile(p, h)
 	return h.Sum32()
 }
 
@@ -91,15 +92,15 @@ func TestGenerator(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			g, err := NewGenerator(path, data, defGenOpts...)
+			g, err := profile.NewGenerator(path, data, defGenOpts...)
 			if err != nil {
 				t.Fatal(err)
 			}
-			profile, err := g.GenerateProfile()
+			p, err := g.GenerateProfile()
 			if err != nil {
 				t.Fatal(err)
 			}
-			gotHash := profile.FnvHash()
+			gotHash := profileFingerprint(p)
 			if gotHash == sdk.goldenHash {
 				return
 			}
@@ -109,7 +110,7 @@ func TestGenerator(t *testing.T) {
 			} else {
 				path = path + goldenSuffix
 			}
-			err = profile.WriteToFile(path)
+			err = writeProfileToFile(p, path)
 			if err != nil {
 				t.Fatalf("error writing output: %v", err)
 			}
@@ -123,7 +124,7 @@ func TestGenerator(t *testing.T) {
 	}
 }
 
-var profileSink *Profile
+var profileSink *profile.Profile
 
 func BenchmarkGenerator(b *testing.B) {
 	for _, sdk := range sdks {
@@ -136,7 +137,7 @@ func BenchmarkGenerator(b *testing.B) {
 			b.ReportAllocs()
 			b.ResetTimer()
 			for i := 0; i < b.N; i++ {
-				g, err := NewGenerator(path, data, defGenOpts...)
+				g, err := profile.NewGenerator(path, data, defGenOpts...)
 				if err != nil {
 					b.Fatal(err)
 				}

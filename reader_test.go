@@ -252,13 +252,13 @@ func TestDecodeHeaderAndFileID(t *testing.T) {
 	}
 }
 
-func BenchmarkDecodeActivity(b *testing.B) {
+func BenchmarkDecode(b *testing.B) {
 	files := []struct {
 		desc, path string
 	}{
-		{"Small", activitySmallPath},
-		{"Large", activityLargePath},
-		{"WithComponents", activityComponentsPath},
+		{"ActivitySmall", activitySmallPath},
+		{"ActivityLarge", activityLargePath},
+		{"ActivityWithComponents", activityComponentsPath},
 	}
 	for _, file := range files {
 		b.Run(file.desc, func(b *testing.B) {

@@ -73,8 +73,8 @@ func (f *File) add(msg reflect.Value) {
 	}
 }
 
-// FileType returns the FIT file type.
-func (f *File) FileType() FileType {
+// Type returns the FIT file type.
+func (f *File) Type() FileType {
 	return f.FileId.Type
 }
 

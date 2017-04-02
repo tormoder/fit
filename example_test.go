@@ -32,7 +32,7 @@ func Example() {
 	fmt.Println(fit.FileId.GetProduct())
 
 	// Inspect the FIT file type
-	fmt.Println(fit.FileType())
+	fmt.Println(fit.Type())
 
 	// Get the actual activity
 	activity, err := fit.Activity()

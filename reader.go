@@ -7,24 +7,14 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"log"
 	"math"
-	"os"
 	"reflect"
 	"sort"
-	"strconv"
 	"time"
 
 	"github.com/tormoder/fit/dyncrc16"
 	"github.com/tormoder/fit/internal/base"
 )
-
-var debug, _ = strconv.ParseBool(os.Getenv("FIT_DEBUG"))
-
-func init() {
-	log.SetPrefix("fit: ")
-	log.SetFlags(0)
-}
 
 var (
 	le = binary.LittleEndian
@@ -47,6 +37,7 @@ type decoder struct {
 	lastTimeOffset int32
 
 	opts decodeOptions
+	log  bool
 
 	unknownFields   map[unknownField]int
 	unknownMessages map[MesgNum]int
@@ -96,6 +87,10 @@ func Decode(r io.Reader, opts ...DecodeOption) (*Fit, error) {
 }
 
 func (d *decoder) decode(r io.Reader, headerOnly, fileIDOnly, crcOnly bool) error {
+	if d.opts.logger != nil {
+		d.log = true
+	}
+
 	d.crc = dyncrc16.New()
 	tr := io.TeeReader(r, d.crc)
 
@@ -114,8 +109,8 @@ func (d *decoder) decode(r io.Reader, headerOnly, fileIDOnly, crcOnly bool) erro
 	d.fit = new(Fit)
 	d.fit.Header = d.h
 
-	if debug {
-		log.Println("header decoded:", d.h)
+	if d.log {
+		d.opts.logger.Println("header decoded:", d.h)
 	}
 
 	if headerOnly {
@@ -376,8 +371,8 @@ func (d *decoder) parseDefinitionMessage(recordHeader byte) (*defmsg, error) {
 	dm := defmsg{}
 	dm.localMsgType = recordHeader & localMesgNumMask
 	if dm.localMsgType > localMesgNumMask {
-		if debug {
-			log.Printf("illegal local message number: %d\n", dm.localMsgType)
+		if d.log {
+			d.opts.logger.Printf("illegal local message number: %d\n", dm.localMsgType)
 		}
 		return nil, FormatError("illegal local message number")
 	}
@@ -434,8 +429,8 @@ func (d *decoder) parseDefinitionMessage(recordHeader byte) (*defmsg, error) {
 		dm.fieldDefs[i] = fd
 	}
 
-	if debug {
-		log.Println("definition messages parsed:", dm)
+	if d.log {
+		d.opts.logger.Println("definition messages parsed:", dm)
 	}
 
 	return &dm, nil
@@ -556,8 +551,8 @@ func (d *decoder) parseDataMessage(recordHeader byte, compressed bool) (reflect.
 
 	// Data message has compressed timestamp header.
 	if d.timestamp == 0 {
-		if debug {
-			log.Println(
+		if d.log {
+			d.opts.logger.Println(
 				"warning: parsing compressed timestamp",
 				"header, but have no previous reference",
 				"time, skipping setting timestamp for message",
@@ -578,8 +573,8 @@ func (d *decoder) parseDataMessage(recordHeader byte, compressed bool) (reflect.
 		return d.parseDataFields(dm, knownMsg, msgv)
 	}
 
-	if debug {
-		log.Println(
+	if d.log {
+		d.opts.logger.Println(
 			"warning: parsing message with compressed timestamp header,",
 			"but did not find timestamp field in message of type", dm.globalMsgNum)
 
@@ -809,8 +804,8 @@ func (d *decoder) parseTimeStamp(dm *defmsg, fieldv reflect.Value, pfield *field
 		return
 	}
 	if u32 < systemTimeMarker {
-		if debug {
-			log.Println("parsing time: seconds from device power on")
+		if d.log {
+			d.opts.logger.Println("parsing time: seconds from device power on")
 		}
 	}
 

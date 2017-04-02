@@ -104,10 +104,18 @@ func (p *Parser) ParseMsg() (*PMsg, error) {
 	if p.typeParser {
 		return nil, errors.New("illegal operation: this is a type parser")
 	}
+
 	line, tok, lit := p.scan()
-	if tok == EOF || tok == EMPTY {
-		return nil, io.EOF
+	for {
+		if tok == EOF {
+			return nil, io.EOF
+		}
+		if tok != EMPTY {
+			break
+		}
+		line, tok, lit = p.scan()
 	}
+
 	if tok == FMSGSHDR {
 		line, tok, lit = p.scan()
 	}

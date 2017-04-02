@@ -342,7 +342,7 @@ func (f *Field) parseComponents(ftypes map[string]*Type) error {
 		}
 	}
 
-	if bitsTotal > 32 || bitsTotal < 0 {
+	if (bitsTotal > 32 && !f.FType.Array()) || bitsTotal < 0 {
 		return fmt.Errorf("parseComponents: illegal size for total number of bits: %d", bitsTotal)
 	}
 
@@ -386,10 +386,11 @@ func (f *Field) parseComponents(ftypes map[string]*Type) error {
 }
 
 var bitsRewrite = map[string]string{
-	"1616":     "16,16",
-	"88888888": "8,8,8,8,8,8,8,8",
-	"53":       "5,3",
-	"44":       "4,4",
+	"1616":      "16,16",
+	"88888888":  "8,8,8,8,8,8,8,8",
+	"888888888": "8,8,8,8,8,8,8,8,8",
+	"53":        "5,3",
+	"44":        "4,4",
 }
 
 var scaleRewrite = map[string]string{

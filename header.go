@@ -61,7 +61,7 @@ func (d *decoder) decodeHeader() error {
 		return nil
 	}
 
-	d.h.CRC = le.Uint16(d.tmp[11:13])
+	d.h.CRC = le.Uint16(d.tmp[11 : d.h.Size-1])
 	if d.h.CRC == 0x0000 {
 		return nil
 	}

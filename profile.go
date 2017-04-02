@@ -2,7 +2,7 @@
 // program found in 'cmd/fitgen/main.go'
 // DO NOT EDIT.
 // SDK Version: 16.20
-// Generation time: Wed Aug  3 18:04:19 UTC 2016
+// Generation time: Fri Sep  9 20:23:12 UTC 2016
 
 package fit
 
@@ -930,8 +930,70 @@ func getField(gmn MesgNum, fdn byte) (*field, bool) {
 	return f, true
 }
 
+var msgsTypes = [...]reflect.Type{
+	MesgNumFileId:                  reflect.TypeOf(FileIdMsg{}),
+	MesgNumFileCreator:             reflect.TypeOf(FileCreatorMsg{}),
+	MesgNumTimestampCorrelation:    reflect.TypeOf(TimestampCorrelationMsg{}),
+	MesgNumSoftware:                reflect.TypeOf(SoftwareMsg{}),
+	MesgNumSlaveDevice:             reflect.TypeOf(SlaveDeviceMsg{}),
+	MesgNumCapabilities:            reflect.TypeOf(CapabilitiesMsg{}),
+	MesgNumFileCapabilities:        reflect.TypeOf(FileCapabilitiesMsg{}),
+	MesgNumMesgCapabilities:        reflect.TypeOf(MesgCapabilitiesMsg{}),
+	MesgNumFieldCapabilities:       reflect.TypeOf(FieldCapabilitiesMsg{}),
+	MesgNumDeviceSettings:          reflect.TypeOf(DeviceSettingsMsg{}),
+	MesgNumUserProfile:             reflect.TypeOf(UserProfileMsg{}),
+	MesgNumHrmProfile:              reflect.TypeOf(HrmProfileMsg{}),
+	MesgNumSdmProfile:              reflect.TypeOf(SdmProfileMsg{}),
+	MesgNumBikeProfile:             reflect.TypeOf(BikeProfileMsg{}),
+	MesgNumZonesTarget:             reflect.TypeOf(ZonesTargetMsg{}),
+	MesgNumSport:                   reflect.TypeOf(SportMsg{}),
+	MesgNumHrZone:                  reflect.TypeOf(HrZoneMsg{}),
+	MesgNumSpeedZone:               reflect.TypeOf(SpeedZoneMsg{}),
+	MesgNumCadenceZone:             reflect.TypeOf(CadenceZoneMsg{}),
+	MesgNumPowerZone:               reflect.TypeOf(PowerZoneMsg{}),
+	MesgNumMetZone:                 reflect.TypeOf(MetZoneMsg{}),
+	MesgNumGoal:                    reflect.TypeOf(GoalMsg{}),
+	MesgNumActivity:                reflect.TypeOf(ActivityMsg{}),
+	MesgNumSession:                 reflect.TypeOf(SessionMsg{}),
+	MesgNumLap:                     reflect.TypeOf(LapMsg{}),
+	MesgNumLength:                  reflect.TypeOf(LengthMsg{}),
+	MesgNumRecord:                  reflect.TypeOf(RecordMsg{}),
+	MesgNumEvent:                   reflect.TypeOf(EventMsg{}),
+	MesgNumDeviceInfo:              reflect.TypeOf(DeviceInfoMsg{}),
+	MesgNumTrainingFile:            reflect.TypeOf(TrainingFileMsg{}),
+	MesgNumHrv:                     reflect.TypeOf(HrvMsg{}),
+	MesgNumCameraEvent:             reflect.TypeOf(CameraEventMsg{}),
+	MesgNumGyroscopeData:           reflect.TypeOf(GyroscopeDataMsg{}),
+	MesgNumAccelerometerData:       reflect.TypeOf(AccelerometerDataMsg{}),
+	MesgNumThreeDSensorCalibration: reflect.TypeOf(ThreeDSensorCalibrationMsg{}),
+	MesgNumVideoFrame:              reflect.TypeOf(VideoFrameMsg{}),
+	MesgNumObdiiData:               reflect.TypeOf(ObdiiDataMsg{}),
+	MesgNumNmeaSentence:            reflect.TypeOf(NmeaSentenceMsg{}),
+	MesgNumAviationAttitude:        reflect.TypeOf(AviationAttitudeMsg{}),
+	MesgNumVideo:                   reflect.TypeOf(VideoMsg{}),
+	MesgNumVideoTitle:              reflect.TypeOf(VideoTitleMsg{}),
+	MesgNumVideoDescription:        reflect.TypeOf(VideoDescriptionMsg{}),
+	MesgNumVideoClip:               reflect.TypeOf(VideoClipMsg{}),
+	MesgNumCourse:                  reflect.TypeOf(CourseMsg{}),
+	MesgNumCoursePoint:             reflect.TypeOf(CoursePointMsg{}),
+	MesgNumSegmentId:               reflect.TypeOf(SegmentIdMsg{}),
+	MesgNumSegmentLeaderboardEntry: reflect.TypeOf(SegmentLeaderboardEntryMsg{}),
+	MesgNumSegmentPoint:            reflect.TypeOf(SegmentPointMsg{}),
+	MesgNumSegmentLap:              reflect.TypeOf(SegmentLapMsg{}),
+	MesgNumSegmentFile:             reflect.TypeOf(SegmentFileMsg{}),
+	MesgNumWorkout:                 reflect.TypeOf(WorkoutMsg{}),
+	MesgNumWorkoutStep:             reflect.TypeOf(WorkoutStepMsg{}),
+	MesgNumSchedule:                reflect.TypeOf(ScheduleMsg{}),
+	MesgNumTotals:                  reflect.TypeOf(TotalsMsg{}),
+	MesgNumWeightScale:             reflect.TypeOf(WeightScaleMsg{}),
+	MesgNumBloodPressure:           reflect.TypeOf(BloodPressureMsg{}),
+	MesgNumMonitoringInfo:          reflect.TypeOf(MonitoringInfoMsg{}),
+	MesgNumMonitoring:              reflect.TypeOf(MonitoringMsg{}),
+	MesgNumMemoGlob:                reflect.TypeOf(MemoGlobMsg{}),
+}
+
 var msgsAllInvalid = [...]reflect.Value{
-	MesgNumFileId: reflect.ValueOf(&FileIdMsg{
+	MesgNumFileId: reflect.ValueOf(FileIdMsg{
 		0xFF,
 		0xFFFF,
 		0xFFFF,
@@ -940,27 +1002,27 @@ var msgsAllInvalid = [...]reflect.Value{
 		0xFFFF,
 		"",
 	}),
-	MesgNumFileCreator: reflect.ValueOf(&FileCreatorMsg{
+	MesgNumFileCreator: reflect.ValueOf(FileCreatorMsg{
 		0xFFFF,
 		0xFF,
 	}),
-	MesgNumTimestampCorrelation: reflect.ValueOf(&TimestampCorrelationMsg{}),
-	MesgNumSoftware: reflect.ValueOf(&SoftwareMsg{
+	MesgNumTimestampCorrelation: reflect.ValueOf(TimestampCorrelationMsg{}),
+	MesgNumSoftware: reflect.ValueOf(SoftwareMsg{
 		0xFFFF,
 		0xFFFF,
 		"",
 	}),
-	MesgNumSlaveDevice: reflect.ValueOf(&SlaveDeviceMsg{
+	MesgNumSlaveDevice: reflect.ValueOf(SlaveDeviceMsg{
 		0xFFFF,
 		0xFFFF,
 	}),
-	MesgNumCapabilities: reflect.ValueOf(&CapabilitiesMsg{
+	MesgNumCapabilities: reflect.ValueOf(CapabilitiesMsg{
 		nil,
 		nil,
 		0x00000000,
 		0x00000000,
 	}),
-	MesgNumFileCapabilities: reflect.ValueOf(&FileCapabilitiesMsg{
+	MesgNumFileCapabilities: reflect.ValueOf(FileCapabilitiesMsg{
 		0xFFFF,
 		0xFF,
 		0x00,
@@ -968,26 +1030,26 @@ var msgsAllInvalid = [...]reflect.Value{
 		0xFFFF,
 		0xFFFFFFFF,
 	}),
-	MesgNumMesgCapabilities: reflect.ValueOf(&MesgCapabilitiesMsg{
+	MesgNumMesgCapabilities: reflect.ValueOf(MesgCapabilitiesMsg{
 		0xFFFF,
 		0xFF,
 		0xFFFF,
 		0xFF,
 		0xFFFF,
 	}),
-	MesgNumFieldCapabilities: reflect.ValueOf(&FieldCapabilitiesMsg{
+	MesgNumFieldCapabilities: reflect.ValueOf(FieldCapabilitiesMsg{
 		0xFFFF,
 		0xFF,
 		0xFFFF,
 		0xFF,
 		0xFFFF,
 	}),
-	MesgNumDeviceSettings: reflect.ValueOf(&DeviceSettingsMsg{
+	MesgNumDeviceSettings: reflect.ValueOf(DeviceSettingsMsg{
 		0xFF,
 		0xFFFFFFFF,
 		nil,
 	}),
-	MesgNumUserProfile: reflect.ValueOf(&UserProfileMsg{
+	MesgNumUserProfile: reflect.ValueOf(UserProfileMsg{
 		0xFFFF,
 		"",
 		0xFF,
@@ -1012,14 +1074,14 @@ var msgsAllInvalid = [...]reflect.Value{
 		nil,
 		0xFF,
 	}),
-	MesgNumHrmProfile: reflect.ValueOf(&HrmProfileMsg{
+	MesgNumHrmProfile: reflect.ValueOf(HrmProfileMsg{
 		0xFFFF,
 		0xFF,
 		0xFFFF,
 		0xFF,
 		0xFF,
 	}),
-	MesgNumSdmProfile: reflect.ValueOf(&SdmProfileMsg{
+	MesgNumSdmProfile: reflect.ValueOf(SdmProfileMsg{
 		0xFFFF,
 		0xFF,
 		0xFFFF,
@@ -1029,7 +1091,7 @@ var msgsAllInvalid = [...]reflect.Value{
 		0xFF,
 		0xFF,
 	}),
-	MesgNumBikeProfile: reflect.ValueOf(&BikeProfileMsg{
+	MesgNumBikeProfile: reflect.ValueOf(BikeProfileMsg{
 		0xFFFF,
 		"",
 		0xFF,
@@ -1063,45 +1125,45 @@ var msgsAllInvalid = [...]reflect.Value{
 		nil,
 		0xFF,
 	}),
-	MesgNumZonesTarget: reflect.ValueOf(&ZonesTargetMsg{
+	MesgNumZonesTarget: reflect.ValueOf(ZonesTargetMsg{
 		0xFF,
 		0xFF,
 		0xFFFF,
 		0xFF,
 		0xFF,
 	}),
-	MesgNumSport: reflect.ValueOf(&SportMsg{
+	MesgNumSport: reflect.ValueOf(SportMsg{
 		0xFF,
 		0xFF,
 		"",
 	}),
-	MesgNumHrZone: reflect.ValueOf(&HrZoneMsg{
+	MesgNumHrZone: reflect.ValueOf(HrZoneMsg{
 		0xFFFF,
 		0xFF,
 		"",
 	}),
-	MesgNumSpeedZone: reflect.ValueOf(&SpeedZoneMsg{
+	MesgNumSpeedZone: reflect.ValueOf(SpeedZoneMsg{
 		0xFFFF,
 		0xFFFF,
 		"",
 	}),
-	MesgNumCadenceZone: reflect.ValueOf(&CadenceZoneMsg{
+	MesgNumCadenceZone: reflect.ValueOf(CadenceZoneMsg{
 		0xFFFF,
 		0xFF,
 		"",
 	}),
-	MesgNumPowerZone: reflect.ValueOf(&PowerZoneMsg{
+	MesgNumPowerZone: reflect.ValueOf(PowerZoneMsg{
 		0xFFFF,
 		0xFFFF,
 		"",
 	}),
-	MesgNumMetZone: reflect.ValueOf(&MetZoneMsg{
+	MesgNumMetZone: reflect.ValueOf(MetZoneMsg{
 		0xFFFF,
 		0xFF,
 		0xFFFF,
 		0xFF,
 	}),
-	MesgNumGoal: reflect.ValueOf(&GoalMsg{
+	MesgNumGoal: reflect.ValueOf(GoalMsg{
 		0xFFFF,
 		0xFF,
 		0xFF,
@@ -1115,7 +1177,7 @@ var msgsAllInvalid = [...]reflect.Value{
 		0xFFFF,
 		0xFF,
 	}),
-	MesgNumActivity: reflect.ValueOf(&ActivityMsg{
+	MesgNumActivity: reflect.ValueOf(ActivityMsg{
 		timeBase,
 		0xFFFFFFFF,
 		0xFFFF,
@@ -1125,7 +1187,7 @@ var msgsAllInvalid = [...]reflect.Value{
 		timeBase,
 		0xFF,
 	}),
-	MesgNumSession: reflect.ValueOf(&SessionMsg{
+	MesgNumSession: reflect.ValueOf(SessionMsg{
 		0xFFFF,
 		timeBase,
 		0xFF,
@@ -1215,7 +1277,7 @@ var msgsAllInvalid = [...]reflect.Value{
 		0xFFFFFFFF,
 		0xFFFFFFFF,
 	}),
-	MesgNumLap: reflect.ValueOf(&LapMsg{
+	MesgNumLap: reflect.ValueOf(LapMsg{
 		0xFFFF,
 		timeBase,
 		0xFF,
@@ -1299,7 +1361,7 @@ var msgsAllInvalid = [...]reflect.Value{
 		0xFFFFFFFF,
 		0xFFFFFFFF,
 	}),
-	MesgNumLength: reflect.ValueOf(&LengthMsg{
+	MesgNumLength: reflect.ValueOf(LengthMsg{
 		0xFFFF,
 		timeBase,
 		0xFF,
@@ -1319,7 +1381,7 @@ var msgsAllInvalid = [...]reflect.Value{
 		nil,
 		nil,
 	}),
-	MesgNumRecord: reflect.ValueOf(&RecordMsg{
+	MesgNumRecord: reflect.ValueOf(RecordMsg{
 		timeBase,
 		NewLatitudeInvalid(),
 		NewLongitudeInvalid(),
@@ -1369,7 +1431,7 @@ var msgsAllInvalid = [...]reflect.Value{
 		0xFFFFFFFF,
 		0xFFFFFFFF,
 	}),
-	MesgNumEvent: reflect.ValueOf(&EventMsg{
+	MesgNumEvent: reflect.ValueOf(EventMsg{
 		timeBase,
 		0xFF,
 		0xFF,
@@ -1383,7 +1445,7 @@ var msgsAllInvalid = [...]reflect.Value{
 		0xFF,
 		0xFF,
 	}),
-	MesgNumDeviceInfo: reflect.ValueOf(&DeviceInfoMsg{
+	MesgNumDeviceInfo: reflect.ValueOf(DeviceInfoMsg{
 		timeBase,
 		0xFF,
 		0xFF,
@@ -1403,7 +1465,7 @@ var msgsAllInvalid = [...]reflect.Value{
 		0xFF,
 		"",
 	}),
-	MesgNumTrainingFile: reflect.ValueOf(&TrainingFileMsg{
+	MesgNumTrainingFile: reflect.ValueOf(TrainingFileMsg{
 		timeBase,
 		0xFF,
 		0xFFFF,
@@ -1411,21 +1473,21 @@ var msgsAllInvalid = [...]reflect.Value{
 		0xFFFFFFFF,
 		timeBase,
 	}),
-	MesgNumHrv: reflect.ValueOf(&HrvMsg{
+	MesgNumHrv: reflect.ValueOf(HrvMsg{
 		nil,
 	}),
-	MesgNumCameraEvent:             reflect.ValueOf(&CameraEventMsg{}),
-	MesgNumGyroscopeData:           reflect.ValueOf(&GyroscopeDataMsg{}),
-	MesgNumAccelerometerData:       reflect.ValueOf(&AccelerometerDataMsg{}),
-	MesgNumThreeDSensorCalibration: reflect.ValueOf(&ThreeDSensorCalibrationMsg{}),
-	MesgNumVideoFrame:              reflect.ValueOf(&VideoFrameMsg{}),
-	MesgNumObdiiData:               reflect.ValueOf(&ObdiiDataMsg{}),
-	MesgNumNmeaSentence: reflect.ValueOf(&NmeaSentenceMsg{
+	MesgNumCameraEvent:             reflect.ValueOf(CameraEventMsg{}),
+	MesgNumGyroscopeData:           reflect.ValueOf(GyroscopeDataMsg{}),
+	MesgNumAccelerometerData:       reflect.ValueOf(AccelerometerDataMsg{}),
+	MesgNumThreeDSensorCalibration: reflect.ValueOf(ThreeDSensorCalibrationMsg{}),
+	MesgNumVideoFrame:              reflect.ValueOf(VideoFrameMsg{}),
+	MesgNumObdiiData:               reflect.ValueOf(ObdiiDataMsg{}),
+	MesgNumNmeaSentence: reflect.ValueOf(NmeaSentenceMsg{
 		timeBase,
 		0xFFFF,
 		"",
 	}),
-	MesgNumAviationAttitude: reflect.ValueOf(&AviationAttitudeMsg{
+	MesgNumAviationAttitude: reflect.ValueOf(AviationAttitudeMsg{
 		timeBase,
 		0xFFFF,
 		nil,
@@ -1439,24 +1501,24 @@ var msgsAllInvalid = [...]reflect.Value{
 		nil,
 		nil,
 	}),
-	MesgNumVideo: reflect.ValueOf(&VideoMsg{}),
-	MesgNumVideoTitle: reflect.ValueOf(&VideoTitleMsg{
+	MesgNumVideo: reflect.ValueOf(VideoMsg{}),
+	MesgNumVideoTitle: reflect.ValueOf(VideoTitleMsg{
 		0xFFFF,
 		0xFFFF,
 		"",
 	}),
-	MesgNumVideoDescription: reflect.ValueOf(&VideoDescriptionMsg{
+	MesgNumVideoDescription: reflect.ValueOf(VideoDescriptionMsg{
 		0xFFFF,
 		0xFFFF,
 		"",
 	}),
-	MesgNumVideoClip: reflect.ValueOf(&VideoClipMsg{}),
-	MesgNumCourse: reflect.ValueOf(&CourseMsg{
+	MesgNumVideoClip: reflect.ValueOf(VideoClipMsg{}),
+	MesgNumCourse: reflect.ValueOf(CourseMsg{
 		0xFF,
 		"",
 		0x00000000,
 	}),
-	MesgNumCoursePoint: reflect.ValueOf(&CoursePointMsg{
+	MesgNumCoursePoint: reflect.ValueOf(CoursePointMsg{
 		0xFFFF,
 		timeBase,
 		NewLatitudeInvalid(),
@@ -1466,7 +1528,7 @@ var msgsAllInvalid = [...]reflect.Value{
 		"",
 		0xFF,
 	}),
-	MesgNumSegmentId: reflect.ValueOf(&SegmentIdMsg{
+	MesgNumSegmentId: reflect.ValueOf(SegmentIdMsg{
 		"",
 		"",
 		0xFF,
@@ -1477,7 +1539,7 @@ var msgsAllInvalid = [...]reflect.Value{
 		0xFF,
 		0xFF,
 	}),
-	MesgNumSegmentLeaderboardEntry: reflect.ValueOf(&SegmentLeaderboardEntryMsg{
+	MesgNumSegmentLeaderboardEntry: reflect.ValueOf(SegmentLeaderboardEntryMsg{
 		0xFFFF,
 		"",
 		0xFF,
@@ -1485,7 +1547,7 @@ var msgsAllInvalid = [...]reflect.Value{
 		0xFFFFFFFF,
 		0xFFFFFFFF,
 	}),
-	MesgNumSegmentPoint: reflect.ValueOf(&SegmentPointMsg{
+	MesgNumSegmentPoint: reflect.ValueOf(SegmentPointMsg{
 		0xFFFF,
 		NewLatitudeInvalid(),
 		NewLongitudeInvalid(),
@@ -1493,7 +1555,7 @@ var msgsAllInvalid = [...]reflect.Value{
 		0xFFFF,
 		nil,
 	}),
-	MesgNumSegmentLap: reflect.ValueOf(&SegmentLapMsg{
+	MesgNumSegmentLap: reflect.ValueOf(SegmentLapMsg{
 		0xFFFF,
 		timeBase,
 		0xFF,
@@ -1568,7 +1630,7 @@ var msgsAllInvalid = [...]reflect.Value{
 		0xFFFF,
 		0xFFFF,
 	}),
-	MesgNumSegmentFile: reflect.ValueOf(&SegmentFileMsg{
+	MesgNumSegmentFile: reflect.ValueOf(SegmentFileMsg{
 		0xFFFF,
 		"",
 		0xFF,
@@ -1577,13 +1639,13 @@ var msgsAllInvalid = [...]reflect.Value{
 		nil,
 		nil,
 	}),
-	MesgNumWorkout: reflect.ValueOf(&WorkoutMsg{
+	MesgNumWorkout: reflect.ValueOf(WorkoutMsg{
 		0xFF,
 		0x00000000,
 		0xFFFF,
 		"",
 	}),
-	MesgNumWorkoutStep: reflect.ValueOf(&WorkoutStepMsg{
+	MesgNumWorkoutStep: reflect.ValueOf(WorkoutStepMsg{
 		0xFFFF,
 		"",
 		0xFF,
@@ -1594,7 +1656,7 @@ var msgsAllInvalid = [...]reflect.Value{
 		0xFFFFFFFF,
 		0xFF,
 	}),
-	MesgNumSchedule: reflect.ValueOf(&ScheduleMsg{
+	MesgNumSchedule: reflect.ValueOf(ScheduleMsg{
 		0xFFFF,
 		0xFFFF,
 		0xFFFFFFFF,
@@ -1603,7 +1665,7 @@ var msgsAllInvalid = [...]reflect.Value{
 		0xFF,
 		timeBase,
 	}),
-	MesgNumTotals: reflect.ValueOf(&TotalsMsg{
+	MesgNumTotals: reflect.ValueOf(TotalsMsg{
 		0xFFFF,
 		timeBase,
 		0xFFFFFFFF,
@@ -1614,7 +1676,7 @@ var msgsAllInvalid = [...]reflect.Value{
 		0xFFFF,
 		0xFFFFFFFF,
 	}),
-	MesgNumWeightScale: reflect.ValueOf(&WeightScaleMsg{
+	MesgNumWeightScale: reflect.ValueOf(WeightScaleMsg{
 		timeBase,
 		0xFFFF,
 		0xFFFF,
@@ -1629,7 +1691,7 @@ var msgsAllInvalid = [...]reflect.Value{
 		0xFF,
 		0xFFFF,
 	}),
-	MesgNumBloodPressure: reflect.ValueOf(&BloodPressureMsg{
+	MesgNumBloodPressure: reflect.ValueOf(BloodPressureMsg{
 		timeBase,
 		0xFFFF,
 		0xFFFF,
@@ -1642,11 +1704,11 @@ var msgsAllInvalid = [...]reflect.Value{
 		0xFF,
 		0xFFFF,
 	}),
-	MesgNumMonitoringInfo: reflect.ValueOf(&MonitoringInfoMsg{
+	MesgNumMonitoringInfo: reflect.ValueOf(MonitoringInfoMsg{
 		timeBase,
 		timeBase,
 	}),
-	MesgNumMonitoring: reflect.ValueOf(&MonitoringMsg{
+	MesgNumMonitoring: reflect.ValueOf(MonitoringMsg{
 		timeBase,
 		0xFF,
 		0xFFFF,
@@ -1660,9 +1722,11 @@ var msgsAllInvalid = [...]reflect.Value{
 		0xFFFF,
 		timeBase,
 	}),
-	MesgNumMemoGlob: reflect.ValueOf(&MemoGlobMsg{}),
+	MesgNumMemoGlob: reflect.ValueOf(MemoGlobMsg{}),
 }
 
 func getMesgAllInvalid(mn MesgNum) reflect.Value {
-	return reflect.ValueOf(msgsAllInvalid[mn].Interface()).Elem()
+	val := reflect.New(msgsTypes[mn]).Elem()
+	val.Set(msgsAllInvalid[mn])
+	return val
 }

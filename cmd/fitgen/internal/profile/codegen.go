@@ -615,6 +615,7 @@ func (g *codeGenerator) genProfile(types map[string]*Type, msgs []*Msg, useSwitc
 	}
 	g.genFieldsArray(msgs)
 	g.genGetFieldArrayLookup(msgs)
+	g.genMsgTypesArray(msgs)
 	g.genZeroValueMsgsArray(msgs)
 	g.genGetZeroValueMsgsArrayLookup(msgs)
 }
@@ -786,7 +787,7 @@ func (g *codeGenerator) genZeroValueMsgsVars(msgs []*Msg) {
 	g.p()
 	g.p("var (")
 	for _, msg := range msgs {
-		g.p(unexport(msg.CCName), "AI = reflect.ValueOf(&", msg.CCName, "Msg{")
+		g.p(unexport(msg.CCName), "AI = reflect.ValueOf(", msg.CCName, "Msg{")
 		for _, f := range msg.Fields {
 			g.p(f.GoInvalid, ",")
 		}
@@ -801,11 +802,20 @@ func (g *codeGenerator) genZeroValueMsgsArray(msgs []*Msg) {
 	g.p("var msgsAllInvalid = [...]reflect.Value{")
 	for _, msg := range msgs {
 
-		g.p("MesgNum", msg.CCName, ": reflect.ValueOf(&", msg.CCName, "Msg{")
+		g.p("MesgNum", msg.CCName, ": reflect.ValueOf(", msg.CCName, "Msg{")
 		for _, f := range msg.Fields {
 			g.p(f.GoInvalid, ",")
 		}
 		g.p("}),")
+	}
+	g.p("}")
+}
+
+func (g *codeGenerator) genMsgTypesArray(msgs []*Msg) {
+	g.p()
+	g.p("var msgsTypes = [...]reflect.Type{")
+	for _, msg := range msgs {
+		g.p("MesgNum", msg.CCName, ": reflect.TypeOf(", msg.CCName, "Msg{}),")
 	}
 	g.p("}")
 }
@@ -827,6 +837,8 @@ func (g *codeGenerator) genGetZeroValueMsgsSwitch(msgs []*Msg) {
 func (g *codeGenerator) genGetZeroValueMsgsArrayLookup(msgs []*Msg) {
 	g.p()
 	g.p("func getMesgAllInvalid(mn MesgNum) reflect.Value {")
-	g.p("return reflect.ValueOf(msgsAllInvalid[mn].Interface()).Elem()")
+	g.p("val := reflect.New(msgsTypes[mn]).Elem()")
+	g.p("val.Set(msgsAllInvalid[mn])")
+	g.p("return val")
 	g.p("}")
 }

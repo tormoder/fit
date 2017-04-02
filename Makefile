@@ -73,7 +73,7 @@ clean:
 
 .PHONY: gcoprofile 
 gcoprofile:
-	git checkout types.go messages.go profile.go
+	git checkout types.go messages.go profile.go types_string.go
 
 .PHONY: profcpu
 profcpu:

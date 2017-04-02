@@ -54,40 +54,39 @@ func MakeNative(b Base, array bool) Fit {
 	return f
 }
 
-// Fit bit-packing layout:
+// type Fit uint16 - bit-packing layout:
 //
-// ----------------------------------------
-// Three most significant bits: Kind
-// Forth most significant bit:  Array flag
-// Four least significant bits: Base type
-// ----------------------------------------
+// +----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+
+// | bF | bE | bD | bC | bB | bA | b9 | b8 | b7 | b6 | b5 | b4 | b3 | b2 | b1 | b0 |
+// +----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+
+//  \________________________________/\______________/\__/\________________________/
 //
-type Fit byte
+//                Unused                    Kind      Array       Base type
+type Fit uint16
 
 func (f Fit) setKind(k Kind) Fit {
-	k = k << 5
-	return Fit(byte(f) | byte(k))
+	return Fit(uint16(f) | uint16(k)<<6)
 }
 
 func (f Fit) setArray() Fit {
-	f = f | 0x10
+	f = f | 0x20
 	return f
 }
 
 func (f Fit) setBase(b Base) Fit {
-	b = b & 0x0F
-	return Fit(byte(f) | byte(b))
+	return Fit(uint16(f) | uint16(b&0x1F))
 }
+
 func (f Fit) Kind() Kind {
-	return Kind((f & 0xE0) >> 5)
+	return Kind((f & 0x1C0) >> 6)
 }
 
 func (f Fit) Array() bool {
-	return (f&0x10)>>4 == 1
+	return (f&0x20)>>5 == 1
 }
 
 func (f Fit) BaseType() Base {
-	return Base(f & 0x0F)
+	return Base(f & 0x1F)
 }
 
 func (f Fit) Valid() bool {

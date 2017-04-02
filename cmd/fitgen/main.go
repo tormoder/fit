@@ -81,6 +81,9 @@ func main() {
 		inputData, err = readDataFromZIP(input)
 	case ".xls", ".xlsx":
 		inputData, err = readDataFromXLSX(input)
+		if *sdkOverride == "" {
+			log.Fatal("-sdk flag required if input is .xls(x)")
+		}
 	default:
 		l.Fatalln("input file must be of type [.zip | .xls | .xlsx], got:", inputExt)
 	}

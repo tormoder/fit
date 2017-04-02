@@ -173,7 +173,7 @@ func (d *decoder) decodeFileData() error {
 		case (b & compressedHeaderMask) == compressedHeaderMask:
 			msg, err = d.parseDataMessage(b, true)
 			if err != nil {
-				return fmt.Errorf("compressed timestamp message: %v", err)
+				return fmt.Errorf("parsing compressed timestamp message: %v", err)
 			}
 			if msg.IsValid() {
 				d.fit.add(msg)

@@ -482,7 +482,7 @@ func (d *decoder) parseDefinitionMessage(recordHeader byte) (*defmsg, error) {
 	case bigEndian:
 		dm.arch = be
 	default:
-		return nil, fmt.Errorf("unknow arch: %#x", arch)
+		return nil, fmt.Errorf("unknown arch: %#x", arch)
 	}
 
 	if err = d.readFull(d.tmp[:2]); err != nil {

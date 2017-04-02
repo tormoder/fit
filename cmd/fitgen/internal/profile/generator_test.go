@@ -85,8 +85,10 @@ var sdks = []sdk{
 
 func TestGenerator(t *testing.T) {
 	for _, sdk := range sdks {
+		sdk := sdk // Capture range variable.
 		sdkFullVer := fmt.Sprintf("%d.%d", sdk.majVer, sdk.minVer)
 		t.Run(sdkFullVer, func(t *testing.T) {
+			t.Parallel()
 			if sdk == currentSDK && testing.Short() {
 				t.Skip("skipping test in short mode")
 			}

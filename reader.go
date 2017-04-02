@@ -20,8 +20,14 @@ var (
 )
 
 type decoder struct {
-	r       io.Reader
-	n       uint32
+	r     io.Reader
+	bytes struct {
+		limit int
+		n     int
+		buf   [4096]byte
+		i, j  int
+	}
+
 	crc     dyncrc16.Hash16
 	tmp     [maxFieldSize]byte
 	defmsgs [maxLocalMesgs]*defmsg
@@ -94,6 +100,7 @@ func (d *decoder) decode(r io.Reader, headerOnly, fileIDOnly, crcOnly bool) erro
 
 	d.fit = new(Fit)
 	d.fit.Header = d.h
+	d.bytes.limit = int(d.h.DataSize)
 
 	if d.debug {
 		d.opts.logger.Println("header decoded:", d.h)
@@ -133,7 +140,7 @@ func (d *decoder) decode(r io.Reader, headerOnly, fileIDOnly, crcOnly bool) erro
 		return err
 	}
 
-	for d.n < d.h.DataSize-2 {
+	for d.bytes.n < d.bytes.limit {
 		var (
 			b   byte
 			dm  *defmsg
@@ -175,18 +182,19 @@ func (d *decoder) decode(r io.Reader, headerOnly, fileIDOnly, crcOnly bool) erro
 	}
 
 crc:
-	// Check invariant pre-read CRC: d.h.DataSize == d.n.
-	if !crcOnly && d.n != d.h.DataSize {
-		fatalErr := fmt.Sprintf("internal decoder error: pre-crc check: data size is %d, but d.n is %d", d.h.DataSize, d.n)
+	// Check invariant pre-read CRC:
+	if !crcOnly && d.bytes.n != d.bytes.limit {
+		fatalErr := fmt.Sprintf("internal decoder error: pre-crc check: data size limit is %d, but n is %d", d.bytes.limit, d.bytes.n)
 		panic(fatalErr)
 	}
 	if d.debug {
 		d.opts.logger.Printf("expecting crc value: 0x%x", d.crc.Sum16())
 	}
-	if err := d.readFull(d.tmp[:bytesForCRC]); err != nil {
+	if _, err = io.ReadFull(d.r, d.tmp[:bytesForCRC]); err != nil {
 		err = noEOF(err)
 		return fmt.Errorf("error parsing file CRC: %v", err)
 	}
+	d.crc.Write(d.tmp[:bytesForCRC])
 	d.fit.CRC = le.Uint16(d.tmp[:bytesForCRC])
 	if d.debug {
 		d.opts.logger.Printf("read crc value: 0x%x", d.fit.CRC)
@@ -199,31 +207,71 @@ crc:
 	return nil
 }
 
-func (d *decoder) readByte() (byte, error) {
-	_, err := io.ReadFull(d.r, d.tmp[:1])
-	if err == nil {
-		d.n++
-		d.crc.Write(d.tmp[:1])
-		return d.tmp[0], nil
+func (d *decoder) fill() error {
+	if d.bytes.i != d.bytes.j {
+		panic("internal decoder error: fill called when unread bytes exist")
 	}
-	err = noEOF(err)
-	return 0, err
+	if d.bytes.n == d.bytes.limit {
+		return FormatError("fit file requested data beyond data size listed in header")
+	}
+
+	d.bytes.i, d.bytes.j = 0, 0
+	end := len(d.bytes.buf)
+	max := d.bytes.limit - d.bytes.n
+	if max < end {
+		end = max
+	}
+
+	n, err := d.r.Read(d.bytes.buf[d.bytes.i:end])
+	d.bytes.j += n
+	if n > 0 {
+		err = nil
+		d.crc.Write(d.bytes.buf[d.bytes.i:d.bytes.j])
+	}
+
+	return err
+}
+
+func (d *decoder) readByte() (byte, error) {
+	for d.bytes.i == d.bytes.j {
+		if err := d.fill(); err != nil {
+			err = noEOF(err)
+			return 0, err
+		}
+	}
+	x := d.bytes.buf[d.bytes.i]
+	d.bytes.i++
+	d.bytes.n++
+	return x, nil
 }
 
 func (d *decoder) skipByte() error {
-	_, err := d.readByte()
-	return err
+	for d.bytes.i == d.bytes.j {
+		if err := d.fill(); err != nil {
+			err = noEOF(err)
+			return err
+		}
+	}
+	d.bytes.i++
+	d.bytes.n++
+	return nil
 }
 
-func (d *decoder) readFull(buf []byte) error {
-	n, err := io.ReadFull(d.r, buf)
-	if err == nil {
-		d.n += uint32(n)
-		d.crc.Write(buf)
-		return nil
+func (d *decoder) readFull(p []byte) error {
+	for {
+		n := copy(p, d.bytes.buf[d.bytes.i:d.bytes.j])
+		p = p[n:]
+		d.bytes.i += n
+		d.bytes.n += n
+		if len(p) == 0 {
+			break
+		}
+		if err := d.fill(); err != nil {
+			err = noEOF(err)
+			return err
+		}
 	}
-	err = noEOF(err)
-	return err
+	return nil
 }
 
 type defmsg struct {

@@ -31,7 +31,7 @@ var decodeTestFiles = [...]struct {
 		"fitsdk",
 		"MonitoringFile.fit",
 		false,
-		8432119481642341932,
+		2156309975902518982,
 		true,
 		tdoNone,
 	},

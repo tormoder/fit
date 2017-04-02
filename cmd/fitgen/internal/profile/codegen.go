@@ -13,8 +13,23 @@ import (
 	"github.com/tormoder/fit/internal/types"
 )
 
-var knownMesgNumButNoMsg = map[string]bool{
-	"Pad": true,
+var knownMesgNumButNoMsgPerSDK = map[string]map[string]bool{
+	"16.20": map[string]bool{
+		"GpsMetadata": true,
+		"Pad":         true,
+	},
+	"20.14": map[string]bool{
+		"Pad": true,
+	},
+}
+
+func knownMesgNumButNoMsg(sdk, mesgNum string) bool {
+	const fallbackSDK = "16.20"
+	mnMap, found := knownMesgNumButNoMsgPerSDK[sdk]
+	if !found {
+		return knownMesgNumButNoMsgPerSDK[fallbackSDK][mesgNum]
+	}
+	return mnMap[mesgNum]
 }
 
 type codeGenerator struct {
@@ -635,7 +650,7 @@ func (g *codeGenerator) genKnownMsgs(types map[string]*Type) {
 	g.p()
 	g.p("var knownMsgNums = map[MesgNum]bool{")
 	for i := 0; i < len(mnvals)-2; i++ { // -2: Skip the last two: RangeMin/Max
-		if knownMesgNumButNoMsg[mnvals[i].Name] {
+		if knownMesgNumButNoMsg(g.sdkVersion, mnvals[i].Name) {
 			continue
 		}
 		g.p("MesgNum", mnvals[i].Name, ": true,")

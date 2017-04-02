@@ -44,6 +44,7 @@ var (
 	activitySmallPath      = filepath.Join(tdfolder, "me", "activity-small-fenix2-run.fit")
 	activityLargePath      = filepath.Join(tdfolder, "me", "activity-large-fenxi2-multisport.fit")
 	activityComponentsPath = filepath.Join(tdfolder, "dcrainmaker", "Edge810-Vector-2013-08-16-15-35-10.fit")
+	monitoringPath         = filepath.Join(tdfolder, "fitsdk", "MonitoringFile.fit")
 )
 
 const (
@@ -259,6 +260,7 @@ func BenchmarkDecode(b *testing.B) {
 		{"ActivitySmall", activitySmallPath},
 		{"ActivityLarge", activityLargePath},
 		{"ActivityWithComponents", activityComponentsPath},
+		{"MonitoringFile", monitoringPath},
 	}
 	for _, file := range files {
 		b.Run(file.desc, func(b *testing.B) {

@@ -36,8 +36,8 @@ type decoder struct {
 	timestamp      uint32
 	lastTimeOffset int32
 
-	opts decodeOptions
-	log  bool
+	opts  decodeOptions
+	debug bool
 
 	unknownFields   map[unknownField]int
 	unknownMessages map[MesgNum]int
@@ -88,7 +88,7 @@ func Decode(r io.Reader, opts ...DecodeOption) (*Fit, error) {
 
 func (d *decoder) decode(r io.Reader, headerOnly, fileIDOnly, crcOnly bool) error {
 	if d.opts.logger != nil {
-		d.log = true
+		d.debug = true
 	}
 
 	d.crc = dyncrc16.New()
@@ -109,7 +109,7 @@ func (d *decoder) decode(r io.Reader, headerOnly, fileIDOnly, crcOnly bool) erro
 	d.fit = new(Fit)
 	d.fit.Header = d.h
 
-	if d.log {
+	if d.debug {
 		d.opts.logger.Println("header decoded:", d.h)
 	}
 
@@ -371,7 +371,7 @@ func (d *decoder) parseDefinitionMessage(recordHeader byte) (*defmsg, error) {
 	dm := defmsg{}
 	dm.localMsgType = recordHeader & localMesgNumMask
 	if dm.localMsgType > localMesgNumMask {
-		if d.log {
+		if d.debug {
 			d.opts.logger.Printf("illegal local message number: %d\n", dm.localMsgType)
 		}
 		return nil, FormatError("illegal local message number")
@@ -429,7 +429,7 @@ func (d *decoder) parseDefinitionMessage(recordHeader byte) (*defmsg, error) {
 		dm.fieldDefs[i] = fd
 	}
 
-	if d.log {
+	if d.debug {
 		d.opts.logger.Println("definition messages parsed:", dm)
 	}
 
@@ -551,7 +551,7 @@ func (d *decoder) parseDataMessage(recordHeader byte, compressed bool) (reflect.
 
 	// Data message has compressed timestamp header.
 	if d.timestamp == 0 {
-		if d.log {
+		if d.debug {
 			d.opts.logger.Println(
 				"warning: parsing compressed timestamp",
 				"header, but have no previous reference",
@@ -573,7 +573,7 @@ func (d *decoder) parseDataMessage(recordHeader byte, compressed bool) (reflect.
 		return d.parseDataFields(dm, knownMsg, msgv)
 	}
 
-	if d.log {
+	if d.debug {
 		d.opts.logger.Println(
 			"warning: parsing message with compressed timestamp header,",
 			"but did not find timestamp field in message of type", dm.globalMsgNum)
@@ -804,7 +804,7 @@ func (d *decoder) parseTimeStamp(dm *defmsg, fieldv reflect.Value, pfield *field
 		return
 	}
 	if u32 < systemTimeMarker {
-		if d.log {
+		if d.debug {
 			d.opts.logger.Println("parsing time: seconds from device power on")
 		}
 	}

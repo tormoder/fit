@@ -41,8 +41,8 @@ type decoder struct {
 	unknownFields   map[unknownField]int
 	unknownMessages map[MesgNum]int
 
-	h   Header
-	fit *File
+	h    Header
+	file *File
 }
 
 // CheckIntegrity verifies the FIT header and file CRC. Only the header CRC is
@@ -70,7 +70,7 @@ func DecodeHeaderAndFileID(r io.Reader) (Header, FileIdMsg, error) {
 	if err := d.decode(r, false, true, false); err != nil {
 		return Header{}, FileIdMsg{}, err
 	}
-	return d.h, d.fit.FileId, nil
+	return d.h, d.file.FileId, nil
 }
 
 // Decode reads a FIT file from r and returns it as a *Fit.
@@ -82,7 +82,7 @@ func Decode(r io.Reader, opts ...DecodeOption) (*File, error) {
 		opt(&d.opts)
 	}
 	err := d.decode(r, false, false, false)
-	return d.fit, err
+	return d.file, err
 }
 
 // DecodeChained reads chained FIT files from r until an error is encountered
@@ -103,12 +103,12 @@ func DecodeChained(r io.Reader, opts ...DecodeOption) ([]*File, error) {
 				// EOF, no more data.
 				return fitFiles, nil
 			}
-			if d.fit != nil {
-				fitFiles = append(fitFiles, d.fit)
+			if d.file != nil {
+				fitFiles = append(fitFiles, d.file)
 			}
 			return fitFiles, fmt.Errorf("error parsing chained fit: file #%d: %v", i+1, err)
 		}
-		fitFiles = append(fitFiles, d.fit)
+		fitFiles = append(fitFiles, d.file)
 		i++
 	}
 }
@@ -126,8 +126,8 @@ func (d *decoder) decode(r io.Reader, headerOnly, fileIDOnly, crcOnly bool) erro
 		return fmt.Errorf("error decoding header: %v", err)
 	}
 
-	d.fit = new(File)
-	d.fit.Header = d.h
+	d.file = new(File)
+	d.file.Header = d.h
 	d.bytes.limit = int(d.h.DataSize)
 
 	if d.debug {
@@ -204,7 +204,7 @@ func (d *decoder) decodeFileData() error {
 				return fmt.Errorf("parsing compressed timestamp message: %v", err)
 			}
 			if msg.IsValid() {
-				d.fit.add(msg)
+				d.file.add(msg)
 			}
 		case (b & headerTypeMask) == mesgDefinitionMask:
 			dm, err = d.parseDefinitionMessage(b)
@@ -218,7 +218,7 @@ func (d *decoder) decodeFileData() error {
 				return fmt.Errorf("parsing data message: %v", err)
 			}
 			if msg.IsValid() {
-				d.fit.add(msg)
+				d.file.add(msg)
 			}
 		default:
 			return fmt.Errorf("unknown record header, got: %#x", b)
@@ -237,9 +237,9 @@ func (d *decoder) checkCRC() error {
 		return fmt.Errorf("error parsing file CRC: %v", err)
 	}
 	d.crc.Write(d.tmp[:bytesForCRC])
-	d.fit.CRC = le.Uint16(d.tmp[:bytesForCRC])
+	d.file.CRC = le.Uint16(d.tmp[:bytesForCRC])
 	if d.debug {
-		d.opts.logger.Printf("read crc value: 0x%x", d.fit.CRC)
+		d.opts.logger.Printf("read crc value: 0x%x", d.file.CRC)
 
 	}
 	if d.crc.Sum16() != 0x0000 {
@@ -382,65 +382,65 @@ func (d *decoder) parseFileIdMsg() error {
 		d.opts.logger.Println("parsed file_id message:", msg)
 	}
 
-	d.fit.add(msg)
+	d.file.add(msg)
 
 	return nil
 }
 
 func (d *decoder) initFileType() error {
-	t := d.fit.FileId.Type
+	t := d.file.FileId.Type
 	switch t {
 	case FileTypeActivity:
-		d.fit.activity = new(ActivityFile)
-		d.fit.msgAdder = d.fit.activity
+		d.file.activity = new(ActivityFile)
+		d.file.msgAdder = d.file.activity
 	case FileTypeDevice:
-		d.fit.device = new(DeviceFile)
-		d.fit.msgAdder = d.fit.device
+		d.file.device = new(DeviceFile)
+		d.file.msgAdder = d.file.device
 	case FileTypeSettings:
-		d.fit.settings = new(SettingsFile)
-		d.fit.msgAdder = d.fit.settings
+		d.file.settings = new(SettingsFile)
+		d.file.msgAdder = d.file.settings
 	case FileTypeSport:
-		d.fit.sport = new(SportFile)
-		d.fit.msgAdder = d.fit.sport
+		d.file.sport = new(SportFile)
+		d.file.msgAdder = d.file.sport
 	case FileTypeWorkout:
-		d.fit.workout = new(WorkoutFile)
-		d.fit.msgAdder = d.fit.workout
+		d.file.workout = new(WorkoutFile)
+		d.file.msgAdder = d.file.workout
 	case FileTypeCourse:
-		d.fit.course = new(CourseFile)
-		d.fit.msgAdder = d.fit.course
+		d.file.course = new(CourseFile)
+		d.file.msgAdder = d.file.course
 	case FileTypeSchedules:
-		d.fit.schedules = new(SchedulesFile)
-		d.fit.msgAdder = d.fit.schedules
+		d.file.schedules = new(SchedulesFile)
+		d.file.msgAdder = d.file.schedules
 	case FileTypeWeight:
-		d.fit.weight = new(WeightFile)
-		d.fit.msgAdder = d.fit.weight
+		d.file.weight = new(WeightFile)
+		d.file.msgAdder = d.file.weight
 	case FileTypeTotals:
-		d.fit.totals = new(TotalsFile)
-		d.fit.msgAdder = d.fit.totals
+		d.file.totals = new(TotalsFile)
+		d.file.msgAdder = d.file.totals
 	case FileTypeGoals:
-		d.fit.goals = new(GoalsFile)
-		d.fit.msgAdder = d.fit.goals
+		d.file.goals = new(GoalsFile)
+		d.file.msgAdder = d.file.goals
 	case FileTypeBloodPressure:
-		d.fit.bloodPressure = new(BloodPressureFile)
-		d.fit.msgAdder = d.fit.bloodPressure
+		d.file.bloodPressure = new(BloodPressureFile)
+		d.file.msgAdder = d.file.bloodPressure
 	case FileTypeMonitoringA:
-		d.fit.monitoringA = new(MonitoringAFile)
-		d.fit.msgAdder = d.fit.monitoringA
+		d.file.monitoringA = new(MonitoringAFile)
+		d.file.msgAdder = d.file.monitoringA
 	case FileTypeActivitySummary:
-		d.fit.activitySummary = new(ActivitySummaryFile)
-		d.fit.msgAdder = d.fit.activitySummary
+		d.file.activitySummary = new(ActivitySummaryFile)
+		d.file.msgAdder = d.file.activitySummary
 	case FileTypeMonitoringDaily:
-		d.fit.monitoringDaily = new(MonitoringDailyFile)
-		d.fit.msgAdder = d.fit.monitoringDaily
+		d.file.monitoringDaily = new(MonitoringDailyFile)
+		d.file.msgAdder = d.file.monitoringDaily
 	case FileTypeMonitoringB:
-		d.fit.monitoringB = new(MonitoringBFile)
-		d.fit.msgAdder = d.fit.monitoringB
+		d.file.monitoringB = new(MonitoringBFile)
+		d.file.msgAdder = d.file.monitoringB
 	case FileTypeSegment:
-		d.fit.segment = new(SegmentFile)
-		d.fit.msgAdder = d.fit.segment
+		d.file.segment = new(SegmentFile)
+		d.file.msgAdder = d.file.segment
 	case FileTypeSegmentList:
-		d.fit.segmentList = new(SegmentListFile)
-		d.fit.msgAdder = d.fit.segmentList
+		d.file.segmentList = new(SegmentListFile)
+		d.file.msgAdder = d.file.segmentList
 	case FileTypeInvalid:
 		return FormatError("file type was set invalid")
 	default:
@@ -949,24 +949,24 @@ func noEOF(err error) error {
 }
 
 func (d *decoder) handleUnknownFields() {
-	d.fit.UnknownFields = make([]UnknownField, 0, len(d.unknownFields))
+	d.file.UnknownFields = make([]UnknownField, 0, len(d.unknownFields))
 	for field, count := range d.unknownFields {
-		d.fit.UnknownFields = append(d.fit.UnknownFields, UnknownField{
+		d.file.UnknownFields = append(d.file.UnknownFields, UnknownField{
 			MesgNum:  field.mesgNum,
 			FieldNum: field.fieldNum,
 			Count:    count,
 		})
 	}
-	sort.Sort(unknownFieldSlice(d.fit.UnknownFields))
+	sort.Sort(unknownFieldSlice(d.file.UnknownFields))
 }
 
 func (d *decoder) handleUnknownMessages() {
-	d.fit.UnknownMessages = make([]UnknownMessage, 0, len(d.unknownMessages))
+	d.file.UnknownMessages = make([]UnknownMessage, 0, len(d.unknownMessages))
 	for mesgNum, count := range d.unknownMessages {
-		d.fit.UnknownMessages = append(d.fit.UnknownMessages, UnknownMessage{
+		d.file.UnknownMessages = append(d.file.UnknownMessages, UnknownMessage{
 			MesgNum: mesgNum,
 			Count:   count,
 		})
 	}
-	sort.Sort(unknownMessageSlice(d.fit.UnknownMessages))
+	sort.Sort(unknownMessageSlice(d.file.UnknownMessages))
 }

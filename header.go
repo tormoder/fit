@@ -1,6 +1,7 @@
 package fit
 
 import (
+	"encoding/binary"
 	"fmt"
 	"io"
 
@@ -26,19 +27,19 @@ var (
 )
 
 func (d *decoder) decodeHeader() error {
-	size, err := d.r.ReadByte()
+	err := binary.Read(d.r, le, &d.h.Size)
 	if err != nil {
 		if err == io.EOF {
 			return errReadSize
 		}
 		return ioError{"reading size", err}
 	}
-	if size != headerSizeCRC && size != headerSizeNoCRC {
+	if d.h.Size != headerSizeCRC && d.h.Size != headerSizeNoCRC {
 		return errHeaderSize
 	}
-	d.h.Size = size
 
-	if err = d.readFull(d.tmp[:size-1]); err != nil {
+	_, err = io.ReadFull(d.r, d.tmp[:d.h.Size-1])
+	if err != nil {
 		if err == io.EOF || err == io.ErrUnexpectedEOF {
 			return errReadData
 		}
@@ -57,7 +58,10 @@ func (d *decoder) decodeHeader() error {
 	}
 	copy(d.h.DataType[:], d.tmp[7:11])
 
-	if size == headerSizeNoCRC {
+	d.crc.Write([]byte{d.h.Size})
+	d.crc.Write(d.tmp[:d.h.Size-1])
+
+	if d.h.Size == headerSizeNoCRC {
 		return nil
 	}
 
@@ -66,11 +70,7 @@ func (d *decoder) decodeHeader() error {
 		return nil
 	}
 
-	checksum := dyncrc16.New()
-	checksum.Write([]byte{size})
-	checksum.Write(d.tmp[:size-1])
-
-	if checksum.Sum16() != 0x0000 {
+	if d.crc.Sum16() != 0x0000 {
 		return errHdrCRC
 	}
 

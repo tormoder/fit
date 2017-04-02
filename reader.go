@@ -1,12 +1,10 @@
 package fit
 
 import (
-	"bufio"
 	"encoding/binary"
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"math"
 	"reflect"
 	"sort"
@@ -21,13 +19,8 @@ var (
 	be = binary.BigEndian
 )
 
-type reader interface {
-	io.Reader
-	io.ByteReader
-}
-
 type decoder struct {
-	r       reader
+	r       io.Reader
 	n       uint32
 	crc     dyncrc16.Hash16
 	tmp     [maxFieldSize]byte
@@ -91,15 +84,8 @@ func (d *decoder) decode(r io.Reader, headerOnly, fileIDOnly, crcOnly bool) erro
 		d.debug = true
 	}
 
+	d.r = r
 	d.crc = dyncrc16.New()
-	tr := io.TeeReader(r, d.crc)
-
-	// Add buffering if r does not provide ReadByte.
-	if rr, ok := tr.(reader); ok {
-		d.r = rr
-	} else {
-		d.r = bufio.NewReader(tr)
-	}
 
 	err := d.decodeHeader()
 	if err != nil {
@@ -118,7 +104,7 @@ func (d *decoder) decode(r io.Reader, headerOnly, fileIDOnly, crcOnly bool) erro
 	}
 
 	if crcOnly {
-		_, err = io.CopyN(ioutil.Discard, d.r, int64(d.h.DataSize))
+		_, err = io.CopyN(d.crc, d.r, int64(d.h.DataSize))
 		if err != nil {
 			return fmt.Errorf("error parsing data: %v", err)
 		}
@@ -194,14 +180,14 @@ crc:
 		fatalErr := fmt.Sprintf("internal decoder error: pre-crc check: data size is %d, but d.n is %d", d.h.DataSize, d.n)
 		panic(fatalErr)
 	}
-
 	if d.debug {
 		d.opts.logger.Printf("expecting crc value: 0x%x", d.crc.Sum16())
 	}
-	if err = binary.Read(d.r, binary.LittleEndian, &d.fit.CRC); err != nil {
+	if err := d.readFull(d.tmp[:bytesForCRC]); err != nil {
 		err = noEOF(err)
 		return fmt.Errorf("error parsing file CRC: %v", err)
 	}
+	d.fit.CRC = le.Uint16(d.tmp[:bytesForCRC])
 	if d.debug {
 		d.opts.logger.Printf("read crc value: 0x%x", d.fit.CRC)
 
@@ -214,13 +200,14 @@ crc:
 }
 
 func (d *decoder) readByte() (byte, error) {
-	c, err := d.r.ReadByte()
+	_, err := io.ReadFull(d.r, d.tmp[:1])
 	if err == nil {
 		d.n++
-		return c, nil
+		d.crc.Write(d.tmp[:1])
+		return d.tmp[0], nil
 	}
 	err = noEOF(err)
-	return c, err
+	return 0, err
 }
 
 func (d *decoder) skipByte() error {
@@ -232,6 +219,7 @@ func (d *decoder) readFull(buf []byte) error {
 	n, err := io.ReadFull(d.r, buf)
 	if err == nil {
 		d.n += uint32(n)
+		d.crc.Write(buf)
 		return nil
 	}
 	err = noEOF(err)

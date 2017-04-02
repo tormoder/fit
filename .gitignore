@@ -38,3 +38,7 @@ fit-fuzz.zip
 # binaries
 cmd/fitgen/fitgen
 cmd/stringer/stringer
+
+# testing related
+*.current
+*.current.gz

@@ -56,6 +56,8 @@ clean:
 	rm -f fit-fuzz.zip
 	find . -name '*.prof' -type f -exec rm -f {} \;
 	find . -name '*.test' -type f -exec rm -f {} \;
+	find . -name '*.current' -type f -exec rm -f {} \;
+	find . -name '*.current.gz' -type f -exec rm -f {} \;
 
 .PHONY: gcoprofile 
 gcoprofile:

@@ -45,6 +45,8 @@ type decoder struct {
 	timestamp      uint32
 	lastTimeOffset int32
 
+	opts decodeOptions
+
 	h   Header
 	fit *Fit
 }
@@ -78,8 +80,11 @@ func DecodeHeaderAndFileID(r io.Reader) (Header, FileIdMsg, error) {
 }
 
 // Decode reads a FIT file from r and returns it as a *Fit.
-func Decode(r io.Reader) (*Fit, error) {
+func Decode(r io.Reader, opts ...DecodeOption) (*Fit, error) {
 	var d decoder
+	for _, opt := range opts {
+		opt(&d.opts)
+	}
 	if err := d.decode(r, false, false, false); err != nil {
 		return nil, err
 	}

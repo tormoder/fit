@@ -1,6 +1,6 @@
+// DO NOT EDIT.
 // This file is auto-generated using the
 // program found in 'cmd/fitgen/main.go'
-// DO NOT EDIT.
 // SDK Version: 16.20
 
 package fit

@@ -1,15 +1,12 @@
 package fit
 
 // ProfileVersion is the current supported profile version of the FIT SDK.
-const ProfileVersion uint16 = ((profileMajorVersion * 100) + profileMinorVersion)
+const ProfileVersion uint16 = ((ProfileMajorVersion * 100) + ProfileMinorVersion)
 
 // ProtocolVersion is the current supported FIT protocol version.
 const ProtocolVersion byte = ((protocolMajorVersion << protocolVersionMajorShift) + protocolMinorVersion)
 
 const (
-	profileMajorVersion = 16
-	profileMinorVersion = 20
-
 	protocolMajorVersion      = 1
 	protocolMinorVersion      = 0
 	protocolVersionMajorShift = 4

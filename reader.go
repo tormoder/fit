@@ -378,6 +378,10 @@ func (d *decoder) parseFileIdMsg() error {
 		return errors.New("parsed message was not of type file_id")
 	}
 
+	if d.debug {
+		d.opts.logger.Println("parsed file_id message:", msg)
+	}
+
 	d.fit.add(msg)
 
 	return nil
@@ -498,6 +502,10 @@ func (d *decoder) parseDefinitionMessage(recordHeader byte) (*defmsg, error) {
 		return nil, err
 	}
 	if dm.fields == 0 {
+		if d.debug {
+			d.opts.logger.Println("parseDefinitionMessage: warning: 0 fields")
+			d.opts.logger.Println("parseDefinitionMessage: message:", dm)
+		}
 		return &dm, nil
 	}
 

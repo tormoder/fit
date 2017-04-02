@@ -2,7 +2,6 @@
 // program found in 'cmd/fitgen/main.go'
 // DO NOT EDIT.
 // SDK Version: 16.20
-// Generation time: Fri Sep  9 20:23:12 UTC 2016
 
 package fit
 

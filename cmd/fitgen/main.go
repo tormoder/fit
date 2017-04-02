@@ -45,7 +45,7 @@ func main() {
 	)
 	timestamp := flag.Bool(
 		"timestamp",
-		true,
+		false,
 		"add generation timestamp to generated code",
 	)
 

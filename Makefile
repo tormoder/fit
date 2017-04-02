@@ -13,6 +13,18 @@ XXHASH_PKG_PATH := github.com/cespare/xxhash
 DECODE_BENCH_NAME := DecodeActivity$$/Small
 DECODE_BENCH_TIME := 5s
 
+CHECK_TOOLS :=	golang.org/x/tools/cmd/goimports \
+		github.com/golang/lint/golint \
+		github.com/jgautheron/goconst/cmd/goconst \
+		github.com/kisielk/errcheck \
+		github.com/gordonklaus/ineffassign \
+		github.com/mdempsky/unconvert \
+		github.com/mvdan/interfacer/cmd/interfacer \
+		github.com/client9/misspell/cmd/misspell \
+		honnef.co/go/unused/cmd/unused \
+		honnef.co/go/simple/cmd/gosimple \
+		honnef.co/go/staticcheck/cmd/staticcheck
+
 .PHONY: all
 all: deps testdeps build test testrace check
 
@@ -100,17 +112,13 @@ getgvt:
 
 .PHONY: getchecktools
 getchecktools:
-	go get -u golang.org/x/tools/cmd/goimports
-	go get -u github.com/golang/lint/golint
-	go get -u github.com/jgautheron/goconst/cmd/goconst
-	go get -u github.com/kisielk/errcheck
-	go get -u github.com/gordonklaus/ineffassign
-	go get -u github.com/mdempsky/unconvert
-	go get -u honnef.co/go/unused/cmd/unused
-	go get -u honnef.co/go/simple/cmd/gosimple
-	go get -u github.com/mvdan/interfacer/cmd/interfacer
-	go get -u github.com/client9/misspell/cmd/misspell
-	go get -u honnef.co/go/staticcheck/cmd/staticcheck
+	@echo "go get'ing tools for static analysis"
+	@go get $(CHECK_TOOLS)
+
+.PHONY: getchecktoolsu
+getchecktoolsu:
+	@echo "go get'ing (-u) tools for static analysis"
+	@go get -u $(CHECK_TOOLS)
 
 .PHONY: check
 check:
@@ -121,7 +129,7 @@ check:
 	@go vet ./...
 
 .PHONY: checkfull
-checkfull:
+checkfull: getchecktools
 	@echo "check (full):"
 	@echo "gofmt (simplify)"
 	@! gofmt -s -l $(FIT_FILES) | grep -vF 'No Exceptions'

@@ -54,7 +54,7 @@ func TransformTypes(ptypes []*PType) (map[string]*Type, error) {
 		if skip {
 			continue
 		}
-		types[t.CCName] = &t
+		types[t.Name] = &t
 	}
 
 	return types, nil
@@ -66,14 +66,14 @@ func (t *Type) transform() (skip bool, err error) {
 		return true, nil
 	}
 
-	t.Name = t.data.Header[tNAME]
-	if len(t.Name) == 0 {
+	name := t.data.Header[tNAME]
+	if name == "" {
 		return false, fmt.Errorf(
 			"found empty type name in header %q",
 			t.data.Header)
 	}
-	t.OrigName = t.Name
-	t.CCName = toCamelCase(t.Name)
+	t.OrigName = name
+	t.Name = toCamelCase(name)
 
 	t.BaseType, err = types.BaseFromString(t.data.Header[tBTYPE])
 	if err != nil {
@@ -89,9 +89,8 @@ func (t *Type) transform() (skip bool, err error) {
 		t.Values = append(t.Values, vt)
 	}
 
-	if renamed, found := typeQuirks[t.Name]; found {
-		t.Name = renamed
-		t.CCName = toCamelCase(t.Name)
+	if renamed, found := typeQuirks[name]; found {
+		t.Name = toCamelCase(renamed)
 	}
 
 	return false, nil

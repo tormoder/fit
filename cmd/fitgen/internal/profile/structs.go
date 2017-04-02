@@ -4,7 +4,6 @@ import "github.com/tormoder/fit/internal/types"
 
 type Type struct {
 	Name     string
-	CCName   string
 	OrigName string
 	BaseType types.Base
 	Values   []ValueTriple

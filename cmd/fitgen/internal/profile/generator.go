@@ -191,7 +191,7 @@ func (g *Generator) genStringerTypeInput() error {
 	var allTypesBuf bytes.Buffer
 	for _, tkey := range tkeys {
 		t := g.types[tkey]
-		allTypesBuf.WriteString(t.CCName)
+		allTypesBuf.WriteString(t.Name)
 		allTypesBuf.WriteByte(',')
 	}
 

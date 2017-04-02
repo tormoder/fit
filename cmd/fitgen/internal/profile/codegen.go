@@ -129,18 +129,18 @@ func (g *codeGenerator) genTypes(types map[string]*Type) {
 	g.p()
 	for _, tkey := range tkeys {
 		t := types[tkey]
-		g.p("// ", t.CCName, " represents the ", t.OrigName, " FIT type.")
-		g.p("type ", t.CCName, " ", t.BaseType.GoType())
+		g.p("// ", t.Name, " represents the ", t.OrigName, " FIT type.")
+		g.p("type ", t.Name, " ", t.BaseType.GoType())
 		g.p()
 		g.p("const (")
 		for _, v := range t.Values {
 			if v.Comment == "" {
-				g.p(t.CCName, v.Name, " ", t.CCName, " = ", v.Value)
+				g.p(t.Name, v.Name, " ", t.Name, " = ", v.Value)
 			} else {
-				g.p(t.CCName, v.Name, " ", t.CCName, " = ", v.Value, " // ", v.Comment)
+				g.p(t.Name, v.Name, " ", t.Name, " = ", v.Value, " // ", v.Comment)
 			}
 		}
-		g.p(t.CCName, "Invalid ", t.CCName, " = ", t.BaseType.GoInvalidValue())
+		g.p(t.Name, "Invalid ", t.Name, " = ", t.BaseType.GoInvalidValue())
 		g.p(")")
 	}
 }

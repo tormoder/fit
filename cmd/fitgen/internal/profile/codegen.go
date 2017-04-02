@@ -14,8 +14,7 @@ import (
 )
 
 var knownMesgNumButNoMsg = map[string]bool{
-	"Pad":         true,
-	"GpsMetadata": true,
+	"Pad": true,
 }
 
 type codeGenerator struct {

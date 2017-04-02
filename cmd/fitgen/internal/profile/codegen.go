@@ -37,14 +37,17 @@ func knownMesgNumButNoMsg(sdk, mesgNum string) bool {
 
 type codeGenerator struct {
 	*bytes.Buffer
-	sdkVersion string
-	addGenTime bool
-	genTime    time.Time
+	sdkFullVer           string
+	sdkMajVer, sdkMinVer int
+	addGenTime           bool
+	genTime              time.Time
 }
 
-func newCodeGenerator(sdkVersion string, addGenerationTime bool) *codeGenerator {
+func newCodeGenerator(sdkMajVer, sdkMinVer int, addGenerationTime bool) *codeGenerator {
 	g := new(codeGenerator)
-	g.sdkVersion = sdkVersion
+	g.sdkMajVer = sdkMajVer
+	g.sdkMinVer = sdkMinVer
+	g.sdkFullVer = fmt.Sprintf("%d.%d", sdkMajVer, sdkMinVer)
 	g.addGenTime = addGenerationTime
 	g.genTime = time.Now()
 	return g
@@ -127,7 +130,7 @@ func (g *codeGenerator) genHeader() {
 	g.p("// DO NOT EDIT.")
 	g.p("// This file is auto-generated using the")
 	g.p("// program found in 'cmd/fitgen/main.go'")
-	g.p("// SDK Version: ", g.sdkVersion)
+	g.p("// SDK Version: ", g.sdkFullVer)
 	if g.addGenTime {
 		g.p("// Generation time: ", g.genTime.UTC().Format(time.UnixDate))
 	}
@@ -653,7 +656,7 @@ func (g *codeGenerator) genKnownMsgs(types map[string]*Type) {
 	g.p()
 	g.p("var knownMsgNums = map[MesgNum]bool{")
 	for i := 0; i < len(mnvals)-2; i++ { // -2: Skip the last two: RangeMin/Max
-		if knownMesgNumButNoMsg(g.sdkVersion, mnvals[i].Name) {
+		if knownMesgNumButNoMsg(g.sdkFullVer, mnvals[i].Name) {
 			continue
 		}
 		g.p("MesgNum", mnvals[i].Name, ": true,")

@@ -9,6 +9,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strconv"
 	"strings"
 
 	"github.com/tormoder/fit/cmd/fitgen/internal/profile"
@@ -97,11 +98,20 @@ func main() {
 		profile.WithGenerationTimestamp(*timestamp),
 		profile.WithLogger(l),
 	)
+
+	var sdkString string
 	if *sdkOverride != "" {
-		genOptions = append(genOptions, profile.WithSDKVersionOverride(*sdkOverride))
+		sdkString = *sdkOverride
+	} else {
+		sdkString = parseSDKVersionStringFromZipFilePath(input)
 	}
 
-	generator, err := profile.NewGenerator(input, inputData, genOptions...)
+	sdkMaj, sdkMin, err := parseMajorAndMinorSDKVersion(sdkString)
+	if err != nil {
+		l.Fatalln("error parsing sdk version:", err)
+	}
+
+	generator, err := profile.NewGenerator(sdkMaj, sdkMin, inputData, genOptions...)
 	if err != nil {
 		l.Fatal(err)
 	}
@@ -283,4 +293,29 @@ func readDataFromZIP(path string) ([]byte, error) {
 
 func readDataFromXLSX(path string) ([]byte, error) {
 	return ioutil.ReadFile(path)
+}
+
+func parseSDKVersionStringFromZipFilePath(path string) string {
+	_, file := filepath.Split(path)
+	ver := strings.TrimSuffix(file, ".zip")
+	return strings.TrimPrefix(ver, "FitSDKRelease_")
+}
+
+func parseMajorAndMinorSDKVersion(sdkString string) (int, int, error) {
+	splitted := strings.Split(sdkString, ".")
+	if len(splitted) < 2 {
+		return 0, 0, fmt.Errorf("could not parse major/minor version from input: %q", sdkString)
+	}
+
+	maj, err := strconv.Atoi(splitted[0])
+	if err != nil {
+		return 0, 0, fmt.Errorf("could not parse major version from input: %q", splitted[0])
+	}
+
+	min, err := strconv.Atoi(splitted[1])
+	if err != nil {
+		return 0, 0, fmt.Errorf("could not parse minor version from input: %q", splitted[1])
+	}
+
+	return maj, min, nil
 }

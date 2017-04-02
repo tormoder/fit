@@ -2,7 +2,7 @@
 // DO NOT EDIT.
 // This file is auto-generated using the
 // program found in 'cmd/fitgen/main.go'
-// SDK Version: Unknown
+// SDK Version: 20.14
 
 package fit
 
@@ -2423,7 +2423,7 @@ const (
 // DO NOT EDIT.
 // This file is auto-generated using the
 // program found in 'cmd/fitgen/main.go'
-// SDK Version: Unknown
+// SDK Version: 20.14
 
 package fit
 
@@ -6246,7 +6246,7 @@ type DeveloperDataIdMsg struct {
 // DO NOT EDIT.
 // This file is auto-generated using the
 // program found in 'cmd/fitgen/main.go'
-// SDK Version: Unknown
+// SDK Version: 20.14
 
 package fit
 
@@ -6311,6 +6311,7 @@ var knownMsgNums = map[MesgNum]bool{
 	MesgNumSegmentPoint:                true,
 	MesgNumSegmentFile:                 true,
 	MesgNumWatchfaceSettings:           true,
+	MesgNumGpsMetadata:                 true,
 	MesgNumCameraEvent:                 true,
 	MesgNumTimestampCorrelation:        true,
 	MesgNumGyroscopeData:               true,

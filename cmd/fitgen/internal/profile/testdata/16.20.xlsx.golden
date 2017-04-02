@@ -2,7 +2,7 @@
 // DO NOT EDIT.
 // This file is auto-generated using the
 // program found in 'cmd/fitgen/main.go'
-// SDK Version: Unknown
+// SDK Version: 16.20
 
 package fit
 
@@ -1584,7 +1584,7 @@ const (
 // DO NOT EDIT.
 // This file is auto-generated using the
 // program found in 'cmd/fitgen/main.go'
-// SDK Version: Unknown
+// SDK Version: 16.20
 
 package fit
 
@@ -5071,7 +5071,7 @@ type MemoGlobMsg struct {
 // DO NOT EDIT.
 // This file is auto-generated using the
 // program found in 'cmd/fitgen/main.go'
-// SDK Version: Unknown
+// SDK Version: 16.20
 
 package fit
 

@@ -3,6 +3,7 @@ package profile_test
 import (
 	"bytes"
 	"flag"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"path/filepath"
@@ -73,27 +74,28 @@ func profileFingerprint(p *profile.Profile) uint64 {
 }
 
 type sdk struct {
-	version           string
+	majVer, minVer    int
 	goldenFingerprint uint64
 }
 
 var sdks = []sdk{
-	{"16.20", 4528042509788505848},
-	{"20.14", 4959578396414666089},
+	{16, 20, 13043592321668127764},
+	{20, 14, 2421693576935362699},
 }
 
 func TestGenerator(t *testing.T) {
 	for _, sdk := range sdks {
-		t.Run(sdk.version, func(t *testing.T) {
+		sdkFullVer := fmt.Sprintf("%d.%d", sdk.majVer, sdk.minVer)
+		t.Run(sdkFullVer, func(t *testing.T) {
 			if sdk == currentSDK && testing.Short() {
 				t.Skip("skipping test in short mode")
 			}
-			path := relPath(sdk.version)
+			path := relPath(sdkFullVer)
 			data, err := ioutil.ReadFile(path)
 			if err != nil {
 				t.Fatal(err)
 			}
-			g, err := profile.NewGenerator(path, data, defGenOpts...)
+			g, err := profile.NewGenerator(sdk.majVer, sdk.minVer, data, defGenOpts...)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -129,8 +131,9 @@ var profileSink *profile.Profile
 
 func BenchmarkGenerator(b *testing.B) {
 	for _, sdk := range sdks {
-		b.Run(sdk.version, func(b *testing.B) {
-			path := relPath(sdk.version)
+		sdkFullVer := fmt.Sprintf("%d.%d", sdk.majVer, sdk.minVer)
+		b.Run(sdkFullVer, func(b *testing.B) {
+			path := relPath(sdkFullVer)
 			data, err := ioutil.ReadFile(path)
 			if err != nil {
 				b.Fatalf("error reading profile workbook: %v", err)
@@ -138,7 +141,7 @@ func BenchmarkGenerator(b *testing.B) {
 			b.ReportAllocs()
 			b.ResetTimer()
 			for i := 0; i < b.N; i++ {
-				g, err := profile.NewGenerator(path, data, defGenOpts...)
+				g, err := profile.NewGenerator(sdk.majVer, sdk.minVer, data, defGenOpts...)
 				if err != nil {
 					b.Fatal(err)
 				}

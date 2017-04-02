@@ -7,7 +7,6 @@ import (
 	"io"
 	"log"
 	"os"
-	"path/filepath"
 	"sort"
 	"strconv"
 	"strings"
@@ -23,7 +22,6 @@ type Profile struct {
 
 type generatorOptions struct {
 	genTimestamp bool
-	sdkVersion   string
 	logger       *log.Logger
 }
 
@@ -35,12 +33,6 @@ func WithGenerationTimestamp(gt bool) GeneratorOption {
 	}
 }
 
-func WithSDKVersionOverride(version string) GeneratorOption {
-	return func(o *generatorOptions) {
-		o.sdkVersion = version
-	}
-}
-
 func WithLogger(logger *log.Logger) GeneratorOption {
 	return func(o *generatorOptions) {
 		o.logger = logger
@@ -48,7 +40,8 @@ func WithLogger(logger *log.Logger) GeneratorOption {
 }
 
 type Generator struct {
-	opts generatorOptions
+	opts                 generatorOptions
+	sdkMajVer, sdkMinVer int
 
 	typesData [][]string
 	msgsData  [][]string
@@ -59,25 +52,20 @@ type Generator struct {
 	p *Profile
 }
 
-func NewGenerator(inputPath string, workbookData []byte, opts ...GeneratorOption) (*Generator, error) {
-	g := new(Generator)
-	g.p = new(Profile)
+func NewGenerator(sdkMajVer, sdkMinVer int, workbookData []byte, opts ...GeneratorOption) (*Generator, error) {
+	g := &Generator{
+		sdkMajVer: sdkMajVer,
+		sdkMinVer: sdkMinVer,
+		p:         new(Profile),
+	}
 
 	for _, opt := range opts {
 		opt(&g.opts)
 	}
 
-	if g.opts.sdkVersion == "" {
-		switch filepath.Ext(inputPath) {
-		case ".zip":
-			g.opts.sdkVersion = parseSDKVersionFromZipFilePath(inputPath)
-		default:
-			g.opts.sdkVersion = "Unknown"
-		}
-	}
-
-	g.logln("sdk version:", g.opts.sdkVersion)
+	g.logf("sdk version: %d.%d", sdkMajVer, sdkMinVer)
 	g.logln("parsing workbook")
+
 	var err error
 	g.typesData, g.msgsData, err = parseWorkbook(workbookData)
 	if err != nil {
@@ -166,7 +154,7 @@ func (g *Generator) genCode() error {
 	g.logln("generating code")
 
 	var err error
-	codeg := newCodeGenerator(g.opts.sdkVersion, g.opts.genTimestamp)
+	codeg := newCodeGenerator(g.sdkMajVer, g.sdkMinVer, g.opts.genTimestamp)
 	g.p.TypesSource, err = codeg.generateTypes(g.types)
 	if err != nil {
 		return err
@@ -234,6 +222,12 @@ func (g *Generator) genMsgNumsVsMsgs() error {
 	return nil
 }
 
+func (g *Generator) logf(format string, v ...interface{}) {
+	if g.opts.logger != nil {
+		g.opts.logger.Printf(format, v...)
+	}
+}
+
 func (g *Generator) logln(v ...interface{}) {
 	if g.opts.logger != nil {
 		g.opts.logger.Println(v...)
@@ -246,12 +240,4 @@ func debugln(v ...interface{}) {
 	if debugfg {
 		fmt.Println(v...)
 	}
-}
-
-func parseSDKVersionFromZipFilePath(path string) string {
-	// Brittle.
-	// TODO: Maybe parse 'c/fit.h' with regexp instead.
-	_, file := filepath.Split(path)
-	ver := strings.TrimSuffix(file, ".zip")
-	return strings.TrimPrefix(ver, "FitSDKRelease_")
 }

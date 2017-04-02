@@ -1,7 +1,7 @@
 // DO NOT EDIT.
 // This file is auto-generated using the
 // program found in 'cmd/fitgen/main.go'
-// SDK Version: 16.20
+// SDK Version: 20.27
 
 package fit
 
@@ -135,9 +135,22 @@ type FieldCapabilitiesMsg struct {
 
 // DeviceSettingsMsg represents the device_settings FIT message type.
 type DeviceSettingsMsg struct {
-	ActiveTimeZone uint8  // Index into time zone arrays.
-	UtcOffset      uint32 // Offset from system time. Required to convert timestamp from system time to UTC.
-	TimeZoneOffset []int8 // timezone offset in 1/4 hour increments
+	ActiveTimeZone         uint8         // Index into time zone arrays.
+	UtcOffset              uint32        // Offset from system time. Required to convert timestamp from system time to UTC.
+	TimeOffset             []uint32      // Offset from system time.
+	TimeMode               []TimeMode    // Display mode for the time
+	TimeZoneOffset         []int8        // timezone offset in 1/4 hour increments
+	BacklightMode          BacklightMode // Mode for backlight
+	ActivityTrackerEnabled Bool          // Enabled state of the activity tracker functionality
+	ClockTime              time.Time     // UTC timestamp used to set the devices clock and date
+	PagesEnabled           []uint16      // Bitfield  to configure enabled screens for each supported loop
+	MoveAlertEnabled       Bool          // Enabled state of the move alert
+	DateMode               DateMode      // Display mode for the date
+	DisplayOrientation     DisplayOrientation
+	MountingSide           Side
+	DefaultPage            []uint16 // Bitfield to indicate one page as default for each supported loop
+	AutosyncMinSteps       uint16   // Minimum steps before an autosync can occur
+	AutosyncMinTime        uint16   // Minimum minutes before an autosync can occur
 }
 
 // GetTimeZoneOffsetScaled returns TimeZoneOffset
@@ -179,6 +192,8 @@ type UserProfileMsg struct {
 	LocalId                    UserLocalId
 	GlobalId                   []byte
 	HeightSetting              DisplayMeasure
+	UserRunningStepLength      uint16 // User defined running step length set to 0 for auto length
+	UserWalkingStepLength      uint16 // User defined walking step length set to 0 for auto length
 }
 
 // GetHeightScaled returns Height
@@ -201,6 +216,28 @@ func (x *UserProfileMsg) GetWeightScaled() float64 {
 		return math.NaN()
 	}
 	return float64(x.Weight) / 10
+}
+
+// GetUserRunningStepLengthScaled returns UserRunningStepLength
+// with scale and any offset applied. NaN is returned if the
+// field has an invalid value (i.e. has not been set).
+// Units: m
+func (x *UserProfileMsg) GetUserRunningStepLengthScaled() float64 {
+	if x.UserRunningStepLength == 0xFFFF {
+		return math.NaN()
+	}
+	return float64(x.UserRunningStepLength) / 1000
+}
+
+// GetUserWalkingStepLengthScaled returns UserWalkingStepLength
+// with scale and any offset applied. NaN is returned if the
+// field has an invalid value (i.e. has not been set).
+// Units: m
+func (x *UserProfileMsg) GetUserWalkingStepLengthScaled() float64 {
+	if x.UserWalkingStepLength == 0xFFFF {
+		return math.NaN()
+	}
+	return float64(x.UserWalkingStepLength) / 1000
 }
 
 // HrmProfileMsg represents the hrm_profile FIT message type.
@@ -348,6 +385,31 @@ func (x *BikeProfileMsg) GetCrankLengthScaled() float64 {
 	return float64(x.CrankLength)/2 - -110
 }
 
+// ConnectivityMsg represents the connectivity FIT message type.
+type ConnectivityMsg struct {
+	BluetoothEnabled            Bool // Use Bluetooth for connectivity features
+	BluetoothLeEnabled          Bool // Use Bluetooth Low Energy for connectivity features
+	AntEnabled                  Bool // Use ANT for connectivity features
+	Name                        string
+	LiveTrackingEnabled         Bool
+	WeatherConditionsEnabled    Bool
+	WeatherAlertsEnabled        Bool
+	AutoActivityUploadEnabled   Bool
+	CourseDownloadEnabled       Bool
+	WorkoutDownloadEnabled      Bool
+	GpsEphemerisDownloadEnabled Bool
+	IncidentDetectionEnabled    Bool
+	GrouptrackEnabled           Bool
+}
+
+// WatchfaceSettingsMsg represents the watchface_settings FIT message type.
+type WatchfaceSettingsMsg struct {
+}
+
+// OhrSettingsMsg represents the ohr_settings FIT message type.
+type OhrSettingsMsg struct {
+}
+
 // ZonesTargetMsg represents the zones_target FIT message type.
 type ZonesTargetMsg struct {
 	MaxHeartRate             uint8
@@ -447,6 +509,7 @@ type GoalMsg struct {
 	Recurrence      GoalRecurrence
 	RecurrenceValue uint16
 	Enabled         Bool
+	Source          GoalSource
 }
 
 // ActivityMsg represents the activity FIT message type.
@@ -474,94 +537,96 @@ func (x *ActivityMsg) GetTotalTimerTimeScaled() float64 {
 
 // SessionMsg represents the session FIT message type.
 type SessionMsg struct {
-	MessageIndex           MessageIndex // Selected bit is set for the current session.
-	Timestamp              time.Time    // Sesson end time.
-	Event                  Event        // session
-	EventType              EventType    // stop
-	StartTime              time.Time
-	StartPositionLat       Latitude
-	StartPositionLong      Longitude
-	Sport                  Sport
-	SubSport               SubSport
-	TotalElapsedTime       uint32 // Time (includes pauses)
-	TotalTimerTime         uint32 // Timer Time (excludes pauses)
-	TotalDistance          uint32
-	TotalCycles            uint32
-	TotalCalories          uint16
-	TotalFatCalories       uint16
-	AvgSpeed               uint16 // total_distance / total_timer_time
-	MaxSpeed               uint16
-	AvgHeartRate           uint8 // average heart rate (excludes pause time)
-	MaxHeartRate           uint8
-	AvgCadence             uint8 // total_cycles / total_timer_time if non_zero_avg_cadence otherwise total_cycles / total_elapsed_time
-	MaxCadence             uint8
-	AvgPower               uint16 // total_power / total_timer_time if non_zero_avg_power otherwise total_power / total_elapsed_time
-	MaxPower               uint16
-	TotalAscent            uint16
-	TotalDescent           uint16
-	TotalTrainingEffect    uint8
-	FirstLapIndex          uint16
-	NumLaps                uint16
-	EventGroup             uint8
-	Trigger                SessionTrigger
-	NecLat                 Latitude
-	NecLong                Longitude
-	SwcLat                 Latitude
-	SwcLong                Longitude
-	NormalizedPower        uint16
-	TrainingStressScore    uint16
-	IntensityFactor        uint16
-	LeftRightBalance       LeftRightBalance100
-	AvgStrokeCount         uint32
-	AvgStrokeDistance      uint16
-	SwimStroke             SwimStroke
-	PoolLength             uint16
-	ThresholdPower         uint16
-	PoolLengthUnit         DisplayMeasure
-	NumActiveLengths       uint16 // # of active lengths of swim pool
-	TotalWork              uint32
-	AvgAltitude            uint16
-	MaxAltitude            uint16
-	GpsAccuracy            uint8
-	AvgGrade               int16
-	AvgPosGrade            int16
-	AvgNegGrade            int16
-	MaxPosGrade            int16
-	MaxNegGrade            int16
-	AvgTemperature         int8
-	MaxTemperature         int8
-	TotalMovingTime        uint32
-	AvgPosVerticalSpeed    int16
-	AvgNegVerticalSpeed    int16
-	MaxPosVerticalSpeed    int16
-	MaxNegVerticalSpeed    int16
-	MinHeartRate           uint8
-	TimeInHrZone           []uint32
-	TimeInSpeedZone        []uint32
-	TimeInCadenceZone      []uint32
-	TimeInPowerZone        []uint32
-	AvgLapTime             uint32
-	BestLapIndex           uint16
-	MinAltitude            uint16
-	PlayerScore            uint16
-	OpponentScore          uint16
-	OpponentName           string
-	StrokeCount            []uint16 // stroke_type enum used as the index
-	ZoneCount              []uint16 // zone number used as the index
-	MaxBallSpeed           uint16
-	AvgBallSpeed           uint16
-	AvgVerticalOscillation uint16
-	AvgStanceTimePercent   uint16
-	AvgStanceTime          uint16
-	AvgFractionalCadence   uint8 // fractional part of the avg_cadence
-	MaxFractionalCadence   uint8 // fractional part of the max_cadence
-	TotalFractionalCycles  uint8 // fractional part of the total_cycles
-	SportIndex             uint8
-	EnhancedAvgSpeed       uint32 // total_distance / total_timer_time
-	EnhancedMaxSpeed       uint32
-	EnhancedAvgAltitude    uint32
-	EnhancedMinAltitude    uint32
-	EnhancedMaxAltitude    uint32
+	MessageIndex                 MessageIndex // Selected bit is set for the current session.
+	Timestamp                    time.Time    // Sesson end time.
+	Event                        Event        // session
+	EventType                    EventType    // stop
+	StartTime                    time.Time
+	StartPositionLat             Latitude
+	StartPositionLong            Longitude
+	Sport                        Sport
+	SubSport                     SubSport
+	TotalElapsedTime             uint32 // Time (includes pauses)
+	TotalTimerTime               uint32 // Timer Time (excludes pauses)
+	TotalDistance                uint32
+	TotalCycles                  uint32
+	TotalCalories                uint16
+	TotalFatCalories             uint16
+	AvgSpeed                     uint16 // total_distance / total_timer_time
+	MaxSpeed                     uint16
+	AvgHeartRate                 uint8 // average heart rate (excludes pause time)
+	MaxHeartRate                 uint8
+	AvgCadence                   uint8 // total_cycles / total_timer_time if non_zero_avg_cadence otherwise total_cycles / total_elapsed_time
+	MaxCadence                   uint8
+	AvgPower                     uint16 // total_power / total_timer_time if non_zero_avg_power otherwise total_power / total_elapsed_time
+	MaxPower                     uint16
+	TotalAscent                  uint16
+	TotalDescent                 uint16
+	TotalTrainingEffect          uint8
+	FirstLapIndex                uint16
+	NumLaps                      uint16
+	EventGroup                   uint8
+	Trigger                      SessionTrigger
+	NecLat                       Latitude
+	NecLong                      Longitude
+	SwcLat                       Latitude
+	SwcLong                      Longitude
+	NormalizedPower              uint16
+	TrainingStressScore          uint16
+	IntensityFactor              uint16
+	LeftRightBalance             LeftRightBalance100
+	AvgStrokeCount               uint32
+	AvgStrokeDistance            uint16
+	SwimStroke                   SwimStroke
+	PoolLength                   uint16
+	ThresholdPower               uint16
+	PoolLengthUnit               DisplayMeasure
+	NumActiveLengths             uint16 // # of active lengths of swim pool
+	TotalWork                    uint32
+	AvgAltitude                  uint16
+	MaxAltitude                  uint16
+	GpsAccuracy                  uint8
+	AvgGrade                     int16
+	AvgPosGrade                  int16
+	AvgNegGrade                  int16
+	MaxPosGrade                  int16
+	MaxNegGrade                  int16
+	AvgTemperature               int8
+	MaxTemperature               int8
+	TotalMovingTime              uint32
+	AvgPosVerticalSpeed          int16
+	AvgNegVerticalSpeed          int16
+	MaxPosVerticalSpeed          int16
+	MaxNegVerticalSpeed          int16
+	MinHeartRate                 uint8
+	TimeInHrZone                 []uint32
+	TimeInSpeedZone              []uint32
+	TimeInCadenceZone            []uint32
+	TimeInPowerZone              []uint32
+	AvgLapTime                   uint32
+	BestLapIndex                 uint16
+	MinAltitude                  uint16
+	PlayerScore                  uint16
+	OpponentScore                uint16
+	OpponentName                 string
+	StrokeCount                  []uint16 // stroke_type enum used as the index
+	ZoneCount                    []uint16 // zone number used as the index
+	MaxBallSpeed                 uint16
+	AvgBallSpeed                 uint16
+	AvgVerticalOscillation       uint16
+	AvgStanceTimePercent         uint16
+	AvgStanceTime                uint16
+	AvgFractionalCadence         uint8 // fractional part of the avg_cadence
+	MaxFractionalCadence         uint8 // fractional part of the max_cadence
+	TotalFractionalCycles        uint8 // fractional part of the total_cycles
+	SportIndex                   uint8
+	EnhancedAvgSpeed             uint32 // total_distance / total_timer_time
+	EnhancedMaxSpeed             uint32
+	EnhancedAvgAltitude          uint32
+	EnhancedMinAltitude          uint32
+	EnhancedMaxAltitude          uint32
+	TotalAnaerobicTrainingEffect uint8
+	AvgVam                       uint16
 }
 
 // GetTotalElapsedTimeScaled returns TotalElapsedTime
@@ -1037,6 +1102,27 @@ func (x *SessionMsg) GetEnhancedMaxAltitudeScaled() float64 {
 	return float64(x.EnhancedMaxAltitude)/5 - 500
 }
 
+// GetTotalAnaerobicTrainingEffectScaled returns TotalAnaerobicTrainingEffect
+// with scale and any offset applied. NaN is returned if the
+// field has an invalid value (i.e. has not been set).
+func (x *SessionMsg) GetTotalAnaerobicTrainingEffectScaled() float64 {
+	if x.TotalAnaerobicTrainingEffect == 0xFF {
+		return math.NaN()
+	}
+	return float64(x.TotalAnaerobicTrainingEffect) / 10
+}
+
+// GetAvgVamScaled returns AvgVam
+// with scale and any offset applied. NaN is returned if the
+// field has an invalid value (i.e. has not been set).
+// Units: m/s
+func (x *SessionMsg) GetAvgVamScaled() float64 {
+	if x.AvgVam == 0xFFFF {
+		return math.NaN()
+	}
+	return float64(x.AvgVam) / 1000
+}
+
 // GetTotalCycles returns the appropriate TotalCycles
 // subfield if a matching reference field/value combination is found.
 // If none of the reference field/value combinations are true
@@ -1188,6 +1274,7 @@ type LapMsg struct {
 	EnhancedAvgAltitude           uint32
 	EnhancedMinAltitude           uint32
 	EnhancedMaxAltitude           uint32
+	AvgVam                        uint16
 }
 
 // GetTotalElapsedTimeScaled returns TotalElapsedTime
@@ -1658,6 +1745,17 @@ func (x *LapMsg) GetEnhancedMaxAltitudeScaled() float64 {
 		return math.NaN()
 	}
 	return float64(x.EnhancedMaxAltitude)/5 - 500
+}
+
+// GetAvgVamScaled returns AvgVam
+// with scale and any offset applied. NaN is returned if the
+// field has an invalid value (i.e. has not been set).
+// Units: m/s
+func (x *LapMsg) GetAvgVamScaled() float64 {
+	if x.AvgVam == 0xFFFF {
+		return math.NaN()
+	}
+	return float64(x.AvgVam) / 1000
 }
 
 // GetTotalCycles returns the appropriate TotalCycles
@@ -2426,6 +2524,51 @@ func (x *HrvMsg) GetTimeScaled() []float64 {
 	return s
 }
 
+// WeatherConditionsMsg represents the weather_conditions FIT message type.
+type WeatherConditionsMsg struct {
+	Timestamp                time.Time     // time of update for current conditions, else forecast time
+	WeatherReport            WeatherReport // Current or forecast
+	Temperature              int8
+	Condition                WeatherStatus // Corresponds to GSC Response weatherIcon field
+	WindDirection            uint16
+	WindSpeed                uint16
+	PrecipitationProbability uint8 // range 0-100
+	TemperatureFeelsLike     int8  // Heat Index if  GCS heatIdx above or equal to 90F or wind chill if GCS windChill below or equal to 32F
+	RelativeHumidity         uint8
+	Location                 string // string corresponding to GCS response location string
+	ObservedAtTime           time.Time
+	ObservedLocationLat      Latitude
+	ObservedLocationLong     Longitude
+	DayOfWeek                DayOfWeek
+	HighTemperature          int8
+	LowTemperature           int8
+}
+
+// GetWindSpeedScaled returns WindSpeed
+// with scale and any offset applied. NaN is returned if the
+// field has an invalid value (i.e. has not been set).
+// Units: m/s
+func (x *WeatherConditionsMsg) GetWindSpeedScaled() float64 {
+	if x.WindSpeed == 0xFFFF {
+		return math.NaN()
+	}
+	return float64(x.WindSpeed) / 1000
+}
+
+// WeatherAlertMsg represents the weather_alert FIT message type.
+type WeatherAlertMsg struct {
+	Timestamp  time.Time
+	ReportId   string            // Unique identifier from GCS report ID string, length is 12
+	IssueTime  time.Time         // Time alert was issued
+	ExpireTime time.Time         // Time alert expires
+	Severity   WeatherSeverity   // Warning, Watch, Advisory, Statement
+	Type       WeatherSevereType // Tornado, Severe Thunderstorm, etc.
+}
+
+// GpsMetadataMsg represents the gps_metadata FIT message type.
+type GpsMetadataMsg struct {
+}
+
 // CameraEventMsg represents the camera_event FIT message type.
 type CameraEventMsg struct {
 }
@@ -2436,6 +2579,10 @@ type GyroscopeDataMsg struct {
 
 // AccelerometerDataMsg represents the accelerometer_data FIT message type.
 type AccelerometerDataMsg struct {
+}
+
+// MagnetometerDataMsg represents the magnetometer_data FIT message type.
+type MagnetometerDataMsg struct {
 }
 
 // ThreeDSensorCalibrationMsg represents the three_d_sensor_calibration FIT message type.
@@ -2482,7 +2629,7 @@ func (x *AviationAttitudeMsg) GetPitchScaled() []float64 {
 	}
 	s := make([]float64, len(x.Pitch))
 	for i, v := range x.Pitch {
-		s[i] = float64(v) / 10430.379999999999
+		s[i] = float64(v) / 10430.38
 	}
 	return s
 }
@@ -2496,7 +2643,7 @@ func (x *AviationAttitudeMsg) GetRollScaled() []float64 {
 	}
 	s := make([]float64, len(x.Roll))
 	for i, v := range x.Roll {
-		s[i] = float64(v) / 10430.379999999999
+		s[i] = float64(v) / 10430.38
 	}
 	return s
 }
@@ -2552,7 +2699,7 @@ func (x *AviationAttitudeMsg) GetTrackScaled() []float64 {
 	}
 	s := make([]float64, len(x.Track))
 	for i, v := range x.Track {
-		s[i] = float64(v) / 10430.379999999999
+		s[i] = float64(v) / 10430.38
 	}
 	return s
 }
@@ -2584,6 +2731,7 @@ type CourseMsg struct {
 	Sport        Sport
 	Name         string
 	Capabilities CourseCapabilities
+	SubSport     SubSport
 }
 
 // CoursePointMsg represents the course_point FIT message type.
@@ -3162,6 +3310,7 @@ type WorkoutStepMsg struct {
 	CustomTargetValueLow  uint32
 	CustomTargetValueHigh uint32
 	Intensity             Intensity
+	Notes                 string
 }
 
 // GetDurationValue returns the appropriate DurationValue
@@ -3193,7 +3342,11 @@ func (x *WorkoutStepMsg) GetDurationValue() interface{} {
 // then the main field is returned.
 func (x *WorkoutStepMsg) GetTargetValue() interface{} {
 	switch {
+	case x.TargetType == WktStepTargetSpeed:
+		return uint32(x.TargetValue)
 	case x.TargetType == WktStepTargetHeartRate:
+		return uint32(x.TargetValue)
+	case x.TargetType == WktStepTargetCadence:
 		return uint32(x.TargetValue)
 	case x.TargetType == WktStepTargetPower:
 		return uint32(x.TargetValue)
@@ -3481,6 +3634,218 @@ func (x *MonitoringMsg) GetCycles() interface{} {
 	}
 }
 
+// HrMsg represents the hr FIT message type.
+type HrMsg struct {
+	Timestamp           time.Time
+	FractionalTimestamp uint16
+	Time256             uint8
+	FilteredBpm         []uint8
+	EventTimestamp      []uint32
+	EventTimestamp12    []byte
+}
+
+// GetFractionalTimestampScaled returns FractionalTimestamp
+// with scale and any offset applied. NaN is returned if the
+// field has an invalid value (i.e. has not been set).
+// Units: s
+func (x *HrMsg) GetFractionalTimestampScaled() float64 {
+	if x.FractionalTimestamp == 0xFFFF {
+		return math.NaN()
+	}
+	return float64(x.FractionalTimestamp) / 32768
+}
+
+// GetTime256Scaled returns Time256
+// with scale and any offset applied. NaN is returned if the
+// field has an invalid value (i.e. has not been set).
+// Units: s
+func (x *HrMsg) GetTime256Scaled() float64 {
+	if x.Time256 == 0xFF {
+		return math.NaN()
+	}
+	return float64(x.Time256) / 256
+}
+
+// GetEventTimestampScaled returns EventTimestamp
+// as a slice with scale and any offset applied to every element.
+// Units: s
+func (x *HrMsg) GetEventTimestampScaled() []float64 {
+	if len(x.EventTimestamp) == 0 {
+		return nil
+	}
+	s := make([]float64, len(x.EventTimestamp))
+	for i, v := range x.EventTimestamp {
+		s[i] = float64(v) / 1024
+	}
+	return s
+}
+
+func (x *HrMsg) expandComponents() {
+	if x.Time256 != 0xFF {
+	}
+	// TODO
+}
+
 // MemoGlobMsg represents the memo_glob FIT message type.
 type MemoGlobMsg struct {
+}
+
+// AntChannelIdMsg represents the ant_channel_id FIT message type.
+type AntChannelIdMsg struct {
+}
+
+// AntRxMsg represents the ant_rx FIT message type.
+type AntRxMsg struct {
+	Timestamp           time.Time
+	FractionalTimestamp uint16
+	MesgId              byte
+	MesgData            []byte
+	ChannelNumber       uint8
+	Data                []byte
+}
+
+// GetFractionalTimestampScaled returns FractionalTimestamp
+// with scale and any offset applied. NaN is returned if the
+// field has an invalid value (i.e. has not been set).
+// Units: s
+func (x *AntRxMsg) GetFractionalTimestampScaled() float64 {
+	if x.FractionalTimestamp == 0xFFFF {
+		return math.NaN()
+	}
+	return float64(x.FractionalTimestamp) / 32768
+}
+
+func (x *AntRxMsg) expandComponents() {
+	if len(x.MesgData) != 0 {
+		x.Data = make([]byte, len(x.MesgData)-1)
+		for i, v := range x.MesgData {
+			if v == 0xFF {
+				break
+			}
+			if i == 0 {
+				x.ChannelNumber = v
+			} else {
+				x.Data[i-1] = v
+			}
+		}
+	}
+}
+
+// AntTxMsg represents the ant_tx FIT message type.
+type AntTxMsg struct {
+	Timestamp           time.Time
+	FractionalTimestamp uint16
+	MesgId              byte
+	MesgData            []byte
+	ChannelNumber       uint8
+	Data                []byte
+}
+
+// GetFractionalTimestampScaled returns FractionalTimestamp
+// with scale and any offset applied. NaN is returned if the
+// field has an invalid value (i.e. has not been set).
+// Units: s
+func (x *AntTxMsg) GetFractionalTimestampScaled() float64 {
+	if x.FractionalTimestamp == 0xFFFF {
+		return math.NaN()
+	}
+	return float64(x.FractionalTimestamp) / 32768
+}
+
+func (x *AntTxMsg) expandComponents() {
+	if len(x.MesgData) != 0 {
+		x.Data = make([]byte, len(x.MesgData)-1)
+		for i, v := range x.MesgData {
+			if v == 0xFF {
+				break
+			}
+			if i == 0 {
+				x.ChannelNumber = v
+			} else {
+				x.Data[i-1] = v
+			}
+		}
+	}
+}
+
+// ExdScreenConfigurationMsg represents the exd_screen_configuration FIT message type.
+type ExdScreenConfigurationMsg struct {
+	ScreenIndex   uint8
+	FieldCount    uint8 // number of fields in screen
+	Layout        ExdLayout
+	ScreenEnabled Bool
+}
+
+// ExdDataFieldConfigurationMsg represents the exd_data_field_configuration FIT message type.
+type ExdDataFieldConfigurationMsg struct {
+	ScreenIndex  uint8
+	ConceptField byte
+	FieldId      uint8
+	ConceptCount uint8
+	DisplayType  ExdDisplayType
+	Title        []string
+}
+
+func (x *ExdDataFieldConfigurationMsg) expandComponents() {
+	if x.ConceptField != 0xFF {
+		x.FieldId = uint8(
+			(x.ConceptField >> 0) & ((1 << 4) - 1),
+		)
+		x.ConceptCount = uint8(
+			(x.ConceptField >> 4) & ((1 << 4) - 1),
+		)
+	}
+}
+
+// ExdDataConceptConfigurationMsg represents the exd_data_concept_configuration FIT message type.
+type ExdDataConceptConfigurationMsg struct {
+	ScreenIndex  uint8
+	ConceptField byte
+	FieldId      uint8
+	ConceptIndex uint8
+	DataPage     uint8
+	ConceptKey   uint8
+	Scaling      uint8
+	DataUnits    ExdDataUnits
+	Qualifier    ExdQualifiers
+	Descriptor   ExdDescriptors
+	IsSigned     Bool
+}
+
+func (x *ExdDataConceptConfigurationMsg) expandComponents() {
+	if x.ConceptField != 0xFF {
+		x.FieldId = uint8(
+			(x.ConceptField >> 0) & ((1 << 4) - 1),
+		)
+		x.ConceptIndex = uint8(
+			(x.ConceptField >> 4) & ((1 << 4) - 1),
+		)
+	}
+}
+
+// FieldDescriptionMsg represents the field_description FIT message type.
+type FieldDescriptionMsg struct {
+	DeveloperDataIndex    uint8
+	FieldDefinitionNumber uint8
+	FitBaseTypeId         FitBaseType
+	FieldName             []string
+	Array                 uint8
+	Components            string
+	Scale                 uint8
+	Offset                int8
+	Units                 []string
+	Bits                  string
+	Accumulate            string
+	FitBaseUnitId         FitBaseUnit
+	NativeMesgNum         MesgNum
+	NativeFieldNum        uint8
+}
+
+// DeveloperDataIdMsg represents the developer_data_id FIT message type.
+type DeveloperDataIdMsg struct {
+	DeveloperId        []byte
+	ApplicationId      []byte
+	ManufacturerId     Manufacturer
+	DeveloperDataIndex uint8
+	ApplicationVersion uint32
 }

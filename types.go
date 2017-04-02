@@ -1,7 +1,7 @@
 // DO NOT EDIT.
 // This file is auto-generated using the
 // program found in 'cmd/fitgen/main.go'
-// SDK Version: 16.20
+// SDK Version: 20.27
 
 package fit
 
@@ -72,8 +72,19 @@ const (
 	ActivityTypeFitnessEquipment ActivityType = 4
 	ActivityTypeSwimming         ActivityType = 5
 	ActivityTypeWalking          ActivityType = 6
+	ActivityTypeSedentary        ActivityType = 8
 	ActivityTypeAll              ActivityType = 254 // All is for goals only to include all sports.
 	ActivityTypeInvalid          ActivityType = 0xFF
+)
+
+// AnalogWatchfaceLayout represents the analog_watchface_layout FIT type.
+type AnalogWatchfaceLayout byte
+
+const (
+	AnalogWatchfaceLayoutMinimal     AnalogWatchfaceLayout = 0
+	AnalogWatchfaceLayoutTraditional AnalogWatchfaceLayout = 1
+	AnalogWatchfaceLayoutModern      AnalogWatchfaceLayout = 2
+	AnalogWatchfaceLayoutInvalid     AnalogWatchfaceLayout = 0xFF
 )
 
 // AntNetwork represents the ant_network FIT type.
@@ -102,6 +113,12 @@ const (
 	AntplusDeviceTypeLightElectricVehicle    AntplusDeviceType = 20
 	AntplusDeviceTypeEnvSensor               AntplusDeviceType = 25
 	AntplusDeviceTypeRacquet                 AntplusDeviceType = 26
+	AntplusDeviceTypeControlHub              AntplusDeviceType = 27
+	AntplusDeviceTypeMuscleOxygen            AntplusDeviceType = 31
+	AntplusDeviceTypeBikeLightMain           AntplusDeviceType = 35
+	AntplusDeviceTypeBikeLightShared         AntplusDeviceType = 36
+	AntplusDeviceTypeExd                     AntplusDeviceType = 38
+	AntplusDeviceTypeBikeRadar               AntplusDeviceType = 40
 	AntplusDeviceTypeWeightScale             AntplusDeviceType = 119
 	AntplusDeviceTypeHeartRate               AntplusDeviceType = 120
 	AntplusDeviceTypeBikeSpeedCadence        AntplusDeviceType = 121
@@ -142,6 +159,31 @@ const (
 	AttitudeValidityInvalid                AttitudeValidity = 0xFFFF
 )
 
+// AutoActivityDetect represents the auto_activity_detect FIT type.
+type AutoActivityDetect uint32
+
+const (
+	AutoActivityDetectNone       AutoActivityDetect = 0x00000000
+	AutoActivityDetectRunning    AutoActivityDetect = 0x00000001
+	AutoActivityDetectCycling    AutoActivityDetect = 0x00000002
+	AutoActivityDetectSwimming   AutoActivityDetect = 0x00000004
+	AutoActivityDetectWalking    AutoActivityDetect = 0x00000008
+	AutoActivityDetectElliptical AutoActivityDetect = 0x00000020
+	AutoActivityDetectSedentary  AutoActivityDetect = 0x00000400
+	AutoActivityDetectInvalid    AutoActivityDetect = 0xFFFFFFFF
+)
+
+// AutoSyncFrequency represents the auto_sync_frequency FIT type.
+type AutoSyncFrequency byte
+
+const (
+	AutoSyncFrequencyNever        AutoSyncFrequency = 0
+	AutoSyncFrequencyOccasionally AutoSyncFrequency = 1
+	AutoSyncFrequencyFrequent     AutoSyncFrequency = 2
+	AutoSyncFrequencyOnceADay     AutoSyncFrequency = 3
+	AutoSyncFrequencyInvalid      AutoSyncFrequency = 0xFF
+)
+
 // AutolapTrigger represents the autolap_trigger FIT type.
 type AutolapTrigger byte
 
@@ -156,6 +198,31 @@ const (
 	AutolapTriggerInvalid          AutolapTrigger = 0xFF
 )
 
+// Autoscroll represents the autoscroll FIT type.
+type Autoscroll byte
+
+const (
+	AutoscrollNone    Autoscroll = 0
+	AutoscrollSlow    Autoscroll = 1
+	AutoscrollMedium  Autoscroll = 2
+	AutoscrollFast    Autoscroll = 3
+	AutoscrollInvalid Autoscroll = 0xFF
+)
+
+// BacklightMode represents the backlight_mode FIT type.
+type BacklightMode byte
+
+const (
+	BacklightModeOff                                 BacklightMode = 0
+	BacklightModeManual                              BacklightMode = 1
+	BacklightModeKeyAndMessages                      BacklightMode = 2
+	BacklightModeAutoBrightness                      BacklightMode = 3
+	BacklightModeSmartNotifications                  BacklightMode = 4
+	BacklightModeKeyAndMessagesNight                 BacklightMode = 5
+	BacklightModeKeyAndMessagesAndSmartNotifications BacklightMode = 6
+	BacklightModeInvalid                             BacklightMode = 0xFF
+)
+
 // BatteryStatus represents the battery_status FIT type.
 type BatteryStatus uint8
 
@@ -165,8 +232,29 @@ const (
 	BatteryStatusOk       BatteryStatus = 3
 	BatteryStatusLow      BatteryStatus = 4
 	BatteryStatusCritical BatteryStatus = 5
+	BatteryStatusCharging BatteryStatus = 6
 	BatteryStatusUnknown  BatteryStatus = 7
 	BatteryStatusInvalid  BatteryStatus = 0xFF
+)
+
+// BikeLightBeamAngleMode represents the bike_light_beam_angle_mode FIT type.
+type BikeLightBeamAngleMode uint8
+
+const (
+	BikeLightBeamAngleModeManual  BikeLightBeamAngleMode = 0
+	BikeLightBeamAngleModeAuto    BikeLightBeamAngleMode = 1
+	BikeLightBeamAngleModeInvalid BikeLightBeamAngleMode = 0xFF
+)
+
+// BikeLightNetworkConfigType represents the bike_light_network_config_type FIT type.
+type BikeLightNetworkConfigType byte
+
+const (
+	BikeLightNetworkConfigTypeAuto           BikeLightNetworkConfigType = 0
+	BikeLightNetworkConfigTypeIndividual     BikeLightNetworkConfigType = 4
+	BikeLightNetworkConfigTypeHighVisibility BikeLightNetworkConfigType = 5
+	BikeLightNetworkConfigTypeTrail          BikeLightNetworkConfigType = 6
+	BikeLightNetworkConfigTypeInvalid        BikeLightNetworkConfigType = 0xFF
 )
 
 // BodyLocation represents the body_location FIT type.
@@ -209,6 +297,10 @@ const (
 	BodyLocationRightForearmExtensors BodyLocation = 33 // Right posterior forearm
 	BodyLocationNeck                  BodyLocation = 34
 	BodyLocationThroat                BodyLocation = 35
+	BodyLocationWaistMidBack          BodyLocation = 36
+	BodyLocationWaistFront            BodyLocation = 37
+	BodyLocationWaistLeft             BodyLocation = 38
+	BodyLocationWaistRight            BodyLocation = 39
 	BodyLocationInvalid               BodyLocation = 0xFF
 )
 
@@ -237,6 +329,10 @@ const (
 	CameraEventTypeVideoSecondStreamEnd        CameraEventType = 6
 	CameraEventTypeVideoSplitStart             CameraEventType = 7 // Mark of video file split start
 	CameraEventTypeVideoSecondStreamSplitStart CameraEventType = 8
+	CameraEventTypeVideoPause                  CameraEventType = 11 // Mark when a video recording has been paused
+	CameraEventTypeVideoSecondStreamPause      CameraEventType = 12
+	CameraEventTypeVideoResume                 CameraEventType = 13 // Mark when a video recording has been resumed
+	CameraEventTypeVideoSecondStreamResume     CameraEventType = 14
 	CameraEventTypeInvalid                     CameraEventType = 0xFF
 )
 
@@ -289,6 +385,24 @@ const (
 	ConnectivityCapabilitiesSetupIncomplete                 ConnectivityCapabilities = 0x00000800
 	ConnectivityCapabilitiesContinueSyncAfterSoftwareUpdate ConnectivityCapabilities = 0x00001000
 	ConnectivityCapabilitiesConnectIqAppDownload            ConnectivityCapabilities = 0x00002000
+	ConnectivityCapabilitiesGolfCourseDownload              ConnectivityCapabilities = 0x00004000
+	ConnectivityCapabilitiesDeviceInitiatesSync             ConnectivityCapabilities = 0x00008000 // Indicates device is in control of initiating all syncs
+	ConnectivityCapabilitiesConnectIqWatchAppDownload       ConnectivityCapabilities = 0x00010000
+	ConnectivityCapabilitiesConnectIqWidgetDownload         ConnectivityCapabilities = 0x00020000
+	ConnectivityCapabilitiesConnectIqWatchFaceDownload      ConnectivityCapabilities = 0x00040000
+	ConnectivityCapabilitiesConnectIqDataFieldDownload      ConnectivityCapabilities = 0x00080000
+	ConnectivityCapabilitiesConnectIqAppManagment           ConnectivityCapabilities = 0x00100000 // Device supports delete and reorder of apps via GCM
+	ConnectivityCapabilitiesSwingSensor                     ConnectivityCapabilities = 0x00200000
+	ConnectivityCapabilitiesSwingSensorRemote               ConnectivityCapabilities = 0x00400000
+	ConnectivityCapabilitiesIncidentDetection               ConnectivityCapabilities = 0x00800000 // Device supports incident detection
+	ConnectivityCapabilitiesAudioPrompts                    ConnectivityCapabilities = 0x01000000
+	ConnectivityCapabilitiesWifiVerification                ConnectivityCapabilities = 0x02000000 // Device supports reporting wifi verification via GCM
+	ConnectivityCapabilitiesTrueUp                          ConnectivityCapabilities = 0x04000000 // Device supports True Up
+	ConnectivityCapabilitiesFindMyWatch                     ConnectivityCapabilities = 0x08000000 // Device supports Find My Watch
+	ConnectivityCapabilitiesRemoteManualSync                ConnectivityCapabilities = 0x10000000
+	ConnectivityCapabilitiesLiveTrackAutoStart              ConnectivityCapabilities = 0x20000000 // Device supports LiveTrack auto start
+	ConnectivityCapabilitiesLiveTrackMessaging              ConnectivityCapabilities = 0x40000000 // Device supports LiveTrack Messaging
+	ConnectivityCapabilitiesInstantInput                    ConnectivityCapabilities = 0x80000000 // Device supports instant input feature
 	ConnectivityCapabilitiesInvalid                         ConnectivityCapabilities = 0x00000000
 )
 
@@ -338,7 +452,32 @@ const (
 	CoursePointSlightRight    CoursePoint = 21
 	CoursePointSharpRight     CoursePoint = 22
 	CoursePointUTurn          CoursePoint = 23
+	CoursePointSegmentStart   CoursePoint = 24
+	CoursePointSegmentEnd     CoursePoint = 25
 	CoursePointInvalid        CoursePoint = 0xFF
+)
+
+// DateMode represents the date_mode FIT type.
+type DateMode byte
+
+const (
+	DateModeDayMonth DateMode = 0
+	DateModeMonthDay DateMode = 1
+	DateModeInvalid  DateMode = 0xFF
+)
+
+// DayOfWeek represents the day_of_week FIT type.
+type DayOfWeek byte
+
+const (
+	DayOfWeekSunday    DayOfWeek = 0
+	DayOfWeekMonday    DayOfWeek = 1
+	DayOfWeekTuesday   DayOfWeek = 2
+	DayOfWeekWednesday DayOfWeek = 3
+	DayOfWeekThursday  DayOfWeek = 4
+	DayOfWeekFriday    DayOfWeek = 5
+	DayOfWeekSaturday  DayOfWeek = 6
+	DayOfWeekInvalid   DayOfWeek = 0xFF
 )
 
 // DeviceIndex represents the device_index FIT type.
@@ -347,6 +486,16 @@ type DeviceIndex uint8
 const (
 	DeviceIndexCreator DeviceIndex = 0 // Creator of the file is always device index 0.
 	DeviceIndexInvalid DeviceIndex = 0xFF
+)
+
+// DigitalWatchfaceLayout represents the digital_watchface_layout FIT type.
+type DigitalWatchfaceLayout byte
+
+const (
+	DigitalWatchfaceLayoutTraditional DigitalWatchfaceLayout = 0
+	DigitalWatchfaceLayoutModern      DigitalWatchfaceLayout = 1
+	DigitalWatchfaceLayoutBold        DigitalWatchfaceLayout = 2
+	DigitalWatchfaceLayoutInvalid     DigitalWatchfaceLayout = 0xFF
 )
 
 // DisplayHeart represents the display_heart FIT type.
@@ -363,9 +512,22 @@ const (
 type DisplayMeasure byte
 
 const (
-	DisplayMeasureMetric  DisplayMeasure = 0
-	DisplayMeasureStatute DisplayMeasure = 1
-	DisplayMeasureInvalid DisplayMeasure = 0xFF
+	DisplayMeasureMetric   DisplayMeasure = 0
+	DisplayMeasureStatute  DisplayMeasure = 1
+	DisplayMeasureNautical DisplayMeasure = 2
+	DisplayMeasureInvalid  DisplayMeasure = 0xFF
+)
+
+// DisplayOrientation represents the display_orientation FIT type.
+type DisplayOrientation byte
+
+const (
+	DisplayOrientationAuto             DisplayOrientation = 0 // automatic if the device supports it
+	DisplayOrientationPortrait         DisplayOrientation = 1
+	DisplayOrientationLandscape        DisplayOrientation = 2
+	DisplayOrientationPortraitFlipped  DisplayOrientation = 3 // portrait mode but rotated 180 degrees
+	DisplayOrientationLandscapeFlipped DisplayOrientation = 4 // landscape mode but rotated 180 degrees
+	DisplayOrientationInvalid          DisplayOrientation = 0xFF
 )
 
 // DisplayPosition represents the display_position FIT type.
@@ -486,6 +648,249 @@ const (
 	EventTypeInvalid                EventType = 0xFF
 )
 
+// ExdDataUnits represents the exd_data_units FIT type.
+type ExdDataUnits byte
+
+const (
+	ExdDataUnitsNoUnits                        ExdDataUnits = 0
+	ExdDataUnitsLaps                           ExdDataUnits = 1
+	ExdDataUnitsMilesPerHour                   ExdDataUnits = 2
+	ExdDataUnitsKilometersPerHour              ExdDataUnits = 3
+	ExdDataUnitsFeetPerHour                    ExdDataUnits = 4
+	ExdDataUnitsMetersPerHour                  ExdDataUnits = 5
+	ExdDataUnitsDegreesCelsius                 ExdDataUnits = 6
+	ExdDataUnitsDegreesFarenheit               ExdDataUnits = 7
+	ExdDataUnitsZone                           ExdDataUnits = 8
+	ExdDataUnitsGear                           ExdDataUnits = 9
+	ExdDataUnitsRpm                            ExdDataUnits = 10
+	ExdDataUnitsBpm                            ExdDataUnits = 11
+	ExdDataUnitsDegrees                        ExdDataUnits = 12
+	ExdDataUnitsMillimeters                    ExdDataUnits = 13
+	ExdDataUnitsMeters                         ExdDataUnits = 14
+	ExdDataUnitsKilometers                     ExdDataUnits = 15
+	ExdDataUnitsFeet                           ExdDataUnits = 16
+	ExdDataUnitsYards                          ExdDataUnits = 17
+	ExdDataUnitsKilofeet                       ExdDataUnits = 18
+	ExdDataUnitsMiles                          ExdDataUnits = 19
+	ExdDataUnitsTime                           ExdDataUnits = 20
+	ExdDataUnitsEnumTurnType                   ExdDataUnits = 21
+	ExdDataUnitsPercent                        ExdDataUnits = 22
+	ExdDataUnitsWatts                          ExdDataUnits = 23
+	ExdDataUnitsWattsPerKilogram               ExdDataUnits = 24
+	ExdDataUnitsEnumBatteryStatus              ExdDataUnits = 25
+	ExdDataUnitsEnumBikeLightBeamAngleMode     ExdDataUnits = 26
+	ExdDataUnitsEnumBikeLightBatteryStatus     ExdDataUnits = 27
+	ExdDataUnitsEnumBikeLightNetworkConfigType ExdDataUnits = 28
+	ExdDataUnitsLights                         ExdDataUnits = 29
+	ExdDataUnitsSeconds                        ExdDataUnits = 30
+	ExdDataUnitsMinutes                        ExdDataUnits = 31
+	ExdDataUnitsHours                          ExdDataUnits = 32
+	ExdDataUnitsCalories                       ExdDataUnits = 33
+	ExdDataUnitsKilojoules                     ExdDataUnits = 34
+	ExdDataUnitsMilliseconds                   ExdDataUnits = 35
+	ExdDataUnitsSecondPerMile                  ExdDataUnits = 36
+	ExdDataUnitsSecondPerKilometer             ExdDataUnits = 37
+	ExdDataUnitsCentimeter                     ExdDataUnits = 38
+	ExdDataUnitsEnumCoursePoint                ExdDataUnits = 39
+	ExdDataUnitsBradians                       ExdDataUnits = 40
+	ExdDataUnitsEnumSport                      ExdDataUnits = 41
+	ExdDataUnitsInchesHg                       ExdDataUnits = 42
+	ExdDataUnitsMmHg                           ExdDataUnits = 43
+	ExdDataUnitsMbars                          ExdDataUnits = 44
+	ExdDataUnitsHectoPascals                   ExdDataUnits = 45
+	ExdDataUnitsFeetPerMin                     ExdDataUnits = 46
+	ExdDataUnitsMetersPerMin                   ExdDataUnits = 47
+	ExdDataUnitsMetersPerSec                   ExdDataUnits = 48
+	ExdDataUnitsEightCardinal                  ExdDataUnits = 49
+	ExdDataUnitsInvalid                        ExdDataUnits = 0xFF
+)
+
+// ExdDescriptors represents the exd_descriptors FIT type.
+type ExdDescriptors byte
+
+const (
+	ExdDescriptorsBikeLightBatteryStatus           ExdDescriptors = 0
+	ExdDescriptorsBeamAngleStatus                  ExdDescriptors = 1
+	ExdDescriptorsBateryLevel                      ExdDescriptors = 2
+	ExdDescriptorsLightNetworkMode                 ExdDescriptors = 3
+	ExdDescriptorsNumberLightsConnected            ExdDescriptors = 4
+	ExdDescriptorsCadence                          ExdDescriptors = 5
+	ExdDescriptorsDistance                         ExdDescriptors = 6
+	ExdDescriptorsEstimatedTimeOfArrival           ExdDescriptors = 7
+	ExdDescriptorsHeading                          ExdDescriptors = 8
+	ExdDescriptorsTime                             ExdDescriptors = 9
+	ExdDescriptorsBatteryLevel                     ExdDescriptors = 10
+	ExdDescriptorsTrainerResistance                ExdDescriptors = 11
+	ExdDescriptorsTrainerTargetPower               ExdDescriptors = 12
+	ExdDescriptorsTimeSeated                       ExdDescriptors = 13
+	ExdDescriptorsTimeStanding                     ExdDescriptors = 14
+	ExdDescriptorsElevation                        ExdDescriptors = 15
+	ExdDescriptorsGrade                            ExdDescriptors = 16
+	ExdDescriptorsAscent                           ExdDescriptors = 17
+	ExdDescriptorsDescent                          ExdDescriptors = 18
+	ExdDescriptorsVerticalSpeed                    ExdDescriptors = 19
+	ExdDescriptorsDi2BatteryLevel                  ExdDescriptors = 20
+	ExdDescriptorsFrontGear                        ExdDescriptors = 21
+	ExdDescriptorsRearGear                         ExdDescriptors = 22
+	ExdDescriptorsGearRatio                        ExdDescriptors = 23
+	ExdDescriptorsHeartRate                        ExdDescriptors = 24
+	ExdDescriptorsHeartRateZone                    ExdDescriptors = 25
+	ExdDescriptorsTimeInHeartRateZone              ExdDescriptors = 26
+	ExdDescriptorsHeartRateReserve                 ExdDescriptors = 27
+	ExdDescriptorsCalories                         ExdDescriptors = 28
+	ExdDescriptorsGpsAccuracy                      ExdDescriptors = 29
+	ExdDescriptorsGpsSignalStrength                ExdDescriptors = 30
+	ExdDescriptorsTemperature                      ExdDescriptors = 31
+	ExdDescriptorsTimeOfDay                        ExdDescriptors = 32
+	ExdDescriptorsBalance                          ExdDescriptors = 33
+	ExdDescriptorsPedalSmoothness                  ExdDescriptors = 34
+	ExdDescriptorsPower                            ExdDescriptors = 35
+	ExdDescriptorsFunctionalThresholdPower         ExdDescriptors = 36
+	ExdDescriptorsIntensityFactor                  ExdDescriptors = 37
+	ExdDescriptorsWork                             ExdDescriptors = 38
+	ExdDescriptorsPowerRatio                       ExdDescriptors = 39
+	ExdDescriptorsNormalizedPower                  ExdDescriptors = 40
+	ExdDescriptorsTrainingStressScore              ExdDescriptors = 41
+	ExdDescriptorsTimeOnZone                       ExdDescriptors = 42
+	ExdDescriptorsSpeed                            ExdDescriptors = 43
+	ExdDescriptorsLaps                             ExdDescriptors = 44
+	ExdDescriptorsReps                             ExdDescriptors = 45
+	ExdDescriptorsWorkoutStep                      ExdDescriptors = 46
+	ExdDescriptorsCourseDistance                   ExdDescriptors = 47
+	ExdDescriptorsNavigationDistance               ExdDescriptors = 48
+	ExdDescriptorsCourseEstimatedTimeOfArrival     ExdDescriptors = 49
+	ExdDescriptorsNavigationEstimatedTimeOfArrival ExdDescriptors = 50
+	ExdDescriptorsCourseTime                       ExdDescriptors = 51
+	ExdDescriptorsNavigationTime                   ExdDescriptors = 52
+	ExdDescriptorsCourseHeading                    ExdDescriptors = 53
+	ExdDescriptorsNavigationHeading                ExdDescriptors = 54
+	ExdDescriptorsPowerZone                        ExdDescriptors = 55
+	ExdDescriptorsTorqueEffectiveness              ExdDescriptors = 56
+	ExdDescriptorsTimerTime                        ExdDescriptors = 57
+	ExdDescriptorsPowerWeightRatio                 ExdDescriptors = 58
+	ExdDescriptorsLeftPlatformCenterOffset         ExdDescriptors = 59
+	ExdDescriptorsRightPlatformCenterOffset        ExdDescriptors = 60
+	ExdDescriptorsLeftPowerPhaseStartAngle         ExdDescriptors = 61
+	ExdDescriptorsRightPowerPhaseStartAngle        ExdDescriptors = 62
+	ExdDescriptorsLeftPowerPhaseFinishAngle        ExdDescriptors = 63
+	ExdDescriptorsRightPowerPhaseFinishAngle       ExdDescriptors = 64
+	ExdDescriptorsGears                            ExdDescriptors = 65 // Combined gear information
+	ExdDescriptorsPace                             ExdDescriptors = 66
+	ExdDescriptorsTrainingEffect                   ExdDescriptors = 67
+	ExdDescriptorsVerticalOscillation              ExdDescriptors = 68
+	ExdDescriptorsVerticalRatio                    ExdDescriptors = 69
+	ExdDescriptorsGroundContactTime                ExdDescriptors = 70
+	ExdDescriptorsLeftGroundContactTimeBalance     ExdDescriptors = 71
+	ExdDescriptorsRightGroundContactTimeBalance    ExdDescriptors = 72
+	ExdDescriptorsStrideLength                     ExdDescriptors = 73
+	ExdDescriptorsRunningCadence                   ExdDescriptors = 74
+	ExdDescriptorsPerformanceCondition             ExdDescriptors = 75
+	ExdDescriptorsCourseType                       ExdDescriptors = 76
+	ExdDescriptorsTimeInPowerZone                  ExdDescriptors = 77
+	ExdDescriptorsNavigationTurn                   ExdDescriptors = 78
+	ExdDescriptorsCourseLocation                   ExdDescriptors = 79
+	ExdDescriptorsNavigationLocation               ExdDescriptors = 80
+	ExdDescriptorsCompass                          ExdDescriptors = 81
+	ExdDescriptorsGearCombo                        ExdDescriptors = 82
+	ExdDescriptorsMuscleOxygen                     ExdDescriptors = 83
+	ExdDescriptorsIcon                             ExdDescriptors = 84
+	ExdDescriptorsCompassHeading                   ExdDescriptors = 85
+	ExdDescriptorsGpsHeading                       ExdDescriptors = 86
+	ExdDescriptorsGpsElevation                     ExdDescriptors = 87
+	ExdDescriptorsAnaerobicTrainingEffect          ExdDescriptors = 88
+	ExdDescriptorsCourse                           ExdDescriptors = 89
+	ExdDescriptorsOffCourse                        ExdDescriptors = 90
+	ExdDescriptorsGlideRatio                       ExdDescriptors = 91
+	ExdDescriptorsVerticalDistance                 ExdDescriptors = 92
+	ExdDescriptorsVmg                              ExdDescriptors = 93
+	ExdDescriptorsAmbientPressure                  ExdDescriptors = 94
+	ExdDescriptorsPressure                         ExdDescriptors = 95
+	ExdDescriptorsInvalid                          ExdDescriptors = 0xFF
+)
+
+// ExdDisplayType represents the exd_display_type FIT type.
+type ExdDisplayType byte
+
+const (
+	ExdDisplayTypeNumerical         ExdDisplayType = 0
+	ExdDisplayTypeSimple            ExdDisplayType = 1
+	ExdDisplayTypeGraph             ExdDisplayType = 2
+	ExdDisplayTypeBar               ExdDisplayType = 3
+	ExdDisplayTypeCircleGraph       ExdDisplayType = 4
+	ExdDisplayTypeVirtualPartner    ExdDisplayType = 5
+	ExdDisplayTypeBalance           ExdDisplayType = 6
+	ExdDisplayTypeStringList        ExdDisplayType = 7
+	ExdDisplayTypeString            ExdDisplayType = 8
+	ExdDisplayTypeSimpleDynamicIcon ExdDisplayType = 9
+	ExdDisplayTypeGauge             ExdDisplayType = 10
+	ExdDisplayTypeInvalid           ExdDisplayType = 0xFF
+)
+
+// ExdLayout represents the exd_layout FIT type.
+type ExdLayout byte
+
+const (
+	ExdLayoutFullScreen                ExdLayout = 0
+	ExdLayoutHalfVertical              ExdLayout = 1
+	ExdLayoutHalfHorizontal            ExdLayout = 2
+	ExdLayoutHalfVerticalRightSplit    ExdLayout = 3
+	ExdLayoutHalfHorizontalBottomSplit ExdLayout = 4
+	ExdLayoutFullQuarterSplit          ExdLayout = 5
+	ExdLayoutHalfVerticalLeftSplit     ExdLayout = 6
+	ExdLayoutHalfHorizontalTopSplit    ExdLayout = 7
+	ExdLayoutInvalid                   ExdLayout = 0xFF
+)
+
+// ExdQualifiers represents the exd_qualifiers FIT type.
+type ExdQualifiers byte
+
+const (
+	ExdQualifiersNoQualifier              ExdQualifiers = 0
+	ExdQualifiersInstantaneous            ExdQualifiers = 1
+	ExdQualifiersAverage                  ExdQualifiers = 2
+	ExdQualifiersLap                      ExdQualifiers = 3
+	ExdQualifiersMaximum                  ExdQualifiers = 4
+	ExdQualifiersMaximumAverage           ExdQualifiers = 5
+	ExdQualifiersMaximumLap               ExdQualifiers = 6
+	ExdQualifiersLastLap                  ExdQualifiers = 7
+	ExdQualifiersAverageLap               ExdQualifiers = 8
+	ExdQualifiersToDestination            ExdQualifiers = 9
+	ExdQualifiersToGo                     ExdQualifiers = 10
+	ExdQualifiersToNext                   ExdQualifiers = 11
+	ExdQualifiersNextCoursePoint          ExdQualifiers = 12
+	ExdQualifiersTotal                    ExdQualifiers = 13
+	ExdQualifiersThreeSecondAverage       ExdQualifiers = 14
+	ExdQualifiersTenSecondAverage         ExdQualifiers = 15
+	ExdQualifiersThirtySecondAverage      ExdQualifiers = 16
+	ExdQualifiersPercentMaximum           ExdQualifiers = 17
+	ExdQualifiersPercentMaximumAverage    ExdQualifiers = 18
+	ExdQualifiersLapPercentMaximum        ExdQualifiers = 19
+	ExdQualifiersElapsed                  ExdQualifiers = 20
+	ExdQualifiersSunrise                  ExdQualifiers = 21
+	ExdQualifiersSunset                   ExdQualifiers = 22
+	ExdQualifiersComparedToVirtualPartner ExdQualifiers = 23
+	ExdQualifiersMaximum24h               ExdQualifiers = 24
+	ExdQualifiersMinimum24h               ExdQualifiers = 25
+	ExdQualifiersMinimum                  ExdQualifiers = 26
+	ExdQualifiersFirst                    ExdQualifiers = 27
+	ExdQualifiersSecond                   ExdQualifiers = 28
+	ExdQualifiersThird                    ExdQualifiers = 29
+	ExdQualifiersShifter                  ExdQualifiers = 30
+	ExdQualifiersLastSport                ExdQualifiers = 31
+	ExdQualifiersMoving                   ExdQualifiers = 32
+	ExdQualifiersStopped                  ExdQualifiers = 33
+	ExdQualifiersZone9                    ExdQualifiers = 242
+	ExdQualifiersZone8                    ExdQualifiers = 243
+	ExdQualifiersZone7                    ExdQualifiers = 244
+	ExdQualifiersZone6                    ExdQualifiers = 245
+	ExdQualifiersZone5                    ExdQualifiers = 246
+	ExdQualifiersZone4                    ExdQualifiers = 247
+	ExdQualifiersZone3                    ExdQualifiers = 248
+	ExdQualifiersZone2                    ExdQualifiers = 249
+	ExdQualifiersZone1                    ExdQualifiers = 250
+	ExdQualifiersInvalid                  ExdQualifiers = 0xFF
+)
+
 // FileFlags represents the file_flags FIT type.
 type FileFlags uint8
 
@@ -500,26 +905,61 @@ const (
 type FileType byte
 
 const (
-	FileTypeDevice          FileType = 1  // Read only, single file. Must be in root directory.
-	FileTypeSettings        FileType = 2  // Read/write, single file. Directory=Settings
-	FileTypeSport           FileType = 3  // Read/write, multiple files, file number = sport type. Directory=Sports
-	FileTypeActivity        FileType = 4  // Read/erase, multiple files. Directory=Activities
-	FileTypeWorkout         FileType = 5  // Read/write/erase, multiple files. Directory=Workouts
-	FileTypeCourse          FileType = 6  // Read/write/erase, multiple files. Directory=Courses
-	FileTypeSchedules       FileType = 7  // Read/write, single file. Directory=Schedules
-	FileTypeWeight          FileType = 9  // Read only, single file. Circular buffer. All message definitions at start of file. Directory=Weight
-	FileTypeTotals          FileType = 10 // Read only, single file. Directory=Totals
-	FileTypeGoals           FileType = 11 // Read/write, single file. Directory=Goals
-	FileTypeBloodPressure   FileType = 14 // Read only. Directory=Blood Pressure
-	FileTypeMonitoringA     FileType = 15 // Read only. Directory=Monitoring. File number=sub type.
-	FileTypeActivitySummary FileType = 20 // Read/erase, multiple files. Directory=Activities
-	FileTypeMonitoringDaily FileType = 28
-	FileTypeMonitoringB     FileType = 32   // Read only. Directory=Monitoring. File number=identifier
-	FileTypeSegment         FileType = 34   // Read/write/erase. Multiple Files.  Directory=Segments
-	FileTypeSegmentList     FileType = 35   // Read/write/erase. Single File.  Directory=Segments
-	FileTypeMfgRangeMin     FileType = 0xF7 // 0xF7 - 0xFE reserved for manufacturer specific file types
-	FileTypeMfgRangeMax     FileType = 0xFE // 0xF7 - 0xFE reserved for manufacturer specific file types
-	FileTypeInvalid         FileType = 0xFF
+	FileTypeDevice           FileType = 1  // Read only, single file. Must be in root directory.
+	FileTypeSettings         FileType = 2  // Read/write, single file. Directory=Settings
+	FileTypeSport            FileType = 3  // Read/write, multiple files, file number = sport type. Directory=Sports
+	FileTypeActivity         FileType = 4  // Read/erase, multiple files. Directory=Activities
+	FileTypeWorkout          FileType = 5  // Read/write/erase, multiple files. Directory=Workouts
+	FileTypeCourse           FileType = 6  // Read/write/erase, multiple files. Directory=Courses
+	FileTypeSchedules        FileType = 7  // Read/write, single file. Directory=Schedules
+	FileTypeWeight           FileType = 9  // Read only, single file. Circular buffer. All message definitions at start of file. Directory=Weight
+	FileTypeTotals           FileType = 10 // Read only, single file. Directory=Totals
+	FileTypeGoals            FileType = 11 // Read/write, single file. Directory=Goals
+	FileTypeBloodPressure    FileType = 14 // Read only. Directory=Blood Pressure
+	FileTypeMonitoringA      FileType = 15 // Read only. Directory=Monitoring. File number=sub type.
+	FileTypeActivitySummary  FileType = 20 // Read/erase, multiple files. Directory=Activities
+	FileTypeMonitoringDaily  FileType = 28
+	FileTypeMonitoringB      FileType = 32   // Read only. Directory=Monitoring. File number=identifier
+	FileTypeSegment          FileType = 34   // Read/write/erase. Multiple Files.  Directory=Segments
+	FileTypeSegmentList      FileType = 35   // Read/write/erase. Single File.  Directory=Segments
+	FileTypeExdConfiguration FileType = 40   // Read/write/erase. Single File. Directory=Settings
+	FileTypeMfgRangeMin      FileType = 0xF7 // 0xF7 - 0xFE reserved for manufacturer specific file types
+	FileTypeMfgRangeMax      FileType = 0xFE // 0xF7 - 0xFE reserved for manufacturer specific file types
+	FileTypeInvalid          FileType = 0xFF
+)
+
+// FitBaseType represents the fit_base_type FIT type.
+type FitBaseType uint8
+
+const (
+	FitBaseTypeEnum    FitBaseType = 0
+	FitBaseTypeSint8   FitBaseType = 1
+	FitBaseTypeUint8   FitBaseType = 2
+	FitBaseTypeSint16  FitBaseType = 131
+	FitBaseTypeUint16  FitBaseType = 132
+	FitBaseTypeSint32  FitBaseType = 133
+	FitBaseTypeUint32  FitBaseType = 134
+	FitBaseTypeString  FitBaseType = 7
+	FitBaseTypeFloat32 FitBaseType = 136
+	FitBaseTypeFloat64 FitBaseType = 137
+	FitBaseTypeUint8z  FitBaseType = 10
+	FitBaseTypeUint16z FitBaseType = 139
+	FitBaseTypeUint32z FitBaseType = 140
+	FitBaseTypeByte    FitBaseType = 13
+	FitBaseTypeSint64  FitBaseType = 142
+	FitBaseTypeUint64  FitBaseType = 143
+	FitBaseTypeUint64z FitBaseType = 144
+	FitBaseTypeInvalid FitBaseType = 0xFF
+)
+
+// FitBaseUnit represents the fit_base_unit FIT type.
+type FitBaseUnit uint16
+
+const (
+	FitBaseUnitOther    FitBaseUnit = 0
+	FitBaseUnitKilogram FitBaseUnit = 1
+	FitBaseUnitPound    FitBaseUnit = 2
+	FitBaseUnitInvalid  FitBaseUnit = 0xFFFF
 )
 
 // FitnessEquipmentState represents the fitness_equipment_state FIT type.
@@ -639,27 +1079,49 @@ const (
 	GarminProductVivoSmartApac             GarminProduct = 2135
 	GarminProductEtrexTouch                GarminProduct = 2140
 	GarminProductEdge25                    GarminProduct = 2147
+	GarminProductFr25                      GarminProduct = 2148
 	GarminProductVivoFit2                  GarminProduct = 2150
 	GarminProductFr225                     GarminProduct = 2153
+	GarminProductFr630                     GarminProduct = 2156
+	GarminProductFr230                     GarminProduct = 2157
 	GarminProductVivoActiveApac            GarminProduct = 2160
 	GarminProductVector2                   GarminProduct = 2161
 	GarminProductVector2s                  GarminProduct = 2162
 	GarminProductVirbxe                    GarminProduct = 2172
 	GarminProductFr620Taiwan               GarminProduct = 2173
 	GarminProductFr220Taiwan               GarminProduct = 2174
+	GarminProductTruswing                  GarminProduct = 2175
 	GarminProductFenix3China               GarminProduct = 2188
 	GarminProductFenix3Twn                 GarminProduct = 2189
 	GarminProductVariaHeadlight            GarminProduct = 2192
 	GarminProductVariaTaillightOld         GarminProduct = 2193
+	GarminProductEdgeExplore1000           GarminProduct = 2204
 	GarminProductFr225Asia                 GarminProduct = 2219
 	GarminProductVariaRadarTaillight       GarminProduct = 2225
 	GarminProductVariaRadarDisplay         GarminProduct = 2226
 	GarminProductEdge20                    GarminProduct = 2238
 	GarminProductD2Bravo                   GarminProduct = 2262
+	GarminProductApproachS20               GarminProduct = 2266
 	GarminProductVariaRemote               GarminProduct = 2276
+	GarminProductHrm4Run                   GarminProduct = 2327
+	GarminProductVivoActiveHr              GarminProduct = 2337
+	GarminProductVivoSmartGpsHr            GarminProduct = 2347
+	GarminProductVivoSmartHr               GarminProduct = 2348
+	GarminProductVivoMove                  GarminProduct = 2368
+	GarminProductVariaVision               GarminProduct = 2398
+	GarminProductVivoFit3                  GarminProduct = 2406
+	GarminProductFenix3Hr                  GarminProduct = 2413
+	GarminProductIndexSmartScale           GarminProduct = 2429
+	GarminProductFr235                     GarminProduct = 2431
+	GarminProductOregon7xx                 GarminProduct = 2441
+	GarminProductRino7xx                   GarminProduct = 2444
+	GarminProductNautix                    GarminProduct = 2496
+	GarminProductEdge820                   GarminProduct = 2530
+	GarminProductEdgeExplore820            GarminProduct = 2531
 	GarminProductSdm4                      GarminProduct = 10007 // SDM4 footpod
 	GarminProductEdgeRemote                GarminProduct = 10014
 	GarminProductTrainingCenter            GarminProduct = 20119
+	GarminProductConnectiqSimulator        GarminProduct = 65531
 	GarminProductAndroidAntplusPlugin      GarminProduct = 65532
 	GarminProductConnect                   GarminProduct = 65534 // Garmin Connect website
 	GarminProductInvalid                   GarminProduct = 0xFFFF
@@ -678,12 +1140,14 @@ const (
 type Goal byte
 
 const (
-	GoalTime      Goal = 0
-	GoalDistance  Goal = 1
-	GoalCalories  Goal = 2
-	GoalFrequency Goal = 3
-	GoalSteps     Goal = 4
-	GoalInvalid   Goal = 0xFF
+	GoalTime          Goal = 0
+	GoalDistance      Goal = 1
+	GoalCalories      Goal = 2
+	GoalFrequency     Goal = 3
+	GoalSteps         Goal = 4
+	GoalAscent        Goal = 5
+	GoalActiveMinutes Goal = 6
+	GoalInvalid       Goal = 0xFF
 )
 
 // GoalRecurrence represents the goal_recurrence FIT type.
@@ -697,6 +1161,16 @@ const (
 	GoalRecurrenceYearly  GoalRecurrence = 4
 	GoalRecurrenceCustom  GoalRecurrence = 5
 	GoalRecurrenceInvalid GoalRecurrence = 0xFF
+)
+
+// GoalSource represents the goal_source FIT type.
+type GoalSource byte
+
+const (
+	GoalSourceAuto      GoalSource = 0 // Device generated
+	GoalSourceCommunity GoalSource = 1 // Social network sourced goal
+	GoalSourceUser      GoalSource = 2 // Manually generated
+	GoalSourceInvalid   GoalSource = 0xFF
 )
 
 // HrType represents the hr_type FIT type.
@@ -733,34 +1207,119 @@ const (
 type Language byte
 
 const (
-	LanguageEnglish    Language = 0
-	LanguageFrench     Language = 1
-	LanguageItalian    Language = 2
-	LanguageGerman     Language = 3
-	LanguageSpanish    Language = 4
-	LanguageCroatian   Language = 5
-	LanguageCzech      Language = 6
-	LanguageDanish     Language = 7
-	LanguageDutch      Language = 8
-	LanguageFinnish    Language = 9
-	LanguageGreek      Language = 10
-	LanguageHungarian  Language = 11
-	LanguageNorwegian  Language = 12
-	LanguagePolish     Language = 13
-	LanguagePortuguese Language = 14
-	LanguageSlovakian  Language = 15
-	LanguageSlovenian  Language = 16
-	LanguageSwedish    Language = 17
-	LanguageRussian    Language = 18
-	LanguageTurkish    Language = 19
-	LanguageLatvian    Language = 20
-	LanguageUkrainian  Language = 21
-	LanguageArabic     Language = 22
-	LanguageFarsi      Language = 23
-	LanguageBulgarian  Language = 24
-	LanguageRomanian   Language = 25
-	LanguageCustom     Language = 254
-	LanguageInvalid    Language = 0xFF
+	LanguageEnglish             Language = 0
+	LanguageFrench              Language = 1
+	LanguageItalian             Language = 2
+	LanguageGerman              Language = 3
+	LanguageSpanish             Language = 4
+	LanguageCroatian            Language = 5
+	LanguageCzech               Language = 6
+	LanguageDanish              Language = 7
+	LanguageDutch               Language = 8
+	LanguageFinnish             Language = 9
+	LanguageGreek               Language = 10
+	LanguageHungarian           Language = 11
+	LanguageNorwegian           Language = 12
+	LanguagePolish              Language = 13
+	LanguagePortuguese          Language = 14
+	LanguageSlovakian           Language = 15
+	LanguageSlovenian           Language = 16
+	LanguageSwedish             Language = 17
+	LanguageRussian             Language = 18
+	LanguageTurkish             Language = 19
+	LanguageLatvian             Language = 20
+	LanguageUkrainian           Language = 21
+	LanguageArabic              Language = 22
+	LanguageFarsi               Language = 23
+	LanguageBulgarian           Language = 24
+	LanguageRomanian            Language = 25
+	LanguageChinese             Language = 26
+	LanguageJapanese            Language = 27
+	LanguageKorean              Language = 28
+	LanguageTaiwanese           Language = 29
+	LanguageThai                Language = 30
+	LanguageHebrew              Language = 31
+	LanguageBrazilianPortuguese Language = 32
+	LanguageIndonesian          Language = 33
+	LanguageMalaysian           Language = 34
+	LanguageVietnamese          Language = 35
+	LanguageBurmese             Language = 36
+	LanguageMongolian           Language = 37
+	LanguageCustom              Language = 254
+	LanguageInvalid             Language = 0xFF
+)
+
+// LanguageBits0 represents the language_bits_0 FIT type.
+type LanguageBits0 uint8
+
+const (
+	LanguageBits0English  LanguageBits0 = 0x01
+	LanguageBits0French   LanguageBits0 = 0x02
+	LanguageBits0Italian  LanguageBits0 = 0x04
+	LanguageBits0German   LanguageBits0 = 0x08
+	LanguageBits0Spanish  LanguageBits0 = 0x10
+	LanguageBits0Croatian LanguageBits0 = 0x20
+	LanguageBits0Czech    LanguageBits0 = 0x40
+	LanguageBits0Danish   LanguageBits0 = 0x80
+	LanguageBits0Invalid  LanguageBits0 = 0x00
+)
+
+// LanguageBits1 represents the language_bits_1 FIT type.
+type LanguageBits1 uint8
+
+const (
+	LanguageBits1Dutch      LanguageBits1 = 0x01
+	LanguageBits1Finnish    LanguageBits1 = 0x02
+	LanguageBits1Greek      LanguageBits1 = 0x04
+	LanguageBits1Hungarian  LanguageBits1 = 0x08
+	LanguageBits1Norwegian  LanguageBits1 = 0x10
+	LanguageBits1Polish     LanguageBits1 = 0x20
+	LanguageBits1Portuguese LanguageBits1 = 0x40
+	LanguageBits1Slovakian  LanguageBits1 = 0x80
+	LanguageBits1Invalid    LanguageBits1 = 0x00
+)
+
+// LanguageBits2 represents the language_bits_2 FIT type.
+type LanguageBits2 uint8
+
+const (
+	LanguageBits2Slovenian LanguageBits2 = 0x01
+	LanguageBits2Swedish   LanguageBits2 = 0x02
+	LanguageBits2Russian   LanguageBits2 = 0x04
+	LanguageBits2Turkish   LanguageBits2 = 0x08
+	LanguageBits2Latvian   LanguageBits2 = 0x10
+	LanguageBits2Ukrainian LanguageBits2 = 0x20
+	LanguageBits2Arabic    LanguageBits2 = 0x40
+	LanguageBits2Farsi     LanguageBits2 = 0x80
+	LanguageBits2Invalid   LanguageBits2 = 0x00
+)
+
+// LanguageBits3 represents the language_bits_3 FIT type.
+type LanguageBits3 uint8
+
+const (
+	LanguageBits3Bulgarian LanguageBits3 = 0x01
+	LanguageBits3Romanian  LanguageBits3 = 0x02
+	LanguageBits3Chinese   LanguageBits3 = 0x04
+	LanguageBits3Japanese  LanguageBits3 = 0x08
+	LanguageBits3Korean    LanguageBits3 = 0x10
+	LanguageBits3Taiwanese LanguageBits3 = 0x20
+	LanguageBits3Thai      LanguageBits3 = 0x40
+	LanguageBits3Hebrew    LanguageBits3 = 0x80
+	LanguageBits3Invalid   LanguageBits3 = 0x00
+)
+
+// LanguageBits4 represents the language_bits_4 FIT type.
+type LanguageBits4 uint8
+
+const (
+	LanguageBits4BrazilianPortuguese LanguageBits4 = 0x01
+	LanguageBits4Indonesian          LanguageBits4 = 0x02
+	LanguageBits4Malaysian           LanguageBits4 = 0x04
+	LanguageBits4Vietnamese          LanguageBits4 = 0x08
+	LanguageBits4Burmese             LanguageBits4 = 0x10
+	LanguageBits4Mongolian           LanguageBits4 = 0x20
+	LanguageBits4Invalid             LanguageBits4 = 0x00
 )
 
 // LapTrigger represents the lap_trigger FIT type.
@@ -804,6 +1363,13 @@ const (
 	LengthTypeIdle    LengthType = 0 // Rest period. Length with no strokes
 	LengthTypeActive  LengthType = 1 // Length with strokes.
 	LengthTypeInvalid LengthType = 0xFF
+)
+
+// LocaltimeIntoDay represents the localtime_into_day FIT type.
+type LocaltimeIntoDay uint32
+
+const (
+	LocaltimeIntoDayInvalid LocaltimeIntoDay = 0xFFFFFFFF
 )
 
 // Manufacturer represents the manufacturer FIT type.
@@ -906,6 +1472,17 @@ const (
 	ManufacturerMiPulse                Manufacturer = 97
 	ManufacturerBsxAthletics           Manufacturer = 98
 	ManufacturerLook                   Manufacturer = 99
+	ManufacturerCampagnoloSrl          Manufacturer = 100
+	ManufacturerBodyBikeSmart          Manufacturer = 101
+	ManufacturerPraxisworks            Manufacturer = 102
+	ManufacturerLimitsTechnology       Manufacturer = 103 // Limits Technology Ltd.
+	ManufacturerTopactionTechnology    Manufacturer = 104 // TopAction Technology Inc.
+	ManufacturerCosinuss               Manufacturer = 105
+	ManufacturerFitcare                Manufacturer = 106
+	ManufacturerMagene                 Manufacturer = 107
+	ManufacturerGiantManufacturingCo   Manufacturer = 108
+	ManufacturerTigrasport             Manufacturer = 109 // Tigrasport
+	ManufacturerSalutron               Manufacturer = 110
 	ManufacturerDevelopment            Manufacturer = 255
 	ManufacturerHealthandlife          Manufacturer = 257
 	ManufacturerLezyne                 Manufacturer = 258
@@ -916,6 +1493,18 @@ const (
 	ManufacturerFaveroElectronics      Manufacturer = 263
 	ManufacturerDynovelo               Manufacturer = 264
 	ManufacturerStrava                 Manufacturer = 265
+	ManufacturerPrecor                 Manufacturer = 266 // Amer Sports
+	ManufacturerBryton                 Manufacturer = 267
+	ManufacturerSram                   Manufacturer = 268
+	ManufacturerNavman                 Manufacturer = 269 // MiTAC Global Corporation (Mio Technology)
+	ManufacturerCobi                   Manufacturer = 270 // COBI GmbH
+	ManufacturerSpivi                  Manufacturer = 271
+	ManufacturerMioMagellan            Manufacturer = 272
+	ManufacturerEvesports              Manufacturer = 273
+	ManufacturerSensitivusGauge        Manufacturer = 274
+	ManufacturerPodoon                 Manufacturer = 275
+	ManufacturerLifeTimeFitness        Manufacturer = 276
+	ManufacturerFalcoEMotors           Manufacturer = 277 // Falco eMotors Inc.
 	ManufacturerActigraphcorp          Manufacturer = 5759
 	ManufacturerInvalid                Manufacturer = 0xFFFF
 )
@@ -934,70 +1523,85 @@ const (
 type MesgNum uint16
 
 const (
-	MesgNumFileId                  MesgNum = 0
-	MesgNumCapabilities            MesgNum = 1
-	MesgNumDeviceSettings          MesgNum = 2
-	MesgNumUserProfile             MesgNum = 3
-	MesgNumHrmProfile              MesgNum = 4
-	MesgNumSdmProfile              MesgNum = 5
-	MesgNumBikeProfile             MesgNum = 6
-	MesgNumZonesTarget             MesgNum = 7
-	MesgNumHrZone                  MesgNum = 8
-	MesgNumPowerZone               MesgNum = 9
-	MesgNumMetZone                 MesgNum = 10
-	MesgNumSport                   MesgNum = 12
-	MesgNumGoal                    MesgNum = 15
-	MesgNumSession                 MesgNum = 18
-	MesgNumLap                     MesgNum = 19
-	MesgNumRecord                  MesgNum = 20
-	MesgNumEvent                   MesgNum = 21
-	MesgNumDeviceInfo              MesgNum = 23
-	MesgNumWorkout                 MesgNum = 26
-	MesgNumWorkoutStep             MesgNum = 27
-	MesgNumSchedule                MesgNum = 28
-	MesgNumWeightScale             MesgNum = 30
-	MesgNumCourse                  MesgNum = 31
-	MesgNumCoursePoint             MesgNum = 32
-	MesgNumTotals                  MesgNum = 33
-	MesgNumActivity                MesgNum = 34
-	MesgNumSoftware                MesgNum = 35
-	MesgNumFileCapabilities        MesgNum = 37
-	MesgNumMesgCapabilities        MesgNum = 38
-	MesgNumFieldCapabilities       MesgNum = 39
-	MesgNumFileCreator             MesgNum = 49
-	MesgNumBloodPressure           MesgNum = 51
-	MesgNumSpeedZone               MesgNum = 53
-	MesgNumMonitoring              MesgNum = 55
-	MesgNumTrainingFile            MesgNum = 72
-	MesgNumHrv                     MesgNum = 78
-	MesgNumLength                  MesgNum = 101
-	MesgNumMonitoringInfo          MesgNum = 103
-	MesgNumPad                     MesgNum = 105
-	MesgNumSlaveDevice             MesgNum = 106
-	MesgNumCadenceZone             MesgNum = 131
-	MesgNumSegmentLap              MesgNum = 142
-	MesgNumMemoGlob                MesgNum = 145
-	MesgNumSegmentId               MesgNum = 148
-	MesgNumSegmentLeaderboardEntry MesgNum = 149
-	MesgNumSegmentPoint            MesgNum = 150
-	MesgNumSegmentFile             MesgNum = 151
-	MesgNumGpsMetadata             MesgNum = 160
-	MesgNumCameraEvent             MesgNum = 161
-	MesgNumTimestampCorrelation    MesgNum = 162
-	MesgNumGyroscopeData           MesgNum = 164
-	MesgNumAccelerometerData       MesgNum = 165
-	MesgNumThreeDSensorCalibration MesgNum = 167
-	MesgNumVideoFrame              MesgNum = 169
-	MesgNumObdiiData               MesgNum = 174
-	MesgNumNmeaSentence            MesgNum = 177
-	MesgNumAviationAttitude        MesgNum = 178
-	MesgNumVideo                   MesgNum = 184
-	MesgNumVideoTitle              MesgNum = 185
-	MesgNumVideoDescription        MesgNum = 186
-	MesgNumVideoClip               MesgNum = 187
-	MesgNumMfgRangeMin             MesgNum = 0xFF00 // 0xFF00 - 0xFFFE reserved for manufacturer specific messages
-	MesgNumMfgRangeMax             MesgNum = 0xFFFE // 0xFF00 - 0xFFFE reserved for manufacturer specific messages
-	MesgNumInvalid                 MesgNum = 0xFFFF
+	MesgNumFileId                      MesgNum = 0
+	MesgNumCapabilities                MesgNum = 1
+	MesgNumDeviceSettings              MesgNum = 2
+	MesgNumUserProfile                 MesgNum = 3
+	MesgNumHrmProfile                  MesgNum = 4
+	MesgNumSdmProfile                  MesgNum = 5
+	MesgNumBikeProfile                 MesgNum = 6
+	MesgNumZonesTarget                 MesgNum = 7
+	MesgNumHrZone                      MesgNum = 8
+	MesgNumPowerZone                   MesgNum = 9
+	MesgNumMetZone                     MesgNum = 10
+	MesgNumSport                       MesgNum = 12
+	MesgNumGoal                        MesgNum = 15
+	MesgNumSession                     MesgNum = 18
+	MesgNumLap                         MesgNum = 19
+	MesgNumRecord                      MesgNum = 20
+	MesgNumEvent                       MesgNum = 21
+	MesgNumDeviceInfo                  MesgNum = 23
+	MesgNumWorkout                     MesgNum = 26
+	MesgNumWorkoutStep                 MesgNum = 27
+	MesgNumSchedule                    MesgNum = 28
+	MesgNumWeightScale                 MesgNum = 30
+	MesgNumCourse                      MesgNum = 31
+	MesgNumCoursePoint                 MesgNum = 32
+	MesgNumTotals                      MesgNum = 33
+	MesgNumActivity                    MesgNum = 34
+	MesgNumSoftware                    MesgNum = 35
+	MesgNumFileCapabilities            MesgNum = 37
+	MesgNumMesgCapabilities            MesgNum = 38
+	MesgNumFieldCapabilities           MesgNum = 39
+	MesgNumFileCreator                 MesgNum = 49
+	MesgNumBloodPressure               MesgNum = 51
+	MesgNumSpeedZone                   MesgNum = 53
+	MesgNumMonitoring                  MesgNum = 55
+	MesgNumTrainingFile                MesgNum = 72
+	MesgNumHrv                         MesgNum = 78
+	MesgNumAntRx                       MesgNum = 80
+	MesgNumAntTx                       MesgNum = 81
+	MesgNumAntChannelId                MesgNum = 82
+	MesgNumLength                      MesgNum = 101
+	MesgNumMonitoringInfo              MesgNum = 103
+	MesgNumPad                         MesgNum = 105
+	MesgNumSlaveDevice                 MesgNum = 106
+	MesgNumConnectivity                MesgNum = 127
+	MesgNumWeatherConditions           MesgNum = 128
+	MesgNumWeatherAlert                MesgNum = 129
+	MesgNumCadenceZone                 MesgNum = 131
+	MesgNumHr                          MesgNum = 132
+	MesgNumSegmentLap                  MesgNum = 142
+	MesgNumMemoGlob                    MesgNum = 145
+	MesgNumSegmentId                   MesgNum = 148
+	MesgNumSegmentLeaderboardEntry     MesgNum = 149
+	MesgNumSegmentPoint                MesgNum = 150
+	MesgNumSegmentFile                 MesgNum = 151
+	MesgNumWatchfaceSettings           MesgNum = 159
+	MesgNumGpsMetadata                 MesgNum = 160
+	MesgNumCameraEvent                 MesgNum = 161
+	MesgNumTimestampCorrelation        MesgNum = 162
+	MesgNumGyroscopeData               MesgNum = 164
+	MesgNumAccelerometerData           MesgNum = 165
+	MesgNumThreeDSensorCalibration     MesgNum = 167
+	MesgNumVideoFrame                  MesgNum = 169
+	MesgNumObdiiData                   MesgNum = 174
+	MesgNumNmeaSentence                MesgNum = 177
+	MesgNumAviationAttitude            MesgNum = 178
+	MesgNumVideo                       MesgNum = 184
+	MesgNumVideoTitle                  MesgNum = 185
+	MesgNumVideoDescription            MesgNum = 186
+	MesgNumVideoClip                   MesgNum = 187
+	MesgNumOhrSettings                 MesgNum = 188
+	MesgNumExdScreenConfiguration      MesgNum = 200
+	MesgNumExdDataFieldConfiguration   MesgNum = 201
+	MesgNumExdDataConceptConfiguration MesgNum = 202
+	MesgNumFieldDescription            MesgNum = 206
+	MesgNumDeveloperDataId             MesgNum = 207
+	MesgNumMagnetometerData            MesgNum = 208
+	MesgNumMfgRangeMin                 MesgNum = 0xFF00 // 0xFF00 - 0xFFFE reserved for manufacturer specific messages
+	MesgNumMfgRangeMax                 MesgNum = 0xFFFE // 0xFF00 - 0xFFFE reserved for manufacturer specific messages
+	MesgNumInvalid                     MesgNum = 0xFFFF
 )
 
 // MessageIndex represents the message_index FIT type.
@@ -1100,7 +1704,7 @@ type SensorType byte
 const (
 	SensorTypeAccelerometer SensorType = 0
 	SensorTypeGyroscope     SensorType = 1
-	SensorTypeCompass       SensorType = 2
+	SensorTypeCompass       SensorType = 2 // Magnetometer
 	SensorTypeInvalid       SensorType = 0xFF
 )
 
@@ -1113,6 +1717,15 @@ const (
 	SessionTriggerAutoMultiSport   SessionTrigger = 2 // Auto multi-sport feature is enabled and user pressed lap button to advance session.
 	SessionTriggerFitnessEquipment SessionTrigger = 3 // Auto sport change caused by user linking to fitness equipment.
 	SessionTriggerInvalid          SessionTrigger = 0xFF
+)
+
+// Side represents the side FIT type.
+type Side byte
+
+const (
+	SideRight   Side = 0
+	SideLeft    Side = 1
+	SideInvalid Side = 0xFF
 )
 
 // SourceType represents the source_type FIT type.
@@ -1177,6 +1790,10 @@ const (
 	SportRafting               Sport = 42
 	SportWindsurfing           Sport = 43
 	SportKitesurfing           Sport = 44
+	SportTactical              Sport = 45
+	SportJumpmaster            Sport = 46
+	SportBoxing                Sport = 47
+	SportFloorClimbing         Sport = 48
 	SportAll                   Sport = 254 // All is for goals only to include all sports.
 	SportInvalid               Sport = 0xFF
 )
@@ -1265,7 +1882,18 @@ const (
 	SportBits5Rafting     SportBits5 = 0x04
 	SportBits5Windsurfing SportBits5 = 0x08
 	SportBits5Kitesurfing SportBits5 = 0x10
+	SportBits5Tactical    SportBits5 = 0x20
+	SportBits5Jumpmaster  SportBits5 = 0x40
+	SportBits5Boxing      SportBits5 = 0x80
 	SportBits5Invalid     SportBits5 = 0x00
+)
+
+// SportBits6 represents the sport_bits_6 FIT type.
+type SportBits6 uint8
+
+const (
+	SportBits6FloorClimbing SportBits6 = 0x01
+	SportBits6Invalid       SportBits6 = 0x00
 )
 
 // SportEvent represents the sport_event FIT type.
@@ -1343,8 +1971,34 @@ const (
 	SubSportRcDrone              SubSport = 39 // Flying
 	SubSportWingsuit             SubSport = 40 // Flying
 	SubSportWhitewater           SubSport = 41 // Kayaking/Rafting
+	SubSportSkateSkiing          SubSport = 42 // Cross Country Skiing
+	SubSportYoga                 SubSport = 43 // Training
+	SubSportPilates              SubSport = 44 // Training
+	SubSportIndoorRunning        SubSport = 45 // Run
+	SubSportGravelCycling        SubSport = 46 // Cycling
+	SubSportEBikeMountain        SubSport = 47 // Cycling
+	SubSportCommuting            SubSport = 48 // Cycling
+	SubSportMixedSurface         SubSport = 49 // Cycling
+	SubSportNavigate             SubSport = 50
+	SubSportTrackMe              SubSport = 51
+	SubSportMap                  SubSport = 52
 	SubSportAll                  SubSport = 254
 	SubSportInvalid              SubSport = 0xFF
+)
+
+// SupportedExdScreenLayouts represents the supported_exd_screen_layouts FIT type.
+type SupportedExdScreenLayouts uint32
+
+const (
+	SupportedExdScreenLayoutsFullScreen                SupportedExdScreenLayouts = 0x00000001
+	SupportedExdScreenLayoutsHalfVertical              SupportedExdScreenLayouts = 0x00000002
+	SupportedExdScreenLayoutsHalfHorizontal            SupportedExdScreenLayouts = 0x00000004
+	SupportedExdScreenLayoutsHalfVerticalRightSplit    SupportedExdScreenLayouts = 0x00000008
+	SupportedExdScreenLayoutsHalfHorizontalBottomSplit SupportedExdScreenLayouts = 0x00000010
+	SupportedExdScreenLayoutsFullQuarterSplit          SupportedExdScreenLayouts = 0x00000020
+	SupportedExdScreenLayoutsHalfVerticalLeftSplit     SupportedExdScreenLayouts = 0x00000040
+	SupportedExdScreenLayoutsHalfHorizontalTopSplit    SupportedExdScreenLayouts = 0x00000080
+	SupportedExdScreenLayoutsInvalid                   SupportedExdScreenLayouts = 0x00000000
 )
 
 // SwimStroke represents the swim_stroke FIT type.
@@ -1359,6 +2013,36 @@ const (
 	SwimStrokeMixed        SwimStroke = 5
 	SwimStrokeIm           SwimStroke = 6 // IM is a mixed interval containing the same number of lengths for each of: Butterfly, Backstroke, Breaststroke, Freestyle, swam in that order.
 	SwimStrokeInvalid      SwimStroke = 0xFF
+)
+
+// Switch represents the switch FIT type.
+type Switch byte
+
+const (
+	SwitchOff     Switch = 0
+	SwitchOn      Switch = 1
+	SwitchAuto    Switch = 2
+	SwitchInvalid Switch = 0xFF
+)
+
+// TimeIntoDay represents the time_into_day FIT type.
+type TimeIntoDay uint32
+
+const (
+	TimeIntoDayInvalid TimeIntoDay = 0xFFFFFFFF
+)
+
+// TimeMode represents the time_mode FIT type.
+type TimeMode byte
+
+const (
+	TimeModeHour12            TimeMode = 0
+	TimeModeHour24            TimeMode = 1 // Does not use a leading zero and has a colon
+	TimeModeMilitary          TimeMode = 2 // Uses a leading zero and does not have a colon
+	TimeModeHour12WithSeconds TimeMode = 3
+	TimeModeHour24WithSeconds TimeMode = 4
+	TimeModeUtc               TimeMode = 5
+	TimeModeInvalid           TimeMode = 0xFF
 )
 
 // TimeZone represents the time_zone FIT type.
@@ -1484,6 +2168,51 @@ const (
 	TimerTriggerInvalid          TimerTrigger = 0xFF
 )
 
+// TurnType represents the turn_type FIT type.
+type TurnType byte
+
+const (
+	TurnTypeArrivingIdx             TurnType = 0
+	TurnTypeArrivingLeftIdx         TurnType = 1
+	TurnTypeArrivingRightIdx        TurnType = 2
+	TurnTypeArrivingViaIdx          TurnType = 3
+	TurnTypeArrivingViaLeftIdx      TurnType = 4
+	TurnTypeArrivingViaRightIdx     TurnType = 5
+	TurnTypeBearKeepLeftIdx         TurnType = 6
+	TurnTypeBearKeepRightIdx        TurnType = 7
+	TurnTypeContinueIdx             TurnType = 8
+	TurnTypeExitLeftIdx             TurnType = 9
+	TurnTypeExitRightIdx            TurnType = 10
+	TurnTypeFerryIdx                TurnType = 11
+	TurnTypeRoundabout45Idx         TurnType = 12
+	TurnTypeRoundabout90Idx         TurnType = 13
+	TurnTypeRoundabout135Idx        TurnType = 14
+	TurnTypeRoundabout180Idx        TurnType = 15
+	TurnTypeRoundabout225Idx        TurnType = 16
+	TurnTypeRoundabout270Idx        TurnType = 17
+	TurnTypeRoundabout315Idx        TurnType = 18
+	TurnTypeRoundabout360Idx        TurnType = 19
+	TurnTypeRoundaboutNeg45Idx      TurnType = 20
+	TurnTypeRoundaboutNeg90Idx      TurnType = 21
+	TurnTypeRoundaboutNeg135Idx     TurnType = 22
+	TurnTypeRoundaboutNeg180Idx     TurnType = 23
+	TurnTypeRoundaboutNeg225Idx     TurnType = 24
+	TurnTypeRoundaboutNeg270Idx     TurnType = 25
+	TurnTypeRoundaboutNeg315Idx     TurnType = 26
+	TurnTypeRoundaboutNeg360Idx     TurnType = 27
+	TurnTypeRoundaboutGenericIdx    TurnType = 28
+	TurnTypeRoundaboutNegGenericIdx TurnType = 29
+	TurnTypeSharpTurnLeftIdx        TurnType = 30
+	TurnTypeSharpTurnRightIdx       TurnType = 31
+	TurnTypeTurnLeftIdx             TurnType = 32
+	TurnTypeTurnRightIdx            TurnType = 33
+	TurnTypeUturnLeftIdx            TurnType = 34
+	TurnTypeUturnRightIdx           TurnType = 35
+	TurnTypeIconInvIdx              TurnType = 36
+	TurnTypeIconIdxCnt              TurnType = 37
+	TurnTypeInvalid                 TurnType = 0xFF
+)
+
 // UserLocalId represents the user_local_id FIT type.
 type UserLocalId uint16
 
@@ -1495,6 +2224,159 @@ const (
 	UserLocalIdPortableMin   UserLocalId = 0x0100
 	UserLocalIdPortableMax   UserLocalId = 0xFFFE
 	UserLocalIdInvalid       UserLocalId = 0xFFFF
+)
+
+// WatchfaceMode represents the watchface_mode FIT type.
+type WatchfaceMode byte
+
+const (
+	WatchfaceModeDigital   WatchfaceMode = 0
+	WatchfaceModeAnalog    WatchfaceMode = 1
+	WatchfaceModeConnectIq WatchfaceMode = 2
+	WatchfaceModeInvalid   WatchfaceMode = 0xFF
+)
+
+// WeatherReport represents the weather_report FIT type.
+type WeatherReport byte
+
+const (
+	WeatherReportCurrent        WeatherReport = 0
+	WeatherReportForecast       WeatherReport = 1 // Deprecated use hourly_forecast instead
+	WeatherReportHourlyForecast WeatherReport = 1
+	WeatherReportDailyForecast  WeatherReport = 2
+	WeatherReportInvalid        WeatherReport = 0xFF
+)
+
+// WeatherSevereType represents the weather_severe_type FIT type.
+type WeatherSevereType byte
+
+const (
+	WeatherSevereTypeUnspecified             WeatherSevereType = 0
+	WeatherSevereTypeTornado                 WeatherSevereType = 1
+	WeatherSevereTypeTsunami                 WeatherSevereType = 2
+	WeatherSevereTypeHurricane               WeatherSevereType = 3
+	WeatherSevereTypeExtremeWind             WeatherSevereType = 4
+	WeatherSevereTypeTyphoon                 WeatherSevereType = 5
+	WeatherSevereTypeInlandHurricane         WeatherSevereType = 6
+	WeatherSevereTypeHurricaneForceWind      WeatherSevereType = 7
+	WeatherSevereTypeWaterspout              WeatherSevereType = 8
+	WeatherSevereTypeSevereThunderstorm      WeatherSevereType = 9
+	WeatherSevereTypeWreckhouseWinds         WeatherSevereType = 10
+	WeatherSevereTypeLesSuetesWind           WeatherSevereType = 11
+	WeatherSevereTypeAvalanche               WeatherSevereType = 12
+	WeatherSevereTypeFlashFlood              WeatherSevereType = 13
+	WeatherSevereTypeTropicalStorm           WeatherSevereType = 14
+	WeatherSevereTypeInlandTropicalStorm     WeatherSevereType = 15
+	WeatherSevereTypeBlizzard                WeatherSevereType = 16
+	WeatherSevereTypeIceStorm                WeatherSevereType = 17
+	WeatherSevereTypeFreezingRain            WeatherSevereType = 18
+	WeatherSevereTypeDebrisFlow              WeatherSevereType = 19
+	WeatherSevereTypeFlashFreeze             WeatherSevereType = 20
+	WeatherSevereTypeDustStorm               WeatherSevereType = 21
+	WeatherSevereTypeHighWind                WeatherSevereType = 22
+	WeatherSevereTypeWinterStorm             WeatherSevereType = 23
+	WeatherSevereTypeHeavyFreezingSpray      WeatherSevereType = 24
+	WeatherSevereTypeExtremeCold             WeatherSevereType = 25
+	WeatherSevereTypeWindChill               WeatherSevereType = 26
+	WeatherSevereTypeColdWave                WeatherSevereType = 27
+	WeatherSevereTypeHeavySnowAlert          WeatherSevereType = 28
+	WeatherSevereTypeLakeEffectBlowingSnow   WeatherSevereType = 29
+	WeatherSevereTypeSnowSquall              WeatherSevereType = 30
+	WeatherSevereTypeLakeEffectSnow          WeatherSevereType = 31
+	WeatherSevereTypeWinterWeather           WeatherSevereType = 32
+	WeatherSevereTypeSleet                   WeatherSevereType = 33
+	WeatherSevereTypeSnowfall                WeatherSevereType = 34
+	WeatherSevereTypeSnowAndBlowingSnow      WeatherSevereType = 35
+	WeatherSevereTypeBlowingSnow             WeatherSevereType = 36
+	WeatherSevereTypeSnowAlert               WeatherSevereType = 37
+	WeatherSevereTypeArcticOutflow           WeatherSevereType = 38
+	WeatherSevereTypeFreezingDrizzle         WeatherSevereType = 39
+	WeatherSevereTypeStorm                   WeatherSevereType = 40
+	WeatherSevereTypeStormSurge              WeatherSevereType = 41
+	WeatherSevereTypeRainfall                WeatherSevereType = 42
+	WeatherSevereTypeArealFlood              WeatherSevereType = 43
+	WeatherSevereTypeCoastalFlood            WeatherSevereType = 44
+	WeatherSevereTypeLakeshoreFlood          WeatherSevereType = 45
+	WeatherSevereTypeExcessiveHeat           WeatherSevereType = 46
+	WeatherSevereTypeHeat                    WeatherSevereType = 47
+	WeatherSevereTypeWeather                 WeatherSevereType = 48
+	WeatherSevereTypeHighHeatAndHumidity     WeatherSevereType = 49
+	WeatherSevereTypeHumidexAndHealth        WeatherSevereType = 50
+	WeatherSevereTypeHumidex                 WeatherSevereType = 51
+	WeatherSevereTypeGale                    WeatherSevereType = 52
+	WeatherSevereTypeFreezingSpray           WeatherSevereType = 53
+	WeatherSevereTypeSpecialMarine           WeatherSevereType = 54
+	WeatherSevereTypeSquall                  WeatherSevereType = 55
+	WeatherSevereTypeStrongWind              WeatherSevereType = 56
+	WeatherSevereTypeLakeWind                WeatherSevereType = 57
+	WeatherSevereTypeMarineWeather           WeatherSevereType = 58
+	WeatherSevereTypeWind                    WeatherSevereType = 59
+	WeatherSevereTypeSmallCraftHazardousSeas WeatherSevereType = 60
+	WeatherSevereTypeHazardousSeas           WeatherSevereType = 61
+	WeatherSevereTypeSmallCraft              WeatherSevereType = 62
+	WeatherSevereTypeSmallCraftWinds         WeatherSevereType = 63
+	WeatherSevereTypeSmallCraftRoughBar      WeatherSevereType = 64
+	WeatherSevereTypeHighWaterLevel          WeatherSevereType = 65
+	WeatherSevereTypeAshfall                 WeatherSevereType = 66
+	WeatherSevereTypeFreezingFog             WeatherSevereType = 67
+	WeatherSevereTypeDenseFog                WeatherSevereType = 68
+	WeatherSevereTypeDenseSmoke              WeatherSevereType = 69
+	WeatherSevereTypeBlowingDust             WeatherSevereType = 70
+	WeatherSevereTypeHardFreeze              WeatherSevereType = 71
+	WeatherSevereTypeFreeze                  WeatherSevereType = 72
+	WeatherSevereTypeFrost                   WeatherSevereType = 73
+	WeatherSevereTypeFireWeather             WeatherSevereType = 74
+	WeatherSevereTypeFlood                   WeatherSevereType = 75
+	WeatherSevereTypeRipTide                 WeatherSevereType = 76
+	WeatherSevereTypeHighSurf                WeatherSevereType = 77
+	WeatherSevereTypeSmog                    WeatherSevereType = 78
+	WeatherSevereTypeAirQuality              WeatherSevereType = 79
+	WeatherSevereTypeBriskWind               WeatherSevereType = 80
+	WeatherSevereTypeAirStagnation           WeatherSevereType = 81
+	WeatherSevereTypeLowWater                WeatherSevereType = 82
+	WeatherSevereTypeHydrological            WeatherSevereType = 83
+	WeatherSevereTypeSpecialWeather          WeatherSevereType = 84
+	WeatherSevereTypeInvalid                 WeatherSevereType = 0xFF
+)
+
+// WeatherSeverity represents the weather_severity FIT type.
+type WeatherSeverity byte
+
+const (
+	WeatherSeverityUnknown   WeatherSeverity = 0
+	WeatherSeverityWarning   WeatherSeverity = 1
+	WeatherSeverityWatch     WeatherSeverity = 2
+	WeatherSeverityAdvisory  WeatherSeverity = 3
+	WeatherSeverityStatement WeatherSeverity = 4
+	WeatherSeverityInvalid   WeatherSeverity = 0xFF
+)
+
+// WeatherStatus represents the weather_status FIT type.
+type WeatherStatus byte
+
+const (
+	WeatherStatusClear                  WeatherStatus = 0
+	WeatherStatusPartlyCloudy           WeatherStatus = 1
+	WeatherStatusMostlyCloudy           WeatherStatus = 2
+	WeatherStatusRain                   WeatherStatus = 3
+	WeatherStatusSnow                   WeatherStatus = 4
+	WeatherStatusWindy                  WeatherStatus = 5
+	WeatherStatusThunderstorms          WeatherStatus = 6
+	WeatherStatusWintryMix              WeatherStatus = 7
+	WeatherStatusFog                    WeatherStatus = 8
+	WeatherStatusHazy                   WeatherStatus = 11
+	WeatherStatusHail                   WeatherStatus = 12
+	WeatherStatusScatteredShowers       WeatherStatus = 13
+	WeatherStatusScatteredThunderstorms WeatherStatus = 14
+	WeatherStatusUnknownPrecipitation   WeatherStatus = 15
+	WeatherStatusLightRain              WeatherStatus = 16
+	WeatherStatusHeavyRain              WeatherStatus = 17
+	WeatherStatusLightSnow              WeatherStatus = 18
+	WeatherStatusHeavySnow              WeatherStatus = 19
+	WeatherStatusLightRainSnow          WeatherStatus = 20
+	WeatherStatusHeavyRainSnow          WeatherStatus = 21
+	WeatherStatusCloudy                 WeatherStatus = 22
+	WeatherStatusInvalid                WeatherStatus = 0xFF
 )
 
 // Weight represents the weight FIT type.
@@ -1509,38 +2391,56 @@ const (
 type WktStepDuration byte
 
 const (
-	WktStepDurationTime                        WktStepDuration = 0
-	WktStepDurationDistance                    WktStepDuration = 1
-	WktStepDurationHrLessThan                  WktStepDuration = 2
-	WktStepDurationHrGreaterThan               WktStepDuration = 3
-	WktStepDurationCalories                    WktStepDuration = 4
-	WktStepDurationOpen                        WktStepDuration = 5
-	WktStepDurationRepeatUntilStepsCmplt       WktStepDuration = 6
-	WktStepDurationRepeatUntilTime             WktStepDuration = 7
-	WktStepDurationRepeatUntilDistance         WktStepDuration = 8
-	WktStepDurationRepeatUntilCalories         WktStepDuration = 9
-	WktStepDurationRepeatUntilHrLessThan       WktStepDuration = 10
-	WktStepDurationRepeatUntilHrGreaterThan    WktStepDuration = 11
-	WktStepDurationRepeatUntilPowerLessThan    WktStepDuration = 12
-	WktStepDurationRepeatUntilPowerGreaterThan WktStepDuration = 13
-	WktStepDurationPowerLessThan               WktStepDuration = 14
-	WktStepDurationPowerGreaterThan            WktStepDuration = 15
-	WktStepDurationRepetitionTime              WktStepDuration = 28
-	WktStepDurationInvalid                     WktStepDuration = 0xFF
+	WktStepDurationTime                               WktStepDuration = 0
+	WktStepDurationDistance                           WktStepDuration = 1
+	WktStepDurationHrLessThan                         WktStepDuration = 2
+	WktStepDurationHrGreaterThan                      WktStepDuration = 3
+	WktStepDurationCalories                           WktStepDuration = 4
+	WktStepDurationOpen                               WktStepDuration = 5
+	WktStepDurationRepeatUntilStepsCmplt              WktStepDuration = 6
+	WktStepDurationRepeatUntilTime                    WktStepDuration = 7
+	WktStepDurationRepeatUntilDistance                WktStepDuration = 8
+	WktStepDurationRepeatUntilCalories                WktStepDuration = 9
+	WktStepDurationRepeatUntilHrLessThan              WktStepDuration = 10
+	WktStepDurationRepeatUntilHrGreaterThan           WktStepDuration = 11
+	WktStepDurationRepeatUntilPowerLessThan           WktStepDuration = 12
+	WktStepDurationRepeatUntilPowerGreaterThan        WktStepDuration = 13
+	WktStepDurationPowerLessThan                      WktStepDuration = 14
+	WktStepDurationPowerGreaterThan                   WktStepDuration = 15
+	WktStepDurationTrainingPeaksTss                   WktStepDuration = 16
+	WktStepDurationRepeatUntilPowerLastLapLessThan    WktStepDuration = 17
+	WktStepDurationRepeatUntilMaxPowerLastLapLessThan WktStepDuration = 18
+	WktStepDurationPower3sLessThan                    WktStepDuration = 19
+	WktStepDurationPower10sLessThan                   WktStepDuration = 20
+	WktStepDurationPower30sLessThan                   WktStepDuration = 21
+	WktStepDurationPower3sGreaterThan                 WktStepDuration = 22
+	WktStepDurationPower10sGreaterThan                WktStepDuration = 23
+	WktStepDurationPower30sGreaterThan                WktStepDuration = 24
+	WktStepDurationPowerLapLessThan                   WktStepDuration = 25
+	WktStepDurationPowerLapGreaterThan                WktStepDuration = 26
+	WktStepDurationRepeatUntilTrainingPeaksTss        WktStepDuration = 27
+	WktStepDurationRepetitionTime                     WktStepDuration = 28
+	WktStepDurationInvalid                            WktStepDuration = 0xFF
 )
 
 // WktStepTarget represents the wkt_step_target FIT type.
 type WktStepTarget byte
 
 const (
-	WktStepTargetSpeed      WktStepTarget = 0
-	WktStepTargetHeartRate  WktStepTarget = 1
-	WktStepTargetOpen       WktStepTarget = 2
-	WktStepTargetCadence    WktStepTarget = 3
-	WktStepTargetPower      WktStepTarget = 4
-	WktStepTargetGrade      WktStepTarget = 5
-	WktStepTargetResistance WktStepTarget = 6
-	WktStepTargetInvalid    WktStepTarget = 0xFF
+	WktStepTargetSpeed        WktStepTarget = 0
+	WktStepTargetHeartRate    WktStepTarget = 1
+	WktStepTargetOpen         WktStepTarget = 2
+	WktStepTargetCadence      WktStepTarget = 3
+	WktStepTargetPower        WktStepTarget = 4
+	WktStepTargetGrade        WktStepTarget = 5
+	WktStepTargetResistance   WktStepTarget = 6
+	WktStepTargetPower3s      WktStepTarget = 7
+	WktStepTargetPower10s     WktStepTarget = 8
+	WktStepTargetPower30s     WktStepTarget = 9
+	WktStepTargetPowerLap     WktStepTarget = 10
+	WktStepTargetSpeedLap     WktStepTarget = 12
+	WktStepTargetHeartRateLap WktStepTarget = 13
+	WktStepTargetInvalid      WktStepTarget = 0xFF
 )
 
 // WorkoutCapabilities represents the workout_capabilities FIT type.

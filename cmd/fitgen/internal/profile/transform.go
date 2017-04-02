@@ -388,6 +388,10 @@ func (f *Field) parseComponents(ftypes map[string]*Type) error {
 	return nil
 }
 
+// Rewrite maps.
+// In SDK ~16.20 all bits and scales were separated by commas.
+// In SDK 20.14 some bits and scales are just concatenated together,
+// making them hard to parse. Use two maps for now.
 var bitsRewrite = map[string]string{
 	"1616":      "16,16",
 	"88888888":  "8,8,8,8,8,8,8,8",

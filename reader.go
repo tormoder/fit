@@ -115,7 +115,7 @@ func (d *decoder) decode(r io.Reader, headerOnly, fileIDOnly, crcOnly bool) erro
 		if err != nil {
 			return fmt.Errorf("error parsing data: %v", err)
 		}
-		goto crc
+		return d.checkCRC()
 	}
 
 	if d.opts.unknownFields {
@@ -181,16 +181,20 @@ func (d *decoder) decode(r io.Reader, headerOnly, fileIDOnly, crcOnly bool) erro
 		}
 	}
 
-crc:
 	// Check invariant pre-read CRC:
 	if !crcOnly && d.bytes.n != d.bytes.limit {
 		fatalErr := fmt.Sprintf("internal decoder error: pre-crc check: data size limit is %d, but n is %d", d.bytes.limit, d.bytes.n)
 		panic(fatalErr)
 	}
+
+	return d.checkCRC()
+}
+
+func (d *decoder) checkCRC() error {
 	if d.debug {
 		d.opts.logger.Printf("expecting crc value: 0x%x", d.crc.Sum16())
 	}
-	if _, err = io.ReadFull(d.r, d.tmp[:bytesForCRC]); err != nil {
+	if _, err := io.ReadFull(d.r, d.tmp[:bytesForCRC]); err != nil {
 		err = noEOF(err)
 		return fmt.Errorf("error parsing file CRC: %v", err)
 	}

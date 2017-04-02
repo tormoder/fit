@@ -486,32 +486,6 @@ const (
 	EventTypeInvalid                EventType = 0xFF
 )
 
-// File represents the file FIT type.
-type File byte
-
-const (
-	FileDevice          File = 1  // Read only, single file. Must be in root directory.
-	FileSettings        File = 2  // Read/write, single file. Directory=Settings
-	FileSport           File = 3  // Read/write, multiple files, file number = sport type. Directory=Sports
-	FileActivity        File = 4  // Read/erase, multiple files. Directory=Activities
-	FileWorkout         File = 5  // Read/write/erase, multiple files. Directory=Workouts
-	FileCourse          File = 6  // Read/write/erase, multiple files. Directory=Courses
-	FileSchedules       File = 7  // Read/write, single file. Directory=Schedules
-	FileWeight          File = 9  // Read only, single file. Circular buffer. All message definitions at start of file. Directory=Weight
-	FileTotals          File = 10 // Read only, single file. Directory=Totals
-	FileGoals           File = 11 // Read/write, single file. Directory=Goals
-	FileBloodPressure   File = 14 // Read only. Directory=Blood Pressure
-	FileMonitoringA     File = 15 // Read only. Directory=Monitoring. File number=sub type.
-	FileActivitySummary File = 20 // Read/erase, multiple files. Directory=Activities
-	FileMonitoringDaily File = 28
-	FileMonitoringB     File = 32   // Read only. Directory=Monitoring. File number=identifier
-	FileSegment         File = 34   // Read/write/erase. Multiple Files.  Directory=Segments
-	FileSegmentList     File = 35   // Read/write/erase. Single File.  Directory=Segments
-	FileMfgRangeMin     File = 0xF7 // 0xF7 - 0xFE reserved for manufacturer specific file types
-	FileMfgRangeMax     File = 0xFE // 0xF7 - 0xFE reserved for manufacturer specific file types
-	FileInvalid         File = 0xFF
-)
-
 // FileFlags represents the file_flags FIT type.
 type FileFlags uint8
 
@@ -520,6 +494,32 @@ const (
 	FileFlagsWrite   FileFlags = 0x04
 	FileFlagsErase   FileFlags = 0x08
 	FileFlagsInvalid FileFlags = 0x00
+)
+
+// FileType represents the file FIT type.
+type FileType byte
+
+const (
+	FileTypeDevice          FileType = 1  // Read only, single file. Must be in root directory.
+	FileTypeSettings        FileType = 2  // Read/write, single file. Directory=Settings
+	FileTypeSport           FileType = 3  // Read/write, multiple files, file number = sport type. Directory=Sports
+	FileTypeActivity        FileType = 4  // Read/erase, multiple files. Directory=Activities
+	FileTypeWorkout         FileType = 5  // Read/write/erase, multiple files. Directory=Workouts
+	FileTypeCourse          FileType = 6  // Read/write/erase, multiple files. Directory=Courses
+	FileTypeSchedules       FileType = 7  // Read/write, single file. Directory=Schedules
+	FileTypeWeight          FileType = 9  // Read only, single file. Circular buffer. All message definitions at start of file. Directory=Weight
+	FileTypeTotals          FileType = 10 // Read only, single file. Directory=Totals
+	FileTypeGoals           FileType = 11 // Read/write, single file. Directory=Goals
+	FileTypeBloodPressure   FileType = 14 // Read only. Directory=Blood Pressure
+	FileTypeMonitoringA     FileType = 15 // Read only. Directory=Monitoring. File number=sub type.
+	FileTypeActivitySummary FileType = 20 // Read/erase, multiple files. Directory=Activities
+	FileTypeMonitoringDaily FileType = 28
+	FileTypeMonitoringB     FileType = 32   // Read only. Directory=Monitoring. File number=identifier
+	FileTypeSegment         FileType = 34   // Read/write/erase. Multiple Files.  Directory=Segments
+	FileTypeSegmentList     FileType = 35   // Read/write/erase. Single File.  Directory=Segments
+	FileTypeMfgRangeMin     FileType = 0xF7 // 0xF7 - 0xFE reserved for manufacturer specific file types
+	FileTypeMfgRangeMax     FileType = 0xFE // 0xF7 - 0xFE reserved for manufacturer specific file types
+	FileTypeInvalid         FileType = 0xFF
 )
 
 // FitnessEquipmentState represents the fitness_equipment_state FIT type.

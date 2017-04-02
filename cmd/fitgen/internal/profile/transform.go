@@ -21,6 +21,7 @@ func toCamelCase(s string) string {
 
 var typeQuirks = map[string]string{
 	"activity": "activity_mode",
+	"file":     "file_type",
 }
 
 func isTimestamp(name string) (types.Kind, bool) {

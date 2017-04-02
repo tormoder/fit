@@ -21,7 +21,7 @@ var (
 // the field "LocalTimestamp" for the file's "Activity" message.
 // SetLocalTimeZone returns a nil error if a local time zone was set or a
 // descriptive error otherwise.
-func SetLocalTimeZone(fitFile *fit.Fit) error {
+func SetLocalTimeZone(fitFile *fit.File) error {
 	if fitFile == nil {
 		return errors.New("provided fit file was nil")
 	}
@@ -34,7 +34,7 @@ func SetLocalTimeZone(fitFile *fit.Fit) error {
 
 	switch fitFile.FileId.Type {
 
-	case fit.FileActivity:
+	case fit.FileTypeActivity:
 		a, err := fitFile.Activity()
 		if err != nil {
 			return err
@@ -59,7 +59,7 @@ func SetLocalTimeZone(fitFile *fit.Fit) error {
 		}
 		activityMsg = a.Activity
 
-	case fit.FileActivitySummary:
+	case fit.FileTypeActivitySummary:
 		as, err := fitFile.ActivitySummary()
 		if err != nil {
 			return err

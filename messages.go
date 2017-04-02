@@ -12,7 +12,7 @@ import (
 
 // FileIdMsg represents the file_id FIT message type.
 type FileIdMsg struct {
-	Type         File
+	Type         FileType
 	Manufacturer Manufacturer
 	Product      uint16
 	SerialNumber uint32
@@ -91,7 +91,7 @@ type CapabilitiesMsg struct {
 // FileCapabilitiesMsg represents the file_capabilities FIT message type.
 type FileCapabilitiesMsg struct {
 	MessageIndex MessageIndex
-	Type         File
+	Type         FileType
 	Flags        FileFlags
 	Directory    string
 	MaxCount     uint16
@@ -101,7 +101,7 @@ type FileCapabilitiesMsg struct {
 // MesgCapabilitiesMsg represents the mesg_capabilities FIT message type.
 type MesgCapabilitiesMsg struct {
 	MessageIndex MessageIndex
-	File         File
+	File         FileType
 	MesgNum      MesgNum
 	CountType    MesgCount
 	Count        uint16
@@ -127,7 +127,7 @@ func (x *MesgCapabilitiesMsg) GetCount() interface{} {
 // FieldCapabilitiesMsg represents the field_capabilities FIT message type.
 type FieldCapabilitiesMsg struct {
 	MessageIndex MessageIndex
-	File         File
+	File         FileType
 	MesgNum      MesgNum
 	FieldNum     uint8
 	Count        uint16
@@ -2387,7 +2387,7 @@ func (x *DeviceInfoMsg) GetProduct() interface{} {
 // TrainingFileMsg represents the training_file FIT message type.
 type TrainingFileMsg struct {
 	Timestamp    time.Time
-	Type         File
+	Type         FileType
 	Manufacturer Manufacturer
 	Product      uint16
 	SerialNumber uint32

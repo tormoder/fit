@@ -42,7 +42,7 @@ type decoder struct {
 	unknownMessages map[MesgNum]int
 
 	h   Header
-	fit *Fit
+	fit *File
 }
 
 // CheckIntegrity verifies the FIT header and file CRC. Only the header CRC is
@@ -76,7 +76,7 @@ func DecodeHeaderAndFileID(r io.Reader) (Header, FileIdMsg, error) {
 // Decode reads a FIT file from r and returns it as a *Fit.
 // If error is non-nil, all data decoded before the error was
 // encountered is also returned.
-func Decode(r io.Reader, opts ...DecodeOption) (*Fit, error) {
+func Decode(r io.Reader, opts ...DecodeOption) (*File, error) {
 	var d decoder
 	for _, opt := range opts {
 		opt(&d.opts)
@@ -88,8 +88,8 @@ func Decode(r io.Reader, opts ...DecodeOption) (*Fit, error) {
 // DecodeChained reads chained FIT files from r until an error is encountered
 // or no more data is available. If error is non-nil, all data decoded before
 // the error was encountered is also returned for the last file read.
-func DecodeChained(r io.Reader, opts ...DecodeOption) ([]*Fit, error) {
-	var fitFiles []*Fit
+func DecodeChained(r io.Reader, opts ...DecodeOption) ([]*File, error) {
+	var fitFiles []*File
 	var i int
 	for {
 		var d decoder
@@ -126,7 +126,7 @@ func (d *decoder) decode(r io.Reader, headerOnly, fileIDOnly, crcOnly bool) erro
 		return fmt.Errorf("error decoding header: %v", err)
 	}
 
-	d.fit = new(Fit)
+	d.fit = new(File)
 	d.fit.Header = d.h
 	d.bytes.limit = int(d.h.DataSize)
 
@@ -390,66 +390,66 @@ func (d *decoder) parseFileIdMsg() error {
 func (d *decoder) initFileType() error {
 	t := d.fit.FileId.Type
 	switch t {
-	case FileActivity:
+	case FileTypeActivity:
 		d.fit.activity = new(ActivityFile)
 		d.fit.msgAdder = d.fit.activity
-	case FileDevice:
+	case FileTypeDevice:
 		d.fit.device = new(DeviceFile)
 		d.fit.msgAdder = d.fit.device
-	case FileSettings:
+	case FileTypeSettings:
 		d.fit.settings = new(SettingsFile)
 		d.fit.msgAdder = d.fit.settings
-	case FileSport:
+	case FileTypeSport:
 		d.fit.sport = new(SportFile)
 		d.fit.msgAdder = d.fit.sport
-	case FileWorkout:
+	case FileTypeWorkout:
 		d.fit.workout = new(WorkoutFile)
 		d.fit.msgAdder = d.fit.workout
-	case FileCourse:
+	case FileTypeCourse:
 		d.fit.course = new(CourseFile)
 		d.fit.msgAdder = d.fit.course
-	case FileSchedules:
+	case FileTypeSchedules:
 		d.fit.schedules = new(SchedulesFile)
 		d.fit.msgAdder = d.fit.schedules
-	case FileWeight:
+	case FileTypeWeight:
 		d.fit.weight = new(WeightFile)
 		d.fit.msgAdder = d.fit.weight
-	case FileTotals:
+	case FileTypeTotals:
 		d.fit.totals = new(TotalsFile)
 		d.fit.msgAdder = d.fit.totals
-	case FileGoals:
+	case FileTypeGoals:
 		d.fit.goals = new(GoalsFile)
 		d.fit.msgAdder = d.fit.goals
-	case FileBloodPressure:
+	case FileTypeBloodPressure:
 		d.fit.bloodPressure = new(BloodPressureFile)
 		d.fit.msgAdder = d.fit.bloodPressure
-	case FileMonitoringA:
+	case FileTypeMonitoringA:
 		d.fit.monitoringA = new(MonitoringAFile)
 		d.fit.msgAdder = d.fit.monitoringA
-	case FileActivitySummary:
+	case FileTypeActivitySummary:
 		d.fit.activitySummary = new(ActivitySummaryFile)
 		d.fit.msgAdder = d.fit.activitySummary
-	case FileMonitoringDaily:
+	case FileTypeMonitoringDaily:
 		d.fit.monitoringDaily = new(MonitoringDailyFile)
 		d.fit.msgAdder = d.fit.monitoringDaily
-	case FileMonitoringB:
+	case FileTypeMonitoringB:
 		d.fit.monitoringB = new(MonitoringBFile)
 		d.fit.msgAdder = d.fit.monitoringB
-	case FileSegment:
+	case FileTypeSegment:
 		d.fit.segment = new(SegmentFile)
 		d.fit.msgAdder = d.fit.segment
-	case FileSegmentList:
+	case FileTypeSegmentList:
 		d.fit.segmentList = new(SegmentListFile)
 		d.fit.msgAdder = d.fit.segmentList
-	case FileInvalid:
+	case FileTypeInvalid:
 		return FormatError("file type was set invalid")
 	default:
 		switch {
-		case t > FileMonitoringB && t < FileMfgRangeMin:
+		case t > FileTypeMonitoringB && t < FileTypeMfgRangeMin:
 			return FormatError(
 				fmt.Sprintf("unknown file type: %v", t),
 			)
-		case t >= FileMfgRangeMin && t <= FileMfgRangeMax:
+		case t >= FileTypeMfgRangeMin && t <= FileTypeMfgRangeMax:
 			return NotSupportedError("manufacturer specific file types")
 		default:
 			return FormatError(

@@ -17,13 +17,13 @@ import (
 	"github.com/tormoder/fit"
 )
 
-func fitFingerprint(fit *fit.Fit) uint64 {
+func fitFingerprint(fit *fit.File) uint64 {
 	h := xxhash.New()
 	utter.Fdump(h, fit)
 	return h.Sum64()
 }
 
-func fitUtterDump(fit *fit.Fit, path string, compressed bool) error {
+func fitUtterDump(fit *fit.File, path string, compressed bool) error {
 	f, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE, 0644)
 	if err != nil {
 		return err

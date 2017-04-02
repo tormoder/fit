@@ -5,8 +5,8 @@ import (
 	"reflect"
 )
 
-// Fit represents a decoded FIT file.
-type Fit struct {
+// File represents a decoded FIT file.
+type File struct {
 	// Header is the FIT file header.
 	Header Header
 
@@ -54,7 +54,7 @@ type msgAdder interface {
 	add(reflect.Value)
 }
 
-func (f *Fit) add(msg reflect.Value) {
+func (f *File) add(msg reflect.Value) {
 	x := msg.Interface()
 	switch x.(type) {
 	case FileIdMsg:
@@ -74,12 +74,12 @@ func (f *Fit) add(msg reflect.Value) {
 }
 
 // FileType returns the FIT file type.
-func (f *Fit) FileType() File {
+func (f *File) FileType() FileType {
 	return f.FileId.Type
 }
 
 type wrongFileTypeError struct {
-	actual, requested File
+	actual, requested FileType
 }
 
 func (e wrongFileTypeError) Error() string {
@@ -88,153 +88,153 @@ func (e wrongFileTypeError) Error() string {
 
 // Activity returns f's Activity file. An error is returned if the FIT file is
 // not of type activity.
-func (f *Fit) Activity() (*ActivityFile, error) {
-	if !(f.FileId.Type == FileActivity) {
-		return nil, wrongFileTypeError{f.FileId.Type, FileActivity}
+func (f *File) Activity() (*ActivityFile, error) {
+	if !(f.FileId.Type == FileTypeActivity) {
+		return nil, wrongFileTypeError{f.FileId.Type, FileTypeActivity}
 	}
 	return f.activity, nil
 }
 
 // Device returns f's Device file. An error is returned if the FIT file is
 // not of type device.
-func (f *Fit) Device() (*DeviceFile, error) {
-	if !(f.FileId.Type == FileDevice) {
-		return nil, wrongFileTypeError{f.FileId.Type, FileDevice}
+func (f *File) Device() (*DeviceFile, error) {
+	if !(f.FileId.Type == FileTypeDevice) {
+		return nil, wrongFileTypeError{f.FileId.Type, FileTypeDevice}
 	}
 	return f.device, nil
 }
 
 // Settings returns f's Settings file. An error is returned if the FIT file is
 // not of type settings.
-func (f *Fit) Settings() (*SettingsFile, error) {
-	if !(f.FileId.Type == FileSettings) {
-		return nil, wrongFileTypeError{f.FileId.Type, FileSettings}
+func (f *File) Settings() (*SettingsFile, error) {
+	if !(f.FileId.Type == FileTypeSettings) {
+		return nil, wrongFileTypeError{f.FileId.Type, FileTypeSettings}
 	}
 	return f.settings, nil
 }
 
 // Sport returns f's Sport file. An error is returned if the FIT file is
 // not of type sport.
-func (f *Fit) Sport() (*SportFile, error) {
-	if !(f.FileId.Type == FileSport) {
-		return nil, wrongFileTypeError{f.FileId.Type, FileSport}
+func (f *File) Sport() (*SportFile, error) {
+	if !(f.FileId.Type == FileTypeSport) {
+		return nil, wrongFileTypeError{f.FileId.Type, FileTypeSport}
 	}
 	return f.sport, nil
 }
 
 // Workout returns f's Workout file. An error is returned if the FIT file is
 // not of type workout.
-func (f *Fit) Workout() (*WorkoutFile, error) {
-	if !(f.FileId.Type == FileWorkout) {
-		return nil, wrongFileTypeError{f.FileId.Type, FileWorkout}
+func (f *File) Workout() (*WorkoutFile, error) {
+	if !(f.FileId.Type == FileTypeWorkout) {
+		return nil, wrongFileTypeError{f.FileId.Type, FileTypeWorkout}
 	}
 	return f.workout, nil
 }
 
 // Course returns f's Course file. An error is returned if the FIT file is
 // not of type course.
-func (f *Fit) Course() (*CourseFile, error) {
-	if !(f.FileId.Type == FileCourse) {
-		return nil, wrongFileTypeError{f.FileId.Type, FileCourse}
+func (f *File) Course() (*CourseFile, error) {
+	if !(f.FileId.Type == FileTypeCourse) {
+		return nil, wrongFileTypeError{f.FileId.Type, FileTypeCourse}
 	}
 	return f.course, nil
 }
 
 // Schedules returns f's Schedules file. An error is returned if the FIT file is
 // not of type schedules.
-func (f *Fit) Schedules() (*SchedulesFile, error) {
-	if !(f.FileId.Type == FileSchedules) {
-		return nil, wrongFileTypeError{f.FileId.Type, FileSchedules}
+func (f *File) Schedules() (*SchedulesFile, error) {
+	if !(f.FileId.Type == FileTypeSchedules) {
+		return nil, wrongFileTypeError{f.FileId.Type, FileTypeSchedules}
 	}
 	return f.schedules, nil
 }
 
 // Weight returns f's Weight file. An error is returned if the FIT file is
 // not of type weight.
-func (f *Fit) Weight() (*WeightFile, error) {
-	if !(f.FileId.Type == FileWeight) {
-		return nil, wrongFileTypeError{f.FileId.Type, FileWeight}
+func (f *File) Weight() (*WeightFile, error) {
+	if !(f.FileId.Type == FileTypeWeight) {
+		return nil, wrongFileTypeError{f.FileId.Type, FileTypeWeight}
 	}
 	return f.weight, nil
 }
 
 // Totals returns f's Totals file. An error is returned if the FIT file is
 // not of type totals.
-func (f *Fit) Totals() (*TotalsFile, error) {
-	if !(f.FileId.Type == FileTotals) {
-		return nil, wrongFileTypeError{f.FileId.Type, FileTotals}
+func (f *File) Totals() (*TotalsFile, error) {
+	if !(f.FileId.Type == FileTypeTotals) {
+		return nil, wrongFileTypeError{f.FileId.Type, FileTypeTotals}
 	}
 	return f.totals, nil
 }
 
 // Goals returns f's Goals file. An error is returned if the FIT file is
 // not of type goals.
-func (f *Fit) Goals() (*GoalsFile, error) {
-	if !(f.FileId.Type == FileGoals) {
-		return nil, wrongFileTypeError{f.FileId.Type, FileGoals}
+func (f *File) Goals() (*GoalsFile, error) {
+	if !(f.FileId.Type == FileTypeGoals) {
+		return nil, wrongFileTypeError{f.FileId.Type, FileTypeGoals}
 	}
 	return f.goals, nil
 }
 
 // BloodPressure returns f's BloodPressure file. An error is returned if the FIT file is
 // not of type blood pressure.
-func (f *Fit) BloodPressure() (*BloodPressureFile, error) {
-	if !(f.FileId.Type == FileBloodPressure) {
-		return nil, wrongFileTypeError{f.FileId.Type, FileBloodPressure}
+func (f *File) BloodPressure() (*BloodPressureFile, error) {
+	if !(f.FileId.Type == FileTypeBloodPressure) {
+		return nil, wrongFileTypeError{f.FileId.Type, FileTypeBloodPressure}
 	}
 	return f.bloodPressure, nil
 }
 
 // MonitoringA returns f's MonitoringA file. An error is returned if the FIT file is
 // not of type monitoring A.
-func (f *Fit) MonitoringA() (*MonitoringAFile, error) {
-	if !(f.FileId.Type == FileMonitoringA) {
-		return nil, wrongFileTypeError{f.FileId.Type, FileMonitoringA}
+func (f *File) MonitoringA() (*MonitoringAFile, error) {
+	if !(f.FileId.Type == FileTypeMonitoringA) {
+		return nil, wrongFileTypeError{f.FileId.Type, FileTypeMonitoringA}
 	}
 	return f.monitoringA, nil
 }
 
 // ActivitySummary returns f's ActivitySummary file. An error is returned if the FIT file is
 // not of type activity summary.
-func (f *Fit) ActivitySummary() (*ActivitySummaryFile, error) {
-	if !(f.FileId.Type == FileActivitySummary) {
-		return nil, wrongFileTypeError{f.FileId.Type, FileActivitySummary}
+func (f *File) ActivitySummary() (*ActivitySummaryFile, error) {
+	if !(f.FileId.Type == FileTypeActivitySummary) {
+		return nil, wrongFileTypeError{f.FileId.Type, FileTypeActivitySummary}
 	}
 	return f.activitySummary, nil
 }
 
 // MonitoringDaily returns f's MonitoringDaily file. An error is returned if the FIT file is
 // not of type monitoring daily.
-func (f *Fit) MonitoringDaily() (*MonitoringDailyFile, error) {
-	if !(f.FileId.Type == FileMonitoringDaily) {
-		return nil, wrongFileTypeError{f.FileId.Type, FileMonitoringDaily}
+func (f *File) MonitoringDaily() (*MonitoringDailyFile, error) {
+	if !(f.FileId.Type == FileTypeMonitoringDaily) {
+		return nil, wrongFileTypeError{f.FileId.Type, FileTypeMonitoringDaily}
 	}
 	return f.monitoringDaily, nil
 }
 
 // MonitoringB returns f's MonitoringB file. An error is returned if the FIT file is
 // not of type monitoring B.
-func (f *Fit) MonitoringB() (*MonitoringBFile, error) {
-	if !(f.FileId.Type == FileMonitoringB) {
-		return nil, wrongFileTypeError{f.FileId.Type, FileMonitoringB}
+func (f *File) MonitoringB() (*MonitoringBFile, error) {
+	if !(f.FileId.Type == FileTypeMonitoringB) {
+		return nil, wrongFileTypeError{f.FileId.Type, FileTypeMonitoringB}
 	}
 	return f.monitoringB, nil
 }
 
 // Segment returns f's Segment file. An error is returned if the FIT file is
 // not of type segment.
-func (f *Fit) Segment() (*SegmentFile, error) {
-	if !(f.FileId.Type == FileSegment) {
-		return nil, wrongFileTypeError{f.FileId.Type, FileSegment}
+func (f *File) Segment() (*SegmentFile, error) {
+	if !(f.FileId.Type == FileTypeSegment) {
+		return nil, wrongFileTypeError{f.FileId.Type, FileTypeSegment}
 	}
 	return f.segment, nil
 }
 
 // SegmentList returns f's SegmentList file. An error is returned if the FIT file is
 // not of type segment list.
-func (f *Fit) SegmentList() (*SegmentListFile, error) {
-	if !(f.FileId.Type == FileSegmentList) {
-		return nil, wrongFileTypeError{f.FileId.Type, FileSegmentList}
+func (f *File) SegmentList() (*SegmentListFile, error) {
+	if !(f.FileId.Type == FileTypeSegmentList) {
+		return nil, wrongFileTypeError{f.FileId.Type, FileTypeSegmentList}
 	}
 	return f.segmentList, nil
 }

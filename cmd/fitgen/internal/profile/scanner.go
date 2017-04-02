@@ -105,7 +105,7 @@ func (s *Scanner) mscan() (line int, token Token, literal []string) {
 	}
 
 	if ch[mFDEFN] == "" {
-		// fdefn empty: can be FMSGHDR, EMPTY, DYNMSGFIELD
+		// fdefn empty: can be FMSGHDR, EMPTY, DYNMSGFIELD.
 		if ch[mFNAME] == "" {
 			// fname empty: FMSGSHDR, EMPTY
 			switch {
@@ -117,11 +117,11 @@ func (s *Scanner) mscan() (line int, token Token, literal []string) {
 				return line, ILLEGAL, ch
 			}
 		} else {
-			// fname not empty, must be DYNMSGFIELD
+			// fname not empty, must be DYNMSGFIELD.
 			return line, DYNMSGFIELD, ch
 		}
 	} else {
-		// fdefn not empty: must be MSGFIELD
+		// fdefn not empty: must be MSGFIELD.
 		return line, MSGFIELD, ch
 	}
 }

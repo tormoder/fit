@@ -8,7 +8,6 @@ import (
 	"go/printer"
 	"go/token"
 	"sort"
-	"strings"
 	"time"
 
 	"github.com/tormoder/fit/internal/base"
@@ -51,10 +50,10 @@ func (g *codeGenerator) generateMsgs(msgs []*Msg) ([]byte, error) {
 	return g.Bytes(), nil
 }
 
-func (g *codeGenerator) generateProfile(types map[string]*Type, msgs []*Msg, useSwitches bool) ([]byte, error) {
+func (g *codeGenerator) generateProfile(types map[string]*Type, msgs []*Msg) ([]byte, error) {
 	g.Buffer = new(bytes.Buffer)
 	g.genHeader()
-	g.genProfile(types, msgs, useSwitches)
+	g.genProfile(types, msgs)
 	err := g.formatCode()
 	if err != nil {
 		return nil, err
@@ -100,8 +99,6 @@ func (g *codeGenerator) p(str ...interface{}) {
 	}
 	g.WriteByte('\n')
 }
-
-func unexport(s string) string { return strings.ToLower(s[:1]) + s[1:] }
 
 func (g *codeGenerator) genHeader() {
 	g.p("// This file is auto-generated using the")
@@ -594,7 +591,7 @@ func (g *codeGenerator) genExpandComponentsMaskShiftDyn(msg *Msg, sfield *Field,
 	}
 }
 
-func (g *codeGenerator) genProfile(types map[string]*Type, msgs []*Msg, useSwitches bool) {
+func (g *codeGenerator) genProfile(types map[string]*Type, msgs []*Msg) {
 	g.p("import (")
 	g.p("\"fmt\"")
 	g.p("\"reflect\"")
@@ -605,14 +602,6 @@ func (g *codeGenerator) genProfile(types map[string]*Type, msgs []*Msg, useSwitc
 	g.genFieldDef()
 	g.genKnownMsgs(types)
 	g.genAccumulators(msgs)
-
-	if useSwitches {
-		g.genFieldsVarsAndMap(msgs)
-		g.genGetFieldSwitch(msgs)
-		g.genZeroValueMsgsVars(msgs)
-		g.genGetZeroValueMsgsSwitch(msgs)
-		return
-	}
 	g.genFieldsArray(msgs)
 	g.genGetFieldArrayLookup(msgs)
 	g.genMsgTypesArray(msgs)
@@ -719,19 +708,6 @@ func (g *codeGenerator) genAccumulator(comp Component, msg *Msg) {
 	g.p("accumu", comp.Name, " *", targetf.Type, "Accumulator")
 }
 
-func (g *codeGenerator) genFieldsVarsAndMap(msgs []*Msg) {
-	g.p()
-	for _, msg := range msgs {
-		g.p("var ", unexport(msg.CCName), "Fields = map[byte]*field{")
-		for i := 0; i < len(msg.Fields); i++ {
-			f := msg.Fields[i]
-			g.p(f.DefNum, ": {", i, ", ", f.Array, ", ", f.GoType, ", ", f.DefNum, ", ", f.BaseType.PkgString(), "},")
-		}
-		g.p("}")
-		g.p()
-	}
-}
-
 func (g *codeGenerator) genFieldsArray(msgs []*Msg) {
 	g.p()
 	g.p("// Set length to 256, so that lookup for any")
@@ -749,26 +725,6 @@ func (g *codeGenerator) genFieldsArray(msgs []*Msg) {
 	g.p("}")
 }
 
-func (g *codeGenerator) genGetFieldSwitch(msgs []*Msg) {
-	g.p()
-	g.p("func getField(gmn MesgNum, fdn byte) (*field, bool) {")
-	g.p("var f *field")
-	g.p("var ok bool")
-	g.p("switch gmn {")
-	for _, msg := range msgs {
-		g.p("case ", "MesgNum", msg.CCName, ":")
-		g.p("f, ok = ", unexport(msg.CCName), "Fields[fdn]")
-		g.p("if !ok {")
-		g.p("return nil, false")
-		g.p("}")
-	}
-	g.p("default:")
-	g.p("panic(\"getField: global message not found\")")
-	g.p("}")
-	g.p("return f, true")
-	g.p("}")
-}
-
 func (g *codeGenerator) genGetFieldArrayLookup(msgs []*Msg) {
 	g.p()
 	g.p("func getField(gmn MesgNum, fdn byte) (*field, bool) {")
@@ -781,20 +737,6 @@ func (g *codeGenerator) genGetFieldArrayLookup(msgs []*Msg) {
 	g.p("}")
 	g.p("return f, true")
 	g.p("}")
-}
-
-func (g *codeGenerator) genZeroValueMsgsVars(msgs []*Msg) {
-	g.p()
-	g.p("var (")
-	for _, msg := range msgs {
-		g.p(unexport(msg.CCName), "AI = reflect.ValueOf(", msg.CCName, "Msg{")
-		for _, f := range msg.Fields {
-			g.p(f.GoInvalid, ",")
-		}
-		g.p("})")
-		g.p()
-	}
-	g.p(")")
 }
 
 func (g *codeGenerator) genZeroValueMsgsArray(msgs []*Msg) {
@@ -817,20 +759,6 @@ func (g *codeGenerator) genMsgTypesArray(msgs []*Msg) {
 	for _, msg := range msgs {
 		g.p("MesgNum", msg.CCName, ": reflect.TypeOf(", msg.CCName, "Msg{}),")
 	}
-	g.p("}")
-}
-
-func (g *codeGenerator) genGetZeroValueMsgsSwitch(msgs []*Msg) {
-	g.p()
-	g.p("func getMesgAllInvalid(mn MesgNum) reflect.Value {")
-	g.p("switch mn {")
-	for _, msg := range msgs {
-		g.p("case MesgNum", msg.CCName, ":")
-		g.p("return reflect.ValueOf(", unexport(msg.CCName), "AI.Interface()).Elem()")
-	}
-	g.p("default:")
-	g.p("panic(\"getMesgAllInvalid: unknown message number\")")
-	g.p("}")
 	g.p("}")
 }
 

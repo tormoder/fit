@@ -24,7 +24,6 @@ type Profile struct {
 type generatorOptions struct {
 	genTimestamp bool
 	sdkVersion   string
-	useSwitches  bool
 	logger       *log.Logger
 }
 
@@ -39,12 +38,6 @@ func WithGenerationTimestamp(gt bool) GeneratorOption {
 func WithSDKVersionOverride(version string) GeneratorOption {
 	return func(o *generatorOptions) {
 		o.sdkVersion = version
-	}
-}
-
-func WithUseSwitches() GeneratorOption {
-	return func(o *generatorOptions) {
-		o.useSwitches = true
 	}
 }
 
@@ -182,7 +175,7 @@ func (g *Generator) genCode() error {
 	if err != nil {
 		return err
 	}
-	g.p.ProfileSource, err = codeg.generateProfile(g.types, g.msgs, g.opts.useSwitches)
+	g.p.ProfileSource, err = codeg.generateProfile(g.types, g.msgs)
 	return err
 }
 

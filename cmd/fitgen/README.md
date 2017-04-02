@@ -18,8 +18,6 @@ for information about profile generation.
 usage: fitgen [flags] [path to sdk zip, xls or xlsx file]
   -sdk string
 	provide or override SDK version printed in generated code
-  -switches
-	use switches instead jump tables for profile message and field lookups
   -timestamp
 	add generation timestamp to generated code (default true)
 ```

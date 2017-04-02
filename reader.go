@@ -189,11 +189,17 @@ func (d *decoder) decode(r io.Reader, headerOnly, fileIDOnly, crcOnly bool) erro
 	}
 
 crc:
+	if d.debug {
+		d.opts.logger.Printf("expecting crc value: 0x%x", d.crc.Sum16())
+	}
 	if err = binary.Read(d.r, binary.LittleEndian, &d.fit.CRC); err != nil {
 		err = noEOF(err)
 		return fmt.Errorf("error parsing file CRC: %v", err)
 	}
+	if d.debug {
+		d.opts.logger.Printf("read crc value: 0x%x", d.fit.CRC)
 
+	}
 	if d.crc.Sum16() != 0x0000 {
 		return IntegrityError("file checksum failed")
 	}

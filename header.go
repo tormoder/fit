@@ -147,7 +147,7 @@ func (h Header) MarshalJSON() ([]byte, error) {
 
 func (h Header) String() string {
 	return fmt.Sprintf(
-		"size: %d | protover: %d | profver: %d | dsize: %d | dtype: %s | crc: %d",
+		"size: %d | protover: %d | profver: %d | dsize: %d | dtype: %s | crc: 0x%x",
 		h.Size, h.ProtocolVersion, h.ProfileVersion, h.DataSize, h.DataType, h.CRC,
 	)
 }

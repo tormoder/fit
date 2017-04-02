@@ -492,7 +492,19 @@ func (g *codeGenerator) genExpandComponentsArray(field *Field) {
 	case "EventTimestamp12":
 		g.p("// TODO")
 	case "MesgData":
-		g.p("// TODO")
+		g.p("if len(x.", field.CCName, ") != 0 {")
+		g.p("x.Data = make([]byte, len(x.", field.CCName, ")-1)")
+		g.p("for i, v := range x.", field.CCName, " {")
+		g.p("if v == ", field.FType.BaseType().GoInvalidValue(), "{")
+		g.p("break")
+		g.p("}")
+		g.p("if i == 0 {")
+		g.p("x.ChannelNumber = v")
+		g.p("} else {")
+		g.p("x.Data[i-1] = v")
+		g.p("}")
+		g.p("}")
+		g.p("}")
 	default:
 		fatalErr := fmt.Sprintf("genExpandComponentsArray: unhandled case for field %q", field.CCName)
 		panic(fatalErr)

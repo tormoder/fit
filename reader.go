@@ -75,15 +75,15 @@ func DecodeHeaderAndFileID(r io.Reader) (Header, FileIdMsg, error) {
 }
 
 // Decode reads a FIT file from r and returns it as a *Fit.
+// If error is non-nil, all data decoded before the error was
+// encountered is also returned.
 func Decode(r io.Reader, opts ...DecodeOption) (*Fit, error) {
 	var d decoder
 	for _, opt := range opts {
 		opt(&d.opts)
 	}
-	if err := d.decode(r, false, false, false); err != nil {
-		return nil, err
-	}
-	return d.fit, nil
+	err := d.decode(r, false, false, false)
+	return d.fit, err
 }
 
 func (d *decoder) decode(r io.Reader, headerOnly, fileIDOnly, crcOnly bool) error {
@@ -125,8 +125,14 @@ func (d *decoder) decode(r io.Reader, headerOnly, fileIDOnly, crcOnly bool) erro
 		goto crc
 	}
 
-	d.unknownMessages = make(map[MesgNum]int)
-	d.unknownFields = make(map[unknownField]int)
+	if d.opts.unknownFields {
+		d.unknownFields = make(map[unknownField]int)
+		defer d.handleUnknownFields()
+	}
+	if d.opts.unknownMessages {
+		d.unknownMessages = make(map[MesgNum]int)
+		defer d.handleUnknownMessages()
+	}
 
 	err = d.parseFileIdMsg()
 	if err != nil {
@@ -180,13 +186,6 @@ func (d *decoder) decode(r io.Reader, headerOnly, fileIDOnly, crcOnly bool) erro
 		default:
 			return fmt.Errorf("unknown record header, got: %#x", b)
 		}
-	}
-
-	if d.opts.unknownFields {
-		d.handleUnknownFields()
-	}
-	if d.opts.unknownMessages {
-		d.handleUnknownMessages()
 	}
 
 crc:

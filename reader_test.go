@@ -76,7 +76,7 @@ func TestDecode(t *testing.T) {
 				if file.wantErr && err == nil {
 					t.Error("got no error, want error")
 				}
-				if file.fingerprint == 0 || file.wantErr {
+				if file.fingerprint == 0 {
 					return
 				}
 				fp := fitFingerprint(fitFile)

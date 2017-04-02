@@ -1,11 +1,16 @@
-language: go
-
 sudo: false
+language: go
 
 os:
   - linux
   - osx
 
 go:
-  - 1.7
-  - tip
+  - 1.7.x
+  - 1.8.x
+  - master
+
+matrix:
+  allow_failures:
+    - go: master
+  fast_finish: true

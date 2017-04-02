@@ -175,7 +175,7 @@ func (f *Field) transform(subfield bool, ftypes map[string]*Type) (skip bool, er
 		return false, nil
 	}
 
-	return false, f.parseComponents(ftypes)
+	return false, f.parseComponents()
 }
 
 func (f *Field) parseArray() {
@@ -273,7 +273,7 @@ func (f *Field) parseScaleOffset() {
 	}
 }
 
-func (f *Field) parseComponents(ftypes map[string]*Type) error {
+func (f *Field) parseComponents() error {
 	if f.data[mCOMPS] == "" {
 		return nil
 	}

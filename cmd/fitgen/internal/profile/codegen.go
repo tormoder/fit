@@ -602,10 +602,10 @@ func (g *codeGenerator) genProfile(types map[string]*Type, msgs []*Msg) {
 	g.genKnownMsgs(types)
 	g.genAccumulators(msgs)
 	g.genFieldsArray(msgs)
-	g.genGetFieldArrayLookup(msgs)
+	g.genGetFieldArrayLookup()
 	g.genMsgTypesArray(msgs)
 	g.genZeroValueMsgsArray(msgs)
-	g.genGetZeroValueMsgsArrayLookup(msgs)
+	g.genGetZeroValueMsgsArrayLookup()
 }
 
 func (g *codeGenerator) genKnownMsgs(types map[string]*Type) {
@@ -673,7 +673,7 @@ func (g *codeGenerator) genFieldsArray(msgs []*Msg) {
 	g.p("}")
 }
 
-func (g *codeGenerator) genGetFieldArrayLookup(msgs []*Msg) {
+func (g *codeGenerator) genGetFieldArrayLookup() {
 	g.p()
 	g.p("func getField(gmn MesgNum, fdn byte) (*field, bool) {")
 	g.p("if int(gmn) >= len(_fields) {")
@@ -710,7 +710,7 @@ func (g *codeGenerator) genMsgTypesArray(msgs []*Msg) {
 	g.p("}")
 }
 
-func (g *codeGenerator) genGetZeroValueMsgsArrayLookup(msgs []*Msg) {
+func (g *codeGenerator) genGetZeroValueMsgsArrayLookup() {
 	g.p()
 	g.p("func getMesgAllInvalid(mn MesgNum) reflect.Value {")
 	g.p("val := reflect.New(msgsTypes[mn]).Elem()")

@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"path/filepath"
+	"runtime"
+	"strings"
 	"sync"
 	"testing"
 	"time"
@@ -16,6 +18,7 @@ import (
 var (
 	update  = flag.Bool("update", false, "update .golden output and table for decode test files if their fingerprint differs")
 	fupdate = flag.Bool("fupdate", false, "force regeneration of decode test files table")
+	fdecode = flag.Bool("fdecode", false, "force decode golden part of decode test irregardless of Go version")
 )
 
 func init() { flag.Parse() }
@@ -55,6 +58,27 @@ const (
 )
 
 func TestDecode(t *testing.T) {
+	const goMajorVersionForDecodeGolden = "go1.8"
+	testDecodeGolden := true
+	goVersion := runtime.Version()
+	goVersionOK := strings.HasPrefix(goVersion, goMajorVersionForDecodeGolden)
+	switch {
+	case !goVersionOK && !*fdecode:
+		testDecodeGolden = false
+		t.Logf(
+			"skipping golden decode part of test due to Go version (enabled for %s.x, have %q)",
+			goMajorVersionForDecodeGolden,
+			goVersion,
+		)
+	case !goVersionOK && *fdecode:
+		t.Logf(
+			"override: performing golden decode part of test for Go version %q (default only for %s.x)",
+			goVersion,
+			goMajorVersionForDecodeGolden,
+		)
+	default:
+	}
+
 	regenTestTable := struct {
 		sync.Mutex // Protects val and decodeTestFiles slice in reader_util_test.go.
 		val        bool
@@ -76,6 +100,9 @@ func TestDecode(t *testing.T) {
 				}
 				if file.wantErr && err == nil {
 					t.Fatalf("got no error, want error")
+				}
+				if !testDecodeGolden {
+					return
 				}
 				if file.fingerprint == 0 {
 					return

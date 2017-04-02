@@ -638,6 +638,7 @@ func (g *codeGenerator) genProfile(types map[string]*Type, msgs []*Msg) {
 	g.p("\"github.com/tormoder/fit/internal/types\"")
 	g.p(")")
 
+	g.genVersionConsts()
 	g.genKnownMsgs(types)
 	g.genAccumulators(msgs)
 	g.genFieldsArray(msgs)
@@ -645,6 +646,17 @@ func (g *codeGenerator) genProfile(types map[string]*Type, msgs []*Msg) {
 	g.genMsgTypesArray(msgs)
 	g.genZeroValueMsgsArray(msgs)
 	g.genGetZeroValueMsgsArrayLookup()
+}
+
+func (g *codeGenerator) genVersionConsts() {
+	g.p("const (")
+	g.p("// ProfileMajorVersion is the current supported profile major version of the FIT SDK.")
+	g.p("ProfileMajorVersion =", g.sdkMajVer)
+	g.p()
+	g.p("// ProfileMinorVersion is the current supported profile minor version of the FIT SDK.")
+	g.p("ProfileMinorVersion =", g.sdkMinVer)
+	g.p(")")
+	g.p()
 }
 
 func (g *codeGenerator) genKnownMsgs(types map[string]*Type) {

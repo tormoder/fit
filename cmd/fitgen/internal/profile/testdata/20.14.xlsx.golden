@@ -6256,6 +6256,14 @@ import (
 	"github.com/tormoder/fit/internal/types"
 )
 
+const (
+	// ProfileMajorVersion is the current supported profile major version of the FIT SDK.
+	ProfileMajorVersion = 20
+
+	// ProfileMinorVersion is the current supported profile minor version of the FIT SDK.
+	ProfileMinorVersion = 14
+)
+
 var knownMsgNums = map[MesgNum]bool{
 	MesgNumFileId:                      true,
 	MesgNumCapabilities:                true,

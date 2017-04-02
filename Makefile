@@ -12,12 +12,16 @@ DECODE_BENCH_NAME := DecodeActivity$$/Small
 DECODE_BENCH_TIME := 5s
 
 .PHONY: all
-all: deps build test testrace check
+all: deps testdeps build test testrace check
 
 .PHONY: deps
 deps:
 	@echo "go get:"
 	go get $(LATLONG_PKG_PATH)
+
+.PHONY: testdeps
+testdeps:
+	@echo "go get:"
 	go get $(UTTER_PKG_PATH)
 
 .PHONY: build

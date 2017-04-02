@@ -2,73 +2,23 @@ package fit_test
 
 import (
 	"bytes"
-	"compress/gzip"
 	"flag"
 	"fmt"
-	"io"
 	"io/ioutil"
-	"log"
-	"os"
 	"path/filepath"
 	"sync"
 	"testing"
 	"time"
 
-	"github.com/cespare/xxhash"
-	"github.com/kortschak/utter"
 	"github.com/tormoder/fit"
 )
 
-var update = flag.Bool("update", false, "update .golden output for decode test files")
-
-func init() { flag.Parse() }
-
-func fitFingerprint(fit *fit.Fit) uint64 {
-	h := xxhash.New()
-	utter.Fdump(h, fit)
-	return h.Sum64()
-}
-
-func fitUtterDump(fit *fit.Fit, path string, compressed bool) error {
-	f, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE, 0644)
-	if err != nil {
-		return err
-	}
-	var w io.WriteCloser
-	if compressed {
-		w = gzip.NewWriter(f)
-	} else {
-		w = f
-	}
-
-	utter.Fdump(w, fit)
-
-	if !compressed {
-		return f.Close()
-	}
-
-	err = w.Close()
-	if err != nil {
-		_ = f.Close()
-		return err
-	}
-	return f.Close()
-}
-
 var (
-	loggerMu      sync.Mutex
-	loggerOnce    sync.Once
-	devNullLogger *log.Logger
+	update  = flag.Bool("update", false, "update .golden output and table for decode test files if their fingerprint differs")
+	fupdate = flag.Bool("fupdate", false, "force regeneration of decode test files table")
 )
 
-func nullLogger() *log.Logger {
-	loggerMu.Lock()
-	defer loggerMu.Unlock()
-	loggerOnce.Do(func() {
-		devNullLogger = log.New(ioutil.Discard, "", 0)
-	})
-	return devNullLogger
-}
+func init() { flag.Parse() }
 
 var (
 	activitySmallMu   sync.Mutex
@@ -91,247 +41,82 @@ func activitySmall() []byte {
 }
 
 var (
-	activitySmallPath      = filepath.Join(tfolder, me, "activity-small-fenix2-run.fit")
-	activityLargePath      = filepath.Join(tfolder, me, "activity-large-fenxi2-multisport.fit")
-	activityComponentsPath = filepath.Join(tfolder, dcrain, "Edge810-Vector-2013-08-16-15-35-10.fit")
+	activitySmallPath      = filepath.Join(tdfolder, "me", "activity-small-fenix2-run.fit")
+	activityLargePath      = filepath.Join(tdfolder, "me", "activity-large-fenxi2-multisport.fit")
+	activityComponentsPath = filepath.Join(tdfolder, "dcrainmaker", "Edge810-Vector-2013-08-16-15-35-10.fit")
 )
 
 const (
 	goldenSuffix  = ".golden"
 	currentSuffix = ".current"
 	gzSuffix      = ".gz"
-)
-
-const (
-	tfolder  = "testdata"
-	me       = "me"
-	fitsdk   = "fitsdk"
-	fitparse = "python-fitparse"
-	sram     = "sram"
-	dcrain   = "dcrainmaker"
-	misc     = "misc"
-	corrupt  = "corrupt"
+	tdfolder      = "testdata"
 )
 
 func TestDecode(t *testing.T) {
-	testFiles := [...]struct {
-		folder      string
-		name        string
-		wantErr     bool
-		fingerprint uint64
-		compress    bool
-		dopts       []fit.DecodeOption
-	}{
-		{
-			me,
-			"activity-small-fenix2-run.fit",
-			false,
-			11839585052621994073,
-			true,
-			[]fit.DecodeOption{
-				fit.WithUnknownFields(),
-				fit.WithUnknownMessages(),
-				fit.WithLogger(nullLogger()), // For test coverage.
-			},
-		},
-		{
-			fitsdk,
-			"Activity.fit",
-			false,
-			11751796383273411430,
-			true,
-			nil,
-		},
-		{
-			fitsdk,
-			"MonitoringFile.fit",
-			false,
-			8432119481642341932,
-			true,
-			nil,
-		},
-		{
-			fitsdk,
-			"Settings.fit",
-			false,
-			3588228500905428848,
-			true,
-			nil,
-		},
+	regenTestTable := struct {
+		sync.Mutex
+		val bool
+	}{}
 
-		{
-			fitsdk,
-			"WeightScaleMultiUser.fit",
-			false,
-			6803015094161409776,
-			true,
-			nil,
-		},
-		{
-			fitsdk,
-			"WorkoutCustomTargetValues.fit",
-			false,
-			10030359812057747231,
-			true,
-			nil,
-		},
-		{
-			fitsdk,
-			"WorkoutIndividualSteps.fit",
-			false,
-			14879051105853803529,
-			true,
-			nil,
-		},
-		{
-			fitsdk,
-			"WorkoutRepeatGreaterThanStep.fit",
-			false,
-			8356463518492741917,
-			true,
-			nil,
-		},
-		{
-			fitsdk,
-			"WorkoutRepeatSteps.fit",
-			false,
-			3776887550528028307,
-			true,
-			nil,
-		},
-		{
-			fitparse,
-			"garmin-edge-500-activitiy.fit",
-			false,
-			8168113212172708718,
-			true,
-			nil,
-		},
-		{
-			fitparse,
-			"sample-activity-indoor-trainer.fit",
-			false,
-			17579428410140140762,
-			true,
-			nil,
-		},
-		{
-			fitparse,
-			"compressed-speed-distance.fit",
-			false,
-			0,
-			false,
-			nil,
-		},
-		{
-			fitparse,
-			"antfs-dump.63.fit",
-			false,
-			8067952813397841073,
-			true,
-			nil,
-		},
-		{
-			sram,
-			"Settings.fit",
-			false,
-			7436219522300668883,
-			true,
-			nil,
-		},
-		{
-			sram,
-			"Settings2.fit",
-			false,
-			16468149498896926724,
-			true,
-			nil,
-		},
-		{
-			dcrain,
-			"Edge810-Vector-2013-08-16-15-35-10.fit",
-			false,
-			4621767084268372354,
-			true,
-			nil,
-		},
-		{
-			misc,
-			"2013-02-06-12-11-14.fit",
-			false,
-			3536874099933490685,
-			true,
-			nil,
-		},
-		{
-			misc,
-			"2015-10-13-08-43-15.fit",
-			false,
-			17842959338060611382,
-			true,
-			nil,
-		},
-		{
-			corrupt,
-			"activity-filecrc.fit",
-			true,
-			0,
-			false,
-			nil,
-		},
-		{
-			corrupt,
-			"activity-unexpected-eof.fit",
-			true,
-			0,
-			false,
-			nil,
-		},
-	}
-	for _, file := range testFiles {
-		file := file
-		t.Run(fmt.Sprintf("%s/%s", file.folder, file.name), func(t *testing.T) {
-			t.Parallel()
-			fpath := filepath.Join(tfolder, file.folder, file.name)
-			data, err := ioutil.ReadFile(fpath)
-			if err != nil {
-				t.Fatalf("reading file failed: %v", err)
-			}
-			fitFile, err := fit.Decode(bytes.NewReader(data), file.dopts...)
-			if !file.wantErr && err != nil {
-				t.Errorf("got error %v, want no error", err)
-			}
-			if file.wantErr && err == nil {
-				t.Error("got no error, want error")
-			}
-			if file.fingerprint == 0 || file.wantErr {
-				return
-			}
-			fp := fitFingerprint(fitFile)
-			if fp == file.fingerprint {
-				return
-			}
-			t.Errorf("fit file fingerprint differs: got: %d, want: %d", fp, file.fingerprint)
-			if !*update {
-				fpath = fpath + currentSuffix
-			} else {
-				fpath = fpath + goldenSuffix
-			}
-			if file.compress {
-				fpath = fpath + gzSuffix
-			}
-			err = fitUtterDump(fitFile, fpath, file.compress)
-			if err != nil {
-				t.Fatalf("error writing output: %v", err)
-			}
-			if !*update {
-				t.Logf("current output written to: %s", fpath)
-				t.Logf("use a diff tool to compare (e.g. zdiff if compressed)")
-			} else {
-				t.Logf("%q has been updated", fpath)
-				t.Logf("new fingerprint is: %d, update test case in reader_test.go", fp)
-			}
-		})
+	t.Run("Group", func(t *testing.T) {
+		for i, file := range decodeTestFiles {
+			i, file := i, file // Capture range variables.
+			t.Run(fmt.Sprintf("%s/%s", file.folder, file.name), func(t *testing.T) {
+				t.Parallel()
+				fpath := filepath.Join(tdfolder, file.folder, file.name)
+				data, err := ioutil.ReadFile(fpath)
+				if err != nil {
+					t.Fatalf("reading file failed: %v", err)
+				}
+				fitFile, err := fit.Decode(bytes.NewReader(data), file.dopts.opts()...)
+				if !file.wantErr && err != nil {
+					t.Errorf("got error %v, want no error", err)
+				}
+				if file.wantErr && err == nil {
+					t.Error("got no error, want error")
+				}
+				if file.fingerprint == 0 || file.wantErr {
+					return
+				}
+				fp := fitFingerprint(fitFile)
+				if fp == file.fingerprint {
+					return
+				}
+				t.Errorf("fit file fingerprint differs: got: %d, want: %d", fp, file.fingerprint)
+				if !*update {
+					fpath = fpath + currentSuffix
+				} else {
+					fpath = fpath + goldenSuffix
+				}
+				if file.compress {
+					fpath = fpath + gzSuffix
+				}
+				err = fitUtterDump(fitFile, fpath, file.compress)
+				if err != nil {
+					t.Fatalf("error writing output: %v", err)
+				}
+				if !*update {
+					t.Logf("current output written to: %s", fpath)
+					t.Logf("use a diff tool to compare (e.g. zdiff if compressed)")
+				} else {
+					regenTestTable.Lock()
+					regenTestTable.val = true
+					decodeTestFiles[i].fingerprint = fp
+					regenTestTable.Unlock()
+					t.Logf("%q has been updated", fpath)
+					t.Logf("new fingerprint is: %d, update test case in reader_test.go", fp)
+				}
+			})
+		}
+	})
+
+	if regenTestTable.val || *fupdate {
+		t.Logf("regenerating table for decode test files...")
+		err := regenerateDecodeTestTable()
+		if err != nil {
+			t.Fatalf("error regenerating table for decode test files: %v", err)
+		}
 	}
 }
 

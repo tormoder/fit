@@ -73,8 +73,8 @@ func profileFingerprint(p *profile.Profile) uint32 {
 }
 
 type sdk struct {
-	version    string
-	goldenHash uint32
+	version           string
+	goldenFingerprint uint32
 }
 
 var sdks = []sdk{
@@ -100,11 +100,11 @@ func TestGenerator(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			gotHash := profileFingerprint(p)
-			if gotHash == sdk.goldenHash {
+			gotFP := profileFingerprint(p)
+			if gotFP == sdk.goldenFingerprint {
 				return
 			}
-			t.Errorf("profile fingerprint differs: got: %d, want %d", gotHash, sdk.goldenHash)
+			t.Errorf("profile fingerprint differs: got: %d, want %d", gotFP, sdk.goldenFingerprint)
 			if !*update {
 				path = path + currentSuffix
 			} else {
@@ -118,7 +118,7 @@ func TestGenerator(t *testing.T) {
 				t.Logf("current output written to: %s", path)
 			} else {
 				t.Logf("%q has been updated", path)
-				t.Logf("new fingerprint is: %d", gotHash)
+				t.Logf("new fingerprint is: %d", gotFP)
 			}
 		})
 	}

@@ -24,6 +24,9 @@ const (
 	BaseUint16z Base = 0x0B
 	BaseUint32z Base = 0x0C
 	BaseByte    Base = 0x0D // Array of bytes. Field is invalid if all bytes are invalid
+	BaseSint64  Base = 0x0E // 2's complement format
+	BaseUint64  Base = 0x0F
+	BaseUint64z Base = 0x10
 )
 
 func DecodeBase(b byte) Base {
@@ -81,6 +84,9 @@ var bsize = [...]int{
 	2,
 	4,
 	1,
+	8,
+	8,
+	8,
 }
 
 var bname = [...]string{
@@ -98,6 +104,9 @@ var bname = [...]string{
 	"BaseUint16z",
 	"BaseUint32z",
 	"BaseByte",
+	"BaseSint64",
+	"BaseUint64",
+	"BaseUint64z",
 }
 
 var binteger = [...]bool{
@@ -115,6 +124,9 @@ var binteger = [...]bool{
 	true,
 	true,
 	false,
+	true,
+	true,
+	true,
 }
 
 var bsigned = [...]bool{
@@ -130,6 +142,9 @@ var bsigned = [...]bool{
 	true,
 	false,
 	false,
+	false,
+	false,
+	true,
 	false,
 	false,
 }
@@ -149,6 +164,9 @@ var bgotype = [...]string{
 	"uint16",
 	"uint32",
 	"byte",
+	"int64",
+	"uint64",
+	"uint64",
 }
 
 var binvalid = [...]string{
@@ -166,6 +184,9 @@ var binvalid = [...]string{
 	"0x0000",
 	"0x00000000",
 	"0xFF",
+	"0x7FFFFFFFFFFFFFFF",
+	"0xFFFFFFFFFFFFFFFF",
+	"0x0000000000000000",
 }
 
 func BaseFromString(s string) (Base, error) {
@@ -191,4 +212,7 @@ var baseStringToType = map[string]Base{
 	"uint16z": BaseUint16z,
 	"uint32z": BaseUint32z,
 	"byte":    BaseByte,
+	"sint64":  BaseSint64,
+	"uint64":  BaseUint64,
+	"uint64z": BaseUint64z,
 }

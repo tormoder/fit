@@ -71,10 +71,10 @@ func TestDecode(t *testing.T) {
 				}
 				fitFile, err := fit.Decode(bytes.NewReader(data), file.dopts.opts()...)
 				if !file.wantErr && err != nil {
-					t.Errorf("got error, want none; error is: %v", err)
+					t.Fatalf("got error, want none; error is: %v", err)
 				}
 				if file.wantErr && err == nil {
-					t.Error("got no error, want error")
+					t.Fatalf("got no error, want error")
 				}
 				if file.fingerprint == 0 {
 					return

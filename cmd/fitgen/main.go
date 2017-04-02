@@ -115,6 +115,12 @@ func main() {
 		l.Fatalf("typegen: error writing profile output file: %v", err)
 	}
 
+	l.Println("running go install (for go/types in stringer)")
+	err = runGoInstall(fitPkgImportPath)
+	if err != nil {
+		l.Fatal(err)
+	}
+
 	l.Println("running stringer")
 	err = runStringerOnTypes(stringerPath, fitSrcDir, typesStringOut, fitProfile.StringerInput)
 	if err != nil {
@@ -133,6 +139,15 @@ func main() {
 	}
 
 	l.Println("done")
+}
+
+func runGoInstall(pkgDir string) error {
+	listCmd := exec.Command("go", "install", pkgDir+"/...")
+	output, err := listCmd.CombinedOutput()
+	if err != nil {
+		return fmt.Errorf("go install: fail: %v\n%s", err, output)
+	}
+	return nil
 }
 
 func runStringerOnTypes(stringerPath, fitSrcDir, typesStringOut, fitTypes string) error {

@@ -42,7 +42,7 @@ func (t Token) String() string {
 type Scanner struct {
 	i     int
 	input [][]string
-	scan  func() (Token, []string)
+	scan  func() (int, Token, []string)
 }
 
 func NewTypeScanner(input [][]string) (*Scanner, error) {
@@ -59,70 +59,70 @@ func NewMsgScanner(input [][]string) (*Scanner, error) {
 	return s, nil
 }
 
-func (s *Scanner) Scan() (tok Token, lit []string) {
+func (s *Scanner) Scan() (line int, token Token, literal []string) {
 	return s.scan()
 }
 
-func (s *Scanner) read() []string {
+func (s *Scanner) read() (int, []string) {
 	if s.i > len(s.input)-1 {
-		return nil
+		return 0, nil
 	}
-	ch := s.input[s.i]
+	line, ch := s.i, s.input[s.i]
 	s.i++
-	return ch
+	return line, ch
 }
 
-func (s *Scanner) tscan() (tok Token, lit []string) {
-	ch := s.read()
+func (s *Scanner) tscan() (line int, token Token, literal []string) {
+	line, ch := s.read()
 	if ch == nil {
-		return EOF, nil
+		return line, EOF, nil
 	}
 	if ch[tNAME] != "" {
 		if ch[tVALNAME] != "" {
-			return PROFILEHDR, ch
+			return line, PROFILEHDR, ch
 		}
-		return THDR, ch
+		return line, THDR, ch
 	}
 	if ch[tVALNAME] == "" {
-		return EMPTY, ch
+		return line, EMPTY, ch
 	}
-	return TFIELD, ch
+	return line, TFIELD, ch
 }
 
-func (s *Scanner) mscan() (tok Token, lit []string) {
-	ch := s.read()
+func (s *Scanner) mscan() (line int, token Token, literal []string) {
+	line, ch := s.read()
 
 	if ch == nil {
-		return EOF, nil
+		return line, EOF, nil
 	}
 
 	if ch[mMSGNAME] != "" {
 		// not empty: CSVHDR, MSGHDR
 		if ch[mFDEFN] == "" {
-			return MSGHDR, ch
+			return line, MSGHDR, ch
 		}
-		return PROFILEHDR, ch
+		return line, PROFILEHDR, ch
 	}
 
 	if ch[mFDEFN] == "" {
-		// fdefn empty: can be FMSGHDR, EMPTY, DYNMSGFIELD
+		// fdefn empty: can be FMSGHDR, EMPTY, DYNMSGFIELD.
 		if ch[mFNAME] == "" {
 			// fname empty: FMSGSHDR, EMPTY
 			switch {
 			case ch[mFTYPE] != "":
-				return FMSGSHDR, ch
+				return line, FMSGSHDR, ch
 			case isempty(ch[mFTYPE:]):
-				return EMPTY, ch
+				return line, EMPTY, ch
 			default:
-				return ILLEGAL, ch
+				return line, ILLEGAL, ch
 			}
 		} else {
-			// fname not empty, must be DYNMSGFIELD
-			return DYNMSGFIELD, ch
+			// fname not empty, must be DYNMSGFIELD.
+			return line, DYNMSGFIELD, ch
 		}
 	} else {
-		// fdefn not empty: must be MSGFIELD
-		return MSGFIELD, ch
+		// fdefn not empty: must be MSGFIELD.
+		return line, MSGFIELD, ch
 	}
 }
 

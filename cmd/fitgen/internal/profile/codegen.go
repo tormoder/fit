@@ -13,9 +13,23 @@ import (
 	"github.com/tormoder/fit/internal/types"
 )
 
-var knownMesgNumButNoMsg = map[string]bool{
-	"Pad":         true,
-	"GpsMetadata": true,
+var knownMesgNumButNoMsgPerSDK = map[string]map[string]bool{
+	"16.20": map[string]bool{
+		"GpsMetadata": true,
+		"Pad":         true,
+	},
+	"20.14": map[string]bool{
+		"Pad": true,
+	},
+}
+
+func knownMesgNumButNoMsg(sdk, mesgNum string) bool {
+	const fallbackSDK = "16.20"
+	mnMap, found := knownMesgNumButNoMsgPerSDK[sdk]
+	if !found {
+		return knownMesgNumButNoMsgPerSDK[fallbackSDK][mesgNum]
+	}
+	return mnMap[mesgNum]
 }
 
 type codeGenerator struct {
@@ -437,7 +451,6 @@ func (g *codeGenerator) genExpandComponents(msg *Msg, compFieldIndices []int, dy
 		}
 
 		debugln("expand components: msg:", msg.CCName, "- field:", field.CCName)
-		debugln("FType.Array():", field.FType.Array())
 
 		if !field.FType.Array() {
 			g.genExpandComponentsReg(msg, field)
@@ -490,8 +503,25 @@ func (g *codeGenerator) genExpandComponentsArray(field *Field) {
 		g.p("uint32(x.", field.CCName, "[1]>>4) | uint32(x.", field.CCName, "[2]<< 4),")
 		g.p(")")
 		g.p("}")
+	case "EventTimestamp12":
+		g.p("// TODO")
+	case "MesgData":
+		g.p("if len(x.", field.CCName, ") != 0 {")
+		g.p("x.Data = make([]byte, len(x.", field.CCName, ")-1)")
+		g.p("for i, v := range x.", field.CCName, " {")
+		g.p("if v == ", field.FType.BaseType().GoInvalidValue(), "{")
+		g.p("break")
+		g.p("}")
+		g.p("if i == 0 {")
+		g.p("x.ChannelNumber = v")
+		g.p("} else {")
+		g.p("x.Data[i-1] = v")
+		g.p("}")
+		g.p("}")
+		g.p("}")
 	default:
-		panic("genExpandComponentsArray: unhandled case")
+		fatalErr := fmt.Sprintf("genExpandComponentsArray: unhandled case for field %q", field.CCName)
+		panic(fatalErr)
 	}
 }
 
@@ -553,6 +583,9 @@ func (g *codeGenerator) genExpandComponentsDyn(msg *Msg, field *Field, dcsfis []
 }
 
 func (g *codeGenerator) genExpandComponentsMaskShift(msg *Msg, field *Field) {
+	if msg.CCName == "Hr" {
+		return
+	}
 	bits := 0
 	for _, comp := range field.Components {
 		tfield, tfound := msg.FieldByName[comp.Name]
@@ -617,7 +650,7 @@ func (g *codeGenerator) genKnownMsgs(types map[string]*Type) {
 	g.p()
 	g.p("var knownMsgNums = map[MesgNum]bool{")
 	for i := 0; i < len(mnvals)-2; i++ { // -2: Skip the last two: RangeMin/Max
-		if knownMesgNumButNoMsg[mnvals[i].Name] {
+		if knownMesgNumButNoMsg(g.sdkVersion, mnvals[i].Name) {
 			continue
 		}
 		g.p("MesgNum", mnvals[i].Name, ": true,")
@@ -630,6 +663,9 @@ func (g *codeGenerator) genAccumulators(msgs []*Msg) {
 	g.p("var (")
 	// For-loop hell.
 	for _, msg := range msgs {
+		if msg.CCName == "Hr" {
+			continue
+		}
 		for _, field := range msg.Fields {
 			for _, comp := range field.Components {
 				if comp.Accumulate {

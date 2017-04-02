@@ -281,11 +281,7 @@ func (f *Field) parseComponents() error {
 	debugln("parsing components for field", f.CCName)
 
 	switch f.FType.BaseType() {
-	case types.BaseUint8, types.BaseUint16, types.BaseUint32:
-	case types.BaseByte:
-		if !f.FType.Array() {
-			return fmt.Errorf("parseComponents: base type was byte but not an array")
-		}
+	case types.BaseUint8, types.BaseUint16, types.BaseUint32, types.BaseByte:
 	default:
 		return fmt.Errorf(
 			"parseComponents: unhandled base type (%s) for field %s",
@@ -297,11 +293,14 @@ func (f *Field) parseComponents() error {
 		return fmt.Errorf("parseComponents: zero components after string split")
 	}
 
-	bits := strings.Split(f.data[mBITS], ",")
+	bitsFull := f.data[mBITS]
+	if new, rewrite := bitsRewrite[bitsFull]; rewrite {
+		bitsFull = new
+	}
+	bits := strings.Split(bitsFull, ",")
+
 	if len(components) != len(bits) {
-		return fmt.Errorf(
-			"parseComponents: number of components (%d) and bits (%d) differ",
-			len(components), len(bits))
+		return fmt.Errorf("parseComponents: number of components (%d) and bits (%d) differ", len(components), len(bits))
 	}
 
 	accumulate := strings.Split(f.data[mACCUMU], ",")
@@ -340,7 +339,7 @@ func (f *Field) parseComponents() error {
 		}
 	}
 
-	if bitsTotal > 32 || bitsTotal < 0 {
+	if (bitsTotal > 32 && !f.FType.Array()) || bitsTotal < 0 {
 		return fmt.Errorf("parseComponents: illegal size for total number of bits: %d", bitsTotal)
 	}
 
@@ -351,13 +350,21 @@ func (f *Field) parseComponents() error {
 		return nil
 	}
 
-	cscale := strings.Split(f.data[mSCALE], ",")
-	coffset := strings.Split(f.data[mOFFSET], ",")
+	cscaleFull := f.data[mSCALE]
+	if new, rewrite := scaleRewrite[cscaleFull]; rewrite {
+		cscaleFull = new
+	}
+	cscale := strings.Split(cscaleFull, ",")
+	if len(cscale) == 1 && cscale[0] == "" {
+		cscale = nil
+	}
 
+	coffset := strings.Split(f.data[mOFFSET], ",")
 	if len(coffset) == 1 && coffset[0] == "" {
 		coffset = nil
 	}
-	if len(cscale) != len(components) {
+
+	if len(cscale) != 0 && len(cscale) != len(components) {
 		return fmt.Errorf(
 			"parseComponents: number of components (%d) and scales (%d) differ",
 			len(components), len(cscale))
@@ -369,6 +376,9 @@ func (f *Field) parseComponents() error {
 	}
 
 	for i := range f.Components {
+		if len(cscale) == 0 {
+			continue
+		}
 		f.Components[i].Scale = strings.TrimSpace(cscale[i])
 		if len(coffset) == 0 {
 			continue
@@ -377,4 +387,21 @@ func (f *Field) parseComponents() error {
 	}
 
 	return nil
+}
+
+// Rewrite maps.
+// In SDK ~16.20 all bits and scales were separated by commas.
+// In SDK 20.14 some bits and scales are just concatenated together,
+// making them hard to parse. Use two maps for now.
+var bitsRewrite = map[string]string{
+	"1616":      "16,16",
+	"88888888":  "8,8,8,8,8,8,8,8",
+	"888888888": "8,8,8,8,8,8,8,8,8",
+	"53":        "5,3",
+	"44":        "4,4",
+}
+
+var scaleRewrite = map[string]string{
+	"11":   "1,1",
+	"1111": "1,1,1,1",
 }

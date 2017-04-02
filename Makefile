@@ -27,7 +27,7 @@ CHECK_TOOLS :=	golang.org/x/tools/cmd/goimports \
 		github.com/mvdan/unparam
 
 .PHONY: all
-all: deps testdeps build test testrace check
+all: deps testdeps build test testrace checkfull
 
 .PHONY: deps
 deps:

@@ -296,11 +296,14 @@ func (f *Field) parseComponents(ftypes map[string]*Type) error {
 		return fmt.Errorf("parseComponents: zero components after string split")
 	}
 
-	bits := strings.Split(f.data[mBITS], ",")
+	bitsFull := f.data[mBITS]
+	if new, rewrite := bitsRewrite[bitsFull]; rewrite {
+		bitsFull = new
+	}
+	bits := strings.Split(bitsFull, ",")
+
 	if len(components) != len(bits) {
-		return fmt.Errorf(
-			"parseComponents: number of components (%d) and bits (%d) differ",
-			len(components), len(bits))
+		return fmt.Errorf("parseComponents: number of components (%d) and bits (%d) differ", len(components), len(bits))
 	}
 
 	accumulate := strings.Split(f.data[mACCUMU], ",")
@@ -376,4 +379,11 @@ func (f *Field) parseComponents(ftypes map[string]*Type) error {
 	}
 
 	return nil
+}
+
+var bitsRewrite = map[string]string{
+	"1616":     "16,16",
+	"88888888": "8,8,8,8,8,8,8,8",
+	"53":       "5,3",
+	"44":       "4,4",
 }

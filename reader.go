@@ -189,6 +189,12 @@ func (d *decoder) decode(r io.Reader, headerOnly, fileIDOnly, crcOnly bool) erro
 	}
 
 crc:
+	// Check invariant pre-read CRC: d.h.DataSize == d.n.
+	if !crcOnly && d.n != d.h.DataSize {
+		fatalErr := fmt.Sprintf("internal decoder error: pre-crc check: data size is %d, but d.n is %d", d.h.DataSize, d.n)
+		panic(fatalErr)
+	}
+
 	if d.debug {
 		d.opts.logger.Printf("expecting crc value: 0x%x", d.crc.Sum16())
 	}

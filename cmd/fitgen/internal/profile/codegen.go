@@ -14,11 +14,11 @@ import (
 )
 
 var knownMesgNumButNoMsgPerSDK = map[string]map[string]bool{
-	"16.20": map[string]bool{
+	"16.20": {
 		"GpsMetadata": true,
 		"Pad":         true,
 	},
-	"20.14": map[string]bool{
+	"20.14": {
 		"Pad": true,
 	},
 }

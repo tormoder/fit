@@ -5,7 +5,6 @@ import (
 	"compress/gzip"
 	"flag"
 	"fmt"
-	"hash/fnv"
 	"io"
 	"io/ioutil"
 	"log"
@@ -15,6 +14,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/cespare/xxhash"
 	"github.com/kortschak/utter"
 	"github.com/tormoder/fit"
 )
@@ -23,10 +23,10 @@ var update = flag.Bool("update", false, "update .golden output for decode test f
 
 func init() { flag.Parse() }
 
-func fitFingerprint(fit *fit.Fit) uint32 {
-	h := fnv.New32a()
+func fitFingerprint(fit *fit.Fit) uint64 {
+	h := xxhash.New()
 	utter.Fdump(h, fit)
-	return h.Sum32()
+	return h.Sum64()
 }
 
 func fitUtterDump(fit *fit.Fit, path string, compressed bool) error {
@@ -118,7 +118,7 @@ func TestDecode(t *testing.T) {
 		folder      string
 		name        string
 		wantErr     bool
-		fingerprint uint32
+		fingerprint uint64
 		compress    bool
 		dopts       []fit.DecodeOption
 	}{
@@ -126,7 +126,7 @@ func TestDecode(t *testing.T) {
 			me,
 			"activity-small-fenix2-run.fit",
 			false,
-			389865072,
+			11839585052621994073,
 			true,
 			[]fit.DecodeOption{
 				fit.WithUnknownFields(),
@@ -138,7 +138,7 @@ func TestDecode(t *testing.T) {
 			fitsdk,
 			"Activity.fit",
 			false,
-			2722395800,
+			11751796383273411430,
 			true,
 			nil,
 		},
@@ -146,7 +146,7 @@ func TestDecode(t *testing.T) {
 			fitsdk,
 			"MonitoringFile.fit",
 			false,
-			1628070551,
+			8432119481642341932,
 			true,
 			nil,
 		},
@@ -154,7 +154,7 @@ func TestDecode(t *testing.T) {
 			fitsdk,
 			"Settings.fit",
 			false,
-			300677984,
+			3588228500905428848,
 			true,
 			nil,
 		},
@@ -163,7 +163,7 @@ func TestDecode(t *testing.T) {
 			fitsdk,
 			"WeightScaleMultiUser.fit",
 			false,
-			1631563326,
+			6803015094161409776,
 			true,
 			nil,
 		},
@@ -171,7 +171,7 @@ func TestDecode(t *testing.T) {
 			fitsdk,
 			"WorkoutCustomTargetValues.fit",
 			false,
-			407208810,
+			10030359812057747231,
 			true,
 			nil,
 		},
@@ -179,7 +179,7 @@ func TestDecode(t *testing.T) {
 			fitsdk,
 			"WorkoutIndividualSteps.fit",
 			false,
-			1159208415,
+			14879051105853803529,
 			true,
 			nil,
 		},
@@ -187,7 +187,7 @@ func TestDecode(t *testing.T) {
 			fitsdk,
 			"WorkoutRepeatGreaterThanStep.fit",
 			false,
-			3635471829,
+			8356463518492741917,
 			true,
 			nil,
 		},
@@ -195,7 +195,7 @@ func TestDecode(t *testing.T) {
 			fitsdk,
 			"WorkoutRepeatSteps.fit",
 			false,
-			2404845921,
+			3776887550528028307,
 			true,
 			nil,
 		},
@@ -203,7 +203,7 @@ func TestDecode(t *testing.T) {
 			fitparse,
 			"garmin-edge-500-activitiy.fit",
 			false,
-			1109206956,
+			8168113212172708718,
 			true,
 			nil,
 		},
@@ -211,7 +211,7 @@ func TestDecode(t *testing.T) {
 			fitparse,
 			"sample-activity-indoor-trainer.fit",
 			false,
-			3859373415,
+			17579428410140140762,
 			true,
 			nil,
 		},
@@ -227,7 +227,7 @@ func TestDecode(t *testing.T) {
 			fitparse,
 			"antfs-dump.63.fit",
 			false,
-			1614815088,
+			8067952813397841073,
 			true,
 			nil,
 		},
@@ -235,7 +235,7 @@ func TestDecode(t *testing.T) {
 			sram,
 			"Settings.fit",
 			false,
-			272343177,
+			7436219522300668883,
 			true,
 			nil,
 		},
@@ -243,7 +243,7 @@ func TestDecode(t *testing.T) {
 			sram,
 			"Settings2.fit",
 			false,
-			1859314011,
+			16468149498896926724,
 			true,
 			nil,
 		},
@@ -251,7 +251,7 @@ func TestDecode(t *testing.T) {
 			dcrain,
 			"Edge810-Vector-2013-08-16-15-35-10.fit",
 			false,
-			1622709791,
+			4621767084268372354,
 			true,
 			nil,
 		},
@@ -259,7 +259,7 @@ func TestDecode(t *testing.T) {
 			misc,
 			"2013-02-06-12-11-14.fit",
 			false,
-			822106955,
+			3536874099933490685,
 			true,
 			nil,
 		},
@@ -267,7 +267,7 @@ func TestDecode(t *testing.T) {
 			misc,
 			"2015-10-13-08-43-15.fit",
 			false,
-			3810387731,
+			17842959338060611382,
 			true,
 			nil,
 		},

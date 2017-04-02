@@ -4,9 +4,11 @@ FIT_DIRS 	:= $(shell find . -type d -not -path "*vendor*" -not -path "./.git*" -
 
 FIT_PKG_PATH 	:= github.com/tormoder/fit
 FITGEN_PKG_PATH := $(FIT_PKG_PATH)/cmd/fitgen
+
 GOFUZZ_PKG_PATH := github.com/dvyukov/go-fuzz
 LATLONG_PKG_PATH:= github.com/bradfitz/latlong
 UTTER_PKG_PATH	:= github.com/kortschak/utter
+XXHASH_PKG_PATH := github.com/cespare/xxhash
 
 DECODE_BENCH_NAME := DecodeActivity$$/Small
 DECODE_BENCH_TIME := 5s
@@ -23,6 +25,7 @@ deps:
 testdeps:
 	@echo "go get:"
 	go get $(UTTER_PKG_PATH)
+	go get $(XXHASH_PKG_PATH)
 
 .PHONY: build
 build:

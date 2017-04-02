@@ -801,7 +801,7 @@ func (d *decoder) parseFitFieldArray(dm *defmsg, dfield fieldDef, fieldv reflect
 	dsize := int(dfield.size)
 
 	if dbt == types.BaseByte {
-		byteArray := make([]byte, dsize, dsize)
+		byteArray := make([]byte, dsize)
 		copy(byteArray, d.tmp[:dsize])
 		fieldv.SetBytes(byteArray)
 		return nil

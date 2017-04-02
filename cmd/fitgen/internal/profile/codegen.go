@@ -21,6 +21,9 @@ var knownMesgNumButNoMsgPerSDK = map[string]map[string]bool{
 	"20.14": {
 		"Pad": true,
 	},
+	"20.27": {
+		"Pad": true,
+	},
 }
 
 func knownMesgNumButNoMsg(sdk, mesgNum string) bool {

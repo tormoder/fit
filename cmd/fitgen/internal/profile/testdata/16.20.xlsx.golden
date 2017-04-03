@@ -1,7 +1,6 @@
 // TYPES
-// DO NOT EDIT.
-// This file is auto-generated using the
-// program found in 'cmd/fitgen/main.go'
+// Code generated using the program found in 'cmd/fitgen/main.go'. DO NOT EDIT.
+
 // SDK Version: 16.20
 
 package fit
@@ -1581,9 +1580,8 @@ const (
 	WorkoutPowerInvalid     WorkoutPower = 0xFFFFFFFF
 )
 // MESSAGES
-// DO NOT EDIT.
-// This file is auto-generated using the
-// program found in 'cmd/fitgen/main.go'
+// Code generated using the program found in 'cmd/fitgen/main.go'. DO NOT EDIT.
+
 // SDK Version: 16.20
 
 package fit
@@ -5068,9 +5066,8 @@ func (x *MonitoringMsg) GetCycles() interface{} {
 type MemoGlobMsg struct {
 }
 // PROFILE
-// DO NOT EDIT.
-// This file is auto-generated using the
-// program found in 'cmd/fitgen/main.go'
+// Code generated using the program found in 'cmd/fitgen/main.go'. DO NOT EDIT.
+
 // SDK Version: 16.20
 
 package fit

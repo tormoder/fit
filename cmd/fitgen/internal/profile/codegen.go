@@ -105,9 +105,8 @@ func (g *codeGenerator) p(str ...interface{}) {
 }
 
 func (g *codeGenerator) genHeader() {
-	g.p("// DO NOT EDIT.")
-	g.p("// This file is auto-generated using the")
-	g.p("// program found in 'cmd/fitgen/main.go'")
+	g.p("// Code generated using the program found in 'cmd/fitgen/main.go'. DO NOT EDIT.")
+	g.p()
 	g.p("// SDK Version: ", g.sdkFullVer)
 	if g.addGenTime {
 		g.p("// Generation time: ", g.genTime.UTC().Format(time.UnixDate))

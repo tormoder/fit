@@ -2,6 +2,7 @@ package profile
 
 import (
 	"fmt"
+	"log"
 	"regexp"
 	"strconv"
 	"strings"
@@ -97,7 +98,7 @@ func (t *Type) transform() (skip bool, err error) {
 	return false, nil
 }
 
-func TransformMsgs(pmsgs []*PMsg, ftypes map[string]*Type) ([]*Msg, error) {
+func TransformMsgs(pmsgs []*PMsg, ftypes map[string]*Type, logger *log.Logger) ([]*Msg, error) {
 	var msgs []*Msg
 	for _, pmsg := range pmsgs {
 		msg := Msg{
@@ -111,11 +112,11 @@ func TransformMsgs(pmsgs []*PMsg, ftypes map[string]*Type) ([]*Msg, error) {
 				pmsg.Header)
 		}
 		msg.CCName = toCamelCase(msg.Name)
-		debugln("transforming message", msg.CCName)
+		logger.Println("transforming message:", msg.CCName)
 
 		for _, pfield := range pmsg.Fields {
 			f := &Field{data: pfield.Field}
-			skip, err := f.transform(false, ftypes)
+			skip, err := f.transform(false, ftypes, logger)
 			if err != nil {
 				return nil, err
 			}
@@ -130,7 +131,7 @@ func TransformMsgs(pmsgs []*PMsg, ftypes map[string]*Type) ([]*Msg, error) {
 
 			for _, sfield := range pfield.Subfields {
 				sf := &Field{data: sfield}
-				skip, err := sf.transform(true, ftypes)
+				skip, err := sf.transform(true, ftypes, logger)
 				if err != nil {
 					return nil, fmt.Errorf("error parsing subfield: %v", err)
 				}
@@ -146,7 +147,7 @@ func TransformMsgs(pmsgs []*PMsg, ftypes map[string]*Type) ([]*Msg, error) {
 	return msgs, nil
 }
 
-func (f *Field) transform(subfield bool, ftypes map[string]*Type) (skip bool, err error) {
+func (f *Field) transform(subfield bool, ftypes map[string]*Type, logger *log.Logger) (skip bool, err error) {
 	if f.data[mEXAMPLE] == "" {
 		return true, nil
 	}
@@ -175,7 +176,7 @@ func (f *Field) transform(subfield bool, ftypes map[string]*Type) (skip bool, er
 		return false, nil
 	}
 
-	return false, f.parseComponents()
+	return false, f.parseComponents(logger)
 }
 
 func (f *Field) parseArray() {
@@ -273,12 +274,12 @@ func (f *Field) parseScaleOffset() {
 	}
 }
 
-func (f *Field) parseComponents() error {
+func (f *Field) parseComponents(logger *log.Logger) error {
 	if f.data[mCOMPS] == "" {
 		return nil
 	}
 
-	debugln("parsing components for field", f.CCName)
+	logger.Println("parsing components for field:", f.CCName)
 
 	switch f.FType.BaseType() {
 	case types.BaseUint8, types.BaseUint16, types.BaseUint32, types.BaseByte:

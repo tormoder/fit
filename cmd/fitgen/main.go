@@ -59,6 +59,11 @@ func main() {
 		false,
 		"run go install before invoking stringer (go/types related, see golang issue #11415)",
 	)
+	verbose := flag.Bool(
+		"verbose",
+		false,
+		"print verbose debugging output for profile parsing and code generation",
+	)
 
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "usage: fitgen [flags] [path to sdk zip, xls or xlsx file]\n")
@@ -92,12 +97,13 @@ func main() {
 		l.Fatal(err)
 	}
 
-	var genOptions []profile.GeneratorOption
-	genOptions = append(
-		genOptions,
+	genOptions := []profile.GeneratorOption{
 		profile.WithGenerationTimestamp(*timestamp),
 		profile.WithLogger(l),
-	)
+	}
+	if *verbose {
+		genOptions = append(genOptions, profile.WithDebugOutput())
+	}
 
 	var sdkString string
 	if *sdkOverride != "" {

@@ -40,7 +40,5 @@ func parseWorkbook(inputData []byte) (typeData, msgData [][]string, err error) {
 	typeData = output[typesSheetIndex]
 	msgData = output[msgsSheetIndex]
 
-	debugln("parse workbook: done")
-
 	return typeData, msgData, nil
 }

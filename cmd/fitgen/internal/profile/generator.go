@@ -5,10 +5,9 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
-	"os"
 	"sort"
-	"strconv"
 	"strings"
 )
 
@@ -23,6 +22,7 @@ type Profile struct {
 type generatorOptions struct {
 	genTimestamp bool
 	logger       *log.Logger
+	debug        bool
 }
 
 type GeneratorOption func(*generatorOptions)
@@ -36,6 +36,12 @@ func WithGenerationTimestamp(gt bool) GeneratorOption {
 func WithLogger(logger *log.Logger) GeneratorOption {
 	return func(o *generatorOptions) {
 		o.logger = logger
+	}
+}
+
+func WithDebugOutput() GeneratorOption {
+	return func(o *generatorOptions) {
+		o.debug = true
 	}
 }
 
@@ -61,6 +67,12 @@ func NewGenerator(sdkMajVer, sdkMinVer int, workbookData []byte, opts ...Generat
 
 	for _, opt := range opts {
 		opt(&g.opts)
+	}
+
+	// The code generation is not performance critical,
+	// so we can avoid nil-checks when logging.
+	if g.opts.logger == nil {
+		g.opts.logger = log.New(ioutil.Discard, "", 0)
 	}
 
 	g.logf("sdk version: %d.%d", sdkMajVer, sdkMinVer)
@@ -142,7 +154,7 @@ func (g *Generator) parseMsgs() error {
 		pmsgs = append(pmsgs, m)
 	}
 
-	g.msgs, err = TransformMsgs(pmsgs, g.types)
+	g.msgs, err = TransformMsgs(pmsgs, g.types, g.opts.logger)
 	if err != nil {
 		return fmt.Errorf("transform error: %v", err)
 	}
@@ -154,7 +166,7 @@ func (g *Generator) genCode() error {
 	g.logln("generating code")
 
 	var err error
-	codeg := newCodeGenerator(g.sdkMajVer, g.sdkMinVer, g.opts.genTimestamp)
+	codeg := newCodeGenerator(g.sdkMajVer, g.sdkMinVer, g.opts.genTimestamp, g.opts.logger)
 	g.p.TypesSource, err = codeg.generateTypes(g.types)
 	if err != nil {
 		return err
@@ -231,13 +243,5 @@ func (g *Generator) logf(format string, v ...interface{}) {
 func (g *Generator) logln(v ...interface{}) {
 	if g.opts.logger != nil {
 		g.opts.logger.Println(v...)
-	}
-}
-
-var debugfg, _ = strconv.ParseBool(os.Getenv("FITGEN_DEBUG"))
-
-func debugln(v ...interface{}) {
-	if debugfg {
-		fmt.Println(v...)
 	}
 }

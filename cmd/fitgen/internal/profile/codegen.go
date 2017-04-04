@@ -7,6 +7,7 @@ import (
 	"go/parser"
 	"go/printer"
 	"go/token"
+	"log"
 	"sort"
 	"time"
 
@@ -19,15 +20,17 @@ type codeGenerator struct {
 	sdkMajVer, sdkMinVer int
 	addGenTime           bool
 	genTime              time.Time
+	logger               *log.Logger
 }
 
-func newCodeGenerator(sdkMajVer, sdkMinVer int, addGenerationTime bool) *codeGenerator {
+func newCodeGenerator(sdkMajVer, sdkMinVer int, addGenerationTime bool, logger *log.Logger) *codeGenerator {
 	g := new(codeGenerator)
 	g.sdkMajVer = sdkMajVer
 	g.sdkMinVer = sdkMinVer
 	g.sdkFullVer = fmt.Sprintf("%d.%d", sdkMajVer, sdkMinVer)
 	g.addGenTime = addGenerationTime
 	g.genTime = time.Now()
+	g.logger = logger
 	return g
 }
 
@@ -420,7 +423,7 @@ func (g *codeGenerator) genExpandComponents(msg *Msg, compFieldIndices []int, dy
 		return
 	}
 
-	debugln("msggen:", msg.CCName, "should call expandComponents() on add in file_types.go")
+	g.logger.Println("msggen:", msg.CCName, "should call expandComponents() on add in file_types.go")
 
 	g.p()
 	g.p("func (", "x", " *", msg.CCName, "Msg) expandComponents() {")
@@ -433,7 +436,7 @@ func (g *codeGenerator) genExpandComponents(msg *Msg, compFieldIndices []int, dy
 			panic("genExpandComponents: unhandled base type")
 		}
 
-		debugln("expand components: msg:", msg.CCName, "- field:", field.CCName)
+		g.logger.Println("expand components: msg:", msg.CCName, "- field:", field.CCName)
 
 		if !field.FType.Array() {
 			g.genExpandComponentsReg(msg, field)
@@ -512,7 +515,7 @@ func (g *codeGenerator) genExpandComponentsDyn(msg *Msg, field *Field, dcsfis []
 	refFieldNamesSet := make(map[string]bool)
 	for _, subfi := range dcsfis {
 		subf := field.Subfields[subfi]
-		debugln("expand components: msg:", msg.CCName, "- field:", field.CCName, "- subfield:", subf.CCName)
+		g.logger.Println("expand components: msg:", msg.CCName, "- field:", field.CCName, "- subfield:", subf.CCName)
 		for _, reffn := range subf.RefFieldName {
 			refFieldNamesSet[reffn] = true
 		}

@@ -197,7 +197,6 @@ func (d *decoder) decodeFileData() error {
 		}
 
 		switch {
-
 		case (b & compressedHeaderMask) == compressedHeaderMask:
 			msg, err = d.parseDataMessage(b, true)
 			if err != nil {
@@ -342,34 +341,25 @@ func (fd fieldDef) String() string {
 }
 
 func (d *decoder) parseFileIdMsg() error {
-	for {
-		// Why for-loop here?
-		// Due to "testdata/fitsdk/WeightScaleSingleUser.fit".
-		// Duplicate file_id definition messages where the first one has no fields.
-		// Don't ask me why.
-		b, err := d.readByte()
-		if err != nil {
-			return fmt.Errorf("error parsing record header: %v", err)
-		}
-
-		if !((b & mesgDefinitionMask) == mesgDefinitionMask) {
-			return fmt.Errorf("expected record header byte for definition message, got %#x - %8b", b, b)
-		}
-
-		dm, err := d.parseDefinitionMessage(b)
-		if err != nil {
-			return fmt.Errorf("error parsing definition message: %v", err)
-		}
-		if dm.globalMsgNum != MesgNumFileId {
-			return fmt.Errorf("parsed definiton message was not for file_id (was %v)", dm.globalMsgNum)
-		}
-		d.defmsgs[dm.localMsgType] = dm
-		if dm.fields > 0 {
-			break
-		}
+	b, err := d.readByte()
+	if err != nil {
+		return fmt.Errorf("error parsing record header: %v", err)
 	}
 
-	b, err := d.readByte()
+	if !((b & mesgDefinitionMask) == mesgDefinitionMask) {
+		return fmt.Errorf("expected record header byte for definition message, got %#x - %8b", b, b)
+	}
+
+	dm, err := d.parseDefinitionMessage(b)
+	if err != nil {
+		return fmt.Errorf("error parsing definition message: %v", err)
+	}
+	if dm.globalMsgNum != MesgNumFileId {
+		return fmt.Errorf("parsed definiton message was not for file_id (was %v)", dm.globalMsgNum)
+	}
+	d.defmsgs[dm.localMsgType] = dm
+
+	b, err = d.readByte()
 	if err != nil {
 		return fmt.Errorf("error parsing record header: %v", err)
 	}

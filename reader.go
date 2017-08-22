@@ -898,10 +898,8 @@ func (d *decoder) parseTimeStamp(dm *defmsg, fieldv reflect.Value, pfield *field
 	if u32 == 0xFFFFFFFF {
 		return
 	}
-	if u32 < systemTimeMarker {
-		if d.debug {
-			d.opts.logger.Println("parsing time: seconds from device power on")
-		}
+	if u32 < systemTimeMarker && d.debug {
+		d.opts.logger.Println("parsing time: seconds from device power on")
 	}
 
 	if pfield.t.Kind() == types.TimeUTC {

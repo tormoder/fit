@@ -19,12 +19,9 @@ CHECK_TOOLS :=	golang.org/x/tools/cmd/goimports \
 		github.com/kisielk/errcheck \
 		github.com/gordonklaus/ineffassign \
 		github.com/mdempsky/unconvert \
-		github.com/mvdan/interfacer/cmd/interfacer \
+		mvdan.cc/interfacer \
 		github.com/client9/misspell/cmd/misspell \
-		honnef.co/go/tools/cmd/unused/ \
-		honnef.co/go/tools/cmd/gosimple \
-		honnef.co/go/tools/cmd/staticcheck \
-		github.com/mvdan/unparam
+		honnef.co/go/tools/cmd/megacheck/ \
 
 .PHONY: all
 all: deps testdeps build test testrace checkfull
@@ -130,7 +127,7 @@ check:
 	@go vet ./...
 
 .PHONY: checkfull
-checkfull: getchecktools
+checkfull: getchecktoolsu
 	@echo "check (full):"
 	@echo "gofmt (simplify)"
 	@! gofmt -s -l $(FIT_FILES) | grep -vF 'No Exceptions'
@@ -155,17 +152,11 @@ checkfull: getchecktools
 	done
 	@echo "unconvert"
 	@! unconvert $(FIT_PKGS) | grep -vF 'messages.go'
-	@echo "unused"
-	@! unused $(FIT_PKGS) | grep -vE '(tdoStderrLogger)'
-	@echo "gosimple"
-	@for pkg in $(FIT_PKGS); do \
-		gosimple $$pkg ; \
-	done
 	@echo "interfacer"
 	@interfacer $(FIT_PKGS)
 	@echo "misspell"
-	@ ! misspell ./**/* | grep -vE '(messages.go|/vendor/|profile/testdata)'
-	@echo "staticcheck"
-	@staticcheck $(FIT_PKGS)
-	@echo "unparam"
-	@unparam $(FIT_PKGS)
+	@! misspell ./**/* | grep -vE '(messages.go|/vendor/|profile/testdata)'
+	@echo "megacheck"
+	@! megacheck $(FIT_PKGS) | grep -vE '(tdoStderrLogger)'
+	@echo "unparam (disabled)"
+	#@unparam $(FIT_PKGS)

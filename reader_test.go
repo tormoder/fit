@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"io/ioutil"
+	"os"
 	"path/filepath"
 	"runtime"
 	"strings"
@@ -20,8 +21,6 @@ var (
 	fupdate = flag.Bool("fupdate", false, "force regeneration of decode test files table")
 	fdecode = flag.Bool("fdecode", false, "force decode golden part of decode test irregardless of Go version")
 )
-
-func init() { flag.Parse() }
 
 var (
 	activitySmallMu   sync.Mutex
@@ -56,6 +55,11 @@ const (
 	gzSuffix      = ".gz"
 	tdfolder      = "testdata"
 )
+
+func TestMain(m *testing.M) {
+	flag.Parse()
+	os.Exit(m.Run())
+}
 
 func TestDecode(t *testing.T) {
 	const goMajorVersionForDecodeGolden = "go1.8"

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"os"
 	"path/filepath"
 	"testing"
 
@@ -21,8 +22,6 @@ const (
 )
 
 var update = flag.Bool("update", false, "update .golden output files")
-
-func init() { flag.Parse() }
 
 var currentSDK = sdks[0]
 
@@ -82,6 +81,11 @@ var sdks = []sdk{
 	{16, 20, 9140511954122483521},
 	{20, 14, 1110026377375606382},
 	{20, 27, 17729391755185608044},
+}
+
+func TestMain(m *testing.M) {
+	flag.Parse()
+	os.Exit(m.Run())
 }
 
 func TestGenerator(t *testing.T) {

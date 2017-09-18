@@ -17,7 +17,7 @@ var decodeTestFiles = [...]struct {
 		false,
 		852090183974198924,
 		true,
-		tdoAllWithNullLogger,
+		tdoAllWithDiscardLogger,
 	},
 	{
 		"fitsdk",

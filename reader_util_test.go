@@ -10,7 +10,6 @@ import (
 	"log"
 	"os"
 	"strconv"
-	"sync"
 
 	"github.com/cespare/xxhash"
 	"github.com/kortschak/utter"
@@ -55,7 +54,7 @@ type testingDecodeOpts int
 
 const (
 	tdoNone testingDecodeOpts = iota
-	tdoAllWithNullLogger
+	tdoAllWithDiscardLogger
 	tdoStderrLogger
 )
 
@@ -68,7 +67,7 @@ var tdoOpts = [...][]fit.DecodeOption{
 	{
 		fit.WithUnknownFields(),
 		fit.WithUnknownMessages(),
-		fit.WithLogger(nullLogger()), // For test coverage.
+		fit.WithLogger(discardLogger()), // For test coverage.
 	},
 	{
 		fit.WithLogger(log.New(os.Stderr, "", 0)), // For debugging.
@@ -81,23 +80,12 @@ func (tdo testingDecodeOpts) String() string {
 
 var tdoString = [...]string{
 	"tdoNone",
-	"tdoAllWithNullLogger",
+	"tdoAllWithDiscardLogger",
 	"tdoStderrLogger",
 }
 
-var (
-	loggerMu      sync.Mutex
-	loggerOnce    sync.Once
-	devNullLogger *log.Logger
-)
-
-func nullLogger() *log.Logger {
-	loggerMu.Lock()
-	defer loggerMu.Unlock()
-	loggerOnce.Do(func() {
-		devNullLogger = log.New(ioutil.Discard, "", 0)
-	})
-	return devNullLogger
+func discardLogger() *log.Logger {
+	return log.New(ioutil.Discard, "", 0)
 }
 
 func regenerateDecodeTestTable() error {

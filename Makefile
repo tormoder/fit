@@ -55,7 +55,7 @@ testrace:
 
 .PHONY: bench
 bench:
-	go test -v -run=XXX -bench=. $(FIT_PKGS) -benchtime=5s
+	go test -v -run=^$$ -bench=. $(FIT_PKGS) -benchtime=5s
 
 .PHONY: fitgen
 fitgen:
@@ -88,17 +88,17 @@ gcoprofile:
 
 .PHONY: profcpu
 profcpu:
-	go test -run=XXX -cpuprofile=cpu.prof -bench=$(DECODE_BENCH_NAME) -benchtime=$(DECODE_BENCH_TIME)
+	go test -run=^$$ -cpuprofile=cpu.prof -bench=$(DECODE_BENCH_NAME) -benchtime=$(DECODE_BENCH_TIME)
 	go tool pprof fit.test cpu.prof
 
 .PHONY: profmem
 profmem:
-	go test -run=XXX -memprofile=allocmem.prof -bench=$(DECODE_BENCH_NAME) -benchtime=$(DECODE_BENCH_TIME)
+	go test -run^$$ =-memprofile=allocmem.prof -bench=$(DECODE_BENCH_NAME) -benchtime=$(DECODE_BENCH_TIME)
 	go tool pprof -alloc_space fit.test allocmem.prof
 
 .PHONY: profobj
 profobj:
-	go test -run=XXX -memprofile=allocobj.prof -bench=$(DECODE_BENCH_NAME) -benchtime=$(DECODE_BENCH_TIME)
+	go test -run=^$$ -memprofile=allocobj.prof -bench=$(DECODE_BENCH_NAME) -benchtime=$(DECODE_BENCH_TIME)
 	go tool pprof -alloc_objects fit.test allocobj.prof
 
 .PHONY: mdgen

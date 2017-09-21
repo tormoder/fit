@@ -20,6 +20,7 @@ CHECK_TOOLS :=	golang.org/x/tools/cmd/goimports \
 		github.com/gordonklaus/ineffassign \
 		github.com/mdempsky/unconvert \
 		mvdan.cc/interfacer \
+		mvdan.cc/unparam \
 		github.com/client9/misspell/cmd/misspell \
 		honnef.co/go/tools/cmd/megacheck/ \
 

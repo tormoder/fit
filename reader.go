@@ -535,6 +535,27 @@ func (d *decoder) parseDefinitionMessage(recordHeader byte) (*defmsg, error) {
 		dm.fieldDefs[i] = fd
 	}
 
+	//fix  DevDataMask
+	if (recordHeader & 32) == 32 {
+		arch11, err := d.readByte()
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		devfield := make([]DeveloperFieldDefinition, 0)
+		for i := 0; i < int(arch11); i++ {
+			t := DeveloperFieldDefinition{}
+			num, _ := d.readByte()
+			size, _ := d.readByte()
+			devIdx, _ := d.readByte()
+			t.Size = size
+			t.FieldNum = num
+			t.DevIdx = devIdx
+			devfield = append(devfield, t)
+		}
+		dm.MdevFieldDefs = devfield
+	}
+
 	if d.debug {
 		d.opts.logger.Println("definition messages parsed:", dm)
 	}

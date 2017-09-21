@@ -1,6 +1,6 @@
 // Code generated using the program found in 'cmd/fitgen/main.go'. DO NOT EDIT.
 
-// SDK Version: 20.27
+// SDK Version: 20.43
 
 package fit
 
@@ -15,7 +15,7 @@ const (
 	ProfileMajorVersion = 20
 
 	// ProfileMinorVersion is the current supported profile minor version of the FIT SDK.
-	ProfileMinorVersion = 27
+	ProfileMinorVersion = 43
 )
 
 var knownMsgNums = map[MesgNum]bool{
@@ -72,8 +72,8 @@ var knownMsgNums = map[MesgNum]bool{
 	MesgNumSegmentLeaderboardEntry:     true,
 	MesgNumSegmentPoint:                true,
 	MesgNumSegmentFile:                 true,
+	MesgNumWorkoutSession:              true,
 	MesgNumWatchfaceSettings:           true,
-	MesgNumGpsMetadata:                 true,
 	MesgNumCameraEvent:                 true,
 	MesgNumTimestampCorrelation:        true,
 	MesgNumGyroscopeData:               true,
@@ -874,10 +874,23 @@ var _fields = [...][256]*field{
 	},
 
 	MesgNumWorkout: {
-		4: {0, 4, types.Fit(0)},
-		5: {1, 5, types.Fit(12)},
-		6: {2, 6, types.Fit(4)},
-		8: {3, 8, types.Fit(7)},
+		4:  {0, 4, types.Fit(0)},
+		5:  {1, 5, types.Fit(12)},
+		6:  {2, 6, types.Fit(4)},
+		8:  {3, 8, types.Fit(7)},
+		11: {4, 11, types.Fit(0)},
+		14: {5, 14, types.Fit(4)},
+		15: {6, 15, types.Fit(0)},
+	},
+
+	MesgNumWorkoutSession: {
+		254: {0, 254, types.Fit(4)},
+		0:   {1, 0, types.Fit(0)},
+		1:   {2, 1, types.Fit(0)},
+		2:   {3, 2, types.Fit(4)},
+		3:   {4, 3, types.Fit(4)},
+		4:   {5, 4, types.Fit(4)},
+		5:   {6, 5, types.Fit(0)},
 	},
 
 	MesgNumWorkoutStep: {
@@ -891,6 +904,7 @@ var _fields = [...][256]*field{
 		6:   {7, 6, types.Fit(6)},
 		7:   {8, 7, types.Fit(0)},
 		8:   {9, 8, types.Fit(7)},
+		9:   {10, 9, types.Fit(0)},
 	},
 
 	MesgNumSchedule: {
@@ -1122,6 +1136,7 @@ var msgsTypes = [...]reflect.Type{
 	MesgNumSegmentLap:                  reflect.TypeOf(SegmentLapMsg{}),
 	MesgNumSegmentFile:                 reflect.TypeOf(SegmentFileMsg{}),
 	MesgNumWorkout:                     reflect.TypeOf(WorkoutMsg{}),
+	MesgNumWorkoutSession:              reflect.TypeOf(WorkoutSessionMsg{}),
 	MesgNumWorkoutStep:                 reflect.TypeOf(WorkoutStepMsg{}),
 	MesgNumSchedule:                    reflect.TypeOf(ScheduleMsg{}),
 	MesgNumTotals:                      reflect.TypeOf(TotalsMsg{}),
@@ -1858,6 +1873,18 @@ var msgsAllInvalid = [...]reflect.Value{
 		0x00000000,
 		0xFFFF,
 		"",
+		0xFF,
+		0xFFFF,
+		0xFF,
+	}),
+	MesgNumWorkoutSession: reflect.ValueOf(WorkoutSessionMsg{
+		0xFFFF,
+		0xFF,
+		0xFF,
+		0xFFFF,
+		0xFFFF,
+		0xFFFF,
+		0xFF,
 	}),
 	MesgNumWorkoutStep: reflect.ValueOf(WorkoutStepMsg{
 		0xFFFF,
@@ -1870,6 +1897,7 @@ var msgsAllInvalid = [...]reflect.Value{
 		0xFFFFFFFF,
 		0xFF,
 		"",
+		0xFF,
 	}),
 	MesgNumSchedule: reflect.ValueOf(ScheduleMsg{
 		0xFFFF,

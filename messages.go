@@ -1,6 +1,6 @@
 // Code generated using the program found in 'cmd/fitgen/main.go'. DO NOT EDIT.
 
-// SDK Version: 20.27
+// SDK Version: 20.43
 
 package fit
 
@@ -3292,10 +3292,46 @@ type SegmentFileMsg struct {
 
 // WorkoutMsg represents the workout FIT message type.
 type WorkoutMsg struct {
-	Sport         Sport
-	Capabilities  WorkoutCapabilities
-	NumValidSteps uint16 // number of valid steps
-	WktName       string
+	Sport          Sport
+	Capabilities   WorkoutCapabilities
+	NumValidSteps  uint16 // number of valid steps
+	WktName        string
+	SubSport       SubSport
+	PoolLength     uint16
+	PoolLengthUnit DisplayMeasure
+}
+
+// GetPoolLengthScaled returns PoolLength
+// with scale and any offset applied. NaN is returned if the
+// field has an invalid value (i.e. has not been set).
+// Units: m
+func (x *WorkoutMsg) GetPoolLengthScaled() float64 {
+	if x.PoolLength == 0xFFFF {
+		return math.NaN()
+	}
+	return float64(x.PoolLength) / 100
+}
+
+// WorkoutSessionMsg represents the workout_session FIT message type.
+type WorkoutSessionMsg struct {
+	MessageIndex   MessageIndex
+	Sport          Sport
+	SubSport       SubSport
+	NumValidSteps  uint16
+	FirstStepIndex uint16
+	PoolLength     uint16
+	PoolLengthUnit DisplayMeasure
+}
+
+// GetPoolLengthScaled returns PoolLength
+// with scale and any offset applied. NaN is returned if the
+// field has an invalid value (i.e. has not been set).
+// Units: m
+func (x *WorkoutSessionMsg) GetPoolLengthScaled() float64 {
+	if x.PoolLength == 0xFFFF {
+		return math.NaN()
+	}
+	return float64(x.PoolLength) / 100
 }
 
 // WorkoutStepMsg represents the workout_step FIT message type.
@@ -3310,6 +3346,7 @@ type WorkoutStepMsg struct {
 	CustomTargetValueHigh uint32
 	Intensity             Intensity
 	Notes                 string
+	Equipment             WorkoutEquipment
 }
 
 // GetDurationValue returns the appropriate DurationValue
@@ -3365,6 +3402,8 @@ func (x *WorkoutStepMsg) GetTargetValue() interface{} {
 		return WorkoutPower(x.TargetValue)
 	case x.DurationType == WktStepDurationRepeatUntilPowerGreaterThan:
 		return WorkoutPower(x.TargetValue)
+	case x.TargetType == WktStepTargetSwimStroke:
+		return SwimStroke(x.TargetValue)
 	default:
 		return x.TargetValue
 	}

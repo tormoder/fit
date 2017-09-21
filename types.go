@@ -1,6 +1,6 @@
 // Code generated using the program found in 'cmd/fitgen/main.go'. DO NOT EDIT.
 
-// SDK Version: 20.27
+// SDK Version: 20.43
 
 package fit
 
@@ -180,6 +180,7 @@ const (
 	AutoSyncFrequencyOccasionally AutoSyncFrequency = 1
 	AutoSyncFrequencyFrequent     AutoSyncFrequency = 2
 	AutoSyncFrequencyOnceADay     AutoSyncFrequency = 3
+	AutoSyncFrequencyRemote       AutoSyncFrequency = 4
 	AutoSyncFrequencyInvalid      AutoSyncFrequency = 0xFF
 )
 
@@ -804,6 +805,7 @@ const (
 	ExdDescriptorsVmg                              ExdDescriptors = 93
 	ExdDescriptorsAmbientPressure                  ExdDescriptors = 94
 	ExdDescriptorsPressure                         ExdDescriptors = 95
+	ExdDescriptorsVam                              ExdDescriptors = 96
 	ExdDescriptorsInvalid                          ExdDescriptors = 0xFF
 )
 
@@ -1110,13 +1112,22 @@ const (
 	GarminProductVariaVision               GarminProduct = 2398
 	GarminProductVivoFit3                  GarminProduct = 2406
 	GarminProductFenix3Hr                  GarminProduct = 2413
+	GarminProductVirbUltra30               GarminProduct = 2417
 	GarminProductIndexSmartScale           GarminProduct = 2429
 	GarminProductFr235                     GarminProduct = 2431
+	GarminProductFenix3Chronos             GarminProduct = 2432
 	GarminProductOregon7xx                 GarminProduct = 2441
 	GarminProductRino7xx                   GarminProduct = 2444
 	GarminProductNautix                    GarminProduct = 2496
 	GarminProductEdge820                   GarminProduct = 2530
 	GarminProductEdgeExplore820            GarminProduct = 2531
+	GarminProductFenix5s                   GarminProduct = 2544
+	GarminProductD2BravoTitanium           GarminProduct = 2547
+	GarminProductRunningDynamicsPod        GarminProduct = 2593
+	GarminProductFenix5x                   GarminProduct = 2604
+	GarminProductVivoFitJr                 GarminProduct = 2606
+	GarminProductFr935                     GarminProduct = 2691
+	GarminProductFenix5                    GarminProduct = 2697
 	GarminProductSdm4                      GarminProduct = 10007 // SDM4 footpod
 	GarminProductEdgeRemote                GarminProduct = 10014
 	GarminProductTrainingCenter            GarminProduct = 20119
@@ -1482,6 +1493,11 @@ const (
 	ManufacturerGiantManufacturingCo   Manufacturer = 108
 	ManufacturerTigrasport             Manufacturer = 109 // Tigrasport
 	ManufacturerSalutron               Manufacturer = 110
+	ManufacturerTechnogym              Manufacturer = 111
+	ManufacturerBrytonSensors          Manufacturer = 112
+	ManufacturerLatitudeLimited        Manufacturer = 113
+	ManufacturerSoaringTechnology      Manufacturer = 114
+	ManufacturerIgpsport               Manufacturer = 115
 	ManufacturerDevelopment            Manufacturer = 255
 	ManufacturerHealthandlife          Manufacturer = 257
 	ManufacturerLezyne                 Manufacturer = 258
@@ -1504,6 +1520,12 @@ const (
 	ManufacturerPodoon                 Manufacturer = 275
 	ManufacturerLifeTimeFitness        Manufacturer = 276
 	ManufacturerFalcoEMotors           Manufacturer = 277 // Falco eMotors Inc.
+	ManufacturerMinoura                Manufacturer = 278
+	ManufacturerCycliq                 Manufacturer = 279
+	ManufacturerLuxottica              Manufacturer = 280
+	ManufacturerTrainerRoad            Manufacturer = 281
+	ManufacturerTheSufferfest          Manufacturer = 282
+	ManufacturerFullspeedahead         Manufacturer = 283
 	ManufacturerActigraphcorp          Manufacturer = 5759
 	ManufacturerInvalid                Manufacturer = 0xFFFF
 )
@@ -1576,6 +1598,7 @@ const (
 	MesgNumSegmentLeaderboardEntry     MesgNum = 149
 	MesgNumSegmentPoint                MesgNum = 150
 	MesgNumSegmentFile                 MesgNum = 151
+	MesgNumWorkoutSession              MesgNum = 158
 	MesgNumWatchfaceSettings           MesgNum = 159
 	MesgNumGpsMetadata                 MesgNum = 160
 	MesgNumCameraEvent                 MesgNum = 161
@@ -1637,9 +1660,11 @@ const (
 type RiderPositionType byte
 
 const (
-	RiderPositionTypeSeated   RiderPositionType = 0
-	RiderPositionTypeStanding RiderPositionType = 1
-	RiderPositionTypeInvalid  RiderPositionType = 0xFF
+	RiderPositionTypeSeated               RiderPositionType = 0
+	RiderPositionTypeStanding             RiderPositionType = 1
+	RiderPositionTypeTransitionToSeated   RiderPositionType = 2
+	RiderPositionTypeTransitionToStanding RiderPositionType = 3
+	RiderPositionTypeInvalid              RiderPositionType = 0xFF
 )
 
 // Schedule represents the schedule FIT type.
@@ -1981,6 +2006,8 @@ const (
 	SubSportNavigate             SubSport = 50
 	SubSportTrackMe              SubSport = 51
 	SubSportMap                  SubSport = 52
+	SubSportVirtualActivity      SubSport = 58
+	SubSportObstacle             SubSport = 59 // Used for events where participants run, crawl through mud, climb over walls, etc.
 	SubSportAll                  SubSport = 254
 	SubSportInvalid              SubSport = 0xFF
 )
@@ -2232,6 +2259,7 @@ const (
 	WatchfaceModeDigital   WatchfaceMode = 0
 	WatchfaceModeAnalog    WatchfaceMode = 1
 	WatchfaceModeConnectIq WatchfaceMode = 2
+	WatchfaceModeDisabled  WatchfaceMode = 3
 	WatchfaceModeInvalid   WatchfaceMode = 0xFF
 )
 
@@ -2437,6 +2465,7 @@ const (
 	WktStepTargetPower10s     WktStepTarget = 8
 	WktStepTargetPower30s     WktStepTarget = 9
 	WktStepTargetPowerLap     WktStepTarget = 10
+	WktStepTargetSwimStroke   WktStepTarget = 11
 	WktStepTargetSpeedLap     WktStepTarget = 12
 	WktStepTargetHeartRateLap WktStepTarget = 13
 	WktStepTargetInvalid      WktStepTarget = 0xFF
@@ -2461,6 +2490,19 @@ const (
 	WorkoutCapabilitiesResistance       WorkoutCapabilities = 0x00002000 // Resistance source required for workout step.
 	WorkoutCapabilitiesProtected        WorkoutCapabilities = 0x00004000
 	WorkoutCapabilitiesInvalid          WorkoutCapabilities = 0x00000000
+)
+
+// WorkoutEquipment represents the workout_equipment FIT type.
+type WorkoutEquipment byte
+
+const (
+	WorkoutEquipmentNone          WorkoutEquipment = 0
+	WorkoutEquipmentSwimFins      WorkoutEquipment = 1
+	WorkoutEquipmentSwimKickboard WorkoutEquipment = 2
+	WorkoutEquipmentSwimPaddles   WorkoutEquipment = 3
+	WorkoutEquipmentSwimPullBuoy  WorkoutEquipment = 4
+	WorkoutEquipmentSwimSnorkel   WorkoutEquipment = 5
+	WorkoutEquipmentInvalid       WorkoutEquipment = 0xFF
 )
 
 // WorkoutHr represents the workout_hr FIT type.

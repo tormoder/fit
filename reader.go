@@ -205,13 +205,15 @@ func (d *decoder) decodeFileData() error {
 			if msg.IsValid() {
 				d.file.add(msg)
 			}
-		case (b & headerTypeMask) == mesgDefinitionMask:
+		case (b & mesgDefinitionMask) == mesgDefinitionMask:
+
 			dm, err = d.parseDefinitionMessage(b)
 			if err != nil {
 				return fmt.Errorf("parsing definition message: %v", err)
 			}
 			d.defmsgs[dm.localMsgType] = dm
-		case (b & mesgHeaderMask) == mesgHeaderMask:
+		case (b & mesgDefinitionMask) == mesgHeaderMask:
+
 			msg, err = d.parseDataMessage(b, false)
 			if err != nil {
 				return fmt.Errorf("parsing data message: %v", err)
@@ -316,11 +318,18 @@ func (d *decoder) readFull(p []byte) error {
 }
 
 type defmsg struct {
-	localMsgType uint8
-	arch         binary.ByteOrder
-	globalMsgNum MesgNum
-	fields       byte
-	fieldDefs    []fieldDef
+	localMsgType  uint8
+	arch          binary.ByteOrder
+	globalMsgNum  MesgNum
+	fields        byte
+	fieldDefs     []fieldDef
+	MdevFieldDefs []DeveloperFieldDefinition
+}
+
+type DeveloperFieldDefinition struct {
+	FieldNum byte
+	Size     byte
+	DevIdx   byte
 }
 
 func (dm defmsg) String() string {
@@ -508,7 +517,8 @@ func (d *decoder) parseDefinitionMessage(recordHeader byte) (*defmsg, error) {
 		return &dm, nil
 	}
 
-	if err = d.readFull(d.tmp[0 : 3*dm.fields]); err != nil {
+	end := 3 * int(dm.fields)
+	if err = d.readFull(d.tmp[0:end]); err != nil {
 		return nil, fmt.Errorf("error parsing fields: %v", err)
 	}
 
@@ -743,7 +753,15 @@ func (d *decoder) parseDataFields(dm *defmsg, knownMsg bool, msgv reflect.Value)
 			panic("parseDataFields: unreachable: unknown kind")
 		}
 	}
+	for _, mdev := range dm.MdevFieldDefs {
 
+		dsize := mdev.Size
+		err := d.readFull(d.tmp[0:dsize])
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+
+	}
 	return msgv, nil
 }
 

@@ -57,7 +57,7 @@ const (
 	localMesgNumMask        = 0x0F
 
 	maxLocalMesgs = localMesgNumMask + 1
-	maxFieldSize  = 255
+	maxFieldSize  = 255*3
 
 	littleEndian = 0x00
 	bigEndian    = 0x01

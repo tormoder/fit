@@ -75,11 +75,7 @@ func (s *SheetSuite) TestMakeXLSXSheetWithNumFormats(c *C) {
 	styles := newXlsxStyleSheet(nil)
 	worksheet := sheet.makeXLSXSheet(refTable, styles)
 
-	c.Assert(styles.CellStyleXfs.Count, Equals, 1)
-	// The 0th CellStyleXf could just be getting the zero values by default
-	c.Assert(styles.CellStyleXfs.Xf[0].FontId, Equals, 0)
-	c.Assert(styles.CellStyleXfs.Xf[0].FillId, Equals, 0)
-	c.Assert(styles.CellStyleXfs.Xf[0].BorderId, Equals, 0)
+	c.Assert(styles.CellStyleXfs, IsNil)
 
 	c.Assert(styles.CellXfs.Count, Equals, 5)
 	c.Assert(styles.CellXfs.Xf[0].NumFmtId, Equals, 0)
@@ -142,11 +138,7 @@ func (s *SheetSuite) TestMakeXLSXSheetAlsoPopulatesXLSXSTyles(c *C) {
 	c.Assert(styles.Borders.Border[1].Top.Style, Equals, "none")
 	c.Assert(styles.Borders.Border[1].Bottom.Style, Equals, "thin")
 
-	c.Assert(styles.CellStyleXfs.Count, Equals, 2)
-	// The 0th CellStyleXf could just be getting the zero values by default
-	c.Assert(styles.CellStyleXfs.Xf[0].FontId, Equals, 0)
-	c.Assert(styles.CellStyleXfs.Xf[0].FillId, Equals, 0)
-	c.Assert(styles.CellStyleXfs.Xf[0].BorderId, Equals, 0)
+	c.Assert(styles.CellStyleXfs, IsNil)
 
 	c.Assert(styles.CellXfs.Count, Equals, 2)
 	c.Assert(styles.CellXfs.Xf[0].FontId, Equals, 0)
@@ -170,7 +162,7 @@ func (s *SheetSuite) TestMakeXLSXSheetDefaultsCustomColWidth(c *C) {
 	refTable := NewSharedStringRefTable()
 	styles := newXlsxStyleSheet(nil)
 	worksheet := sheet.makeXLSXSheet(refTable, styles)
-	c.Assert(worksheet.Cols.Col[0].CustomWidth, Equals, 0)
+	c.Assert(worksheet.Cols.Col[0].CustomWidth, Equals, false)
 }
 
 // If the column width is customised, the xslxCol.CustomWidth field is set to 1.
@@ -186,7 +178,7 @@ func (s *SheetSuite) TestMakeXLSXSheetSetsCustomColWidth(c *C) {
 	refTable := NewSharedStringRefTable()
 	styles := newXlsxStyleSheet(nil)
 	worksheet := sheet.makeXLSXSheet(refTable, styles)
-	c.Assert(worksheet.Cols.Col[1].CustomWidth, Equals, 1)
+	c.Assert(worksheet.Cols.Col[1].CustomWidth, Equals, true)
 }
 
 func (s *SheetSuite) TestMarshalSheet(c *C) {
@@ -329,7 +321,7 @@ func (s *SheetSuite) TestAlignment(c *C) {
 	obtained := parts["xl/styles.xml"]
 
 	shouldbe := `<?xml version="1.0" encoding="UTF-8"?>
-<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="1"><font><sz val="12"/><name val="Verdana"/><family val="0"/><charset val="0"/></font></fonts><fills count="2"><fill><patternFill patternType="none"><fgColor rgb="FFFFFFFF"/><bgColor rgb="00000000"/></patternFill></fill><fill><patternFill patternType="lightGray"/></fill></fills><borders count="1"><border><left style=""></left><right style=""></right><top style=""></top><bottom style=""></bottom></border></borders><cellStyleXfs count="7"><xf applyAlignment="0" applyBorder="0" applyFont="0" applyFill="0" applyNumberFormat="0" applyProtection="0" borderId="0" fillId="0" fontId="0" numFmtId="0"><alignment horizontal="general" indent="0" shrinkToFit="0" textRotation="0" vertical="bottom" wrapText="0"/></xf><xf applyAlignment="1" applyBorder="0" applyFont="0" applyFill="0" applyNumberFormat="0" applyProtection="0" borderId="0" fillId="0" fontId="0" numFmtId="0"><alignment horizontal="left" indent="0" shrinkToFit="0" textRotation="0" vertical="bottom" wrapText="0"/></xf><xf applyAlignment="1" applyBorder="0" applyFont="0" applyFill="0" applyNumberFormat="0" applyProtection="0" borderId="0" fillId="0" fontId="0" numFmtId="0"><alignment horizontal="center" indent="0" shrinkToFit="0" textRotation="0" vertical="bottom" wrapText="0"/></xf><xf applyAlignment="1" applyBorder="0" applyFont="0" applyFill="0" applyNumberFormat="0" applyProtection="0" borderId="0" fillId="0" fontId="0" numFmtId="0"><alignment horizontal="right" indent="0" shrinkToFit="0" textRotation="0" vertical="bottom" wrapText="0"/></xf><xf applyAlignment="1" applyBorder="0" applyFont="0" applyFill="0" applyNumberFormat="0" applyProtection="0" borderId="0" fillId="0" fontId="0" numFmtId="0"><alignment horizontal="general" indent="0" shrinkToFit="0" textRotation="0" vertical="top" wrapText="0"/></xf><xf applyAlignment="1" applyBorder="0" applyFont="0" applyFill="0" applyNumberFormat="0" applyProtection="0" borderId="0" fillId="0" fontId="0" numFmtId="0"><alignment horizontal="general" indent="0" shrinkToFit="0" textRotation="0" vertical="center" wrapText="0"/></xf><xf applyAlignment="1" applyBorder="0" applyFont="0" applyFill="0" applyNumberFormat="0" applyProtection="0" borderId="0" fillId="0" fontId="0" numFmtId="0"><alignment horizontal="general" indent="0" shrinkToFit="0" textRotation="0" vertical="bottom" wrapText="0"/></xf></cellStyleXfs><cellXfs count="8"><xf applyAlignment="0" applyBorder="0" applyFont="0" applyFill="0" applyNumberFormat="0" applyProtection="0" borderId="0" fillId="0" fontId="0" numFmtId="0"><alignment horizontal="general" indent="0" shrinkToFit="0" textRotation="0" vertical="bottom" wrapText="0"/></xf><xf applyAlignment="0" applyBorder="0" applyFont="0" applyFill="0" applyNumberFormat="0" applyProtection="0" borderId="0" fillId="0" fontId="0" numFmtId="0"><alignment horizontal="general" indent="0" shrinkToFit="0" textRotation="0" vertical="bottom" wrapText="0"/></xf><xf applyAlignment="1" applyBorder="0" applyFont="0" applyFill="0" applyNumberFormat="0" applyProtection="0" borderId="0" fillId="0" fontId="0" numFmtId="0"><alignment horizontal="left" indent="0" shrinkToFit="0" textRotation="0" vertical="bottom" wrapText="0"/></xf><xf applyAlignment="1" applyBorder="0" applyFont="0" applyFill="0" applyNumberFormat="0" applyProtection="0" borderId="0" fillId="0" fontId="0" numFmtId="0"><alignment horizontal="center" indent="0" shrinkToFit="0" textRotation="0" vertical="bottom" wrapText="0"/></xf><xf applyAlignment="1" applyBorder="0" applyFont="0" applyFill="0" applyNumberFormat="0" applyProtection="0" borderId="0" fillId="0" fontId="0" numFmtId="0"><alignment horizontal="right" indent="0" shrinkToFit="0" textRotation="0" vertical="bottom" wrapText="0"/></xf><xf applyAlignment="1" applyBorder="0" applyFont="0" applyFill="0" applyNumberFormat="0" applyProtection="0" borderId="0" fillId="0" fontId="0" numFmtId="0"><alignment horizontal="general" indent="0" shrinkToFit="0" textRotation="0" vertical="top" wrapText="0"/></xf><xf applyAlignment="1" applyBorder="0" applyFont="0" applyFill="0" applyNumberFormat="0" applyProtection="0" borderId="0" fillId="0" fontId="0" numFmtId="0"><alignment horizontal="general" indent="0" shrinkToFit="0" textRotation="0" vertical="center" wrapText="0"/></xf><xf applyAlignment="1" applyBorder="0" applyFont="0" applyFill="0" applyNumberFormat="0" applyProtection="0" borderId="0" fillId="0" fontId="0" numFmtId="0"><alignment horizontal="general" indent="0" shrinkToFit="0" textRotation="0" vertical="bottom" wrapText="0"/></xf></cellXfs></styleSheet>`
+<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="1"><font><sz val="12"/><name val="Verdana"/><family val="0"/><charset val="0"/></font></fonts><fills count="2"><fill><patternFill patternType="none"><fgColor rgb="FFFFFFFF"/><bgColor rgb="00000000"/></patternFill></fill><fill><patternFill patternType="lightGray"/></fill></fills><borders count="1"><border><left style="none"></left><right style="none"></right><top style="none"></top><bottom style="none"></bottom></border></borders><cellXfs count="8"><xf applyAlignment="0" applyBorder="0" applyFont="0" applyFill="0" applyNumberFormat="0" applyProtection="0" borderId="0" fillId="0" fontId="0" numFmtId="0"><alignment horizontal="general" indent="0" shrinkToFit="0" textRotation="0" vertical="bottom" wrapText="0"/></xf><xf applyAlignment="0" applyBorder="0" applyFont="0" applyFill="0" applyNumberFormat="0" applyProtection="0" borderId="0" fillId="0" fontId="0" numFmtId="0"><alignment horizontal="general" indent="0" shrinkToFit="0" textRotation="0" vertical="bottom" wrapText="0"/></xf><xf applyAlignment="1" applyBorder="0" applyFont="0" applyFill="0" applyNumberFormat="0" applyProtection="0" borderId="0" fillId="0" fontId="0" numFmtId="0"><alignment horizontal="left" indent="0" shrinkToFit="0" textRotation="0" vertical="bottom" wrapText="0"/></xf><xf applyAlignment="1" applyBorder="0" applyFont="0" applyFill="0" applyNumberFormat="0" applyProtection="0" borderId="0" fillId="0" fontId="0" numFmtId="0"><alignment horizontal="center" indent="0" shrinkToFit="0" textRotation="0" vertical="bottom" wrapText="0"/></xf><xf applyAlignment="1" applyBorder="0" applyFont="0" applyFill="0" applyNumberFormat="0" applyProtection="0" borderId="0" fillId="0" fontId="0" numFmtId="0"><alignment horizontal="right" indent="0" shrinkToFit="0" textRotation="0" vertical="bottom" wrapText="0"/></xf><xf applyAlignment="1" applyBorder="0" applyFont="0" applyFill="0" applyNumberFormat="0" applyProtection="0" borderId="0" fillId="0" fontId="0" numFmtId="0"><alignment horizontal="general" indent="0" shrinkToFit="0" textRotation="0" vertical="top" wrapText="0"/></xf><xf applyAlignment="1" applyBorder="0" applyFont="0" applyFill="0" applyNumberFormat="0" applyProtection="0" borderId="0" fillId="0" fontId="0" numFmtId="0"><alignment horizontal="general" indent="0" shrinkToFit="0" textRotation="0" vertical="center" wrapText="0"/></xf><xf applyAlignment="1" applyBorder="0" applyFont="0" applyFill="0" applyNumberFormat="0" applyProtection="0" borderId="0" fillId="0" fontId="0" numFmtId="0"><alignment horizontal="general" indent="0" shrinkToFit="0" textRotation="0" vertical="bottom" wrapText="0"/></xf></cellXfs></styleSheet>`
 
 	expected := bytes.NewBufferString(shouldbe)
 
@@ -357,8 +349,76 @@ func (s *SheetSuite) TestBorder(c *C) {
 	c.Assert(styles.Borders.Border[1].Top.Style, Equals, "thin")
 	c.Assert(styles.Borders.Border[1].Bottom.Style, Equals, "thin")
 
-	c.Assert(styles.CellStyleXfs.Xf[1].BorderId, Equals, 1)
-	c.Assert(styles.CellStyleXfs.Xf[1].ApplyBorder, Equals, true)
-
 	c.Assert(worksheet.SheetData.Row[0].C[0].S, Equals, 1)
+}
+
+func (s *SheetSuite) TestOutlineLevels(c *C) {
+	file := NewFile()
+	sheet, _ := file.AddSheet("Sheet1")
+
+	r1 := sheet.AddRow()
+	c11 := r1.AddCell()
+	c11.Value = "A1"
+	c12 := r1.AddCell()
+	c12.Value = "B1"
+
+	r2 := sheet.AddRow()
+	c21 := r2.AddCell()
+	c21.Value = "A2"
+	c22 := r2.AddCell()
+	c22.Value = "B2"
+
+	r3 := sheet.AddRow()
+	c31 := r3.AddCell()
+	c31.Value = "A3"
+	c32 := r3.AddCell()
+	c32.Value = "B3"
+
+	// Add some groups
+	r1.OutlineLevel = 1
+	r2.OutlineLevel = 2
+	sheet.Col(0).OutlineLevel = 1
+
+	refTable := NewSharedStringRefTable()
+	styles := newXlsxStyleSheet(nil)
+	worksheet := sheet.makeXLSXSheet(refTable, styles)
+
+	c.Assert(worksheet.SheetFormatPr.OutlineLevelCol, Equals, uint8(1))
+	c.Assert(worksheet.SheetFormatPr.OutlineLevelRow, Equals, uint8(2))
+
+	c.Assert(worksheet.Cols.Col[0].OutlineLevel, Equals, uint8(1))
+	c.Assert(worksheet.Cols.Col[1].OutlineLevel, Equals, uint8(0))
+	c.Assert(worksheet.SheetData.Row[0].OutlineLevel, Equals, uint8(1))
+	c.Assert(worksheet.SheetData.Row[1].OutlineLevel, Equals, uint8(2))
+	c.Assert(worksheet.SheetData.Row[2].OutlineLevel, Equals, uint8(0))
+}
+
+func (s *SheetSuite) TestAutoFilter(c *C) {
+	file := NewFile()
+	sheet, _ := file.AddSheet("Sheet1")
+
+	r1 := sheet.AddRow()
+	r1.AddCell()
+	r1.AddCell()
+	r1.AddCell()
+
+	r2 := sheet.AddRow()
+	r2.AddCell()
+	r2.AddCell()
+	r2.AddCell()
+
+	r3 := sheet.AddRow()
+	r3.AddCell()
+	r3.AddCell()
+	r3.AddCell()
+
+	// Define a filter area
+	sheet.AutoFilter = &AutoFilter{TopLeftCell: "B2", BottomRightCell: "C3"}
+
+	refTable := NewSharedStringRefTable()
+	styles := newXlsxStyleSheet(nil)
+	worksheet := sheet.makeXLSXSheet(refTable, styles)
+
+	c.Assert(worksheet.AutoFilter, NotNil)
+	c.Assert(worksheet.AutoFilter.Ref, Equals, "B2:C3")
 }

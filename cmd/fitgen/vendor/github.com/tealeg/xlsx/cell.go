@@ -67,14 +67,29 @@ func (c *Cell) SetString(s string) {
 	c.cellType = CellTypeString
 }
 
-// String returns the value of a Cell as a string.
-func (c *Cell) String() (string, error) {
-	return c.FormattedValue()
+// String returns the value of a Cell as a string.  If you'd like to
+// see errors returned from formatting then please use
+// Cell.FormattedValue() instead.
+func (c *Cell) String() string {
+	// To preserve the String() interface we'll throw away errors.
+	// Not that using FormattedValue is therefore strongly
+	// preferred.
+	value, _ := c.FormattedValue()
+	return value
 }
 
 // SetFloat sets the value of a cell to a float.
 func (c *Cell) SetFloat(n float64) {
-	c.SetFloatWithFormat(n, builtInNumFmt[builtInNumFmtIndex_GENERAL])
+	c.SetValue(n)
+}
+
+//GetTime returns the value of a Cell as a time.Time
+func (c *Cell) GetTime(date1904 bool) (t time.Time, err error) {
+	f, err := c.Float()
+	if err != nil {
+		return t, err
+	}
+	return TimeFromExcelTime(f, date1904), nil
 }
 
 /*
@@ -103,27 +118,53 @@ func (c *Cell) SetFloatWithFormat(n float64, format string) {
 	c.cellType = CellTypeNumeric
 }
 
-var timeLocationUTC *time.Location
+var timeLocationUTC, _ = time.LoadLocation("UTC")
 
-func init() {
-	timeLocationUTC, _ = time.LoadLocation("UTC")
-}
-
-func timeToUTCTime(t time.Time) time.Time {
+func TimeToUTCTime(t time.Time) time.Time {
 	return time.Date(t.Year(), t.Month(), t.Day(), t.Hour(), t.Minute(), t.Second(), t.Nanosecond(), timeLocationUTC)
 }
 
-func timeToExcelTime(t time.Time) float64 {
-	return float64(t.Unix())/86400.0 + 25569.0
+func TimeToExcelTime(t time.Time) float64 {
+	return float64(t.UnixNano())/8.64e13 + 25569.0
 }
+
+// DateTimeOptions are additional options for exporting times
+type DateTimeOptions struct {
+	// Location allows calculating times in other timezones/locations
+	Location *time.Location
+	// ExcelTimeFormat is the string you want excel to use to format the datetime
+	ExcelTimeFormat string
+}
+
+var (
+	DefaultDateFormat     = builtInNumFmt[14]
+	DefaultDateTimeFormat = builtInNumFmt[22]
+
+	DefaultDateOptions = DateTimeOptions{
+		Location:        timeLocationUTC,
+		ExcelTimeFormat: DefaultDateFormat,
+	}
+
+	DefaultDateTimeOptions = DateTimeOptions{
+		Location:        timeLocationUTC,
+		ExcelTimeFormat: DefaultDateTimeFormat,
+	}
+)
 
 // SetDate sets the value of a cell to a float.
 func (c *Cell) SetDate(t time.Time) {
-	c.SetDateTimeWithFormat(float64(int64(timeToExcelTime(timeToUTCTime(t)))), builtInNumFmt[14])
+	c.SetDateWithOptions(t, DefaultDateOptions)
 }
 
 func (c *Cell) SetDateTime(t time.Time) {
-	c.SetDateTimeWithFormat(timeToExcelTime(timeToUTCTime(t)), builtInNumFmt[14])
+	c.SetDateWithOptions(t, DefaultDateTimeOptions)
+}
+
+// SetDateWithOptions allows for more granular control when exporting dates and times
+func (c *Cell) SetDateWithOptions(t time.Time, options DateTimeOptions) {
+	_, offset := t.In(options.Location).Zone()
+	t = time.Unix(t.Unix()+int64(offset), 0)
+	c.SetDateTimeWithFormat(TimeToExcelTime(t.In(timeLocationUTC)), options.ExcelTimeFormat)
 }
 
 func (c *Cell) SetDateTimeWithFormat(n float64, format string) {
@@ -144,10 +185,7 @@ func (c *Cell) Float() (float64, error) {
 
 // SetInt64 sets a cell's value to a 64-bit integer.
 func (c *Cell) SetInt64(n int64) {
-	c.Value = fmt.Sprintf("%d", n)
-	c.NumFmt = builtInNumFmt[builtInNumFmtIndex_INT]
-	c.formula = ""
-	c.cellType = CellTypeNumeric
+	c.SetValue(n)
 }
 
 // Int64 returns the value of cell as 64-bit integer.
@@ -161,44 +199,26 @@ func (c *Cell) Int64() (int64, error) {
 
 // SetInt sets a cell's value to an integer.
 func (c *Cell) SetInt(n int) {
-	c.Value = fmt.Sprintf("%d", n)
-	c.NumFmt = builtInNumFmt[builtInNumFmtIndex_INT]
-	c.formula = ""
-	c.cellType = CellTypeNumeric
+	c.SetValue(n)
 }
 
 // SetInt sets a cell's value to an integer.
 func (c *Cell) SetValue(n interface{}) {
-	var s string
-	switch n.(type) {
+	switch t := n.(type) {
 	case time.Time:
 		c.SetDateTime(n.(time.Time))
 		return
-	case int:
+	case int, int8, int16, int32, int64, float32, float64:
 		c.setGeneral(fmt.Sprintf("%v", n))
-		return
-	case int32:
-		c.setGeneral(fmt.Sprintf("%v", n))
-		return
-	case int64:
-		c.setGeneral(fmt.Sprintf("%v", n))
-		return
-	case float32:
-		c.setGeneral(fmt.Sprintf("%v", n))
-		return
-	case float64:
-		c.setGeneral(fmt.Sprintf("%v", n))
-		return
 	case string:
-		s = n.(string)
+		c.SetString(t)
 	case []byte:
-		s = string(n.([]byte))
+		c.SetString(string(t))
 	case nil:
-		s = ""
+		c.SetString("")
 	default:
-		s = fmt.Sprintf("%v", n)
+		c.SetString(fmt.Sprintf("%v", n))
 	}
-	c.SetString(s)
 }
 
 // SetInt sets a cell's value to an integer.
@@ -239,7 +259,7 @@ func (c *Cell) Bool() bool {
 		return c.Value == "1"
 	}
 	// If numeric, base it on a non-zero.
-	if c.cellType == CellTypeNumeric {
+	if c.cellType == CellTypeNumeric || c.cellType == CellTypeGeneral {
 		return c.Value != "0"
 	}
 	// Return whether there's an empty string.
@@ -356,27 +376,44 @@ func parseTime(c *Cell) (string, error) {
 	}
 	val := TimeFromExcelTime(f, c.date1904)
 	format := c.GetNumberFormat()
+
 	// Replace Excel placeholders with Go time placeholders.
 	// For example, replace yyyy with 2006. These are in a specific order,
 	// due to the fact that m is used in month, minute, and am/pm. It would
 	// be easier to fix that with regular expressions, but if it's possible
 	// to keep this simple it would be easier to maintain.
+	// Full-length month and days (e.g. March, Tuesday) have letters in them that would be replaced
+	// by other characters below (such as the 'h' in March, or the 'd' in Tuesday) below.
+	// First we convert them to arbitrary characters unused in Excel Date formats, and then at the end,
+	// turn them to what they should actually be.
+	// Based off: http://www.ozgrid.com/Excel/CustomFormats.htm
 	replacements := []struct{ xltime, gotime string }{
 		{"yyyy", "2006"},
 		{"yy", "06"},
+		{"mmmm", "%%%%"},
+		{"dddd", "&&&&"},
 		{"dd", "02"},
 		{"d", "2"},
 		{"mmm", "Jan"},
 		{"mmss", "0405"},
 		{"ss", "05"},
-		{"hh", "15"},
-		{"h", "3"},
 		{"mm:", "04:"},
 		{":mm", ":04"},
 		{"mm", "01"},
 		{"am/pm", "pm"},
 		{"m/", "1/"},
-		{".0", ".9999"},
+		{"%%%%", "January"},
+		{"&&&&", "Monday"},
+	}
+	// It is the presence of the "am/pm" indicator that determins
+	// if this is a 12 hour or 24 hours time format, not the
+	// number of 'h' characters.
+	if is12HourTime(format) {
+		format = strings.Replace(format, "hh", "03", 1)
+		format = strings.Replace(format, "h", "3", 1)
+	} else {
+		format = strings.Replace(format, "hh", "15", 1)
+		format = strings.Replace(format, "h", "15", 1)
 	}
 	for _, repl := range replacements {
 		format = strings.Replace(format, repl.xltime, repl.gotime, 1)
@@ -385,6 +422,7 @@ func parseTime(c *Cell) (string, error) {
 	// possible dangling colon that would remain.
 	if val.Hour() < 1 {
 		format = strings.Replace(format, "]:", "]", 1)
+		format = strings.Replace(format, "[03]", "", 1)
 		format = strings.Replace(format, "[3]", "", 1)
 		format = strings.Replace(format, "[15]", "", 1)
 	} else {
@@ -398,7 +436,7 @@ func parseTime(c *Cell) (string, error) {
 // a time.Time.
 func isTimeFormat(format string) bool {
 	dateParts := []string{
-		"yy", "hh", "am", "pm", "ss", "mm", ":",
+		"yy", "hh", "h", "am/pm", "AM/PM", "A/P", "a/p", "ss", "mm", ":",
 	}
 	for _, part := range dateParts {
 		if strings.Contains(format, part) {
@@ -406,4 +444,10 @@ func isTimeFormat(format string) bool {
 		}
 	}
 	return false
+}
+
+// is12HourTime checks whether an Excel time format string is a 12
+// hours form.
+func is12HourTime(format string) bool {
+	return strings.Contains(format, "am/pm") || strings.Contains(format, "AM/PM") || strings.Contains(format, "a/p") || strings.Contains(format, "A/P")
 }

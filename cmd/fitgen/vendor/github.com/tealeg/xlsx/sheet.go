@@ -18,6 +18,7 @@ type Sheet struct {
 	Selected    bool
 	SheetViews  []SheetView
 	SheetFormat SheetFormat
+	AutoFilter  *AutoFilter
 }
 
 type SheetView struct {
@@ -35,6 +36,13 @@ type Pane struct {
 type SheetFormat struct {
 	DefaultColWidth  float64
 	DefaultRowHeight float64
+	OutlineLevelCol  uint8
+	OutlineLevelRow  uint8
+}
+
+type AutoFilter struct {
+	TopLeftCell     string
+	BottomRightCell string
 }
 
 // Add a new Row to a Sheet
@@ -140,12 +148,12 @@ func (s *Sheet) handleMerged() {
 
 		// When merging cells, the upper left cell does not maintain
 		// the original borders
-		mainstyle.Border.Top = ""
-		mainstyle.Border.Left = ""
-		mainstyle.Border.Right = ""
-		mainstyle.Border.Bottom = ""
+		mainstyle.Border.Top = "none"
+		mainstyle.Border.Left = "none"
+		mainstyle.Border.Right = "none"
+		mainstyle.Border.Bottom = "none"
 
-		maincol, mainrow, _ := getCoordsFromCellIDString(key)
+		maincol, mainrow, _ := GetCoordsFromCellIDString(key)
 		for rownum := 0; rownum <= cell.VMerge; rownum++ {
 			for colnum := 0; colnum <= cell.HMerge; colnum++ {
 				tmpcell := s.Cell(mainrow+rownum, maincol+colnum)
@@ -178,11 +186,25 @@ func (s *Sheet) makeXLSXSheet(refTable *RefTable, styles *xlsxStyleSheet) *xlsxW
 	xSheet := xlsxSheetData{}
 	maxRow := 0
 	maxCell := 0
+	var maxLevelCol, maxLevelRow uint8
 
 	// Scan through the sheet and see if there are any merged cells. If there
 	// are, we may need to extend the size of the sheet. There needs to be
 	// phantom cells underlying the area covered by the merged cell
 	s.handleMerged()
+
+	for index, sheetView := range s.SheetViews {
+		if sheetView.Pane != nil {
+			worksheet.SheetViews.SheetView[index].Pane = &xlsxPane{
+				XSplit:      sheetView.Pane.XSplit,
+				YSplit:      sheetView.Pane.YSplit,
+				TopLeftCell: sheetView.Pane.TopLeftCell,
+				ActivePane:  sheetView.Pane.ActivePane,
+				State:       sheetView.Pane.State,
+			}
+
+		}
+	}
 
 	if s.Selected {
 		worksheet.SheetViews.SheetView[0].TabSelected = true
@@ -211,21 +233,28 @@ func (s *Sheet) makeXLSXSheet(refTable *RefTable, styles *xlsxStyleSheet) *xlsxW
 		}
 		colsXfIdList[c] = XfId
 
-		var customWidth int
+		var customWidth bool
 		if col.Width == 0 {
 			col.Width = ColWidth
+			customWidth = false
+
 		} else {
-			customWidth = 1
+			customWidth = true
 		}
 		worksheet.Cols.Col = append(worksheet.Cols.Col,
 			xlsxCol{Min: col.Min,
-				Max:         col.Max,
-				Hidden:      col.Hidden,
-				Width:       col.Width,
-				CustomWidth: customWidth,
-				Collapsed:   col.Collapsed,
-				Style:       XfId,
+				Max:          col.Max,
+				Hidden:       col.Hidden,
+				Width:        col.Width,
+				CustomWidth:  customWidth,
+				Collapsed:    col.Collapsed,
+				OutlineLevel: col.OutlineLevel,
+				Style:        XfId,
 			})
+
+		if col.OutlineLevel > maxLevelCol {
+			maxLevelCol = col.OutlineLevel
+		}
 	}
 
 	for r, row := range s.Rows {
@@ -237,6 +266,10 @@ func (s *Sheet) makeXLSXSheet(refTable *RefTable, styles *xlsxStyleSheet) *xlsxW
 		if row.isCustom {
 			xRow.CustomHeight = true
 			xRow.Ht = fmt.Sprintf("%g", row.Height)
+		}
+		xRow.OutlineLevel = row.OutlineLevel
+		if row.OutlineLevel > maxLevelRow {
+			maxLevelRow = row.OutlineLevel
 		}
 		for c, cell := range row.Cells {
 			XfId := colsXfIdList[c]
@@ -306,8 +339,19 @@ func (s *Sheet) makeXLSXSheet(refTable *RefTable, styles *xlsxStyleSheet) *xlsxW
 		xSheet.Row = append(xSheet.Row, xRow)
 	}
 
+	// Update sheet format with the freshly determined max levels
+	s.SheetFormat.OutlineLevelCol = maxLevelCol
+	s.SheetFormat.OutlineLevelRow = maxLevelRow
+	// .. and then also apply this to the xml worksheet
+	worksheet.SheetFormatPr.OutlineLevelCol = s.SheetFormat.OutlineLevelCol
+	worksheet.SheetFormatPr.OutlineLevelRow = s.SheetFormat.OutlineLevelRow
+
 	if worksheet.MergeCells != nil {
 		worksheet.MergeCells.Count = len(worksheet.MergeCells.Cells)
+	}
+
+	if s.AutoFilter != nil {
+		worksheet.AutoFilter = &xlsxAutoFilter{Ref: fmt.Sprintf("%v:%v", s.AutoFilter.TopLeftCell, s.AutoFilter.BottomRightCell)}
 	}
 
 	worksheet.SheetData = xSheet
@@ -322,7 +366,7 @@ func (s *Sheet) makeXLSXSheet(refTable *RefTable, styles *xlsxStyleSheet) *xlsxW
 }
 
 func handleStyleForXLSX(style *Style, NumFmtId int, styles *xlsxStyleSheet) (XfId int) {
-	xFont, xFill, xBorder, xCellStyleXf, xCellXf := style.makeXLSXStyleElements()
+	xFont, xFill, xBorder, xCellXf := style.makeXLSXStyleElements()
 	fontId := styles.addFont(xFont)
 	fillId := styles.addFill(xFill)
 
@@ -332,10 +376,6 @@ func handleStyleForXLSX(style *Style, NumFmtId int, styles *xlsxStyleSheet) (XfI
 	styles.addFill(greyfill)
 
 	borderId := styles.addBorder(xBorder)
-	xCellStyleXf.FontId = fontId
-	xCellStyleXf.FillId = fillId
-	xCellStyleXf.BorderId = borderId
-	xCellStyleXf.NumFmtId = builtInNumFmtIndex_GENERAL
 	xCellXf.FontId = fontId
 	xCellXf.FillId = fillId
 	xCellXf.BorderId = borderId
@@ -345,12 +385,6 @@ func handleStyleForXLSX(style *Style, NumFmtId int, styles *xlsxStyleSheet) (XfI
 		xCellXf.ApplyNumberFormat = true
 	}
 
-	xCellStyleXf.Alignment.Horizontal = style.Alignment.Horizontal
-	xCellStyleXf.Alignment.Indent = style.Alignment.Indent
-	xCellStyleXf.Alignment.ShrinkToFit = style.Alignment.ShrinkToFit
-	xCellStyleXf.Alignment.TextRotation = style.Alignment.TextRotation
-	xCellStyleXf.Alignment.Vertical = style.Alignment.Vertical
-	xCellStyleXf.Alignment.WrapText = style.Alignment.WrapText
 	xCellXf.Alignment.Horizontal = style.Alignment.Horizontal
 	xCellXf.Alignment.Indent = style.Alignment.Indent
 	xCellXf.Alignment.ShrinkToFit = style.Alignment.ShrinkToFit
@@ -358,7 +392,6 @@ func handleStyleForXLSX(style *Style, NumFmtId int, styles *xlsxStyleSheet) (XfI
 	xCellXf.Alignment.Vertical = style.Alignment.Vertical
 	xCellXf.Alignment.WrapText = style.Alignment.WrapText
 
-	styles.addCellStyleXf(xCellStyleXf)
 	XfId = styles.addCellXf(xCellXf)
 	return
 }

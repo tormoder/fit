@@ -162,10 +162,10 @@ func intOnlyMapF(rune rune) rune {
 	return -1
 }
 
-// getCoordsFromCellIDString returns the zero based cartesian
+// GetCoordsFromCellIDString returns the zero based cartesian
 // coordinates from a cell name in Excel format, e.g. the cellIDString
 // "A1" returns 0, 0 and the "B3" return 1, 2.
-func getCoordsFromCellIDString(cellIDString string) (x, y int, error error) {
+func GetCoordsFromCellIDString(cellIDString string) (x, y int, error error) {
 	var letterPart string = strings.Map(letterOnlyMapF, cellIDString)
 	y, error = strconv.Atoi(strings.Map(intOnlyMapF, cellIDString))
 	if error != nil {
@@ -176,9 +176,9 @@ func getCoordsFromCellIDString(cellIDString string) (x, y int, error error) {
 	return x, y, error
 }
 
-// getCellIDStringFromCoords returns the Excel format cell name that
+// GetCellIDStringFromCoords returns the Excel format cell name that
 // represents a pair of zero based cartesian coordinates.
-func getCellIDStringFromCoords(x, y int) string {
+func GetCellIDStringFromCoords(x, y int) string {
 	letterPart := numericToLetters(x)
 	numericPart := y + 1
 	return fmt.Sprintf("%s%d", letterPart, numericPart)
@@ -191,7 +191,7 @@ func getCellIDStringFromCoords(x, y int) string {
 func getMaxMinFromDimensionRef(ref string) (minx, miny, maxx, maxy int, err error) {
 	var parts []string
 	parts = strings.Split(ref, ":")
-	minx, miny, err = getCoordsFromCellIDString(parts[0])
+	minx, miny, err = GetCoordsFromCellIDString(parts[0])
 	if err != nil {
 		return -1, -1, -1, -1, err
 	}
@@ -199,7 +199,7 @@ func getMaxMinFromDimensionRef(ref string) (minx, miny, maxx, maxy int, err erro
 		maxx, maxy = minx, miny
 		return
 	}
-	maxx, maxy, err = getCoordsFromCellIDString(parts[1])
+	maxx, maxy, err = GetCoordsFromCellIDString(parts[1])
 	if err != nil {
 		return -1, -1, -1, -1, err
 	}
@@ -220,7 +220,7 @@ func calculateMaxMinFromWorksheet(worksheet *xlsxWorksheet) (minx, miny, maxx, m
 	maxx = 0
 	for _, row := range worksheet.SheetData.Row {
 		for _, cell := range row.C {
-			x, y, err = getCoordsFromCellIDString(cell.R)
+			x, y, err = GetCoordsFromCellIDString(cell.R)
 			if err != nil {
 				return -1, -1, -1, -1, err
 			}
@@ -285,7 +285,7 @@ func makeRowFromRaw(rawrow xlsxRow, sheet *Sheet) *Row {
 
 	for _, rawcell := range rawrow.C {
 		if rawcell.R != "" {
-			x, _, error := getCoordsFromCellIDString(rawcell.R)
+			x, _, error := GetCoordsFromCellIDString(rawcell.R)
 			if error != nil {
 				panic(fmt.Sprintf("Invalid Cell Coord, %s\n", rawcell.R))
 			}
@@ -297,6 +297,8 @@ func makeRowFromRaw(rawrow xlsxRow, sheet *Sheet) *Row {
 		upper++
 	}
 	upper++
+
+	row.OutlineLevel = rawrow.OutlineLevel
 
 	row.Cells = make([]*Cell, upper)
 	for i := 0; i < upper; i++ {
@@ -327,7 +329,7 @@ func formulaForCell(rawcell xlsxC, sharedFormulas map[int]sharedFormula) string 
 		return ""
 	}
 	if f.T == "shared" {
-		x, y, err := getCoordsFromCellIDString(rawcell.R)
+		x, y, err := GetCoordsFromCellIDString(rawcell.R)
 		if err != nil {
 			res = f.Content
 		} else {
@@ -377,7 +379,7 @@ func formulaForCell(rawcell xlsxC, sharedFormulas map[int]sharedFormula) string 
 					}
 				}
 				if start < len(orig) {
-					res += string(orig[start:end])
+					res += string(orig[start:])
 				}
 			}
 		}
@@ -390,7 +392,7 @@ func formulaForCell(rawcell xlsxC, sharedFormulas map[int]sharedFormula) string 
 // shiftCell returns the cell shifted according to dx and dy taking into consideration of absolute
 // references with dollar sign ($)
 func shiftCell(cellID string, dx, dy int) string {
-	fx, fy, _ := getCoordsFromCellIDString(cellID)
+	fx, fy, _ := GetCoordsFromCellIDString(cellID)
 
 	// Is fixed column?
 	fixedCol := strings.Index(cellID, "$") == 0
@@ -409,7 +411,7 @@ func shiftCell(cellID string, dx, dy int) string {
 	}
 
 	// New shifted cell
-	shiftedCellID := getCellIDStringFromCoords(fx, fy)
+	shiftedCellID := GetCellIDStringFromCoords(fx, fy)
 
 	if !fixedCol && !fixedRow {
 		return shiftedCellID
@@ -440,7 +442,7 @@ func shiftCell(cellID string, dx, dy int) string {
 // CSV form from the raw cell value.  Note - this is not actually
 // general enough - we should support retaining tabs and newlines.
 func fillCellData(rawcell xlsxC, reftable *RefTable, sharedFormulas map[int]sharedFormula, cell *Cell) {
-	var data string = rawcell.V
+	var data = rawcell.V
 	if len(data) > 0 {
 		vval := strings.Trim(data, " \t\n\r")
 		switch rawcell.T {
@@ -469,6 +471,23 @@ func fillCellData(rawcell xlsxC, reftable *RefTable, sharedFormulas map[int]shar
 				cell.formula = formulaForCell(rawcell, sharedFormulas)
 				cell.cellType = CellTypeFormula
 			}
+		}
+	} else {
+		if rawcell.Is != nil {
+			fillCellDataFromInlineString(rawcell, cell)
+		}
+	}
+}
+
+// fillCellDataFromInlineString attempts to get inline string data and put it into a Cell.
+func fillCellDataFromInlineString(rawcell xlsxC, cell *Cell) {
+	if rawcell.Is.T != "" {
+		cell.Value = strings.Trim(rawcell.Is.T, " \t\n\r")
+		cell.cellType = CellTypeInline
+	} else {
+		cell.Value = ""
+		for _, r := range rawcell.Is.R {
+			cell.Value += r.T
 		}
 	}
 }
@@ -521,10 +540,11 @@ func readRowsFromSheet(Worksheet *xlsxWorksheet, file *File, sheet *Sheet) ([]*R
 			// columns.
 			for i := rawcol.Min; i <= rawcol.Max && i <= colCount; i++ {
 				col := &Col{
-					Min:    rawcol.Min,
-					Max:    rawcol.Max,
-					Hidden: rawcol.Hidden,
-					Width:  rawcol.Width}
+					Min:          rawcol.Min,
+					Max:          rawcol.Max,
+					Hidden:       rawcol.Hidden,
+					Width:        rawcol.Width,
+					OutlineLevel: rawcol.OutlineLevel}
 				cols[i-1] = col
 				if file.styles != nil {
 					col.style = file.styles.getStyle(rawcol.Style)
@@ -559,6 +579,12 @@ func readRowsFromSheet(Worksheet *xlsxWorksheet, file *File, sheet *Sheet) ([]*R
 		}
 
 		row.Hidden = rawrow.Hidden
+		height, err := strconv.ParseFloat(rawrow.Ht, 64)
+		if err == nil {
+			row.Height = height
+		}
+		row.isCustom = rawrow.CustomHeight
+		row.OutlineLevel = rawrow.OutlineLevel
 
 		insertColIndex = minCol
 		for _, rawcell := range rawrow.C {
@@ -566,28 +592,36 @@ func readRowsFromSheet(Worksheet *xlsxWorksheet, file *File, sheet *Sheet) ([]*R
 			if err != nil {
 				panic(err.Error())
 			}
-			x, _, _ := getCoordsFromCellIDString(rawcell.R)
+			x, _, _ := GetCoordsFromCellIDString(rawcell.R)
+
+			// K1000000: Prevent panic when the range specified in the spreadsheet
+			//           view exceeds the actual number of columns in the dataset.
 
 			// Some spreadsheets will omit blank cells
 			// from the data.
 			for x > insertColIndex {
 				// Put an empty Cell into the array
-				row.Cells[insertColIndex] = new(Cell)
+				if insertColIndex < len(row.Cells) {
+					row.Cells[insertColIndex] = new(Cell)
+				}
 				insertColIndex++
 			}
 			cellX := insertColIndex
-			cell := row.Cells[cellX]
-			cell.HMerge = h
-			cell.VMerge = v
-			fillCellData(rawcell, reftable, sharedFormulas, cell)
-			if file.styles != nil {
-				cell.style = file.styles.getStyle(rawcell.S)
-				cell.NumFmt = file.styles.getNumberFormat(rawcell.S)
+
+			if cellX < len(row.Cells) {
+				cell := row.Cells[cellX]
+				cell.HMerge = h
+				cell.VMerge = v
+				fillCellData(rawcell, reftable, sharedFormulas, cell)
+				if file.styles != nil {
+					cell.style = file.styles.getStyle(rawcell.S)
+					cell.NumFmt = file.styles.getNumberFormat(rawcell.S)
+				}
+				cell.date1904 = file.Date1904
+				// Cell is considered hidden if the row or the column of this cell is hidden
+				cell.Hidden = rawrow.Hidden || (len(cols) > cellX && cols[cellX].Hidden)
+				insertColIndex++
 			}
-			cell.date1904 = file.Date1904
-			// Cell is considered hidden if the row or the column of this cell is hidden
-			cell.Hidden = rawrow.Hidden || (len(cols) > cellX && cols[cellX].Hidden)
-			insertColIndex++
 		}
 		if len(rows) > insertRowIndex {
 			rows[insertRowIndex] = row
@@ -629,13 +663,15 @@ func readSheetViews(xSheetViews xlsxSheetViews) []SheetView {
 // into a Sheet struct.  This work can be done in parallel and so
 // readSheetsFromZipFile will spawn an instance of this function per
 // sheet and get the results back on the provided channel.
-func readSheetFromFile(sc chan *indexedSheet, index int, rsheet xlsxSheet, fi *File, sheetXMLMap map[string]string) {
+func readSheetFromFile(sc chan *indexedSheet, index int, rsheet xlsxSheet, fi *File, sheetXMLMap map[string]string) (errRes error) {
 	result := &indexedSheet{Index: index, Sheet: nil, Error: nil}
 	defer func() {
 		if e := recover(); e != nil {
+
 			switch e.(type) {
 			case error:
 				result.Error = e.(error)
+				errRes = e.(error)
 			default:
 				result.Error = errors.New("unexpected error")
 			}
@@ -648,7 +684,7 @@ func readSheetFromFile(sc chan *indexedSheet, index int, rsheet xlsxSheet, fi *F
 	if error != nil {
 		result.Error = error
 		sc <- result
-		return
+		return error
 	}
 	sheet := new(Sheet)
 	sheet.File = fi
@@ -658,9 +694,12 @@ func readSheetFromFile(sc chan *indexedSheet, index int, rsheet xlsxSheet, fi *F
 
 	sheet.SheetFormat.DefaultColWidth = worksheet.SheetFormatPr.DefaultColWidth
 	sheet.SheetFormat.DefaultRowHeight = worksheet.SheetFormatPr.DefaultRowHeight
+	sheet.SheetFormat.OutlineLevelCol = worksheet.SheetFormatPr.OutlineLevelCol
+	sheet.SheetFormat.OutlineLevelRow = worksheet.SheetFormatPr.OutlineLevelRow
 
 	result.Sheet = sheet
 	sc <- result
+	return nil
 }
 
 // readSheetsFromZipFile is an internal helper function that loops
@@ -684,8 +723,8 @@ func readSheetsFromZipFile(f *zip.File, file *File, sheetXMLMap map[string]strin
 	}
 	file.Date1904 = workbook.WorkbookPr.Date1904
 
-	for _, entry := range workbook.DefinedNames.DefinedName {
-		file.DefinedNames = append(file.DefinedNames, &entry)
+	for entryNum := range workbook.DefinedNames.DefinedName {
+		file.DefinedNames = append(file.DefinedNames, &workbook.DefinedNames.DefinedName[entryNum])
 	}
 
 	// Only try and read sheets that have corresponding files.
@@ -700,12 +739,14 @@ func readSheetsFromZipFile(f *zip.File, file *File, sheetXMLMap map[string]strin
 	sheetsByName := make(map[string]*Sheet, sheetCount)
 	sheets := make([]*Sheet, sheetCount)
 	sheetChan := make(chan *indexedSheet, sheetCount)
-	defer close(sheetChan)
 
 	go func() {
+		defer close(sheetChan)
 		err = nil
 		for i, rawsheet := range workbookSheets {
-			readSheetFromFile(sheetChan, i, rawsheet, file, sheetXMLMap)
+			if err := readSheetFromFile(sheetChan, i, rawsheet, file, sheetXMLMap); err != nil {
+				return
+			}
 		}
 	}()
 

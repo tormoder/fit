@@ -17,6 +17,7 @@ type xlsxWorksheet struct {
 	SheetFormatPr xlsxSheetFormatPr `xml:"sheetFormatPr"`
 	Cols          *xlsxCols         `xml:"cols,omitempty"`
 	SheetData     xlsxSheetData     `xml:"sheetData"`
+	AutoFilter    *xlsxAutoFilter   `xml:"autoFilter,omitempty"`
 	MergeCells    *xlsxMergeCells   `xml:"mergeCells,omitempty"`
 	PrintOptions  xlsxPrintOptions  `xml:"printOptions"`
 	PageMargins   xlsxPageMargins   `xml:"pageMargins"`
@@ -105,6 +106,8 @@ type xlsxPageMargins struct {
 type xlsxSheetFormatPr struct {
 	DefaultColWidth  float64 `xml:"defaultColWidth,attr,omitempty"`
 	DefaultRowHeight float64 `xml:"defaultRowHeight,attr"`
+	OutlineLevelCol  uint8   `xml:"outlineLevelCol,attr,omitempty"`
+	OutlineLevelRow  uint8   `xml:"outlineLevelRow,attr,omitempty"`
 }
 
 // xlsxSheetViews directly maps the sheetViews element in the namespace
@@ -136,8 +139,8 @@ type xlsxSheetView struct {
 	ZoomScaleNormal         float64         `xml:"zoomScaleNormal,attr"`
 	ZoomScalePageLayoutView float64         `xml:"zoomScalePageLayoutView,attr"`
 	WorkbookViewId          int             `xml:"workbookViewId,attr"`
-	Selection               []xlsxSelection `xml:"selection"`
 	Pane                    *xlsxPane       `xml:"pane"`
+	Selection               []xlsxSelection `xml:"selection"`
 }
 
 // xlsxSelection directly maps the selection element in the namespace
@@ -193,13 +196,14 @@ type xlsxCols struct {
 // currently I have not checked it for completeness - it does as much
 // as I need.
 type xlsxCol struct {
-	Collapsed   bool    `xml:"collapsed,attr"`
-	Hidden      bool    `xml:"hidden,attr"`
-	Max         int     `xml:"max,attr"`
-	Min         int     `xml:"min,attr"`
-	Style       int     `xml:"style,attr"`
-	Width       float64 `xml:"width,attr"`
-	CustomWidth int     `xml:"customWidth,attr,omitempty"`
+	Collapsed    bool    `xml:"collapsed,attr"`
+	Hidden       bool    `xml:"hidden,attr"`
+	Max          int     `xml:"max,attr"`
+	Min          int     `xml:"min,attr"`
+	Style        int     `xml:"style,attr"`
+	Width        float64 `xml:"width,attr"`
+	CustomWidth  bool    `xml:"customWidth,attr,omitempty"`
+	OutlineLevel uint8   `xml:"outlineLevel,attr,omitempty"`
 }
 
 // xlsxDimension directly maps the dimension element in the namespace
@@ -230,6 +234,11 @@ type xlsxRow struct {
 	C            []xlsxC `xml:"c"`
 	Ht           string  `xml:"ht,attr,omitempty"`
 	CustomHeight bool    `xml:"customHeight,attr,omitempty"`
+	OutlineLevel uint8   `xml:"outlineLevel,attr,omitempty"`
+}
+
+type xlsxAutoFilter struct {
+	Ref string `xml:"ref,attr"`
 }
 
 type xlsxMergeCell struct {
@@ -249,13 +258,13 @@ func (mc *xlsxMergeCells) getExtent(cellRef string) (int, int, error) {
 		return 0, 0, nil
 	}
 	for _, cell := range mc.Cells {
-		if strings.HasPrefix(cell.Ref, cellRef) {
+		if strings.HasPrefix(cell.Ref, cellRef+":") {
 			parts := strings.Split(cell.Ref, ":")
-			startx, starty, err := getCoordsFromCellIDString(parts[0])
+			startx, starty, err := GetCoordsFromCellIDString(parts[0])
 			if err != nil {
 				return -1, -1, err
 			}
-			endx, endy, err := getCoordsFromCellIDString(parts[1])
+			endx, endy, err := GetCoordsFromCellIDString(parts[1])
 			if err != nil {
 				return -2, -2, err
 			}
@@ -270,11 +279,12 @@ func (mc *xlsxMergeCells) getExtent(cellRef string) (int, int, error) {
 // currently I have not checked it for completeness - it does as much
 // as I need.
 type xlsxC struct {
-	R string `xml:"r,attr"`           // Cell ID, e.g. A1
-	S int    `xml:"s,attr,omitempty"` // Style reference.
-	T string `xml:"t,attr,omitempty"` // Type.
-	V string `xml:"v,omitempty"`      // Value
-	F *xlsxF `xml:"f,omitempty"`      // Formula
+	R  string  `xml:"r,attr"`           // Cell ID, e.g. A1
+	S  int     `xml:"s,attr,omitempty"` // Style reference.
+	T  string  `xml:"t,attr,omitempty"` // Type.
+	F  *xlsxF  `xml:"f,omitempty"`      // Formula
+	V  string  `xml:"v,omitempty"`      // Value
+	Is *xlsxSI `xml:"is,omitempty"`     // Inline String.
 }
 
 // xlsxF directly maps the f element in the namespace

@@ -171,7 +171,7 @@ func (l *FileSuite) TestGetStyleFromZipFile(c *C) {
 	row0 := tabelle1.Rows[0]
 	cellFoo := row0.Cells[0]
 	style = cellFoo.GetStyle()
-	if val, err = cellFoo.String(); err != nil {
+	if val, err = cellFoo.FormattedValue(); err != nil {
 		c.Error(err)
 	}
 	c.Assert(val, Equals, "Foo")
@@ -182,7 +182,7 @@ func (l *FileSuite) TestGetStyleFromZipFile(c *C) {
 	row1 := tabelle1.Rows[1]
 	cellQuuk := row1.Cells[1]
 	style = cellQuuk.GetStyle()
-	if val, err = cellQuuk.String(); err != nil {
+	if val, err = cellQuuk.FormattedValue(); err != nil {
 		c.Error(err)
 	}
 	c.Assert(val, Equals, "Quuk")
@@ -190,7 +190,7 @@ func (l *FileSuite) TestGetStyleFromZipFile(c *C) {
 	c.Assert(style.ApplyBorder, Equals, true)
 
 	cellBar := row0.Cells[1]
-	if val, err = cellBar.String(); err != nil {
+	if val, err = cellBar.FormattedValue(); err != nil {
 		c.Error(err)
 	}
 	c.Assert(val, Equals, "Bar")
@@ -224,7 +224,7 @@ func (l *FileSuite) TestCreateSheet(c *C) {
 	row = sheet.Rows[0]
 	c.Assert(len(row.Cells), Equals, 2)
 	cell := row.Cells[0]
-	if val, err := cell.String(); err != nil {
+	if val, err := cell.FormattedValue(); err != nil {
 		c.Error(err)
 	} else {
 		c.Assert(val, Equals, "Foo")
@@ -245,13 +245,34 @@ func (l *FileSuite) TestAddSheet(c *C) {
 
 // Test that AddSheet returns an error if you try to add two sheets with the same name
 func (l *FileSuite) TestAddSheetWithDuplicateName(c *C) {
-	var f *File
-
-	f = NewFile()
+	f := NewFile()
 	_, err := f.AddSheet("MySheet")
 	c.Assert(err, IsNil)
 	_, err = f.AddSheet("MySheet")
-	c.Assert(err, ErrorMatches, "Duplicate sheet name 'MySheet'.")
+	c.Assert(err, ErrorMatches, "duplicate sheet name 'MySheet'.")
+}
+
+// Test that we can append a sheet to a File
+func (l *FileSuite) TestAppendSheet(c *C) {
+	var f *File
+
+	f = NewFile()
+	s := Sheet{}
+	sheet, err := f.AppendSheet(s, "MySheet")
+	c.Assert(err, IsNil)
+	c.Assert(sheet, NotNil)
+	c.Assert(len(f.Sheets), Equals, 1)
+	c.Assert(f.Sheet["MySheet"], Equals, sheet)
+}
+
+// Test that AppendSheet returns an error if you try to add two sheets with the same name
+func (l *FileSuite) TestAppendSheetWithDuplicateName(c *C) {
+	f := NewFile()
+	s := Sheet{}
+	_, err := f.AppendSheet(s, "MySheet")
+	c.Assert(err, IsNil)
+	_, err = f.AppendSheet(s, "MySheet")
+	c.Assert(err, ErrorMatches, "duplicate sheet name 'MySheet'.")
 }
 
 // Test that we can get the Nth sheet
@@ -695,7 +716,7 @@ func (l *FileSuite) TestMarshalFile(c *C) {
 	// For now we only allow simple string data in the
 	// spreadsheet.  Style support will follow.
 	expectedStyles := `<?xml version="1.0" encoding="UTF-8"?>
-<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="1"><font><sz val="12"/><name val="Verdana"/><family val="0"/><charset val="0"/></font></fonts><fills count="2"><fill><patternFill patternType="none"><fgColor rgb="FFFFFFFF"/><bgColor rgb="00000000"/></patternFill></fill><fill><patternFill patternType="lightGray"/></fill></fills><borders count="1"><border><left style=""></left><right style=""></right><top style=""></top><bottom style=""></bottom></border></borders><cellStyleXfs count="1"><xf applyAlignment="0" applyBorder="0" applyFont="0" applyFill="0" applyNumberFormat="0" applyProtection="0" borderId="0" fillId="0" fontId="0" numFmtId="0"><alignment horizontal="general" indent="0" shrinkToFit="0" textRotation="0" vertical="bottom" wrapText="0"/></xf></cellStyleXfs><cellXfs count="2"><xf applyAlignment="0" applyBorder="0" applyFont="0" applyFill="0" applyNumberFormat="0" applyProtection="0" borderId="0" fillId="0" fontId="0" numFmtId="0"><alignment horizontal="general" indent="0" shrinkToFit="0" textRotation="0" vertical="bottom" wrapText="0"/></xf><xf applyAlignment="0" applyBorder="0" applyFont="0" applyFill="0" applyNumberFormat="0" applyProtection="0" borderId="0" fillId="0" fontId="0" numFmtId="0"><alignment horizontal="general" indent="0" shrinkToFit="0" textRotation="0" vertical="bottom" wrapText="0"/></xf></cellXfs></styleSheet>`
+<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="1"><font><sz val="12"/><name val="Verdana"/><family val="0"/><charset val="0"/></font></fonts><fills count="2"><fill><patternFill patternType="none"><fgColor rgb="FFFFFFFF"/><bgColor rgb="00000000"/></patternFill></fill><fill><patternFill patternType="lightGray"/></fill></fills><borders count="1"><border><left style="none"></left><right style="none"></right><top style="none"></top><bottom style="none"></bottom></border></borders><cellXfs count="2"><xf applyAlignment="0" applyBorder="0" applyFont="0" applyFill="0" applyNumberFormat="0" applyProtection="0" borderId="0" fillId="0" fontId="0" numFmtId="0"><alignment horizontal="general" indent="0" shrinkToFit="0" textRotation="0" vertical="bottom" wrapText="0"/></xf><xf applyAlignment="0" applyBorder="0" applyFont="0" applyFill="0" applyNumberFormat="0" applyProtection="0" borderId="0" fillId="0" fontId="0" numFmtId="0"><alignment horizontal="general" indent="0" shrinkToFit="0" textRotation="0" vertical="bottom" wrapText="0"/></xf></cellXfs></styleSheet>`
 
 	c.Assert(parts["xl/styles.xml"], Equals, expectedStyles)
 }
@@ -742,6 +763,12 @@ func (s *SliceReaderSuite) TestFileToSlice(c *C) {
 	fileToSliceCheckOutput(c, output)
 }
 
+func (s *SliceReaderSuite) TestFileToSliceMissingCol(c *C) {
+	// Test xlsx file with the A column removed
+	_, err := FileToSlice("./testdocs/testFileToSlice.xlsx")
+	c.Assert(err, IsNil)
+}
+
 func (s *SliceReaderSuite) TestFileObjToSlice(c *C) {
 	f, err := OpenFile("./testdocs/testfile.xlsx")
 	output, err := f.ToSlice()
@@ -775,7 +802,7 @@ func (l *FileSuite) TestReadWorkbookWithTypes(c *C) {
 
 	// string 1
 	c.Assert(sheet.Rows[0].Cells[0].Type(), Equals, CellTypeString)
-	if val, err := sheet.Rows[0].Cells[0].String(); err != nil {
+	if val, err := sheet.Rows[0].Cells[0].FormattedValue(); err != nil {
 		c.Error(err)
 	} else {
 		c.Assert(val, Equals, "hello world")
@@ -783,7 +810,7 @@ func (l *FileSuite) TestReadWorkbookWithTypes(c *C) {
 
 	// string 2
 	c.Assert(sheet.Rows[1].Cells[0].Type(), Equals, CellTypeString)
-	if val, err := sheet.Rows[1].Cells[0].String(); err != nil {
+	if val, err := sheet.Rows[1].Cells[0].FormattedValue(); err != nil {
 		c.Error(err)
 	} else {
 		c.Assert(val, Equals, "日本語")
@@ -825,12 +852,12 @@ func (s *SliceReaderSuite) TestFileWithEmptyRows(c *C) {
 	sheet, ok := f.Sheet["EmptyRows"]
 	c.Assert(ok, Equals, true)
 
-	if val, err := sheet.Cell(0, 0).String(); err != nil {
+	if val, err := sheet.Cell(0, 0).FormattedValue(); err != nil {
 		c.Error(err)
 	} else {
 		c.Assert(val, Equals, "")
 	}
-	if val, err := sheet.Cell(2, 0).String(); err != nil {
+	if val, err := sheet.Cell(2, 0).FormattedValue(); err != nil {
 		c.Error(err)
 	} else {
 		c.Assert(val, Equals, "A3")
@@ -843,12 +870,12 @@ func (s *SliceReaderSuite) TestFileWithEmptyCols(c *C) {
 	sheet, ok := f.Sheet["EmptyCols"]
 	c.Assert(ok, Equals, true)
 
-	if val, err := sheet.Cell(0, 0).String(); err != nil {
+	if val, err := sheet.Cell(0, 0).FormattedValue(); err != nil {
 		c.Error(err)
 	} else {
 		c.Assert(val, Equals, "")
 	}
-	if val, err := sheet.Cell(0, 2).String(); err != nil {
+	if val, err := sheet.Cell(0, 2).FormattedValue(); err != nil {
 		c.Error(err)
 	} else {
 		c.Assert(val, Equals, "C1")

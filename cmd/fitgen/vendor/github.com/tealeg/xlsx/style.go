@@ -5,14 +5,15 @@ import "strconv"
 // Style is a high level structure intended to provide user access to
 // the contents of Style within an XLSX file.
 type Style struct {
-	Border         Border
-	Fill           Fill
-	Font           Font
-	ApplyBorder    bool
-	ApplyFill      bool
-	ApplyFont      bool
-	ApplyAlignment bool
-	Alignment      Alignment
+	Border          Border
+	Fill            Fill
+	Font            Font
+	ApplyBorder     bool
+	ApplyFill       bool
+	ApplyFont       bool
+	ApplyAlignment  bool
+	Alignment       Alignment
+	NamedStyleIndex *int
 }
 
 // Return a new Style structure initialised with the default values.
@@ -26,11 +27,10 @@ func NewStyle() *Style {
 }
 
 // Generate the underlying XLSX style elements that correspond to the Style.
-func (style *Style) makeXLSXStyleElements() (xFont xlsxFont, xFill xlsxFill, xBorder xlsxBorder, xCellStyleXf xlsxXf, xCellXf xlsxXf) {
+func (style *Style) makeXLSXStyleElements() (xFont xlsxFont, xFill xlsxFill, xBorder xlsxBorder, xCellXf xlsxXf) {
 	xFont = xlsxFont{}
 	xFill = xlsxFill{}
 	xBorder = xlsxBorder{}
-	xCellStyleXf = xlsxXf{}
 	xCellXf = xlsxXf{}
 	xFont.Sz.Val = strconv.Itoa(style.Font.Size)
 	xFont.Name.Val = style.Font.Name
@@ -78,18 +78,9 @@ func (style *Style) makeXLSXStyleElements() (xFont xlsxFont, xFill xlsxFill, xBo
 	xCellXf.ApplyFill = style.ApplyFill
 	xCellXf.ApplyFont = style.ApplyFont
 	xCellXf.ApplyAlignment = style.ApplyAlignment
-	xCellStyleXf.ApplyBorder = style.ApplyBorder
-	xCellStyleXf.ApplyFill = style.ApplyFill
-	xCellStyleXf.ApplyFont = style.ApplyFont
-	xCellStyleXf.ApplyAlignment = style.ApplyAlignment
-	xCellStyleXf.NumFmtId = 0
-
-	xCellStyleXf.Alignment.Horizontal = style.Alignment.Horizontal
-	xCellStyleXf.Alignment.Indent = style.Alignment.Indent
-	xCellStyleXf.Alignment.ShrinkToFit = style.Alignment.ShrinkToFit
-	xCellStyleXf.Alignment.TextRotation = style.Alignment.TextRotation
-	xCellStyleXf.Alignment.Vertical = style.Alignment.Vertical
-	xCellStyleXf.Alignment.WrapText = style.Alignment.WrapText
+	if style.NamedStyleIndex != nil {
+		xCellXf.XfId = style.NamedStyleIndex
+	}
 	return
 }
 
@@ -113,14 +104,10 @@ type Border struct {
 
 func NewBorder(left, right, top, bottom string) *Border {
 	return &Border{
-		Left:        left,
-		LeftColor:   "",
-		Right:       right,
-		RightColor:  "",
-		Top:         top,
-		TopColor:    "",
-		Bottom:      bottom,
-		BottomColor: "",
+		Left:   left,
+		Right:  right,
+		Top:    top,
+		Bottom: bottom,
 	}
 }
 
@@ -133,7 +120,11 @@ type Fill struct {
 }
 
 func NewFill(patternType, fgColor, bgColor string) *Fill {
-	return &Fill{PatternType: patternType, FgColor: fgColor, BgColor: bgColor}
+	return &Fill{
+		PatternType: patternType,
+		FgColor:     fgColor,
+		BgColor:     bgColor,
+	}
 }
 
 type Font struct {
@@ -160,13 +151,8 @@ type Alignment struct {
 	WrapText     bool
 }
 
-var defaultFontSize int
-var defaultFontName string
-
-func init() {
-	defaultFontSize = 12
-	defaultFontName = "Verdana"
-}
+var defaultFontSize = 12
+var defaultFontName = "Verdana"
 
 func SetDefaultFont(size int, name string) {
 	defaultFontSize = size
@@ -183,17 +169,12 @@ func DefaultFill() *Fill {
 }
 
 func DefaultBorder() *Border {
-	return NewBorder("", "", "", "")
+	return NewBorder("none", "none", "none", "none")
 }
 
 func DefaultAlignment() *Alignment {
 	return &Alignment{
-		Horizontal:   "general",
-		Indent:       0,
-		ShrinkToFit:  false,
-		TextRotation: 0,
-		Vertical:     "bottom",
-		WrapText:     false,
+		Horizontal: "general",
+		Vertical:   "bottom",
 	}
-
 }

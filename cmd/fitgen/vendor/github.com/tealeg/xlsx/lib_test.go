@@ -28,6 +28,29 @@ func (l *LibSuite) TestReadZipReaderWithFileWithNoWorksheets(c *C) {
 	c.Assert(err.Error(), Equals, "Input xlsx contains no worksheets.")
 }
 
+// Attempt to read data from a file with inlined string sheet data.
+func (l *LibSuite) TestReadWithInlineStrings(c *C) {
+	var xlsxFile *File
+	var err error
+
+	xlsxFile, err = OpenFile("./testdocs/inlineStrings.xlsx")
+	c.Assert(err, IsNil)
+	sheet := xlsxFile.Sheets[0]
+	r1 := sheet.Rows[0]
+	c1 := r1.Cells[1]
+
+	val, err := c1.FormattedValue()
+	if err != nil {
+		c.Error(err)
+		return
+	}
+	if val == "" {
+		c.Error("Expected a string value")
+		return
+	}
+	c.Assert(val, Equals, "HL Retail - North America - Activity by Day - MTD")
+}
+
 // which they are contained from the XLSX file, even when the
 // worksheet files have arbitrary, non-numeric names.
 func (l *LibSuite) TestReadWorkbookRelationsFromZipFileWithFunnyNames(c *C) {
@@ -39,7 +62,7 @@ func (l *LibSuite) TestReadWorkbookRelationsFromZipFileWithFunnyNames(c *C) {
 	bob := xlsxFile.Sheet["Bob"]
 	row1 := bob.Rows[0]
 	cell1 := row1.Cells[0]
-	if val, err := cell1.String(); err != nil {
+	if val, err := cell1.FormattedValue(); err != nil {
 		c.Error(err)
 	} else {
 		c.Assert(val, Equals, "I am Bob")
@@ -160,15 +183,15 @@ func (l *LibSuite) TestGetCoordsFromCellIDString(c *C) {
 	var cellIDString string = "A3"
 	var x, y int
 	var err error
-	x, y, err = getCoordsFromCellIDString(cellIDString)
+	x, y, err = GetCoordsFromCellIDString(cellIDString)
 	c.Assert(err, IsNil)
 	c.Assert(x, Equals, 0)
 	c.Assert(y, Equals, 2)
 }
 
 func (l *LibSuite) TestGetCellIDStringFromCoords(c *C) {
-	c.Assert(getCellIDStringFromCoords(0, 0), Equals, "A1")
-	c.Assert(getCellIDStringFromCoords(2, 2), Equals, "C3")
+	c.Assert(GetCellIDStringFromCoords(0, 0), Equals, "A1")
+	c.Assert(GetCellIDStringFromCoords(2, 2), Equals, "C3")
 }
 
 func (l *LibSuite) TestGetMaxMinFromDimensionRef(c *C) {
@@ -293,7 +316,7 @@ func (l *LibSuite) TestReadRowsFromSheet(c *C) {
   </sheetViews>
   <sheetFormatPr baseColWidth="10" defaultRowHeight="15"/>
   <sheetData>
-    <row r="1" spans="1:2">
+    <row r="1" spans="1:2" ht="123.45" customHeight="1">
       <c r="A1" t="s">
         <v>0</v>
       </c>
@@ -331,6 +354,8 @@ func (l *LibSuite) TestReadRowsFromSheet(c *C) {
 	row := rows[0]
 	c.Assert(row.Sheet, Equals, sheet)
 	c.Assert(len(row.Cells), Equals, 2)
+	c.Assert(row.Height, Equals, 123.45)
+	c.Assert(row.isCustom, Equals, true)
 	cell1 := row.Cells[0]
 	c.Assert(cell1.Value, Equals, "Foo")
 	cell2 := row.Cells[1]
@@ -532,13 +557,13 @@ func (l *LibSuite) TestReadRowsFromSheetWithLeadingEmptyRows(c *C) {
 	c.Assert(len(rows[1].Cells), Equals, 0)
 	c.Assert(len(rows[2].Cells), Equals, 0)
 	c.Assert(len(rows[3].Cells), Equals, 1)
-	if val, err := rows[3].Cells[0].String(); err != nil {
+	if val, err := rows[3].Cells[0].FormattedValue(); err != nil {
 		c.Error(err)
 	} else {
 		c.Assert(val, Equals, "ABC")
 	}
 	c.Assert(len(rows[4].Cells), Equals, 1)
-	if val, err := rows[4].Cells[0].String(); err != nil {
+	if val, err := rows[4].Cells[0].FormattedValue(); err != nil {
 		c.Error(err)
 	} else {
 		c.Assert(val, Equals, "DEF")
@@ -595,43 +620,43 @@ func (l *LibSuite) TestReadRowsFromSheetWithLeadingEmptyCols(c *C) {
 	c.Assert(maxCols, Equals, 4)
 
 	c.Assert(len(rows[0].Cells), Equals, 4)
-	if val, err := rows[0].Cells[0].String(); err != nil {
+	if val, err := rows[0].Cells[0].FormattedValue(); err != nil {
 		c.Error(err)
 	} else {
 		c.Assert(val, Equals, "")
 	}
-	if val, err := rows[0].Cells[1].String(); err != nil {
+	if val, err := rows[0].Cells[1].FormattedValue(); err != nil {
 		c.Error(err)
 	} else {
 		c.Assert(val, Equals, "")
 	}
-	if val, err := rows[0].Cells[2].String(); err != nil {
+	if val, err := rows[0].Cells[2].FormattedValue(); err != nil {
 		c.Error(err)
 	} else {
 		c.Assert(val, Equals, "ABC")
 	}
-	if val, err := rows[0].Cells[3].String(); err != nil {
+	if val, err := rows[0].Cells[3].FormattedValue(); err != nil {
 		c.Error(err)
 	} else {
 		c.Assert(val, Equals, "DEF")
 	}
 	c.Assert(len(rows[1].Cells), Equals, 4)
-	if val, err := rows[1].Cells[0].String(); err != nil {
+	if val, err := rows[1].Cells[0].FormattedValue(); err != nil {
 		c.Error(err)
 	} else {
 		c.Assert(val, Equals, "")
 	}
-	if val, err := rows[1].Cells[1].String(); err != nil {
+	if val, err := rows[1].Cells[1].FormattedValue(); err != nil {
 		c.Error(err)
 	} else {
 		c.Assert(val, Equals, "")
 	}
-	if val, err := rows[1].Cells[2].String(); err != nil {
+	if val, err := rows[1].Cells[2].FormattedValue(); err != nil {
 		c.Error(err)
 	} else {
 		c.Assert(val, Equals, "ABC")
 	}
-	if val, err := rows[1].Cells[3].String(); err != nil {
+	if val, err := rows[1].Cells[3].FormattedValue(); err != nil {
 		c.Error(err)
 	} else {
 		c.Assert(val, Equals, "DEF")
@@ -967,7 +992,7 @@ func (l *LibSuite) TestReadRowsFromSheetWithMultipleTypes(c *C) {
 
 	cell1 := row.Cells[0]
 	c.Assert(cell1.Type(), Equals, CellTypeString)
-	if val, err := cell1.String(); err != nil {
+	if val, err := cell1.FormattedValue(); err != nil {
 		c.Error(err)
 	} else {
 		c.Assert(val, Equals, "Hello World")
@@ -1040,7 +1065,7 @@ func (l *LibSuite) TestReadRowsFromSheetWithHiddenColumn(c *C) {
 
 	cell1 := row.Cells[0]
 	c.Assert(cell1.Type(), Equals, CellTypeString)
-	if val, err := cell1.String(); err != nil {
+	if val, err := cell1.FormattedValue(); err != nil {
 		c.Error(err)
 	} else {
 		c.Assert(val, Equals, "This is a test.")
@@ -1049,7 +1074,7 @@ func (l *LibSuite) TestReadRowsFromSheetWithHiddenColumn(c *C) {
 
 	cell2 := row.Cells[1]
 	c.Assert(cell2.Type(), Equals, CellTypeString)
-	if val, err := cell2.String(); err != nil {
+	if val, err := cell2.FormattedValue(); err != nil {
 		c.Error(err)
 	} else {
 		c.Assert(val, Equals, "This should be invisible.")
@@ -1191,6 +1216,13 @@ func (l *LibSuite) TestSharedFormulasWithAbsoluteReferences(c *C) {
 		"A1+$B$1",
 		"$A$1+$B$1",
 		`IF(C23>=E$12,"Q4",IF(C23>=$D$12,"Q3",IF(C23>=C$12,"Q2","Q1")))`,
+		`SUM(D44:H44)*IM_A_DEFINED_NAME`,
+		`IM_A_DEFINED_NAME+SUM(D44:H44)*IM_A_DEFINED_NAME_ALSO`,
+		`SUM(D44:H44)*IM_A_DEFINED_NAME+A1`,
+		"AA1",
+		"$AA1",
+		"AA$1",
+		"$AA$1",
 	}
 
 	expected := []string{
@@ -1206,12 +1238,19 @@ func (l *LibSuite) TestSharedFormulasWithAbsoluteReferences(c *C) {
 		"B2+$B$1",
 		"$A$1+$B$1",
 		`IF(D24>=F$12,"Q4",IF(D24>=$D$12,"Q3",IF(D24>=D$12,"Q2","Q1")))`,
+		`SUM(E45:I45)*IM_A_DEFINED_NAME`,
+		`IM_A_DEFINED_NAME+SUM(E45:I45)*IM_A_DEFINED_NAME_ALSO`,
+		`SUM(E45:I45)*IM_A_DEFINED_NAME+B2`,
+		"AB2",
+		"$AA2",
+		"AB$1",
+		"$AA$1",
 	}
 
 	anchorCell := "C4"
 
 	sharedFormulas := map[int]sharedFormula{}
-	x, y, _ := getCoordsFromCellIDString(anchorCell)
+	x, y, _ := GetCoordsFromCellIDString(anchorCell)
 	for i, formula := range formulas {
 		res := formula
 		sharedFormulas[i] = sharedFormula{x, y, res}

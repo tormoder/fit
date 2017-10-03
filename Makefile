@@ -111,11 +111,6 @@ getdep:
 
 .PHONY: getchecktools
 getchecktools:
-	@echo "go get'ing tools for static analysis"
-	@go get $(CHECK_TOOLS)
-
-.PHONY: getchecktoolsu
-getchecktoolsu:
 	@echo "go get'ing (-u) tools for static analysis"
 	@go get -u $(CHECK_TOOLS)
 
@@ -128,7 +123,7 @@ check:
 	@go vet ./...
 
 .PHONY: checkfull
-checkfull: getchecktoolsu
+checkfull: getchecktools
 	@echo "check (full):"
 	@echo "gofmt (simplify)"
 	@! gofmt -s -l $(FIT_FILES) | grep -vF 'No Exceptions'

@@ -105,9 +105,9 @@ profobj:
 mdgen:
 	godoc2md $(FIT_PKG_PATH) Fit Header CheckIntegrity > MainApiReference.md
 
-.PHONY: getgvt
-getgvt:
-	go get -u github.com/FiloSottile/gvt
+.PHONY: getdep
+getdep:
+	go get -u github.com/golang/dep
 
 .PHONY: getchecktools
 getchecktools:

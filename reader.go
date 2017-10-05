@@ -526,7 +526,7 @@ func (d *decoder) parseDefinitionMessage(recordHeader byte) (*defmsg, error) {
 	}
 
 	if d.debug {
-		d.opts.logger.Println("definition messages parsed:", dm)
+		d.opts.logger.Println("definition message parsed:", dm)
 	}
 
 	return &dm, nil

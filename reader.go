@@ -680,7 +680,6 @@ func (d *decoder) parseDataMessage(recordHeader byte, compressed bool) (reflect.
 
 func (d *decoder) parseDataFields(dm *defmsg, knownMsg bool, msgv reflect.Value) (reflect.Value, error) {
 	for i, dfield := range dm.fieldDefs {
-
 		dsize := int(dfield.size)
 		padding := 0
 
@@ -742,6 +741,10 @@ func (d *decoder) parseDataFields(dm *defmsg, knownMsg bool, msgv reflect.Value)
 		default:
 			panic("parseDataFields: unreachable: unknown kind")
 		}
+	}
+
+	if knownMsg && !msgv.IsValid() {
+		panic("internal decoder error: parse data fields: known message, but not (reflect) valid")
 	}
 
 	return msgv, nil

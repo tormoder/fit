@@ -518,9 +518,10 @@ func (d *decoder) parseDefinitionMessage(recordHeader byte) (*defmsg, error) {
 		fd.size = d.tmp[(i*3)+1]
 		fd.btype = types.DecodeBase(d.tmp[(i*3)+2])
 		if err = d.validateFieldDef(dm.globalMsgNum, fd); err != nil {
-			return nil, fmt.Errorf(
-				"validating %v failed: %v",
-				dm.globalMsgNum, err)
+			if d.debug {
+				d.opts.logger.Println("illegal definition message:", dm)
+			}
+			return nil, fmt.Errorf("validating %v failed: %v", dm.globalMsgNum, err)
 		}
 		dm.fieldDefs[i] = fd
 	}

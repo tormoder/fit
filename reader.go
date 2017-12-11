@@ -534,7 +534,7 @@ func (d *decoder) parseDefinitionMessage(recordHeader byte) (*defmsg, error) {
 
 func (d *decoder) validateFieldDef(gmsgnum MesgNum, dfield fieldDef) error {
 	if !dfield.btype.Known() {
-		return fmt.Errorf("field %d: unknown base type 0X%X", dfield.num, dfield.btype)
+		return fmt.Errorf("field %d: unknown base type: %v", dfield.num, dfield.btype)
 	}
 
 	var pfield *field

@@ -1,3 +1,6 @@
+// Package types provides the set of base types defined by the FIT protocol.
+// Users of this package must validate base types parsed from a raw byte using
+// the Known method before calling any other methods (except String).
 package types
 
 import "fmt"
@@ -66,7 +69,10 @@ func (t Base) Size() int {
 }
 
 func (t Base) String() string {
-	return bname[t]
+	if t.Known() {
+		return bname[t]
+	}
+	return fmt.Sprintf("unknown (0x%X)", byte(t))
 }
 
 var bsize = [...]int{

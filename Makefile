@@ -20,7 +20,6 @@ CHECK_TOOLS :=	golang.org/x/tools/cmd/goimports \
 		github.com/gordonklaus/ineffassign \
 		github.com/mdempsky/unconvert \
 		mvdan.cc/interfacer \
-		mvdan.cc/unparam \
 		github.com/client9/misspell/cmd/misspell \
 		honnef.co/go/tools/cmd/megacheck/ \
 
@@ -154,5 +153,3 @@ checkfull: getchecktools
 	@! misspell ./**/* | grep -vE '(messages.go|/vendor/|profile/testdata)'
 	@echo "megacheck"
 	@! megacheck $(FIT_PKGS) | grep -vE '(tdoStderrLogger)'
-	@echo "unparam (disabled)"
-	#@unparam $(FIT_PKGS)

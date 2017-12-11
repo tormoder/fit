@@ -1,5 +1,10 @@
 package fit
 
+import (
+	"log"
+	"os"
+)
+
 type decodeOptions struct {
 	logger          Logger
 	unknownFields   bool
@@ -14,6 +19,14 @@ type DecodeOption func(*decodeOptions)
 func WithLogger(logger Logger) DecodeOption {
 	return func(o *decodeOptions) {
 		o.logger = logger
+	}
+}
+
+// WithStdLogger configures the decoder to enable debug logging using the
+// standard library's logger.
+func WithStdLogger() DecodeOption {
+	return func(o *decodeOptions) {
+		o.logger = log.New(os.Stderr, "", 0)
 	}
 }
 

@@ -70,7 +70,7 @@ var tdoOpts = [...][]fit.DecodeOption{
 		fit.WithLogger(discardLogger()), // For test coverage.
 	},
 	{
-		fit.WithLogger(log.New(os.Stderr, "", 0)), // For debugging.
+		fit.WithStdLogger(), // For debugging.
 	},
 }
 

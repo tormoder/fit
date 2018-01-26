@@ -6,7 +6,7 @@
 
 <img src="https://raw.githubusercontent.com/hackraft/gophericons/master/png/2.png" width="225" align="right" hspace="25" />
 
-**This library is at the moment very much in flux.**
+**This library is at the moment not actively maintained.**
 
 fit is a [Go](http://www.golang.org/) package that implements decoding of the
 [Flexible and Interoperable Data Transfer (FIT)

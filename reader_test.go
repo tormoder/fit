@@ -62,7 +62,7 @@ func TestMain(m *testing.M) {
 }
 
 func TestDecode(t *testing.T) {
-	const goMajorVersionForDecodeGolden = "go1.9"
+	const goMajorVersionForDecodeGolden = "go1.10"
 	testDecodeGolden := true
 	goVersion := runtime.Version()
 	goVersionOK := strings.HasPrefix(goVersion, goMajorVersionForDecodeGolden)

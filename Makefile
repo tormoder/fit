@@ -140,7 +140,7 @@ checkfull: getchecktools
 		goconst $$dir ; \
 	done
 	@echo "errcheck"
-	@errcheck -ignore 'bytes:Write*,archive/zip:Close,io:Close,Write' $(FIT_PKGS)
+	@errcheck -ignore 'fmt:Fprinf*,bytes:Write*,archive/zip:Close,io:Close,Write' $(FIT_PKGS)
 	@echo "ineffassign"
 	@for dir in $(FIT_DIRS); do \
 		ineffassign -n $$dir ; \

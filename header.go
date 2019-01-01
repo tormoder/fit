@@ -1,6 +1,7 @@
 package fit
 
 import (
+	"bytes"
 	"encoding/binary"
 	"fmt"
 	"io"
@@ -151,4 +152,45 @@ func (h Header) String() string {
 		"size: %d | protover: %d | profver: %d | dsize: %d | dtype: %s | crc: 0x%x",
 		h.Size, h.ProtocolVersion, h.ProfileVersion, h.DataSize, string(h.DataType[:]), h.CRC,
 	)
+}
+
+// MarshalBinary implements the encoding.BinaryMarshaler interface.
+func (h Header) MarshalBinary() ([]byte, error) {
+	buf := &bytes.Buffer{}
+
+	err := binary.Write(buf, binary.LittleEndian, h.Size)
+	if err != nil {
+		return nil, err
+	}
+
+	err = binary.Write(buf, binary.LittleEndian, h.ProtocolVersion)
+	if err != nil {
+		return nil, err
+	}
+
+	err = binary.Write(buf, binary.LittleEndian, h.ProfileVersion)
+	if err != nil {
+		return nil, err
+	}
+
+	err = binary.Write(buf, binary.LittleEndian, h.DataSize)
+	if err != nil {
+		return nil, err
+	}
+
+	err = binary.Write(buf, binary.LittleEndian, h.DataType)
+	if err != nil {
+		return nil, err
+	}
+
+	h.CRC = dyncrc16.Checksum(buf.Bytes())
+
+	if h.Size == headerSizeCRC {
+		err = binary.Write(buf, binary.LittleEndian, h.CRC)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return buf.Bytes(), nil
 }

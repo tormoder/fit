@@ -321,22 +321,15 @@ func TestEncodeWriteField(t *testing.T) {
 	}
 }
 
-func TestEncodeWriteMesg(t *testing.T) {
-	type TestMesg struct {
-		Type         byte
-		Timestamp    time.Time
-		PositionLat  Latitude
-		PositionLong Longitude
-	}
+type TestMesg struct {
+	Type         byte
+	Timestamp    time.Time
+	PositionLat  Latitude
+	PositionLong Longitude
+}
 
-	mesg := TestMesg{
-		Type:         0x10,
-		Timestamp:    timeBase.Add(32 * time.Second),
-		PositionLat:  NewLatitudeDegrees(50.2053),
-		PositionLong: NewLongitudeDegrees(0.1218),
-	}
-
-	def := &encodeMesgDef{
+func testMesgDef() *encodeMesgDef {
+	return &encodeMesgDef{
 		localMesgNum: 3,
 		fields: []*field{
 			{
@@ -360,6 +353,17 @@ func TestEncodeWriteMesg(t *testing.T) {
 			},
 		},
 	}
+}
+
+func TestEncodeWriteMesg(t *testing.T) {
+	mesg := TestMesg{
+		Type:         0x10,
+		Timestamp:    timeBase.Add(32 * time.Second),
+		PositionLat:  NewLatitudeDegrees(50.2053),
+		PositionLong: NewLongitudeDegrees(0.1218),
+	}
+
+	def := testMesgDef()
 
 	expect := []byte{
 		0x03,
@@ -378,6 +382,141 @@ func TestEncodeWriteMesg(t *testing.T) {
 	err := e.writeMesg(reflect.ValueOf(mesg), def)
 	if err != nil {
 		t.Fatal(err)
+	}
+
+	if !bytes.Equal(buf.Bytes(), expect) {
+		t.Errorf("Expected '%v', got '%v'", expect, buf.Bytes())
+	}
+}
+
+func (a *encodeMesgDef) Equals(b *encodeMesgDef) bool {
+	if a.globalMesgNum != b.globalMesgNum {
+		return false
+	}
+
+	if a.localMesgNum != b.localMesgNum {
+		return false
+	}
+
+	if len(a.fields) != len(b.fields) {
+		return false
+	}
+
+	for i, f := range a.fields {
+		if *f != *b.fields[i] {
+			return false
+		}
+	}
+
+	return true
+}
+
+func testFileIdMsg() FileIdMsg {
+	return FileIdMsg{
+		Type:         FileTypeActivity,
+		Manufacturer: ManufacturerDynastream,
+		Product:      uint16(GarminProductEdge25),
+		SerialNumber: 0x00,     // Invalid field, should be skipped
+		TimeCreated:  timeBase, // Invalid field, should be skipped
+		Number:       0xffff,   // Invalid field, should be skipped
+		ProductName:  "",       // Invalid field, should be skipped
+	}
+}
+
+func TestGetEncodeMesgDef(t *testing.T) {
+	mesg := testFileIdMsg()
+
+	def := &encodeMesgDef{
+		globalMesgNum: MesgNumFileId,
+		localMesgNum:  2,
+		fields: []*field{
+			{
+				sindex: 0,
+				num:    0,
+				t:      types.Fit(0),
+				length: 1,
+			},
+			{
+				sindex: 1,
+				num:    1,
+				t:      types.Fit(4),
+				length: 1,
+			},
+			{
+				sindex: 2,
+				num:    2,
+				t:      types.Fit(4),
+				length: 1,
+			},
+		},
+	}
+
+	got := getEncodeMesgDef(reflect.ValueOf(mesg), 2)
+
+	if !got.Equals(def) {
+		t.Errorf("Expected '%+v', got '%+v'", def, got)
+	}
+}
+
+func TestWriteDefMesg(t *testing.T) {
+	mesg := testFileIdMsg()
+	def := getEncodeMesgDef(reflect.ValueOf(mesg), 2)
+
+	buf := &bytes.Buffer{}
+
+	e := &encoder{
+		w:    buf,
+		arch: binary.LittleEndian,
+	}
+
+	err := e.writeDefMesg(def)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	expect := []byte{
+		(1 << 6) | 2,
+		0,
+		0,
+		byte(MesgNumFileId & 0xFF), byte(MesgNumFileId >> 8),
+		3,
+		0, 1, 0,
+		1, 2, 4,
+		2, 2, 4,
+	}
+
+	if !bytes.Equal(buf.Bytes(), expect) {
+		t.Errorf("Expected '%v', got '%v'", expect, buf.Bytes())
+	}
+}
+
+func TestWriteDefMesgArray(t *testing.T) {
+	mesg := CapabilitiesMsg{
+		Languages: []uint8{0x1},
+		Sports:    []SportBits0{0x1, 0x2},
+	}
+	def := getEncodeMesgDef(reflect.ValueOf(mesg), 2)
+
+	buf := &bytes.Buffer{}
+
+	e := &encoder{
+		w:    buf,
+		arch: binary.LittleEndian,
+	}
+
+	err := e.writeDefMesg(def)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	expect := []byte{
+		(1 << 6) | 2,
+		0,
+		0,
+		byte(MesgNumCapabilities & 0xFF), byte(MesgNumCapabilities >> 8),
+		2,
+		0, 4, 10,
+		1, 1, 10,
 	}
 
 	if !bytes.Equal(buf.Bytes(), expect) {

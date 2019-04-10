@@ -156,6 +156,7 @@ func (g *codeGenerator) genMsgs(msgs []*Msg) {
 		g.p("type ", msg.CCName, "Msg", " struct {")
 		scaledfs, dynfs, compfs, dyncompfs := g.genFields(msg)
 		g.p("}")
+		g.genConstructor(msg)
 		for _, scaledfi := range scaledfs {
 			g.genScaledGetter(msg, scaledfi)
 		}
@@ -198,6 +199,18 @@ func (g *codeGenerator) genFields(msg *Msg) (scaledfi, dynfi, compfi []int, dync
 		}
 	}
 	return
+}
+
+func (g *codeGenerator) genConstructor(msg *Msg) {
+	g.p("// New", msg.CCName, "Msg returns a ", msg.Name, " FIT message")
+	g.p("// initialized to all-invalid values.")
+	g.p("func New", msg.CCName, "Msg() *", msg.CCName, "Msg {")
+	g.p("return &", msg.CCName, "Msg{")
+	for _, f := range msg.Fields {
+		g.p(f.CCName, ": ", f.FType.GoInvalidValue(), ",")
+	}
+	g.p("}")
+	g.p("}")
 }
 
 func (g *codeGenerator) genScaledGetter(msg *Msg, fieldIndex int) {

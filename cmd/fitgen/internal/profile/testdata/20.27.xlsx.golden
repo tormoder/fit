@@ -2502,6 +2502,20 @@ type FileIdMsg struct {
 	ProductName  string    // Optional free form string to indicate the devices name or model
 }
 
+// NewFileIdMsg returns a file_id FIT message
+// initialized to all-invalid values.
+func NewFileIdMsg() *FileIdMsg {
+	return &FileIdMsg{
+		Type:         0xFF,
+		Manufacturer: 0xFFFF,
+		Product:      0xFFFF,
+		SerialNumber: 0x00000000,
+		TimeCreated:  timeBase,
+		Number:       0xFFFF,
+		ProductName:  "",
+	}
+}
+
 // GetProduct returns the appropriate Product
 // subfield if a matching reference field/value combination is found.
 // If none of the reference field/value combinations are true
@@ -2521,8 +2535,23 @@ type FileCreatorMsg struct {
 	HardwareVersion uint8
 }
 
+// NewFileCreatorMsg returns a file_creator FIT message
+// initialized to all-invalid values.
+func NewFileCreatorMsg() *FileCreatorMsg {
+	return &FileCreatorMsg{
+		SoftwareVersion: 0xFFFF,
+		HardwareVersion: 0xFF,
+	}
+}
+
 // TimestampCorrelationMsg represents the timestamp_correlation FIT message type.
 type TimestampCorrelationMsg struct {
+}
+
+// NewTimestampCorrelationMsg returns a timestamp_correlation FIT message
+// initialized to all-invalid values.
+func NewTimestampCorrelationMsg() *TimestampCorrelationMsg {
+	return &TimestampCorrelationMsg{}
 }
 
 // SoftwareMsg represents the software FIT message type.
@@ -2530,6 +2559,16 @@ type SoftwareMsg struct {
 	MessageIndex MessageIndex
 	Version      uint16
 	PartNumber   string
+}
+
+// NewSoftwareMsg returns a software FIT message
+// initialized to all-invalid values.
+func NewSoftwareMsg() *SoftwareMsg {
+	return &SoftwareMsg{
+		MessageIndex: 0xFFFF,
+		Version:      0xFFFF,
+		PartNumber:   "",
+	}
 }
 
 // GetVersionScaled returns Version
@@ -2546,6 +2585,15 @@ func (x *SoftwareMsg) GetVersionScaled() float64 {
 type SlaveDeviceMsg struct {
 	Manufacturer Manufacturer
 	Product      uint16
+}
+
+// NewSlaveDeviceMsg returns a slave_device FIT message
+// initialized to all-invalid values.
+func NewSlaveDeviceMsg() *SlaveDeviceMsg {
+	return &SlaveDeviceMsg{
+		Manufacturer: 0xFFFF,
+		Product:      0xFFFF,
+	}
 }
 
 // GetProduct returns the appropriate Product
@@ -2569,6 +2617,17 @@ type CapabilitiesMsg struct {
 	ConnectivitySupported ConnectivityCapabilities
 }
 
+// NewCapabilitiesMsg returns a capabilities FIT message
+// initialized to all-invalid values.
+func NewCapabilitiesMsg() *CapabilitiesMsg {
+	return &CapabilitiesMsg{
+		Languages:             nil,
+		Sports:                nil,
+		WorkoutsSupported:     0x00000000,
+		ConnectivitySupported: 0x00000000,
+	}
+}
+
 // FileCapabilitiesMsg represents the file_capabilities FIT message type.
 type FileCapabilitiesMsg struct {
 	MessageIndex MessageIndex
@@ -2579,6 +2638,19 @@ type FileCapabilitiesMsg struct {
 	MaxSize      uint32
 }
 
+// NewFileCapabilitiesMsg returns a file_capabilities FIT message
+// initialized to all-invalid values.
+func NewFileCapabilitiesMsg() *FileCapabilitiesMsg {
+	return &FileCapabilitiesMsg{
+		MessageIndex: 0xFFFF,
+		Type:         0xFF,
+		Flags:        0x00,
+		Directory:    "",
+		MaxCount:     0xFFFF,
+		MaxSize:      0xFFFFFFFF,
+	}
+}
+
 // MesgCapabilitiesMsg represents the mesg_capabilities FIT message type.
 type MesgCapabilitiesMsg struct {
 	MessageIndex MessageIndex
@@ -2586,6 +2658,18 @@ type MesgCapabilitiesMsg struct {
 	MesgNum      MesgNum
 	CountType    MesgCount
 	Count        uint16
+}
+
+// NewMesgCapabilitiesMsg returns a mesg_capabilities FIT message
+// initialized to all-invalid values.
+func NewMesgCapabilitiesMsg() *MesgCapabilitiesMsg {
+	return &MesgCapabilitiesMsg{
+		MessageIndex: 0xFFFF,
+		File:         0xFF,
+		MesgNum:      0xFFFF,
+		CountType:    0xFF,
+		Count:        0xFFFF,
+	}
 }
 
 // GetCount returns the appropriate Count
@@ -2614,6 +2698,18 @@ type FieldCapabilitiesMsg struct {
 	Count        uint16
 }
 
+// NewFieldCapabilitiesMsg returns a field_capabilities FIT message
+// initialized to all-invalid values.
+func NewFieldCapabilitiesMsg() *FieldCapabilitiesMsg {
+	return &FieldCapabilitiesMsg{
+		MessageIndex: 0xFFFF,
+		File:         0xFF,
+		MesgNum:      0xFFFF,
+		FieldNum:     0xFF,
+		Count:        0xFFFF,
+	}
+}
+
 // DeviceSettingsMsg represents the device_settings FIT message type.
 type DeviceSettingsMsg struct {
 	ActiveTimeZone         uint8         // Index into time zone arrays.
@@ -2632,6 +2728,29 @@ type DeviceSettingsMsg struct {
 	DefaultPage            []uint16 // Bitfield to indicate one page as default for each supported loop
 	AutosyncMinSteps       uint16   // Minimum steps before an autosync can occur
 	AutosyncMinTime        uint16   // Minimum minutes before an autosync can occur
+}
+
+// NewDeviceSettingsMsg returns a device_settings FIT message
+// initialized to all-invalid values.
+func NewDeviceSettingsMsg() *DeviceSettingsMsg {
+	return &DeviceSettingsMsg{
+		ActiveTimeZone:         0xFF,
+		UtcOffset:              0xFFFFFFFF,
+		TimeOffset:             nil,
+		TimeMode:               nil,
+		TimeZoneOffset:         nil,
+		BacklightMode:          0xFF,
+		ActivityTrackerEnabled: 0xFF,
+		ClockTime:              timeBase,
+		PagesEnabled:           nil,
+		MoveAlertEnabled:       0xFF,
+		DateMode:               0xFF,
+		DisplayOrientation:     0xFF,
+		MountingSide:           0xFF,
+		DefaultPage:            nil,
+		AutosyncMinSteps:       0xFFFF,
+		AutosyncMinTime:        0xFFFF,
+	}
 }
 
 // GetTimeZoneOffsetScaled returns TimeZoneOffset
@@ -2675,6 +2794,38 @@ type UserProfileMsg struct {
 	HeightSetting              DisplayMeasure
 	UserRunningStepLength      uint16 // User defined running step length set to 0 for auto length
 	UserWalkingStepLength      uint16 // User defined walking step length set to 0 for auto length
+}
+
+// NewUserProfileMsg returns a user_profile FIT message
+// initialized to all-invalid values.
+func NewUserProfileMsg() *UserProfileMsg {
+	return &UserProfileMsg{
+		MessageIndex:               0xFFFF,
+		FriendlyName:               "",
+		Gender:                     0xFF,
+		Age:                        0xFF,
+		Height:                     0xFF,
+		Weight:                     0xFFFF,
+		Language:                   0xFF,
+		ElevSetting:                0xFF,
+		WeightSetting:              0xFF,
+		RestingHeartRate:           0xFF,
+		DefaultMaxRunningHeartRate: 0xFF,
+		DefaultMaxBikingHeartRate:  0xFF,
+		DefaultMaxHeartRate:        0xFF,
+		HrSetting:                  0xFF,
+		SpeedSetting:               0xFF,
+		DistSetting:                0xFF,
+		PowerSetting:               0xFF,
+		ActivityClass:              0xFF,
+		PositionSetting:            0xFF,
+		TemperatureSetting:         0xFF,
+		LocalId:                    0xFFFF,
+		GlobalId:                   nil,
+		HeightSetting:              0xFF,
+		UserRunningStepLength:      0xFFFF,
+		UserWalkingStepLength:      0xFFFF,
+	}
 }
 
 // GetHeightScaled returns Height
@@ -2730,6 +2881,18 @@ type HrmProfileMsg struct {
 	HrmAntIdTransType uint8
 }
 
+// NewHrmProfileMsg returns a hrm_profile FIT message
+// initialized to all-invalid values.
+func NewHrmProfileMsg() *HrmProfileMsg {
+	return &HrmProfileMsg{
+		MessageIndex:      0xFFFF,
+		Enabled:           0xFF,
+		HrmAntId:          0x0000,
+		LogHrv:            0xFF,
+		HrmAntIdTransType: 0x00,
+	}
+}
+
 // SdmProfileMsg represents the sdm_profile FIT message type.
 type SdmProfileMsg struct {
 	MessageIndex      MessageIndex
@@ -2740,6 +2903,21 @@ type SdmProfileMsg struct {
 	SpeedSource       Bool // Use footpod for speed source instead of GPS
 	SdmAntIdTransType uint8
 	OdometerRollover  uint8 // Rollover counter that can be used to extend the odometer
+}
+
+// NewSdmProfileMsg returns a sdm_profile FIT message
+// initialized to all-invalid values.
+func NewSdmProfileMsg() *SdmProfileMsg {
+	return &SdmProfileMsg{
+		MessageIndex:      0xFFFF,
+		Enabled:           0xFF,
+		SdmAntId:          0x0000,
+		SdmCalFactor:      0xFFFF,
+		Odometer:          0xFFFFFFFF,
+		SpeedSource:       0xFF,
+		SdmAntIdTransType: 0x00,
+		OdometerRollover:  0xFF,
+	}
 }
 
 // GetSdmCalFactorScaled returns SdmCalFactor
@@ -2798,6 +2976,45 @@ type BikeProfileMsg struct {
 	RearGearNum              uint8   // Number of rear gears
 	RearGear                 []uint8 // Number of teeth on each gear 0 is innermost
 	ShimanoDi2Enabled        Bool
+}
+
+// NewBikeProfileMsg returns a bike_profile FIT message
+// initialized to all-invalid values.
+func NewBikeProfileMsg() *BikeProfileMsg {
+	return &BikeProfileMsg{
+		MessageIndex:             0xFFFF,
+		Name:                     "",
+		Sport:                    0xFF,
+		SubSport:                 0xFF,
+		Odometer:                 0xFFFFFFFF,
+		BikeSpdAntId:             0x0000,
+		BikeCadAntId:             0x0000,
+		BikeSpdcadAntId:          0x0000,
+		BikePowerAntId:           0x0000,
+		CustomWheelsize:          0xFFFF,
+		AutoWheelsize:            0xFFFF,
+		BikeWeight:               0xFFFF,
+		PowerCalFactor:           0xFFFF,
+		AutoWheelCal:             0xFF,
+		AutoPowerZero:            0xFF,
+		Id:                       0xFF,
+		SpdEnabled:               0xFF,
+		CadEnabled:               0xFF,
+		SpdcadEnabled:            0xFF,
+		PowerEnabled:             0xFF,
+		CrankLength:              0xFF,
+		Enabled:                  0xFF,
+		BikeSpdAntIdTransType:    0x00,
+		BikeCadAntIdTransType:    0x00,
+		BikeSpdcadAntIdTransType: 0x00,
+		BikePowerAntIdTransType:  0x00,
+		OdometerRollover:         0xFF,
+		FrontGearNum:             0x00,
+		FrontGear:                nil,
+		RearGearNum:              0x00,
+		RearGear:                 nil,
+		ShimanoDi2Enabled:        0xFF,
+	}
 }
 
 // GetOdometerScaled returns Odometer
@@ -2883,12 +3100,44 @@ type ConnectivityMsg struct {
 	GrouptrackEnabled           Bool
 }
 
+// NewConnectivityMsg returns a connectivity FIT message
+// initialized to all-invalid values.
+func NewConnectivityMsg() *ConnectivityMsg {
+	return &ConnectivityMsg{
+		BluetoothEnabled:            0xFF,
+		BluetoothLeEnabled:          0xFF,
+		AntEnabled:                  0xFF,
+		Name:                        "",
+		LiveTrackingEnabled:         0xFF,
+		WeatherConditionsEnabled:    0xFF,
+		WeatherAlertsEnabled:        0xFF,
+		AutoActivityUploadEnabled:   0xFF,
+		CourseDownloadEnabled:       0xFF,
+		WorkoutDownloadEnabled:      0xFF,
+		GpsEphemerisDownloadEnabled: 0xFF,
+		IncidentDetectionEnabled:    0xFF,
+		GrouptrackEnabled:           0xFF,
+	}
+}
+
 // WatchfaceSettingsMsg represents the watchface_settings FIT message type.
 type WatchfaceSettingsMsg struct {
 }
 
+// NewWatchfaceSettingsMsg returns a watchface_settings FIT message
+// initialized to all-invalid values.
+func NewWatchfaceSettingsMsg() *WatchfaceSettingsMsg {
+	return &WatchfaceSettingsMsg{}
+}
+
 // OhrSettingsMsg represents the ohr_settings FIT message type.
 type OhrSettingsMsg struct {
+}
+
+// NewOhrSettingsMsg returns a ohr_settings FIT message
+// initialized to all-invalid values.
+func NewOhrSettingsMsg() *OhrSettingsMsg {
+	return &OhrSettingsMsg{}
 }
 
 // ZonesTargetMsg represents the zones_target FIT message type.
@@ -2900,11 +3149,33 @@ type ZonesTargetMsg struct {
 	PwrCalcType              PwrZoneCalc
 }
 
+// NewZonesTargetMsg returns a zones_target FIT message
+// initialized to all-invalid values.
+func NewZonesTargetMsg() *ZonesTargetMsg {
+	return &ZonesTargetMsg{
+		MaxHeartRate:             0xFF,
+		ThresholdHeartRate:       0xFF,
+		FunctionalThresholdPower: 0xFFFF,
+		HrCalcType:               0xFF,
+		PwrCalcType:              0xFF,
+	}
+}
+
 // SportMsg represents the sport FIT message type.
 type SportMsg struct {
 	Sport    Sport
 	SubSport SubSport
 	Name     string
+}
+
+// NewSportMsg returns a sport FIT message
+// initialized to all-invalid values.
+func NewSportMsg() *SportMsg {
+	return &SportMsg{
+		Sport:    0xFF,
+		SubSport: 0xFF,
+		Name:     "",
+	}
 }
 
 // HrZoneMsg represents the hr_zone FIT message type.
@@ -2914,11 +3185,31 @@ type HrZoneMsg struct {
 	Name         string
 }
 
+// NewHrZoneMsg returns a hr_zone FIT message
+// initialized to all-invalid values.
+func NewHrZoneMsg() *HrZoneMsg {
+	return &HrZoneMsg{
+		MessageIndex: 0xFFFF,
+		HighBpm:      0xFF,
+		Name:         "",
+	}
+}
+
 // SpeedZoneMsg represents the speed_zone FIT message type.
 type SpeedZoneMsg struct {
 	MessageIndex MessageIndex
 	HighValue    uint16
 	Name         string
+}
+
+// NewSpeedZoneMsg returns a speed_zone FIT message
+// initialized to all-invalid values.
+func NewSpeedZoneMsg() *SpeedZoneMsg {
+	return &SpeedZoneMsg{
+		MessageIndex: 0xFFFF,
+		HighValue:    0xFFFF,
+		Name:         "",
+	}
 }
 
 // GetHighValueScaled returns HighValue
@@ -2939,11 +3230,31 @@ type CadenceZoneMsg struct {
 	Name         string
 }
 
+// NewCadenceZoneMsg returns a cadence_zone FIT message
+// initialized to all-invalid values.
+func NewCadenceZoneMsg() *CadenceZoneMsg {
+	return &CadenceZoneMsg{
+		MessageIndex: 0xFFFF,
+		HighValue:    0xFF,
+		Name:         "",
+	}
+}
+
 // PowerZoneMsg represents the power_zone FIT message type.
 type PowerZoneMsg struct {
 	MessageIndex MessageIndex
 	HighValue    uint16
 	Name         string
+}
+
+// NewPowerZoneMsg returns a power_zone FIT message
+// initialized to all-invalid values.
+func NewPowerZoneMsg() *PowerZoneMsg {
+	return &PowerZoneMsg{
+		MessageIndex: 0xFFFF,
+		HighValue:    0xFFFF,
+		Name:         "",
+	}
 }
 
 // MetZoneMsg represents the met_zone FIT message type.
@@ -2952,6 +3263,17 @@ type MetZoneMsg struct {
 	HighBpm      uint8
 	Calories     uint16
 	FatCalories  uint8
+}
+
+// NewMetZoneMsg returns a met_zone FIT message
+// initialized to all-invalid values.
+func NewMetZoneMsg() *MetZoneMsg {
+	return &MetZoneMsg{
+		MessageIndex: 0xFFFF,
+		HighBpm:      0xFF,
+		Calories:     0xFFFF,
+		FatCalories:  0xFF,
+	}
 }
 
 // GetCaloriesScaled returns Calories
@@ -2993,6 +3315,26 @@ type GoalMsg struct {
 	Source          GoalSource
 }
 
+// NewGoalMsg returns a goal FIT message
+// initialized to all-invalid values.
+func NewGoalMsg() *GoalMsg {
+	return &GoalMsg{
+		MessageIndex:    0xFFFF,
+		Sport:           0xFF,
+		SubSport:        0xFF,
+		StartDate:       timeBase,
+		EndDate:         timeBase,
+		Type:            0xFF,
+		Value:           0xFFFFFFFF,
+		Repeat:          0xFF,
+		TargetValue:     0xFFFFFFFF,
+		Recurrence:      0xFF,
+		RecurrenceValue: 0xFFFF,
+		Enabled:         0xFF,
+		Source:          0xFF,
+	}
+}
+
 // ActivityMsg represents the activity FIT message type.
 type ActivityMsg struct {
 	Timestamp      time.Time
@@ -3003,6 +3345,21 @@ type ActivityMsg struct {
 	EventType      EventType
 	LocalTimestamp time.Time // timestamp epoch expressed in local time, used to convert activity timestamps to local time
 	EventGroup     uint8
+}
+
+// NewActivityMsg returns a activity FIT message
+// initialized to all-invalid values.
+func NewActivityMsg() *ActivityMsg {
+	return &ActivityMsg{
+		Timestamp:      timeBase,
+		TotalTimerTime: 0xFFFFFFFF,
+		NumSessions:    0xFFFF,
+		Type:           0xFF,
+		Event:          0xFF,
+		EventType:      0xFF,
+		LocalTimestamp: timeBase,
+		EventGroup:     0xFF,
+	}
 }
 
 // GetTotalTimerTimeScaled returns TotalTimerTime
@@ -3108,6 +3465,103 @@ type SessionMsg struct {
 	EnhancedMaxAltitude          uint32
 	TotalAnaerobicTrainingEffect uint8
 	AvgVam                       uint16
+}
+
+// NewSessionMsg returns a session FIT message
+// initialized to all-invalid values.
+func NewSessionMsg() *SessionMsg {
+	return &SessionMsg{
+		MessageIndex:                 0xFFFF,
+		Timestamp:                    timeBase,
+		Event:                        0xFF,
+		EventType:                    0xFF,
+		StartTime:                    timeBase,
+		StartPositionLat:             NewLatitudeInvalid(),
+		StartPositionLong:            NewLongitudeInvalid(),
+		Sport:                        0xFF,
+		SubSport:                     0xFF,
+		TotalElapsedTime:             0xFFFFFFFF,
+		TotalTimerTime:               0xFFFFFFFF,
+		TotalDistance:                0xFFFFFFFF,
+		TotalCycles:                  0xFFFFFFFF,
+		TotalCalories:                0xFFFF,
+		TotalFatCalories:             0xFFFF,
+		AvgSpeed:                     0xFFFF,
+		MaxSpeed:                     0xFFFF,
+		AvgHeartRate:                 0xFF,
+		MaxHeartRate:                 0xFF,
+		AvgCadence:                   0xFF,
+		MaxCadence:                   0xFF,
+		AvgPower:                     0xFFFF,
+		MaxPower:                     0xFFFF,
+		TotalAscent:                  0xFFFF,
+		TotalDescent:                 0xFFFF,
+		TotalTrainingEffect:          0xFF,
+		FirstLapIndex:                0xFFFF,
+		NumLaps:                      0xFFFF,
+		EventGroup:                   0xFF,
+		Trigger:                      0xFF,
+		NecLat:                       NewLatitudeInvalid(),
+		NecLong:                      NewLongitudeInvalid(),
+		SwcLat:                       NewLatitudeInvalid(),
+		SwcLong:                      NewLongitudeInvalid(),
+		NormalizedPower:              0xFFFF,
+		TrainingStressScore:          0xFFFF,
+		IntensityFactor:              0xFFFF,
+		LeftRightBalance:             0xFFFF,
+		AvgStrokeCount:               0xFFFFFFFF,
+		AvgStrokeDistance:            0xFFFF,
+		SwimStroke:                   0xFF,
+		PoolLength:                   0xFFFF,
+		ThresholdPower:               0xFFFF,
+		PoolLengthUnit:               0xFF,
+		NumActiveLengths:             0xFFFF,
+		TotalWork:                    0xFFFFFFFF,
+		AvgAltitude:                  0xFFFF,
+		MaxAltitude:                  0xFFFF,
+		GpsAccuracy:                  0xFF,
+		AvgGrade:                     0x7FFF,
+		AvgPosGrade:                  0x7FFF,
+		AvgNegGrade:                  0x7FFF,
+		MaxPosGrade:                  0x7FFF,
+		MaxNegGrade:                  0x7FFF,
+		AvgTemperature:               0x7F,
+		MaxTemperature:               0x7F,
+		TotalMovingTime:              0xFFFFFFFF,
+		AvgPosVerticalSpeed:          0x7FFF,
+		AvgNegVerticalSpeed:          0x7FFF,
+		MaxPosVerticalSpeed:          0x7FFF,
+		MaxNegVerticalSpeed:          0x7FFF,
+		MinHeartRate:                 0xFF,
+		TimeInHrZone:                 nil,
+		TimeInSpeedZone:              nil,
+		TimeInCadenceZone:            nil,
+		TimeInPowerZone:              nil,
+		AvgLapTime:                   0xFFFFFFFF,
+		BestLapIndex:                 0xFFFF,
+		MinAltitude:                  0xFFFF,
+		PlayerScore:                  0xFFFF,
+		OpponentScore:                0xFFFF,
+		OpponentName:                 "",
+		StrokeCount:                  nil,
+		ZoneCount:                    nil,
+		MaxBallSpeed:                 0xFFFF,
+		AvgBallSpeed:                 0xFFFF,
+		AvgVerticalOscillation:       0xFFFF,
+		AvgStanceTimePercent:         0xFFFF,
+		AvgStanceTime:                0xFFFF,
+		AvgFractionalCadence:         0xFF,
+		MaxFractionalCadence:         0xFF,
+		TotalFractionalCycles:        0xFF,
+		SportIndex:                   0xFF,
+		EnhancedAvgSpeed:             0xFFFFFFFF,
+		EnhancedMaxSpeed:             0xFFFFFFFF,
+		EnhancedAvgAltitude:          0xFFFFFFFF,
+		EnhancedMinAltitude:          0xFFFFFFFF,
+		EnhancedMaxAltitude:          0xFFFFFFFF,
+		TotalAnaerobicTrainingEffect: 0xFF,
+		AvgVam:                       0xFFFF,
+	}
 }
 
 // GetTotalElapsedTimeScaled returns TotalElapsedTime
@@ -3758,6 +4212,96 @@ type LapMsg struct {
 	AvgVam                        uint16
 }
 
+// NewLapMsg returns a lap FIT message
+// initialized to all-invalid values.
+func NewLapMsg() *LapMsg {
+	return &LapMsg{
+		MessageIndex:                  0xFFFF,
+		Timestamp:                     timeBase,
+		Event:                         0xFF,
+		EventType:                     0xFF,
+		StartTime:                     timeBase,
+		StartPositionLat:              NewLatitudeInvalid(),
+		StartPositionLong:             NewLongitudeInvalid(),
+		EndPositionLat:                NewLatitudeInvalid(),
+		EndPositionLong:               NewLongitudeInvalid(),
+		TotalElapsedTime:              0xFFFFFFFF,
+		TotalTimerTime:                0xFFFFFFFF,
+		TotalDistance:                 0xFFFFFFFF,
+		TotalCycles:                   0xFFFFFFFF,
+		TotalCalories:                 0xFFFF,
+		TotalFatCalories:              0xFFFF,
+		AvgSpeed:                      0xFFFF,
+		MaxSpeed:                      0xFFFF,
+		AvgHeartRate:                  0xFF,
+		MaxHeartRate:                  0xFF,
+		AvgCadence:                    0xFF,
+		MaxCadence:                    0xFF,
+		AvgPower:                      0xFFFF,
+		MaxPower:                      0xFFFF,
+		TotalAscent:                   0xFFFF,
+		TotalDescent:                  0xFFFF,
+		Intensity:                     0xFF,
+		LapTrigger:                    0xFF,
+		Sport:                         0xFF,
+		EventGroup:                    0xFF,
+		NumLengths:                    0xFFFF,
+		NormalizedPower:               0xFFFF,
+		LeftRightBalance:              0xFFFF,
+		FirstLengthIndex:              0xFFFF,
+		AvgStrokeDistance:             0xFFFF,
+		SwimStroke:                    0xFF,
+		SubSport:                      0xFF,
+		NumActiveLengths:              0xFFFF,
+		TotalWork:                     0xFFFFFFFF,
+		AvgAltitude:                   0xFFFF,
+		MaxAltitude:                   0xFFFF,
+		GpsAccuracy:                   0xFF,
+		AvgGrade:                      0x7FFF,
+		AvgPosGrade:                   0x7FFF,
+		AvgNegGrade:                   0x7FFF,
+		MaxPosGrade:                   0x7FFF,
+		MaxNegGrade:                   0x7FFF,
+		AvgTemperature:                0x7F,
+		MaxTemperature:                0x7F,
+		TotalMovingTime:               0xFFFFFFFF,
+		AvgPosVerticalSpeed:           0x7FFF,
+		AvgNegVerticalSpeed:           0x7FFF,
+		MaxPosVerticalSpeed:           0x7FFF,
+		MaxNegVerticalSpeed:           0x7FFF,
+		TimeInHrZone:                  nil,
+		TimeInSpeedZone:               nil,
+		TimeInCadenceZone:             nil,
+		TimeInPowerZone:               nil,
+		RepetitionNum:                 0xFFFF,
+		MinAltitude:                   0xFFFF,
+		MinHeartRate:                  0xFF,
+		WktStepIndex:                  0xFFFF,
+		OpponentScore:                 0xFFFF,
+		StrokeCount:                   nil,
+		ZoneCount:                     nil,
+		AvgVerticalOscillation:        0xFFFF,
+		AvgStanceTimePercent:          0xFFFF,
+		AvgStanceTime:                 0xFFFF,
+		AvgFractionalCadence:          0xFF,
+		MaxFractionalCadence:          0xFF,
+		TotalFractionalCycles:         0xFF,
+		PlayerScore:                   0xFFFF,
+		AvgTotalHemoglobinConc:        nil,
+		MinTotalHemoglobinConc:        nil,
+		MaxTotalHemoglobinConc:        nil,
+		AvgSaturatedHemoglobinPercent: nil,
+		MinSaturatedHemoglobinPercent: nil,
+		MaxSaturatedHemoglobinPercent: nil,
+		EnhancedAvgSpeed:              0xFFFFFFFF,
+		EnhancedMaxSpeed:              0xFFFFFFFF,
+		EnhancedAvgAltitude:           0xFFFFFFFF,
+		EnhancedMinAltitude:           0xFFFFFFFF,
+		EnhancedMaxAltitude:           0xFFFFFFFF,
+		AvgVam:                        0xFFFF,
+	}
+}
+
 // GetTotalElapsedTimeScaled returns TotalElapsedTime
 // with scale and any offset applied. NaN is returned if the
 // field has an invalid value (i.e. has not been set).
@@ -4328,6 +4872,31 @@ type LengthMsg struct {
 	ZoneCount          []uint16 // zone number used as the index
 }
 
+// NewLengthMsg returns a length FIT message
+// initialized to all-invalid values.
+func NewLengthMsg() *LengthMsg {
+	return &LengthMsg{
+		MessageIndex:       0xFFFF,
+		Timestamp:          timeBase,
+		Event:              0xFF,
+		EventType:          0xFF,
+		StartTime:          timeBase,
+		TotalElapsedTime:   0xFFFFFFFF,
+		TotalTimerTime:     0xFFFFFFFF,
+		TotalStrokes:       0xFFFF,
+		AvgSpeed:           0xFFFF,
+		SwimStroke:         0xFF,
+		AvgSwimmingCadence: 0xFF,
+		EventGroup:         0xFF,
+		TotalCalories:      0xFFFF,
+		LengthType:         0xFF,
+		PlayerScore:        0xFFFF,
+		OpponentScore:      0xFFFF,
+		StrokeCount:        nil,
+		ZoneCount:          nil,
+	}
+}
+
 // GetTotalElapsedTimeScaled returns TotalElapsedTime
 // with scale and any offset applied. NaN is returned if the
 // field has an invalid value (i.e. has not been set).
@@ -4411,6 +4980,61 @@ type RecordMsg struct {
 	DeviceIndex                   DeviceIndex
 	EnhancedSpeed                 uint32
 	EnhancedAltitude              uint32
+}
+
+// NewRecordMsg returns a record FIT message
+// initialized to all-invalid values.
+func NewRecordMsg() *RecordMsg {
+	return &RecordMsg{
+		Timestamp:                     timeBase,
+		PositionLat:                   NewLatitudeInvalid(),
+		PositionLong:                  NewLongitudeInvalid(),
+		Altitude:                      0xFFFF,
+		HeartRate:                     0xFF,
+		Cadence:                       0xFF,
+		Distance:                      0xFFFFFFFF,
+		Speed:                         0xFFFF,
+		Power:                         0xFFFF,
+		CompressedSpeedDistance:       nil,
+		Grade:                         0x7FFF,
+		Resistance:                    0xFF,
+		TimeFromCourse:                0x7FFFFFFF,
+		CycleLength:                   0xFF,
+		Temperature:                   0x7F,
+		Speed1s:                       nil,
+		Cycles:                        0xFF,
+		TotalCycles:                   0xFFFFFFFF,
+		CompressedAccumulatedPower:    0xFFFF,
+		AccumulatedPower:              0xFFFFFFFF,
+		LeftRightBalance:              0xFF,
+		GpsAccuracy:                   0xFF,
+		VerticalSpeed:                 0x7FFF,
+		Calories:                      0xFFFF,
+		VerticalOscillation:           0xFFFF,
+		StanceTimePercent:             0xFFFF,
+		StanceTime:                    0xFFFF,
+		ActivityType:                  0xFF,
+		LeftTorqueEffectiveness:       0xFF,
+		RightTorqueEffectiveness:      0xFF,
+		LeftPedalSmoothness:           0xFF,
+		RightPedalSmoothness:          0xFF,
+		CombinedPedalSmoothness:       0xFF,
+		Time128:                       0xFF,
+		StrokeType:                    0xFF,
+		Zone:                          0xFF,
+		BallSpeed:                     0xFFFF,
+		Cadence256:                    0xFFFF,
+		FractionalCadence:             0xFF,
+		TotalHemoglobinConc:           0xFFFF,
+		TotalHemoglobinConcMin:        0xFFFF,
+		TotalHemoglobinConcMax:        0xFFFF,
+		SaturatedHemoglobinPercent:    0xFFFF,
+		SaturatedHemoglobinPercentMin: 0xFFFF,
+		SaturatedHemoglobinPercentMax: 0xFFFF,
+		DeviceIndex:                   0xFF,
+		EnhancedSpeed:                 0xFFFFFFFF,
+		EnhancedAltitude:              0xFFFFFFFF,
+	}
 }
 
 // GetAltitudeScaled returns Altitude
@@ -4813,6 +5437,25 @@ type EventMsg struct {
 	RearGear      uint8  // Do not populate directly.  Autogenerated by decoder for gear_change subfield components.  Number of rear teeth.
 }
 
+// NewEventMsg returns a event FIT message
+// initialized to all-invalid values.
+func NewEventMsg() *EventMsg {
+	return &EventMsg{
+		Timestamp:     timeBase,
+		Event:         0xFF,
+		EventType:     0xFF,
+		Data16:        0xFFFF,
+		Data:          0xFFFFFFFF,
+		EventGroup:    0xFF,
+		Score:         0xFFFF,
+		OpponentScore: 0xFFFF,
+		FrontGearNum:  0x00,
+		FrontGear:     0x00,
+		RearGearNum:   0x00,
+		RearGear:      0x00,
+	}
+}
+
 // GetData returns the appropriate Data
 // subfield if a matching reference field/value combination is found.
 // If none of the reference field/value combinations are true
@@ -4914,6 +5557,31 @@ type DeviceInfoMsg struct {
 	ProductName         string // Optional free form string to indicate the devices name or model
 }
 
+// NewDeviceInfoMsg returns a device_info FIT message
+// initialized to all-invalid values.
+func NewDeviceInfoMsg() *DeviceInfoMsg {
+	return &DeviceInfoMsg{
+		Timestamp:           timeBase,
+		DeviceIndex:         0xFF,
+		DeviceType:          0xFF,
+		Manufacturer:        0xFFFF,
+		SerialNumber:        0x00000000,
+		Product:             0xFFFF,
+		SoftwareVersion:     0xFFFF,
+		HardwareVersion:     0xFF,
+		CumOperatingTime:    0xFFFFFFFF,
+		BatteryVoltage:      0xFFFF,
+		BatteryStatus:       0xFF,
+		SensorPosition:      0xFF,
+		Descriptor:          "",
+		AntTransmissionType: 0x00,
+		AntDeviceNumber:     0x0000,
+		AntNetwork:          0xFF,
+		SourceType:          0xFF,
+		ProductName:         "",
+	}
+}
+
 // GetSoftwareVersionScaled returns SoftwareVersion
 // with scale and any offset applied. NaN is returned if the
 // field has an invalid value (i.e. has not been set).
@@ -4973,6 +5641,19 @@ type TrainingFileMsg struct {
 	TimeCreated  time.Time
 }
 
+// NewTrainingFileMsg returns a training_file FIT message
+// initialized to all-invalid values.
+func NewTrainingFileMsg() *TrainingFileMsg {
+	return &TrainingFileMsg{
+		Timestamp:    timeBase,
+		Type:         0xFF,
+		Manufacturer: 0xFFFF,
+		Product:      0xFFFF,
+		SerialNumber: 0x00000000,
+		TimeCreated:  timeBase,
+	}
+}
+
 // GetProduct returns the appropriate Product
 // subfield if a matching reference field/value combination is found.
 // If none of the reference field/value combinations are true
@@ -4989,6 +5670,14 @@ func (x *TrainingFileMsg) GetProduct() interface{} {
 // HrvMsg represents the hrv FIT message type.
 type HrvMsg struct {
 	Time []uint16 // Time between beats
+}
+
+// NewHrvMsg returns a hrv FIT message
+// initialized to all-invalid values.
+func NewHrvMsg() *HrvMsg {
+	return &HrvMsg{
+		Time: nil,
+	}
 }
 
 // GetTimeScaled returns Time
@@ -5025,6 +5714,29 @@ type WeatherConditionsMsg struct {
 	LowTemperature           int8
 }
 
+// NewWeatherConditionsMsg returns a weather_conditions FIT message
+// initialized to all-invalid values.
+func NewWeatherConditionsMsg() *WeatherConditionsMsg {
+	return &WeatherConditionsMsg{
+		Timestamp:                timeBase,
+		WeatherReport:            0xFF,
+		Temperature:              0x7F,
+		Condition:                0xFF,
+		WindDirection:            0xFFFF,
+		WindSpeed:                0xFFFF,
+		PrecipitationProbability: 0xFF,
+		TemperatureFeelsLike:     0x7F,
+		RelativeHumidity:         0xFF,
+		Location:                 "",
+		ObservedAtTime:           timeBase,
+		ObservedLocationLat:      NewLatitudeInvalid(),
+		ObservedLocationLong:     NewLongitudeInvalid(),
+		DayOfWeek:                0xFF,
+		HighTemperature:          0x7F,
+		LowTemperature:           0x7F,
+	}
+}
+
 // GetWindSpeedScaled returns WindSpeed
 // with scale and any offset applied. NaN is returned if the
 // field has an invalid value (i.e. has not been set).
@@ -5046,36 +5758,97 @@ type WeatherAlertMsg struct {
 	Type       WeatherSevereType // Tornado, Severe Thunderstorm, etc.
 }
 
+// NewWeatherAlertMsg returns a weather_alert FIT message
+// initialized to all-invalid values.
+func NewWeatherAlertMsg() *WeatherAlertMsg {
+	return &WeatherAlertMsg{
+		Timestamp:  timeBase,
+		ReportId:   "",
+		IssueTime:  timeBase,
+		ExpireTime: timeBase,
+		Severity:   0xFF,
+		Type:       0xFF,
+	}
+}
+
 // GpsMetadataMsg represents the gps_metadata FIT message type.
 type GpsMetadataMsg struct {
+}
+
+// NewGpsMetadataMsg returns a gps_metadata FIT message
+// initialized to all-invalid values.
+func NewGpsMetadataMsg() *GpsMetadataMsg {
+	return &GpsMetadataMsg{}
 }
 
 // CameraEventMsg represents the camera_event FIT message type.
 type CameraEventMsg struct {
 }
 
+// NewCameraEventMsg returns a camera_event FIT message
+// initialized to all-invalid values.
+func NewCameraEventMsg() *CameraEventMsg {
+	return &CameraEventMsg{}
+}
+
 // GyroscopeDataMsg represents the gyroscope_data FIT message type.
 type GyroscopeDataMsg struct {
+}
+
+// NewGyroscopeDataMsg returns a gyroscope_data FIT message
+// initialized to all-invalid values.
+func NewGyroscopeDataMsg() *GyroscopeDataMsg {
+	return &GyroscopeDataMsg{}
 }
 
 // AccelerometerDataMsg represents the accelerometer_data FIT message type.
 type AccelerometerDataMsg struct {
 }
 
+// NewAccelerometerDataMsg returns a accelerometer_data FIT message
+// initialized to all-invalid values.
+func NewAccelerometerDataMsg() *AccelerometerDataMsg {
+	return &AccelerometerDataMsg{}
+}
+
 // MagnetometerDataMsg represents the magnetometer_data FIT message type.
 type MagnetometerDataMsg struct {
+}
+
+// NewMagnetometerDataMsg returns a magnetometer_data FIT message
+// initialized to all-invalid values.
+func NewMagnetometerDataMsg() *MagnetometerDataMsg {
+	return &MagnetometerDataMsg{}
 }
 
 // ThreeDSensorCalibrationMsg represents the three_d_sensor_calibration FIT message type.
 type ThreeDSensorCalibrationMsg struct {
 }
 
+// NewThreeDSensorCalibrationMsg returns a three_d_sensor_calibration FIT message
+// initialized to all-invalid values.
+func NewThreeDSensorCalibrationMsg() *ThreeDSensorCalibrationMsg {
+	return &ThreeDSensorCalibrationMsg{}
+}
+
 // VideoFrameMsg represents the video_frame FIT message type.
 type VideoFrameMsg struct {
 }
 
+// NewVideoFrameMsg returns a video_frame FIT message
+// initialized to all-invalid values.
+func NewVideoFrameMsg() *VideoFrameMsg {
+	return &VideoFrameMsg{}
+}
+
 // ObdiiDataMsg represents the obdii_data FIT message type.
 type ObdiiDataMsg struct {
+}
+
+// NewObdiiDataMsg returns a obdii_data FIT message
+// initialized to all-invalid values.
+func NewObdiiDataMsg() *ObdiiDataMsg {
+	return &ObdiiDataMsg{}
 }
 
 // NmeaSentenceMsg represents the nmea_sentence FIT message type.
@@ -5083,6 +5856,16 @@ type NmeaSentenceMsg struct {
 	Timestamp   time.Time // Timestamp message was output
 	TimestampMs uint16    // Fractional part of timestamp, added to timestamp
 	Sentence    string    // NMEA sentence
+}
+
+// NewNmeaSentenceMsg returns a nmea_sentence FIT message
+// initialized to all-invalid values.
+func NewNmeaSentenceMsg() *NmeaSentenceMsg {
+	return &NmeaSentenceMsg{
+		Timestamp:   timeBase,
+		TimestampMs: 0xFFFF,
+		Sentence:    "",
+	}
 }
 
 // AviationAttitudeMsg represents the aviation_attitude FIT message type.
@@ -5099,6 +5882,25 @@ type AviationAttitudeMsg struct {
 	AttitudeStageComplete []uint8  // The percent complete of the current attitude stage.  Set to 0 for attitude stages 0, 1 and 2 and to 100 for attitude stage 3 by AHRS modules that do not support it.  Range - 100
 	Track                 []uint16 // Track Angle/Heading Range 0 - 2pi
 	Validity              []AttitudeValidity
+}
+
+// NewAviationAttitudeMsg returns a aviation_attitude FIT message
+// initialized to all-invalid values.
+func NewAviationAttitudeMsg() *AviationAttitudeMsg {
+	return &AviationAttitudeMsg{
+		Timestamp:             timeBase,
+		TimestampMs:           0xFFFF,
+		SystemTime:            nil,
+		Pitch:                 nil,
+		Roll:                  nil,
+		AccelLateral:          nil,
+		AccelNormal:           nil,
+		TurnRate:              nil,
+		Stage:                 nil,
+		AttitudeStageComplete: nil,
+		Track:                 nil,
+		Validity:              nil,
+	}
 }
 
 // GetPitchScaled returns Pitch
@@ -5189,11 +5991,27 @@ func (x *AviationAttitudeMsg) GetTrackScaled() []float64 {
 type VideoMsg struct {
 }
 
+// NewVideoMsg returns a video FIT message
+// initialized to all-invalid values.
+func NewVideoMsg() *VideoMsg {
+	return &VideoMsg{}
+}
+
 // VideoTitleMsg represents the video_title FIT message type.
 type VideoTitleMsg struct {
 	MessageIndex MessageIndex // Long titles will be split into multiple parts
 	MessageCount uint16       // Total number of title parts
 	Text         string
+}
+
+// NewVideoTitleMsg returns a video_title FIT message
+// initialized to all-invalid values.
+func NewVideoTitleMsg() *VideoTitleMsg {
+	return &VideoTitleMsg{
+		MessageIndex: 0xFFFF,
+		MessageCount: 0xFFFF,
+		Text:         "",
+	}
 }
 
 // VideoDescriptionMsg represents the video_description FIT message type.
@@ -5203,8 +6021,24 @@ type VideoDescriptionMsg struct {
 	Text         string
 }
 
+// NewVideoDescriptionMsg returns a video_description FIT message
+// initialized to all-invalid values.
+func NewVideoDescriptionMsg() *VideoDescriptionMsg {
+	return &VideoDescriptionMsg{
+		MessageIndex: 0xFFFF,
+		MessageCount: 0xFFFF,
+		Text:         "",
+	}
+}
+
 // VideoClipMsg represents the video_clip FIT message type.
 type VideoClipMsg struct {
+}
+
+// NewVideoClipMsg returns a video_clip FIT message
+// initialized to all-invalid values.
+func NewVideoClipMsg() *VideoClipMsg {
+	return &VideoClipMsg{}
 }
 
 // CourseMsg represents the course FIT message type.
@@ -5213,6 +6047,17 @@ type CourseMsg struct {
 	Name         string
 	Capabilities CourseCapabilities
 	SubSport     SubSport
+}
+
+// NewCourseMsg returns a course FIT message
+// initialized to all-invalid values.
+func NewCourseMsg() *CourseMsg {
+	return &CourseMsg{
+		Sport:        0xFF,
+		Name:         "",
+		Capabilities: 0x00000000,
+		SubSport:     0xFF,
+	}
 }
 
 // CoursePointMsg represents the course_point FIT message type.
@@ -5225,6 +6070,21 @@ type CoursePointMsg struct {
 	Type         CoursePoint
 	Name         string
 	Favorite     Bool
+}
+
+// NewCoursePointMsg returns a course_point FIT message
+// initialized to all-invalid values.
+func NewCoursePointMsg() *CoursePointMsg {
+	return &CoursePointMsg{
+		MessageIndex: 0xFFFF,
+		Timestamp:    timeBase,
+		PositionLat:  NewLatitudeInvalid(),
+		PositionLong: NewLongitudeInvalid(),
+		Distance:     0xFFFFFFFF,
+		Type:         0xFF,
+		Name:         "",
+		Favorite:     0xFF,
+	}
 }
 
 // GetDistanceScaled returns Distance
@@ -5251,6 +6111,22 @@ type SegmentIdMsg struct {
 	SelectionType         SegmentSelectionType // Indicates how the segment was selected to be sent to the device
 }
 
+// NewSegmentIdMsg returns a segment_id FIT message
+// initialized to all-invalid values.
+func NewSegmentIdMsg() *SegmentIdMsg {
+	return &SegmentIdMsg{
+		Name:                  "",
+		Uuid:                  "",
+		Sport:                 0xFF,
+		Enabled:               0xFF,
+		UserProfilePrimaryKey: 0xFFFFFFFF,
+		DeviceId:              0xFFFFFFFF,
+		DefaultRaceLeader:     0xFF,
+		DeleteStatus:          0xFF,
+		SelectionType:         0xFF,
+	}
+}
+
 // SegmentLeaderboardEntryMsg represents the segment_leaderboard_entry FIT message type.
 type SegmentLeaderboardEntryMsg struct {
 	MessageIndex    MessageIndex
@@ -5259,6 +6135,19 @@ type SegmentLeaderboardEntryMsg struct {
 	GroupPrimaryKey uint32                 // Primary user ID of this leader
 	ActivityId      uint32                 // ID of the activity associated with this leader time
 	SegmentTime     uint32                 // Segment Time (includes pauses)
+}
+
+// NewSegmentLeaderboardEntryMsg returns a segment_leaderboard_entry FIT message
+// initialized to all-invalid values.
+func NewSegmentLeaderboardEntryMsg() *SegmentLeaderboardEntryMsg {
+	return &SegmentLeaderboardEntryMsg{
+		MessageIndex:    0xFFFF,
+		Name:            "",
+		Type:            0xFF,
+		GroupPrimaryKey: 0xFFFFFFFF,
+		ActivityId:      0xFFFFFFFF,
+		SegmentTime:     0xFFFFFFFF,
+	}
 }
 
 // GetSegmentTimeScaled returns SegmentTime
@@ -5280,6 +6169,19 @@ type SegmentPointMsg struct {
 	Distance     uint32   // Accumulated distance along the segment at the described point
 	Altitude     uint16   // Accumulated altitude along the segment at the described point
 	LeaderTime   []uint32 // Accumualted time each leader board member required to reach the described point. This value is zero for all leader board members at the starting point of the segment.
+}
+
+// NewSegmentPointMsg returns a segment_point FIT message
+// initialized to all-invalid values.
+func NewSegmentPointMsg() *SegmentPointMsg {
+	return &SegmentPointMsg{
+		MessageIndex: 0xFFFF,
+		PositionLat:  NewLatitudeInvalid(),
+		PositionLong: NewLongitudeInvalid(),
+		Distance:     0xFFFFFFFF,
+		Altitude:     0xFFFF,
+		LeaderTime:   nil,
+	}
 }
 
 // GetDistanceScaled returns Distance
@@ -5393,6 +6295,86 @@ type SegmentLapMsg struct {
 	TotalFractionalCycles       uint8 // fractional part of the total_cycles
 	FrontGearShiftCount         uint16
 	RearGearShiftCount          uint16
+}
+
+// NewSegmentLapMsg returns a segment_lap FIT message
+// initialized to all-invalid values.
+func NewSegmentLapMsg() *SegmentLapMsg {
+	return &SegmentLapMsg{
+		MessageIndex:                0xFFFF,
+		Timestamp:                   timeBase,
+		Event:                       0xFF,
+		EventType:                   0xFF,
+		StartTime:                   timeBase,
+		StartPositionLat:            NewLatitudeInvalid(),
+		StartPositionLong:           NewLongitudeInvalid(),
+		EndPositionLat:              NewLatitudeInvalid(),
+		EndPositionLong:             NewLongitudeInvalid(),
+		TotalElapsedTime:            0xFFFFFFFF,
+		TotalTimerTime:              0xFFFFFFFF,
+		TotalDistance:               0xFFFFFFFF,
+		TotalCycles:                 0xFFFFFFFF,
+		TotalCalories:               0xFFFF,
+		TotalFatCalories:            0xFFFF,
+		AvgSpeed:                    0xFFFF,
+		MaxSpeed:                    0xFFFF,
+		AvgHeartRate:                0xFF,
+		MaxHeartRate:                0xFF,
+		AvgCadence:                  0xFF,
+		MaxCadence:                  0xFF,
+		AvgPower:                    0xFFFF,
+		MaxPower:                    0xFFFF,
+		TotalAscent:                 0xFFFF,
+		TotalDescent:                0xFFFF,
+		Sport:                       0xFF,
+		EventGroup:                  0xFF,
+		NecLat:                      NewLatitudeInvalid(),
+		NecLong:                     NewLongitudeInvalid(),
+		SwcLat:                      NewLatitudeInvalid(),
+		SwcLong:                     NewLongitudeInvalid(),
+		Name:                        "",
+		NormalizedPower:             0xFFFF,
+		LeftRightBalance:            0xFFFF,
+		SubSport:                    0xFF,
+		TotalWork:                   0xFFFFFFFF,
+		AvgAltitude:                 0xFFFF,
+		MaxAltitude:                 0xFFFF,
+		GpsAccuracy:                 0xFF,
+		AvgGrade:                    0x7FFF,
+		AvgPosGrade:                 0x7FFF,
+		AvgNegGrade:                 0x7FFF,
+		MaxPosGrade:                 0x7FFF,
+		MaxNegGrade:                 0x7FFF,
+		AvgTemperature:              0x7F,
+		MaxTemperature:              0x7F,
+		TotalMovingTime:             0xFFFFFFFF,
+		AvgPosVerticalSpeed:         0x7FFF,
+		AvgNegVerticalSpeed:         0x7FFF,
+		MaxPosVerticalSpeed:         0x7FFF,
+		MaxNegVerticalSpeed:         0x7FFF,
+		TimeInHrZone:                nil,
+		TimeInSpeedZone:             nil,
+		TimeInCadenceZone:           nil,
+		TimeInPowerZone:             nil,
+		RepetitionNum:               0xFFFF,
+		MinAltitude:                 0xFFFF,
+		MinHeartRate:                0xFF,
+		ActiveTime:                  0xFFFFFFFF,
+		WktStepIndex:                0xFFFF,
+		SportEvent:                  0xFF,
+		AvgLeftTorqueEffectiveness:  0xFF,
+		AvgRightTorqueEffectiveness: 0xFF,
+		AvgLeftPedalSmoothness:      0xFF,
+		AvgRightPedalSmoothness:     0xFF,
+		AvgCombinedPedalSmoothness:  0xFF,
+		Status:                      0xFF,
+		Uuid:                        "",
+		AvgFractionalCadence:        0xFF,
+		MaxFractionalCadence:        0xFF,
+		TotalFractionalCycles:       0xFF,
+		FrontGearShiftCount:         0xFFFF,
+		RearGearShiftCount:          0xFFFF,
+	}
 }
 
 // GetTotalElapsedTimeScaled returns TotalElapsedTime
@@ -5772,12 +6754,37 @@ type SegmentFileMsg struct {
 	LeaderActivityId      []uint32                 // Activity ID of each leader in the segment file
 }
 
+// NewSegmentFileMsg returns a segment_file FIT message
+// initialized to all-invalid values.
+func NewSegmentFileMsg() *SegmentFileMsg {
+	return &SegmentFileMsg{
+		MessageIndex:          0xFFFF,
+		FileUuid:              "",
+		Enabled:               0xFF,
+		UserProfilePrimaryKey: 0xFFFFFFFF,
+		LeaderType:            nil,
+		LeaderGroupPrimaryKey: nil,
+		LeaderActivityId:      nil,
+	}
+}
+
 // WorkoutMsg represents the workout FIT message type.
 type WorkoutMsg struct {
 	Sport         Sport
 	Capabilities  WorkoutCapabilities
 	NumValidSteps uint16 // number of valid steps
 	WktName       string
+}
+
+// NewWorkoutMsg returns a workout FIT message
+// initialized to all-invalid values.
+func NewWorkoutMsg() *WorkoutMsg {
+	return &WorkoutMsg{
+		Sport:         0xFF,
+		Capabilities:  0x00000000,
+		NumValidSteps: 0xFFFF,
+		WktName:       "",
+	}
 }
 
 // WorkoutStepMsg represents the workout_step FIT message type.
@@ -5792,6 +6799,23 @@ type WorkoutStepMsg struct {
 	CustomTargetValueHigh uint32
 	Intensity             Intensity
 	Notes                 string
+}
+
+// NewWorkoutStepMsg returns a workout_step FIT message
+// initialized to all-invalid values.
+func NewWorkoutStepMsg() *WorkoutStepMsg {
+	return &WorkoutStepMsg{
+		MessageIndex:          0xFFFF,
+		WktStepName:           "",
+		DurationType:          0xFF,
+		DurationValue:         0xFFFFFFFF,
+		TargetType:            0xFF,
+		TargetValue:           0xFFFFFFFF,
+		CustomTargetValueLow:  0xFFFFFFFF,
+		CustomTargetValueHigh: 0xFFFFFFFF,
+		Intensity:             0xFF,
+		Notes:                 "",
+	}
 }
 
 // GetDurationValue returns the appropriate DurationValue
@@ -5901,6 +6925,20 @@ type ScheduleMsg struct {
 	ScheduledTime time.Time
 }
 
+// NewScheduleMsg returns a schedule FIT message
+// initialized to all-invalid values.
+func NewScheduleMsg() *ScheduleMsg {
+	return &ScheduleMsg{
+		Manufacturer:  0xFFFF,
+		Product:       0xFFFF,
+		SerialNumber:  0x00000000,
+		TimeCreated:   timeBase,
+		Completed:     0xFF,
+		Type:          0xFF,
+		ScheduledTime: timeBase,
+	}
+}
+
 // GetProduct returns the appropriate Product
 // subfield if a matching reference field/value combination is found.
 // If none of the reference field/value combinations are true
@@ -5927,6 +6965,22 @@ type TotalsMsg struct {
 	ActiveTime   uint32
 }
 
+// NewTotalsMsg returns a totals FIT message
+// initialized to all-invalid values.
+func NewTotalsMsg() *TotalsMsg {
+	return &TotalsMsg{
+		MessageIndex: 0xFFFF,
+		Timestamp:    timeBase,
+		TimerTime:    0xFFFFFFFF,
+		Distance:     0xFFFFFFFF,
+		Calories:     0xFFFFFFFF,
+		Sport:        0xFF,
+		ElapsedTime:  0xFFFFFFFF,
+		Sessions:     0xFFFF,
+		ActiveTime:   0xFFFFFFFF,
+	}
+}
+
 // WeightScaleMsg represents the weight_scale FIT message type.
 type WeightScaleMsg struct {
 	Timestamp         time.Time
@@ -5942,6 +6996,26 @@ type WeightScaleMsg struct {
 	MetabolicAge      uint8
 	VisceralFatRating uint8
 	UserProfileIndex  MessageIndex // Associates this weight scale message to a user.  This corresponds to the index of the user profile message in the weight scale file.
+}
+
+// NewWeightScaleMsg returns a weight_scale FIT message
+// initialized to all-invalid values.
+func NewWeightScaleMsg() *WeightScaleMsg {
+	return &WeightScaleMsg{
+		Timestamp:         timeBase,
+		Weight:            0xFFFF,
+		PercentFat:        0xFFFF,
+		PercentHydration:  0xFFFF,
+		VisceralFatMass:   0xFFFF,
+		BoneMass:          0xFFFF,
+		MuscleMass:        0xFFFF,
+		BasalMet:          0xFFFF,
+		PhysiqueRating:    0xFF,
+		ActiveMet:         0xFFFF,
+		MetabolicAge:      0xFF,
+		VisceralFatRating: 0xFF,
+		UserProfileIndex:  0xFFFF,
+	}
 }
 
 // GetWeightScaled returns Weight
@@ -6047,10 +7121,37 @@ type BloodPressureMsg struct {
 	UserProfileIndex     MessageIndex // Associates this blood pressure message to a user.  This corresponds to the index of the user profile message in the blood pressure file.
 }
 
+// NewBloodPressureMsg returns a blood_pressure FIT message
+// initialized to all-invalid values.
+func NewBloodPressureMsg() *BloodPressureMsg {
+	return &BloodPressureMsg{
+		Timestamp:            timeBase,
+		SystolicPressure:     0xFFFF,
+		DiastolicPressure:    0xFFFF,
+		MeanArterialPressure: 0xFFFF,
+		Map3SampleMean:       0xFFFF,
+		MapMorningValues:     0xFFFF,
+		MapEveningValues:     0xFFFF,
+		HeartRate:            0xFF,
+		HeartRateType:        0xFF,
+		Status:               0xFF,
+		UserProfileIndex:     0xFFFF,
+	}
+}
+
 // MonitoringInfoMsg represents the monitoring_info FIT message type.
 type MonitoringInfoMsg struct {
 	Timestamp      time.Time
 	LocalTimestamp time.Time // Use to convert activity timestamps to local time if device does not support time zone and daylight savings time correction.
+}
+
+// NewMonitoringInfoMsg returns a monitoring_info FIT message
+// initialized to all-invalid values.
+func NewMonitoringInfoMsg() *MonitoringInfoMsg {
+	return &MonitoringInfoMsg{
+		Timestamp:      timeBase,
+		LocalTimestamp: timeBase,
+	}
 }
 
 // MonitoringMsg represents the monitoring FIT message type.
@@ -6067,6 +7168,25 @@ type MonitoringMsg struct {
 	Cycles16        uint16
 	ActiveTime16    uint16
 	LocalTimestamp  time.Time // Must align to logging interval, for example, time must be 00:00:00 for daily log.
+}
+
+// NewMonitoringMsg returns a monitoring FIT message
+// initialized to all-invalid values.
+func NewMonitoringMsg() *MonitoringMsg {
+	return &MonitoringMsg{
+		Timestamp:       timeBase,
+		DeviceIndex:     0xFF,
+		Calories:        0xFFFF,
+		Distance:        0xFFFFFFFF,
+		Cycles:          0xFFFFFFFF,
+		ActiveTime:      0xFFFFFFFF,
+		ActivityType:    0xFF,
+		ActivitySubtype: 0xFF,
+		Distance16:      0xFFFF,
+		Cycles16:        0xFFFF,
+		ActiveTime16:    0xFFFF,
+		LocalTimestamp:  timeBase,
+	}
 }
 
 // GetDistanceScaled returns Distance
@@ -6125,6 +7245,19 @@ type HrMsg struct {
 	EventTimestamp12    []byte
 }
 
+// NewHrMsg returns a hr FIT message
+// initialized to all-invalid values.
+func NewHrMsg() *HrMsg {
+	return &HrMsg{
+		Timestamp:           timeBase,
+		FractionalTimestamp: 0xFFFF,
+		Time256:             0xFF,
+		FilteredBpm:         nil,
+		EventTimestamp:      nil,
+		EventTimestamp12:    nil,
+	}
+}
+
 // GetFractionalTimestampScaled returns FractionalTimestamp
 // with scale and any offset applied. NaN is returned if the
 // field has an invalid value (i.e. has not been set).
@@ -6171,8 +7304,20 @@ func (x *HrMsg) expandComponents() {
 type MemoGlobMsg struct {
 }
 
+// NewMemoGlobMsg returns a memo_glob FIT message
+// initialized to all-invalid values.
+func NewMemoGlobMsg() *MemoGlobMsg {
+	return &MemoGlobMsg{}
+}
+
 // AntChannelIdMsg represents the ant_channel_id FIT message type.
 type AntChannelIdMsg struct {
+}
+
+// NewAntChannelIdMsg returns a ant_channel_id FIT message
+// initialized to all-invalid values.
+func NewAntChannelIdMsg() *AntChannelIdMsg {
+	return &AntChannelIdMsg{}
 }
 
 // AntRxMsg represents the ant_rx FIT message type.
@@ -6183,6 +7328,19 @@ type AntRxMsg struct {
 	MesgData            []byte
 	ChannelNumber       uint8
 	Data                []byte
+}
+
+// NewAntRxMsg returns a ant_rx FIT message
+// initialized to all-invalid values.
+func NewAntRxMsg() *AntRxMsg {
+	return &AntRxMsg{
+		Timestamp:           timeBase,
+		FractionalTimestamp: 0xFFFF,
+		MesgId:              0xFF,
+		MesgData:            nil,
+		ChannelNumber:       0xFF,
+		Data:                nil,
+	}
 }
 
 // GetFractionalTimestampScaled returns FractionalTimestamp
@@ -6222,6 +7380,19 @@ type AntTxMsg struct {
 	Data                []byte
 }
 
+// NewAntTxMsg returns a ant_tx FIT message
+// initialized to all-invalid values.
+func NewAntTxMsg() *AntTxMsg {
+	return &AntTxMsg{
+		Timestamp:           timeBase,
+		FractionalTimestamp: 0xFFFF,
+		MesgId:              0xFF,
+		MesgData:            nil,
+		ChannelNumber:       0xFF,
+		Data:                nil,
+	}
+}
+
 // GetFractionalTimestampScaled returns FractionalTimestamp
 // with scale and any offset applied. NaN is returned if the
 // field has an invalid value (i.e. has not been set).
@@ -6257,6 +7428,17 @@ type ExdScreenConfigurationMsg struct {
 	ScreenEnabled Bool
 }
 
+// NewExdScreenConfigurationMsg returns a exd_screen_configuration FIT message
+// initialized to all-invalid values.
+func NewExdScreenConfigurationMsg() *ExdScreenConfigurationMsg {
+	return &ExdScreenConfigurationMsg{
+		ScreenIndex:   0xFF,
+		FieldCount:    0xFF,
+		Layout:        0xFF,
+		ScreenEnabled: 0xFF,
+	}
+}
+
 // ExdDataFieldConfigurationMsg represents the exd_data_field_configuration FIT message type.
 type ExdDataFieldConfigurationMsg struct {
 	ScreenIndex  uint8
@@ -6265,6 +7447,19 @@ type ExdDataFieldConfigurationMsg struct {
 	ConceptCount uint8
 	DisplayType  ExdDisplayType
 	Title        []string
+}
+
+// NewExdDataFieldConfigurationMsg returns a exd_data_field_configuration FIT message
+// initialized to all-invalid values.
+func NewExdDataFieldConfigurationMsg() *ExdDataFieldConfigurationMsg {
+	return &ExdDataFieldConfigurationMsg{
+		ScreenIndex:  0xFF,
+		ConceptField: 0xFF,
+		FieldId:      0xFF,
+		ConceptCount: 0xFF,
+		DisplayType:  0xFF,
+		Title:        nil,
+	}
 }
 
 func (x *ExdDataFieldConfigurationMsg) expandComponents() {
@@ -6291,6 +7486,24 @@ type ExdDataConceptConfigurationMsg struct {
 	Qualifier    ExdQualifiers
 	Descriptor   ExdDescriptors
 	IsSigned     Bool
+}
+
+// NewExdDataConceptConfigurationMsg returns a exd_data_concept_configuration FIT message
+// initialized to all-invalid values.
+func NewExdDataConceptConfigurationMsg() *ExdDataConceptConfigurationMsg {
+	return &ExdDataConceptConfigurationMsg{
+		ScreenIndex:  0xFF,
+		ConceptField: 0xFF,
+		FieldId:      0xFF,
+		ConceptIndex: 0xFF,
+		DataPage:     0xFF,
+		ConceptKey:   0xFF,
+		Scaling:      0xFF,
+		DataUnits:    0xFF,
+		Qualifier:    0xFF,
+		Descriptor:   0xFF,
+		IsSigned:     0xFF,
+	}
 }
 
 func (x *ExdDataConceptConfigurationMsg) expandComponents() {
@@ -6322,6 +7535,27 @@ type FieldDescriptionMsg struct {
 	NativeFieldNum        uint8
 }
 
+// NewFieldDescriptionMsg returns a field_description FIT message
+// initialized to all-invalid values.
+func NewFieldDescriptionMsg() *FieldDescriptionMsg {
+	return &FieldDescriptionMsg{
+		DeveloperDataIndex:    0xFF,
+		FieldDefinitionNumber: 0xFF,
+		FitBaseTypeId:         0xFF,
+		FieldName:             nil,
+		Array:                 0xFF,
+		Components:            "",
+		Scale:                 0xFF,
+		Offset:                0x7F,
+		Units:                 nil,
+		Bits:                  "",
+		Accumulate:            "",
+		FitBaseUnitId:         0xFFFF,
+		NativeMesgNum:         0xFFFF,
+		NativeFieldNum:        0xFF,
+	}
+}
+
 // DeveloperDataIdMsg represents the developer_data_id FIT message type.
 type DeveloperDataIdMsg struct {
 	DeveloperId        []byte
@@ -6329,6 +7563,18 @@ type DeveloperDataIdMsg struct {
 	ManufacturerId     Manufacturer
 	DeveloperDataIndex uint8
 	ApplicationVersion uint32
+}
+
+// NewDeveloperDataIdMsg returns a developer_data_id FIT message
+// initialized to all-invalid values.
+func NewDeveloperDataIdMsg() *DeveloperDataIdMsg {
+	return &DeveloperDataIdMsg{
+		DeveloperId:        nil,
+		ApplicationId:      nil,
+		ManufacturerId:     0xFFFF,
+		DeveloperDataIndex: 0xFF,
+		ApplicationVersion: 0xFFFFFFFF,
+	}
 }
 // PROFILE
 // Code generated using the program found in 'cmd/fitgen/main.go'. DO NOT EDIT.

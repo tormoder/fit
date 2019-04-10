@@ -21,16 +21,16 @@ func parseWorkbook(inputData []byte) (typeData, msgData [][]string, err error) {
 	var output = [][][]string{}
 	for _, sheet := range workbook.Sheets {
 		s := [][]string{}
+		ncols := len(sheet.Rows[0].Cells)
 		for _, row := range sheet.Rows {
 			if row == nil {
 				continue
 			}
-			r := []string{}
-			for _, cell := range row.Cells {
+			r := make([]string, ncols)
+			for i, cell := range row.Cells {
 				// The profile message sheet has formatting errors.
 				// Ignore those cells and use the raw values.
-				str := cell.String()
-				r = append(r, str)
+				r[i] = cell.String()
 			}
 			s = append(s, r)
 		}

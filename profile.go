@@ -1200,6 +1200,15 @@ var msgsTypes = [...]reflect.Type{
 	MesgNumDiveSummary:                 reflect.TypeOf(DiveSummaryMsg{}),
 }
 
+func getGlobalMesgNum(t reflect.Type) MesgNum {
+	for i, match := range msgsTypes {
+		if t == match {
+			return MesgNum(i)
+		}
+	}
+	return MesgNumInvalid
+}
+
 type newMesgFunc func() reflect.Value
 
 var newMesgFuncs = [...]newMesgFunc{

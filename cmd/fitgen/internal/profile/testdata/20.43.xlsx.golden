@@ -8823,6 +8823,15 @@ var msgsTypes = [...]reflect.Type{
 	MesgNumDeveloperDataId:             reflect.TypeOf(DeveloperDataIdMsg{}),
 }
 
+func getGlobalMesgNum(t reflect.Type) MesgNum {
+	for i, match := range msgsTypes {
+		if t == match {
+			return MesgNum(i)
+		}
+	}
+	return MesgNumInvalid
+}
+
 type newMesgFunc func() reflect.Value
 
 var newMesgFuncs = [...]newMesgFunc{

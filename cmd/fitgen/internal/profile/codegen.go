@@ -637,6 +637,7 @@ func (g *codeGenerator) genProfile(types map[string]*Type, msgs []*Msg) {
 	g.genFieldsArray(msgs)
 	g.genGetFieldArrayLookup()
 	g.genMsgTypesArray(msgs)
+	g.genGetGlobalMesgNum()
 	g.genNewMesgFuncsArray(msgs)
 	g.genGetZeroValueMsgsArrayLookup()
 }
@@ -750,6 +751,18 @@ func (g *codeGenerator) genMsgTypesArray(msgs []*Msg) {
 	for _, msg := range msgs {
 		g.p("MesgNum", msg.CCName, ": reflect.TypeOf(", msg.CCName, "Msg{}),")
 	}
+	g.p("}")
+}
+
+func (g *codeGenerator) genGetGlobalMesgNum() {
+	g.p()
+	g.p("func getGlobalMesgNum(t reflect.Type) MesgNum {")
+	g.p("for i, match := range msgsTypes {")
+	g.p("if t == match {")
+	g.p("return MesgNum(i)")
+	g.p("}")
+	g.p("}")
+	g.p("return MesgNumInvalid")
 	g.p("}")
 }
 

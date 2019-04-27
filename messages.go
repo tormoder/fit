@@ -5216,13 +5216,9 @@ type FieldDescriptionMsg struct {
 	FieldDefinitionNumber uint8
 	FitBaseTypeId         FitBaseType
 	FieldName             []string
-	Array                 uint8
-	Components            string
 	Scale                 uint8
 	Offset                int8
 	Units                 []string
-	Bits                  string
-	Accumulate            string
 	FitBaseUnitId         FitBaseUnit
 	NativeMesgNum         MesgNum
 	NativeFieldNum        uint8
@@ -5236,13 +5232,9 @@ func NewFieldDescriptionMsg() *FieldDescriptionMsg {
 		FieldDefinitionNumber: 0xFF,
 		FitBaseTypeId:         0xFF,
 		FieldName:             nil,
-		Array:                 0xFF,
-		Components:            "",
 		Scale:                 0xFF,
 		Offset:                0x7F,
 		Units:                 nil,
-		Bits:                  "",
-		Accumulate:            "",
 		FitBaseUnitId:         0xFFFF,
 		NativeMesgNum:         0xFFFF,
 		NativeFieldNum:        0xFF,

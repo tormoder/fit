@@ -161,7 +161,7 @@ func (f *Field) setLength() {
 }
 
 func (f *Field) transform(subfield bool, ftypes map[string]*Type, logger *log.Logger) (skip bool, err error) {
-	if f.data[mEXAMPLE] == "" {
+	if f.data[mEXAMPLE] == "" || f.data[mEXAMPLE] == "0" {
 		return true, nil
 	}
 

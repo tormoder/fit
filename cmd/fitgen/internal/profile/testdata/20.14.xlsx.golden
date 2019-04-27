@@ -7430,13 +7430,9 @@ type FieldDescriptionMsg struct {
 	FieldDefinitionNumber uint8
 	FitBaseTypeId         FitBaseType
 	FieldName             []string
-	Array                 uint8
-	Components            string
 	Scale                 uint8
 	Offset                int8
 	Units                 []string
-	Bits                  string
-	Accumulate            string
 	FitBaseUnitId         FitBaseUnit
 	NativeMesgNum         MesgNum
 	NativeFieldNum        uint8
@@ -7450,13 +7446,9 @@ func NewFieldDescriptionMsg() *FieldDescriptionMsg {
 		FieldDefinitionNumber: 0xFF,
 		FitBaseTypeId:         0xFF,
 		FieldName:             nil,
-		Array:                 0xFF,
-		Components:            "",
 		Scale:                 0xFF,
 		Offset:                0x7F,
 		Units:                 nil,
-		Bits:                  "",
-		Accumulate:            "",
 		FitBaseUnitId:         0xFFFF,
 		NativeMesgNum:         0xFFFF,
 		NativeFieldNum:        0xFF,
@@ -8514,16 +8506,12 @@ var _fields = [...][256]*field{
 		1:  {1, 1, types.Fit(2), 1},
 		2:  {2, 2, types.Fit(2), 1},
 		3:  {3, 3, types.Fit(39), 64},
-		4:  {4, 4, types.Fit(2), 1},
-		5:  {5, 5, types.Fit(7), 0},
-		6:  {6, 6, types.Fit(2), 1},
-		7:  {7, 7, types.Fit(1), 1},
-		8:  {8, 8, types.Fit(39), 16},
-		9:  {9, 9, types.Fit(7), 0},
-		10: {10, 10, types.Fit(7), 0},
-		13: {11, 13, types.Fit(4), 1},
-		14: {12, 14, types.Fit(4), 1},
-		15: {13, 15, types.Fit(2), 1},
+		6:  {4, 6, types.Fit(2), 1},
+		7:  {5, 7, types.Fit(1), 1},
+		8:  {6, 8, types.Fit(39), 16},
+		13: {7, 13, types.Fit(4), 1},
+		14: {8, 14, types.Fit(4), 1},
+		15: {9, 15, types.Fit(2), 1},
 	},
 
 	MesgNumDeveloperDataId: {

@@ -14,7 +14,7 @@ DECODE_BENCH_NAME := DecodeActivity$$/Small
 DECODE_BENCH_TIME := 5s
 
 CHECK_TOOLS :=	golang.org/x/tools/cmd/goimports \
-		github.com/golang/lint/golint \
+		golang.org/x/lint/golint \
 		github.com/jgautheron/goconst/cmd/goconst \
 		github.com/kisielk/errcheck \
 		github.com/gordonklaus/ineffassign \

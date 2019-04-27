@@ -712,7 +712,7 @@ func (g *codeGenerator) genFieldsArray(msgs []*Msg) {
 		g.p("MesgNum", msg.CCName, ": {")
 		for i := 0; i < len(msg.Fields); i++ {
 			f := msg.Fields[i]
-			g.p(f.DefNum, ": {", i, ", ", f.DefNum, ", ", f.FType.ValueString(), "},")
+			g.p(f.DefNum, ": {", i, ", ", f.DefNum, ", ", f.FType.ValueString(), ", ", f.Length, "},")
 		}
 		g.p("},")
 		g.p()

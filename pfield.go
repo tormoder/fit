@@ -11,8 +11,9 @@ type field struct {
 	sindex int
 	num    byte
 	t      types.Fit
+	length byte
 }
 
 func (f field) String() string {
-	return fmt.Sprintf("sindex: %d | num: %d | type: %v", f.sindex, f.num, f.t)
+	return fmt.Sprintf("sindex: %d | num: %d | type: %v | length: %v", f.sindex, f.num, f.t, f.length)
 }

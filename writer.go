@@ -1,6 +1,7 @@
 package fit
 
 import (
+	"bytes"
 	"encoding/binary"
 	"fmt"
 	"io"
@@ -8,6 +9,7 @@ import (
 	"time"
 	"unicode/utf8"
 
+	"github.com/tormoder/fit/dyncrc16"
 	"github.com/tormoder/fit/internal/types"
 )
 
@@ -236,6 +238,246 @@ func (e *encoder) writeDefMesg(def *encodeMesgDef) error {
 		if err != nil {
 			return err
 		}
+	}
+
+	return nil
+}
+
+func (e *encoder) encodeDefAndDataMesg(mesg reflect.Value) error {
+	mesg = reflect.Indirect(mesg)
+	if !mesg.IsValid() {
+		return nil
+	}
+
+	// We'll always just use local ID 0, for simplicity
+	// We know the full file contents up-front, so no need to interleave
+	def := getEncodeMesgDef(mesg, 0)
+
+	err := e.writeDefMesg(def)
+	if err != nil {
+		return err
+	}
+
+	err = e.writeMesg(mesg, def)
+	if err != nil {
+		return err
+	}
+
+	return err
+}
+
+func (e *encoder) encodeFile(file reflect.Value) error {
+	for i := 0; i < file.NumField(); i++ {
+		v := file.Field(i)
+		switch v.Kind() {
+		case reflect.Struct, reflect.Ptr:
+			err := e.encodeDefAndDataMesg(reflect.Indirect(v))
+			if err != nil {
+				return err
+			}
+		case reflect.Slice:
+			var def *encodeMesgDef
+			for j := 0; j < v.Len(); j++ {
+				v2 := reflect.Indirect(v.Index(j))
+
+				if j == 0 {
+					def = getEncodeMesgDef(v2, 0)
+					err := e.writeDefMesg(def)
+					if err != nil {
+						return err
+					}
+				}
+
+				err := e.writeMesg(v2, def)
+				if err != nil {
+					return err
+				}
+			}
+		}
+	}
+
+	return nil
+}
+
+// Encode writes the given FIT file into the given Writer. file.CRC and
+// file.Header.CRC will be updated to the correct values.
+func Encode(w io.Writer, file *File, arch binary.ByteOrder) error {
+	buf := &bytes.Buffer{}
+	enc := &encoder{
+		w:    buf,
+		arch: arch,
+	}
+
+	// XXX: Is there a better way to do this with reflection?
+	var data reflect.Value
+	switch file.Type() {
+	case FileTypeActivity:
+		activity, err := file.Activity()
+		if err != nil {
+			return fmt.Errorf("encode failed: %v", err)
+		}
+		data = reflect.ValueOf(*activity)
+	case FileTypeDevice:
+		device, err := file.Device()
+		if err != nil {
+			return fmt.Errorf("encode failed: %v", err)
+		}
+		data = reflect.ValueOf(*device)
+	case FileTypeSettings:
+		settings, err := file.Settings()
+		if err != nil {
+			return fmt.Errorf("encode failed: %v", err)
+		}
+		data = reflect.ValueOf(*settings)
+	case FileTypeSport:
+		sport, err := file.Sport()
+		if err != nil {
+			return fmt.Errorf("encode failed: %v", err)
+		}
+		data = reflect.ValueOf(*sport)
+	case FileTypeWorkout:
+		workout, err := file.Workout()
+		if err != nil {
+			return fmt.Errorf("encode failed: %v", err)
+		}
+		data = reflect.ValueOf(*workout)
+	case FileTypeCourse:
+		course, err := file.Course()
+		if err != nil {
+			return fmt.Errorf("encode failed: %v", err)
+		}
+		data = reflect.ValueOf(*course)
+	case FileTypeSchedules:
+		schedules, err := file.Schedules()
+		if err != nil {
+			return fmt.Errorf("encode failed: %v", err)
+		}
+		data = reflect.ValueOf(*schedules)
+	case FileTypeWeight:
+		weight, err := file.Weight()
+		if err != nil {
+			return fmt.Errorf("encode failed: %v", err)
+		}
+		data = reflect.ValueOf(*weight)
+	case FileTypeTotals:
+		totals, err := file.Totals()
+		if err != nil {
+			return fmt.Errorf("encode failed: %v", err)
+		}
+		data = reflect.ValueOf(*totals)
+	case FileTypeGoals:
+		goals, err := file.Goals()
+		if err != nil {
+			return fmt.Errorf("encode failed: %v", err)
+		}
+		data = reflect.ValueOf(*goals)
+	case FileTypeBloodPressure:
+		bloodPressure, err := file.BloodPressure()
+		if err != nil {
+			return fmt.Errorf("encode failed: %v", err)
+		}
+		data = reflect.ValueOf(*bloodPressure)
+	case FileTypeMonitoringA:
+		monitoringA, err := file.MonitoringA()
+		if err != nil {
+			return fmt.Errorf("encode failed: %v", err)
+		}
+		data = reflect.ValueOf(*monitoringA)
+	case FileTypeActivitySummary:
+		activitySummary, err := file.ActivitySummary()
+		if err != nil {
+			return fmt.Errorf("encode failed: %v", err)
+		}
+		data = reflect.ValueOf(*activitySummary)
+	case FileTypeMonitoringDaily:
+		monitoringDaily, err := file.MonitoringDaily()
+		if err != nil {
+			return fmt.Errorf("encode failed: %v", err)
+		}
+		data = reflect.ValueOf(*monitoringDaily)
+	case FileTypeMonitoringB:
+		monitoringB, err := file.MonitoringB()
+		if err != nil {
+			return fmt.Errorf("encode failed: %v", err)
+		}
+		data = reflect.ValueOf(*monitoringB)
+	case FileTypeSegment:
+		segment, err := file.Segment()
+		if err != nil {
+			return fmt.Errorf("encode failed: %v", err)
+		}
+		data = reflect.ValueOf(*segment)
+	case FileTypeSegmentList:
+		segmentList, err := file.SegmentList()
+		if err != nil {
+			return fmt.Errorf("encode failed: %v", err)
+		}
+		data = reflect.ValueOf(*segmentList)
+	default:
+		return fmt.Errorf("encode failed: Unknown filetype '%v'", file.Type())
+	}
+
+	// Encode the data
+	err := enc.encodeDefAndDataMesg(reflect.ValueOf(file.FileId))
+	if err != nil {
+		return fmt.Errorf("encode failed: FileId: %v", err)
+	}
+
+	err = enc.encodeDefAndDataMesg(reflect.ValueOf(file.FileCreator))
+	if err != nil {
+		return fmt.Errorf("encode failed: FileCreator: %v", err)
+	}
+
+	err = enc.encodeDefAndDataMesg(reflect.ValueOf(file.TimestampCorrelation))
+	if err != nil {
+		return fmt.Errorf("encode failed: TimestampCorrelation: %v", err)
+	}
+
+	err = enc.encodeDefAndDataMesg(reflect.ValueOf(file.DeviceInfo))
+	if err != nil {
+		return fmt.Errorf("encode failed: DeviceInfo: %v", err)
+	}
+
+	err = enc.encodeFile(data)
+	if err != nil {
+		return fmt.Errorf("encode failed: %vFile: %v", file.Type(), err)
+	}
+
+	file.Header.DataSize = uint32(buf.Len())
+	hdr, err := file.Header.MarshalBinary()
+	if err != nil {
+		return fmt.Errorf("encode failed: Header: %v", err)
+	}
+
+	// Calculate file CRC
+	crc := dyncrc16.New()
+
+	_, err = crc.Write(hdr)
+	if err != nil {
+		return fmt.Errorf("encode failed: header crc calc: %v", err)
+	}
+
+	_, err = crc.Write(buf.Bytes())
+	if err != nil {
+		return fmt.Errorf("encode failed: data crc calc: %v", err)
+	}
+
+	file.CRC = crc.Sum16()
+
+	// Write out the data
+	_, err = w.Write(hdr)
+	if err != nil {
+		return fmt.Errorf("encode failed: writing header: %v", err)
+	}
+
+	_, err = w.Write(buf.Bytes())
+	if err != nil {
+		return fmt.Errorf("encode failed: writing data: %v", err)
+	}
+
+	err = binary.Write(w, binary.LittleEndian, file.CRC)
+	if err != nil {
+		return fmt.Errorf("encode failed: writing crc: %v", err)
 	}
 
 	return nil

@@ -1,6 +1,6 @@
 FIT_PKGS 	:= $(shell go list ./... | grep -v /vendor/)
 FIT_FILES	:= $(shell find . -name '*.go' -not -path "*vendor*")
-FIT_DIRS 	:= $(shell find . -type d -not -path "*vendor*" -not -path "./.git*" -not -path "*testdata*")
+FIT_DIRS 	:= $(shell find . -type f -not -path "*vendor*" -not -path "./.git*" -not -path "*testdata*" -name "*.go" -printf "%h\n" | sort -u)
 
 FIT_PKG_PATH 	:= github.com/tormoder/fit
 FITGEN_PKG_PATH := $(FIT_PKG_PATH)/cmd/fitgen
@@ -22,6 +22,7 @@ CHECK_TOOLS :=	golang.org/x/tools/cmd/goimports \
 		mvdan.cc/interfacer \
 		github.com/client9/misspell/cmd/misspell \
 		honnef.co/go/tools/cmd/megacheck/ \
+		golang.org/x/tools/go/analysis/passes/shadow/cmd/shadow \
 
 .PHONY: all
 all: deps testdeps build test testrace checkfull
@@ -129,10 +130,10 @@ checkfull: getchecktools
 	@echo "goimports"
 	@! goimports -l $(FIT_FILES) | grep -vF 'No Exceptions'
 	@echo "vet"
-	@! go tool vet $(FIT_DIRS) 2>&1 | \
+	@! go vet $(FIT_DIRS) 2>&1 | \
 		grep -vF 'vendor/'
 	@echo "vet --shadow"
-	@! go tool vet --shadow $(FIT_DIRS) 2>&1 | grep -vF 'vendor/'
+	@! go vet -vettool=$(which shadow) $(FIT_DIRS) 2>&1 | grep -vF 'vendor/'
 	@echo "golint"
 	@! golint $(FIT_PKGS) | grep -vE '(FileId|SegmentId|messages.go|types.*.\go|fitgen/internal|cmd/stringer)'
 	@echo "goconst"

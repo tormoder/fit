@@ -98,3 +98,27 @@ func (e *encoder) writeField(value reflect.Value, f *field) error {
 
 	return nil
 }
+
+type encodeMesgDef struct {
+	localMesgNum byte
+	fields       []*field
+}
+
+func (e *encoder) writeMesg(mesg reflect.Value, def *encodeMesgDef) error {
+	hdr := def.localMesgNum & localMesgNumMask
+	err := binary.Write(e.w, e.arch, hdr)
+	if err != nil {
+		return err
+	}
+
+	for _, f := range def.fields {
+		value := mesg.Field(f.sindex)
+
+		err := e.writeField(value, f)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}

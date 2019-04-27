@@ -320,3 +320,67 @@ func TestEncodeWriteField(t *testing.T) {
 		}
 	}
 }
+
+func TestEncodeWriteMesg(t *testing.T) {
+	type TestMesg struct {
+		Type         byte
+		Timestamp    time.Time
+		PositionLat  Latitude
+		PositionLong Longitude
+	}
+
+	mesg := TestMesg{
+		Type:         0x10,
+		Timestamp:    timeBase.Add(32 * time.Second),
+		PositionLat:  NewLatitudeDegrees(50.2053),
+		PositionLong: NewLongitudeDegrees(0.1218),
+	}
+
+	def := &encodeMesgDef{
+		localMesgNum: 3,
+		fields: []*field{
+			{
+				sindex: 0,
+				num:    0,
+				t:      types.MakeNative(types.BaseEnum, false),
+				length: byte(types.BaseEnum.Size()),
+			},
+			{
+				sindex: 1,
+				num:    253,
+				t:      types.Make(types.TimeUTC, false),
+				length: byte(types.BaseUint32.Size()),
+			},
+			// PositionLat intentionally omitted
+			{
+				sindex: 3,
+				num:    3,
+				t:      types.Make(types.Lng, false),
+				length: byte(types.BaseSint32.Size()),
+			},
+		},
+	}
+
+	expect := []byte{
+		0x03,
+		0x10,
+		0x20, 0x00, 0x00, 0x00,
+		0x4A, 0x2C, 0x16, 0x00,
+	}
+
+	buf := &bytes.Buffer{}
+
+	e := &encoder{
+		w:    buf,
+		arch: binary.LittleEndian,
+	}
+
+	err := e.writeMesg(reflect.ValueOf(mesg), def)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if !bytes.Equal(buf.Bytes(), expect) {
+		t.Errorf("Expected '%v', got '%v'", expect, buf.Bytes())
+	}
+}

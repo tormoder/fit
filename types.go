@@ -1,6 +1,6 @@
 // Code generated using the program found in 'cmd/fitgen/main.go'. DO NOT EDIT.
 
-// SDK Version: 20.43
+// SDK Version: 20.88
 
 package fit
 
@@ -118,6 +118,7 @@ const (
 	AntplusDeviceTypeBikeLightShared         AntplusDeviceType = 36
 	AntplusDeviceTypeExd                     AntplusDeviceType = 38
 	AntplusDeviceTypeBikeRadar               AntplusDeviceType = 40
+	AntplusDeviceTypeBikeAero                AntplusDeviceType = 46
 	AntplusDeviceTypeWeightScale             AntplusDeviceType = 119
 	AntplusDeviceTypeHeartRate               AntplusDeviceType = 120
 	AntplusDeviceTypeBikeSpeedCadence        AntplusDeviceType = 121
@@ -223,6 +224,14 @@ const (
 	BacklightModeInvalid                             BacklightMode = 0xFF
 )
 
+// BacklightTimeout represents the backlight_timeout FIT type.
+type BacklightTimeout uint8
+
+const (
+	BacklightTimeoutInfinite BacklightTimeout = 0 // Backlight stays on forever.
+	BacklightTimeoutInvalid  BacklightTimeout = 0xFF
+)
+
 // BatteryStatus represents the battery_status FIT type.
 type BatteryStatus uint8
 
@@ -235,6 +244,40 @@ const (
 	BatteryStatusCharging BatteryStatus = 6
 	BatteryStatusUnknown  BatteryStatus = 7
 	BatteryStatusInvalid  BatteryStatus = 0xFF
+)
+
+// BenchPressExerciseName represents the bench_press_exercise_name FIT type.
+type BenchPressExerciseName uint16
+
+const (
+	BenchPressExerciseNameAlternatingDumbbellChestPressOnSwissBall BenchPressExerciseName = 0
+	BenchPressExerciseNameBarbellBenchPress                        BenchPressExerciseName = 1
+	BenchPressExerciseNameBarbellBoardBenchPress                   BenchPressExerciseName = 2
+	BenchPressExerciseNameBarbellFloorPress                        BenchPressExerciseName = 3
+	BenchPressExerciseNameCloseGripBarbellBenchPress               BenchPressExerciseName = 4
+	BenchPressExerciseNameDeclineDumbbellBenchPress                BenchPressExerciseName = 5
+	BenchPressExerciseNameDumbbellBenchPress                       BenchPressExerciseName = 6
+	BenchPressExerciseNameDumbbellFloorPress                       BenchPressExerciseName = 7
+	BenchPressExerciseNameInclineBarbellBenchPress                 BenchPressExerciseName = 8
+	BenchPressExerciseNameInclineDumbbellBenchPress                BenchPressExerciseName = 9
+	BenchPressExerciseNameInclineSmithMachineBenchPress            BenchPressExerciseName = 10
+	BenchPressExerciseNameIsometricBarbellBenchPress               BenchPressExerciseName = 11
+	BenchPressExerciseNameKettlebellChestPress                     BenchPressExerciseName = 12
+	BenchPressExerciseNameNeutralGripDumbbellBenchPress            BenchPressExerciseName = 13
+	BenchPressExerciseNameNeutralGripDumbbellInclineBenchPress     BenchPressExerciseName = 14
+	BenchPressExerciseNameOneArmFloorPress                         BenchPressExerciseName = 15
+	BenchPressExerciseNameWeightedOneArmFloorPress                 BenchPressExerciseName = 16
+	BenchPressExerciseNamePartialLockout                           BenchPressExerciseName = 17
+	BenchPressExerciseNameReverseGripBarbellBenchPress             BenchPressExerciseName = 18
+	BenchPressExerciseNameReverseGripInclineBenchPress             BenchPressExerciseName = 19
+	BenchPressExerciseNameSingleArmCableChestPress                 BenchPressExerciseName = 20
+	BenchPressExerciseNameSingleArmDumbbellBenchPress              BenchPressExerciseName = 21
+	BenchPressExerciseNameSmithMachineBenchPress                   BenchPressExerciseName = 22
+	BenchPressExerciseNameSwissBallDumbbellChestPress              BenchPressExerciseName = 23
+	BenchPressExerciseNameTripleStopBarbellBenchPress              BenchPressExerciseName = 24
+	BenchPressExerciseNameWideGripBarbellBenchPress                BenchPressExerciseName = 25
+	BenchPressExerciseNameAlternatingDumbbellChestPress            BenchPressExerciseName = 26
+	BenchPressExerciseNameInvalid                                  BenchPressExerciseName = 0xFFFF
 )
 
 // BikeLightBeamAngleMode represents the bike_light_beam_angle_mode FIT type.
@@ -316,6 +359,34 @@ const (
 	BpStatusInvalid                 BpStatus = 0xFF
 )
 
+// CalfRaiseExerciseName represents the calf_raise_exercise_name FIT type.
+type CalfRaiseExerciseName uint16
+
+const (
+	CalfRaiseExerciseName3WayCalfRaise                      CalfRaiseExerciseName = 0
+	CalfRaiseExerciseName3WayWeightedCalfRaise              CalfRaiseExerciseName = 1
+	CalfRaiseExerciseName3WaySingleLegCalfRaise             CalfRaiseExerciseName = 2
+	CalfRaiseExerciseName3WayWeightedSingleLegCalfRaise     CalfRaiseExerciseName = 3
+	CalfRaiseExerciseNameDonkeyCalfRaise                    CalfRaiseExerciseName = 4
+	CalfRaiseExerciseNameWeightedDonkeyCalfRaise            CalfRaiseExerciseName = 5
+	CalfRaiseExerciseNameSeatedCalfRaise                    CalfRaiseExerciseName = 6
+	CalfRaiseExerciseNameWeightedSeatedCalfRaise            CalfRaiseExerciseName = 7
+	CalfRaiseExerciseNameSeatedDumbbellToeRaise             CalfRaiseExerciseName = 8
+	CalfRaiseExerciseNameSingleLegBentKneeCalfRaise         CalfRaiseExerciseName = 9
+	CalfRaiseExerciseNameWeightedSingleLegBentKneeCalfRaise CalfRaiseExerciseName = 10
+	CalfRaiseExerciseNameSingleLegDeclinePushUp             CalfRaiseExerciseName = 11
+	CalfRaiseExerciseNameSingleLegDonkeyCalfRaise           CalfRaiseExerciseName = 12
+	CalfRaiseExerciseNameWeightedSingleLegDonkeyCalfRaise   CalfRaiseExerciseName = 13
+	CalfRaiseExerciseNameSingleLegHipRaiseWithKneeHold      CalfRaiseExerciseName = 14
+	CalfRaiseExerciseNameSingleLegStandingCalfRaise         CalfRaiseExerciseName = 15
+	CalfRaiseExerciseNameSingleLegStandingDumbbellCalfRaise CalfRaiseExerciseName = 16
+	CalfRaiseExerciseNameStandingBarbellCalfRaise           CalfRaiseExerciseName = 17
+	CalfRaiseExerciseNameStandingCalfRaise                  CalfRaiseExerciseName = 18
+	CalfRaiseExerciseNameWeightedStandingCalfRaise          CalfRaiseExerciseName = 19
+	CalfRaiseExerciseNameStandingDumbbellCalfRaise          CalfRaiseExerciseName = 20
+	CalfRaiseExerciseNameInvalid                            CalfRaiseExerciseName = 0xFFFF
+)
+
 // CameraEventType represents the camera_event_type FIT type.
 type CameraEventType byte
 
@@ -347,6 +418,47 @@ const (
 	CameraOrientationTypeInvalid              CameraOrientationType = 0xFF
 )
 
+// CardioExerciseName represents the cardio_exercise_name FIT type.
+type CardioExerciseName uint16
+
+const (
+	CardioExerciseNameBobAndWeaveCircle         CardioExerciseName = 0
+	CardioExerciseNameWeightedBobAndWeaveCircle CardioExerciseName = 1
+	CardioExerciseNameCardioCoreCrawl           CardioExerciseName = 2
+	CardioExerciseNameWeightedCardioCoreCrawl   CardioExerciseName = 3
+	CardioExerciseNameDoubleUnder               CardioExerciseName = 4
+	CardioExerciseNameWeightedDoubleUnder       CardioExerciseName = 5
+	CardioExerciseNameJumpRope                  CardioExerciseName = 6
+	CardioExerciseNameWeightedJumpRope          CardioExerciseName = 7
+	CardioExerciseNameJumpRopeCrossover         CardioExerciseName = 8
+	CardioExerciseNameWeightedJumpRopeCrossover CardioExerciseName = 9
+	CardioExerciseNameJumpRopeJog               CardioExerciseName = 10
+	CardioExerciseNameWeightedJumpRopeJog       CardioExerciseName = 11
+	CardioExerciseNameJumpingJacks              CardioExerciseName = 12
+	CardioExerciseNameWeightedJumpingJacks      CardioExerciseName = 13
+	CardioExerciseNameSkiMoguls                 CardioExerciseName = 14
+	CardioExerciseNameWeightedSkiMoguls         CardioExerciseName = 15
+	CardioExerciseNameSplitJacks                CardioExerciseName = 16
+	CardioExerciseNameWeightedSplitJacks        CardioExerciseName = 17
+	CardioExerciseNameSquatJacks                CardioExerciseName = 18
+	CardioExerciseNameWeightedSquatJacks        CardioExerciseName = 19
+	CardioExerciseNameTripleUnder               CardioExerciseName = 20
+	CardioExerciseNameWeightedTripleUnder       CardioExerciseName = 21
+	CardioExerciseNameInvalid                   CardioExerciseName = 0xFFFF
+)
+
+// CarryExerciseName represents the carry_exercise_name FIT type.
+type CarryExerciseName uint16
+
+const (
+	CarryExerciseNameBarHolds          CarryExerciseName = 0
+	CarryExerciseNameFarmersWalk       CarryExerciseName = 1
+	CarryExerciseNameFarmersWalkOnToes CarryExerciseName = 2
+	CarryExerciseNameHexDumbbellHold   CarryExerciseName = 3
+	CarryExerciseNameOverheadCarry     CarryExerciseName = 4
+	CarryExerciseNameInvalid           CarryExerciseName = 0xFFFF
+)
+
 // Checksum represents the checksum FIT type.
 type Checksum uint8
 
@@ -354,6 +466,36 @@ const (
 	ChecksumClear   Checksum = 0 // Allows clear of checksum for flash memory where can only write 1 to 0 without erasing sector.
 	ChecksumOk      Checksum = 1 // Set to mark checksum as valid if computes to invalid values 0 or 0xFF.  Checksum can also be set to ok to save encoding computation time.
 	ChecksumInvalid Checksum = 0xFF
+)
+
+// ChopExerciseName represents the chop_exercise_name FIT type.
+type ChopExerciseName uint16
+
+const (
+	ChopExerciseNameCablePullThrough                   ChopExerciseName = 0
+	ChopExerciseNameCableRotationalLift                ChopExerciseName = 1
+	ChopExerciseNameCableWoodchop                      ChopExerciseName = 2
+	ChopExerciseNameCrossChopToKnee                    ChopExerciseName = 3
+	ChopExerciseNameWeightedCrossChopToKnee            ChopExerciseName = 4
+	ChopExerciseNameDumbbellChop                       ChopExerciseName = 5
+	ChopExerciseNameHalfKneelingRotation               ChopExerciseName = 6
+	ChopExerciseNameWeightedHalfKneelingRotation       ChopExerciseName = 7
+	ChopExerciseNameHalfKneelingRotationalChop         ChopExerciseName = 8
+	ChopExerciseNameHalfKneelingRotationalReverseChop  ChopExerciseName = 9
+	ChopExerciseNameHalfKneelingStabilityChop          ChopExerciseName = 10
+	ChopExerciseNameHalfKneelingStabilityReverseChop   ChopExerciseName = 11
+	ChopExerciseNameKneelingRotationalChop             ChopExerciseName = 12
+	ChopExerciseNameKneelingRotationalReverseChop      ChopExerciseName = 13
+	ChopExerciseNameKneelingStabilityChop              ChopExerciseName = 14
+	ChopExerciseNameKneelingWoodchopper                ChopExerciseName = 15
+	ChopExerciseNameMedicineBallWoodChops              ChopExerciseName = 16
+	ChopExerciseNamePowerSquatChops                    ChopExerciseName = 17
+	ChopExerciseNameWeightedPowerSquatChops            ChopExerciseName = 18
+	ChopExerciseNameStandingRotationalChop             ChopExerciseName = 19
+	ChopExerciseNameStandingSplitRotationalChop        ChopExerciseName = 20
+	ChopExerciseNameStandingSplitRotationalReverseChop ChopExerciseName = 21
+	ChopExerciseNameStandingStabilityReverseChop       ChopExerciseName = 22
+	ChopExerciseNameInvalid                            ChopExerciseName = 0xFFFF
 )
 
 // CommTimeoutType represents the comm_timeout_type FIT type.
@@ -404,6 +546,86 @@ const (
 	ConnectivityCapabilitiesLiveTrackMessaging              ConnectivityCapabilities = 0x40000000 // Device supports LiveTrack Messaging
 	ConnectivityCapabilitiesInstantInput                    ConnectivityCapabilities = 0x80000000 // Device supports instant input feature
 	ConnectivityCapabilitiesInvalid                         ConnectivityCapabilities = 0x00000000
+)
+
+// CoreExerciseName represents the core_exercise_name FIT type.
+type CoreExerciseName uint16
+
+const (
+	CoreExerciseNameAbsJabs                          CoreExerciseName = 0
+	CoreExerciseNameWeightedAbsJabs                  CoreExerciseName = 1
+	CoreExerciseNameAlternatingPlateReach            CoreExerciseName = 2
+	CoreExerciseNameBarbellRollout                   CoreExerciseName = 3
+	CoreExerciseNameWeightedBarbellRollout           CoreExerciseName = 4
+	CoreExerciseNameBodyBarObliqueTwist              CoreExerciseName = 5
+	CoreExerciseNameCableCorePress                   CoreExerciseName = 6
+	CoreExerciseNameCableSideBend                    CoreExerciseName = 7
+	CoreExerciseNameSideBend                         CoreExerciseName = 8
+	CoreExerciseNameWeightedSideBend                 CoreExerciseName = 9
+	CoreExerciseNameCrescentCircle                   CoreExerciseName = 10
+	CoreExerciseNameWeightedCrescentCircle           CoreExerciseName = 11
+	CoreExerciseNameCyclingRussianTwist              CoreExerciseName = 12
+	CoreExerciseNameWeightedCyclingRussianTwist      CoreExerciseName = 13
+	CoreExerciseNameElevatedFeetRussianTwist         CoreExerciseName = 14
+	CoreExerciseNameWeightedElevatedFeetRussianTwist CoreExerciseName = 15
+	CoreExerciseNameHalfTurkishGetUp                 CoreExerciseName = 16
+	CoreExerciseNameKettlebellWindmill               CoreExerciseName = 17
+	CoreExerciseNameKneelingAbWheel                  CoreExerciseName = 18
+	CoreExerciseNameWeightedKneelingAbWheel          CoreExerciseName = 19
+	CoreExerciseNameModifiedFrontLever               CoreExerciseName = 20
+	CoreExerciseNameOpenKneeTucks                    CoreExerciseName = 21
+	CoreExerciseNameWeightedOpenKneeTucks            CoreExerciseName = 22
+	CoreExerciseNameSideAbsLegLift                   CoreExerciseName = 23
+	CoreExerciseNameWeightedSideAbsLegLift           CoreExerciseName = 24
+	CoreExerciseNameSwissBallJackknife               CoreExerciseName = 25
+	CoreExerciseNameWeightedSwissBallJackknife       CoreExerciseName = 26
+	CoreExerciseNameSwissBallPike                    CoreExerciseName = 27
+	CoreExerciseNameWeightedSwissBallPike            CoreExerciseName = 28
+	CoreExerciseNameSwissBallRollout                 CoreExerciseName = 29
+	CoreExerciseNameWeightedSwissBallRollout         CoreExerciseName = 30
+	CoreExerciseNameTriangleHipPress                 CoreExerciseName = 31
+	CoreExerciseNameWeightedTriangleHipPress         CoreExerciseName = 32
+	CoreExerciseNameTrxSuspendedJackknife            CoreExerciseName = 33
+	CoreExerciseNameWeightedTrxSuspendedJackknife    CoreExerciseName = 34
+	CoreExerciseNameUBoat                            CoreExerciseName = 35
+	CoreExerciseNameWeightedUBoat                    CoreExerciseName = 36
+	CoreExerciseNameWindmillSwitches                 CoreExerciseName = 37
+	CoreExerciseNameWeightedWindmillSwitches         CoreExerciseName = 38
+	CoreExerciseNameAlternatingSlideOut              CoreExerciseName = 39
+	CoreExerciseNameWeightedAlternatingSlideOut      CoreExerciseName = 40
+	CoreExerciseNameGhdBackExtensions                CoreExerciseName = 41
+	CoreExerciseNameWeightedGhdBackExtensions        CoreExerciseName = 42
+	CoreExerciseNameOverheadWalk                     CoreExerciseName = 43
+	CoreExerciseNameInchworm                         CoreExerciseName = 44
+	CoreExerciseNameWeightedModifiedFrontLever       CoreExerciseName = 45
+	CoreExerciseNameRussianTwist                     CoreExerciseName = 46
+	CoreExerciseNameAbdominalLegRotations            CoreExerciseName = 47
+	CoreExerciseNameArmAndLegExtensionOnKnees        CoreExerciseName = 48
+	CoreExerciseNameBicycle                          CoreExerciseName = 49
+	CoreExerciseNameBicepCurlWithLegExtension        CoreExerciseName = 50
+	CoreExerciseNameCatCow                           CoreExerciseName = 51
+	CoreExerciseNameCorkscrew                        CoreExerciseName = 52
+	CoreExerciseNameCrissCross                       CoreExerciseName = 53
+	CoreExerciseNameCrissCrossWithBall               CoreExerciseName = 54
+	CoreExerciseNameDoubleLegStretch                 CoreExerciseName = 55
+	CoreExerciseNameKneeFolds                        CoreExerciseName = 56
+	CoreExerciseNameLowerLift                        CoreExerciseName = 57
+	CoreExerciseNameNeckPull                         CoreExerciseName = 58
+	CoreExerciseNamePelvicClocks                     CoreExerciseName = 59
+	CoreExerciseNameRollOver                         CoreExerciseName = 60
+	CoreExerciseNameRollUp                           CoreExerciseName = 61
+	CoreExerciseNameRolling                          CoreExerciseName = 62
+	CoreExerciseNameRowing1                          CoreExerciseName = 63
+	CoreExerciseNameRowing2                          CoreExerciseName = 64
+	CoreExerciseNameScissors                         CoreExerciseName = 65
+	CoreExerciseNameSingleLegCircles                 CoreExerciseName = 66
+	CoreExerciseNameSingleLegStretch                 CoreExerciseName = 67
+	CoreExerciseNameSnakeTwist1And2                  CoreExerciseName = 68
+	CoreExerciseNameSwan                             CoreExerciseName = 69
+	CoreExerciseNameSwimming                         CoreExerciseName = 70
+	CoreExerciseNameTeaser                           CoreExerciseName = 71
+	CoreExerciseNameTheHundred                       CoreExerciseName = 72
+	CoreExerciseNameInvalid                          CoreExerciseName = 0xFFFF
 )
 
 // CourseCapabilities represents the course_capabilities FIT type.
@@ -457,6 +679,149 @@ const (
 	CoursePointInvalid        CoursePoint = 0xFF
 )
 
+// CrunchExerciseName represents the crunch_exercise_name FIT type.
+type CrunchExerciseName uint16
+
+const (
+	CrunchExerciseNameBicycleCrunch                           CrunchExerciseName = 0
+	CrunchExerciseNameCableCrunch                             CrunchExerciseName = 1
+	CrunchExerciseNameCircularArmCrunch                       CrunchExerciseName = 2
+	CrunchExerciseNameCrossedArmsCrunch                       CrunchExerciseName = 3
+	CrunchExerciseNameWeightedCrossedArmsCrunch               CrunchExerciseName = 4
+	CrunchExerciseNameCrossLegReverseCrunch                   CrunchExerciseName = 5
+	CrunchExerciseNameWeightedCrossLegReverseCrunch           CrunchExerciseName = 6
+	CrunchExerciseNameCrunchChop                              CrunchExerciseName = 7
+	CrunchExerciseNameWeightedCrunchChop                      CrunchExerciseName = 8
+	CrunchExerciseNameDoubleCrunch                            CrunchExerciseName = 9
+	CrunchExerciseNameWeightedDoubleCrunch                    CrunchExerciseName = 10
+	CrunchExerciseNameElbowToKneeCrunch                       CrunchExerciseName = 11
+	CrunchExerciseNameWeightedElbowToKneeCrunch               CrunchExerciseName = 12
+	CrunchExerciseNameFlutterKicks                            CrunchExerciseName = 13
+	CrunchExerciseNameWeightedFlutterKicks                    CrunchExerciseName = 14
+	CrunchExerciseNameFoamRollerReverseCrunchOnBench          CrunchExerciseName = 15
+	CrunchExerciseNameWeightedFoamRollerReverseCrunchOnBench  CrunchExerciseName = 16
+	CrunchExerciseNameFoamRollerReverseCrunchWithDumbbell     CrunchExerciseName = 17
+	CrunchExerciseNameFoamRollerReverseCrunchWithMedicineBall CrunchExerciseName = 18
+	CrunchExerciseNameFrogPress                               CrunchExerciseName = 19
+	CrunchExerciseNameHangingKneeRaiseObliqueCrunch           CrunchExerciseName = 20
+	CrunchExerciseNameWeightedHangingKneeRaiseObliqueCrunch   CrunchExerciseName = 21
+	CrunchExerciseNameHipCrossover                            CrunchExerciseName = 22
+	CrunchExerciseNameWeightedHipCrossover                    CrunchExerciseName = 23
+	CrunchExerciseNameHollowRock                              CrunchExerciseName = 24
+	CrunchExerciseNameWeightedHollowRock                      CrunchExerciseName = 25
+	CrunchExerciseNameInclineReverseCrunch                    CrunchExerciseName = 26
+	CrunchExerciseNameWeightedInclineReverseCrunch            CrunchExerciseName = 27
+	CrunchExerciseNameKneelingCableCrunch                     CrunchExerciseName = 28
+	CrunchExerciseNameKneelingCrossCrunch                     CrunchExerciseName = 29
+	CrunchExerciseNameWeightedKneelingCrossCrunch             CrunchExerciseName = 30
+	CrunchExerciseNameKneelingObliqueCableCrunch              CrunchExerciseName = 31
+	CrunchExerciseNameKneesToElbow                            CrunchExerciseName = 32
+	CrunchExerciseNameLegExtensions                           CrunchExerciseName = 33
+	CrunchExerciseNameWeightedLegExtensions                   CrunchExerciseName = 34
+	CrunchExerciseNameLegLevers                               CrunchExerciseName = 35
+	CrunchExerciseNameMcgillCurlUp                            CrunchExerciseName = 36
+	CrunchExerciseNameWeightedMcgillCurlUp                    CrunchExerciseName = 37
+	CrunchExerciseNameModifiedPilatesRollUpWithBall           CrunchExerciseName = 38
+	CrunchExerciseNameWeightedModifiedPilatesRollUpWithBall   CrunchExerciseName = 39
+	CrunchExerciseNamePilatesCrunch                           CrunchExerciseName = 40
+	CrunchExerciseNameWeightedPilatesCrunch                   CrunchExerciseName = 41
+	CrunchExerciseNamePilatesRollUpWithBall                   CrunchExerciseName = 42
+	CrunchExerciseNameWeightedPilatesRollUpWithBall           CrunchExerciseName = 43
+	CrunchExerciseNameRaisedLegsCrunch                        CrunchExerciseName = 44
+	CrunchExerciseNameWeightedRaisedLegsCrunch                CrunchExerciseName = 45
+	CrunchExerciseNameReverseCrunch                           CrunchExerciseName = 46
+	CrunchExerciseNameWeightedReverseCrunch                   CrunchExerciseName = 47
+	CrunchExerciseNameReverseCrunchOnABench                   CrunchExerciseName = 48
+	CrunchExerciseNameWeightedReverseCrunchOnABench           CrunchExerciseName = 49
+	CrunchExerciseNameReverseCurlAndLift                      CrunchExerciseName = 50
+	CrunchExerciseNameWeightedReverseCurlAndLift              CrunchExerciseName = 51
+	CrunchExerciseNameRotationalLift                          CrunchExerciseName = 52
+	CrunchExerciseNameWeightedRotationalLift                  CrunchExerciseName = 53
+	CrunchExerciseNameSeatedAlternatingReverseCrunch          CrunchExerciseName = 54
+	CrunchExerciseNameWeightedSeatedAlternatingReverseCrunch  CrunchExerciseName = 55
+	CrunchExerciseNameSeatedLegU                              CrunchExerciseName = 56
+	CrunchExerciseNameWeightedSeatedLegU                      CrunchExerciseName = 57
+	CrunchExerciseNameSideToSideCrunchAndWeave                CrunchExerciseName = 58
+	CrunchExerciseNameWeightedSideToSideCrunchAndWeave        CrunchExerciseName = 59
+	CrunchExerciseNameSingleLegReverseCrunch                  CrunchExerciseName = 60
+	CrunchExerciseNameWeightedSingleLegReverseCrunch          CrunchExerciseName = 61
+	CrunchExerciseNameSkaterCrunchCross                       CrunchExerciseName = 62
+	CrunchExerciseNameWeightedSkaterCrunchCross               CrunchExerciseName = 63
+	CrunchExerciseNameStandingCableCrunch                     CrunchExerciseName = 64
+	CrunchExerciseNameStandingSideCrunch                      CrunchExerciseName = 65
+	CrunchExerciseNameStepClimb                               CrunchExerciseName = 66
+	CrunchExerciseNameWeightedStepClimb                       CrunchExerciseName = 67
+	CrunchExerciseNameSwissBallCrunch                         CrunchExerciseName = 68
+	CrunchExerciseNameSwissBallReverseCrunch                  CrunchExerciseName = 69
+	CrunchExerciseNameWeightedSwissBallReverseCrunch          CrunchExerciseName = 70
+	CrunchExerciseNameSwissBallRussianTwist                   CrunchExerciseName = 71
+	CrunchExerciseNameWeightedSwissBallRussianTwist           CrunchExerciseName = 72
+	CrunchExerciseNameSwissBallSideCrunch                     CrunchExerciseName = 73
+	CrunchExerciseNameWeightedSwissBallSideCrunch             CrunchExerciseName = 74
+	CrunchExerciseNameThoracicCrunchesOnFoamRoller            CrunchExerciseName = 75
+	CrunchExerciseNameWeightedThoracicCrunchesOnFoamRoller    CrunchExerciseName = 76
+	CrunchExerciseNameTricepsCrunch                           CrunchExerciseName = 77
+	CrunchExerciseNameWeightedBicycleCrunch                   CrunchExerciseName = 78
+	CrunchExerciseNameWeightedCrunch                          CrunchExerciseName = 79
+	CrunchExerciseNameWeightedSwissBallCrunch                 CrunchExerciseName = 80
+	CrunchExerciseNameToesToBar                               CrunchExerciseName = 81
+	CrunchExerciseNameWeightedToesToBar                       CrunchExerciseName = 82
+	CrunchExerciseNameCrunch                                  CrunchExerciseName = 83
+	CrunchExerciseNameStraightLegCrunchWithBall               CrunchExerciseName = 84
+	CrunchExerciseNameInvalid                                 CrunchExerciseName = 0xFFFF
+)
+
+// CurlExerciseName represents the curl_exercise_name FIT type.
+type CurlExerciseName uint16
+
+const (
+	CurlExerciseNameAlternatingDumbbellBicepsCurl             CurlExerciseName = 0
+	CurlExerciseNameAlternatingDumbbellBicepsCurlOnSwissBall  CurlExerciseName = 1
+	CurlExerciseNameAlternatingInclineDumbbellBicepsCurl      CurlExerciseName = 2
+	CurlExerciseNameBarbellBicepsCurl                         CurlExerciseName = 3
+	CurlExerciseNameBarbellReverseWristCurl                   CurlExerciseName = 4
+	CurlExerciseNameBarbellWristCurl                          CurlExerciseName = 5
+	CurlExerciseNameBehindTheBackBarbellReverseWristCurl      CurlExerciseName = 6
+	CurlExerciseNameBehindTheBackOneArmCableCurl              CurlExerciseName = 7
+	CurlExerciseNameCableBicepsCurl                           CurlExerciseName = 8
+	CurlExerciseNameCableHammerCurl                           CurlExerciseName = 9
+	CurlExerciseNameCheatingBarbellBicepsCurl                 CurlExerciseName = 10
+	CurlExerciseNameCloseGripEzBarBicepsCurl                  CurlExerciseName = 11
+	CurlExerciseNameCrossBodyDumbbellHammerCurl               CurlExerciseName = 12
+	CurlExerciseNameDeadHangBicepsCurl                        CurlExerciseName = 13
+	CurlExerciseNameDeclineHammerCurl                         CurlExerciseName = 14
+	CurlExerciseNameDumbbellBicepsCurlWithStaticHold          CurlExerciseName = 15
+	CurlExerciseNameDumbbellHammerCurl                        CurlExerciseName = 16
+	CurlExerciseNameDumbbellReverseWristCurl                  CurlExerciseName = 17
+	CurlExerciseNameDumbbellWristCurl                         CurlExerciseName = 18
+	CurlExerciseNameEzBarPreacherCurl                         CurlExerciseName = 19
+	CurlExerciseNameForwardBendBicepsCurl                     CurlExerciseName = 20
+	CurlExerciseNameHammerCurlToPress                         CurlExerciseName = 21
+	CurlExerciseNameInclineDumbbellBicepsCurl                 CurlExerciseName = 22
+	CurlExerciseNameInclineOffsetThumbDumbbellCurl            CurlExerciseName = 23
+	CurlExerciseNameKettlebellBicepsCurl                      CurlExerciseName = 24
+	CurlExerciseNameLyingConcentrationCableCurl               CurlExerciseName = 25
+	CurlExerciseNameOneArmPreacherCurl                        CurlExerciseName = 26
+	CurlExerciseNamePlatePinchCurl                            CurlExerciseName = 27
+	CurlExerciseNamePreacherCurlWithCable                     CurlExerciseName = 28
+	CurlExerciseNameReverseEzBarCurl                          CurlExerciseName = 29
+	CurlExerciseNameReverseGripWristCurl                      CurlExerciseName = 30
+	CurlExerciseNameReverseGripBarbellBicepsCurl              CurlExerciseName = 31
+	CurlExerciseNameSeatedAlternatingDumbbellBicepsCurl       CurlExerciseName = 32
+	CurlExerciseNameSeatedDumbbellBicepsCurl                  CurlExerciseName = 33
+	CurlExerciseNameSeatedReverseDumbbellCurl                 CurlExerciseName = 34
+	CurlExerciseNameSplitStanceOffsetPinkyDumbbellCurl        CurlExerciseName = 35
+	CurlExerciseNameStandingAlternatingDumbbellCurls          CurlExerciseName = 36
+	CurlExerciseNameStandingDumbbellBicepsCurl                CurlExerciseName = 37
+	CurlExerciseNameStandingEzBarBicepsCurl                   CurlExerciseName = 38
+	CurlExerciseNameStaticCurl                                CurlExerciseName = 39
+	CurlExerciseNameSwissBallDumbbellOverheadTricepsExtension CurlExerciseName = 40
+	CurlExerciseNameSwissBallEzBarPreacherCurl                CurlExerciseName = 41
+	CurlExerciseNameTwistingStandingDumbbellBicepsCurl        CurlExerciseName = 42
+	CurlExerciseNameWideGripEzBarBicepsCurl                   CurlExerciseName = 43
+	CurlExerciseNameInvalid                                   CurlExerciseName = 0xFFFF
+)
+
 // DateMode represents the date_mode FIT type.
 type DateMode byte
 
@@ -478,6 +843,32 @@ const (
 	DayOfWeekFriday    DayOfWeek = 5
 	DayOfWeekSaturday  DayOfWeek = 6
 	DayOfWeekInvalid   DayOfWeek = 0xFF
+)
+
+// DeadliftExerciseName represents the deadlift_exercise_name FIT type.
+type DeadliftExerciseName uint16
+
+const (
+	DeadliftExerciseNameBarbellDeadlift                       DeadliftExerciseName = 0
+	DeadliftExerciseNameBarbellStraightLegDeadlift            DeadliftExerciseName = 1
+	DeadliftExerciseNameDumbbellDeadlift                      DeadliftExerciseName = 2
+	DeadliftExerciseNameDumbbellSingleLegDeadliftToRow        DeadliftExerciseName = 3
+	DeadliftExerciseNameDumbbellStraightLegDeadlift           DeadliftExerciseName = 4
+	DeadliftExerciseNameKettlebellFloorToShelf                DeadliftExerciseName = 5
+	DeadliftExerciseNameOneArmOneLegDeadlift                  DeadliftExerciseName = 6
+	DeadliftExerciseNameRackPull                              DeadliftExerciseName = 7
+	DeadliftExerciseNameRotationalDumbbellStraightLegDeadlift DeadliftExerciseName = 8
+	DeadliftExerciseNameSingleArmDeadlift                     DeadliftExerciseName = 9
+	DeadliftExerciseNameSingleLegBarbellDeadlift              DeadliftExerciseName = 10
+	DeadliftExerciseNameSingleLegBarbellStraightLegDeadlift   DeadliftExerciseName = 11
+	DeadliftExerciseNameSingleLegDeadliftWithBarbell          DeadliftExerciseName = 12
+	DeadliftExerciseNameSingleLegRdlCircuit                   DeadliftExerciseName = 13
+	DeadliftExerciseNameSingleLegRomanianDeadliftWithDumbbell DeadliftExerciseName = 14
+	DeadliftExerciseNameSumoDeadlift                          DeadliftExerciseName = 15
+	DeadliftExerciseNameSumoDeadliftHighPull                  DeadliftExerciseName = 16
+	DeadliftExerciseNameTrapBarDeadlift                       DeadliftExerciseName = 17
+	DeadliftExerciseNameWideGripBarbellDeadlift               DeadliftExerciseName = 18
+	DeadliftExerciseNameInvalid                               DeadliftExerciseName = 0xFFFF
 )
 
 // DeviceIndex represents the device_index FIT type.
@@ -586,6 +977,34 @@ const (
 	DisplayPowerWatts      DisplayPower = 0
 	DisplayPowerPercentFtp DisplayPower = 1
 	DisplayPowerInvalid    DisplayPower = 0xFF
+)
+
+// DiveAlarmType represents the dive_alarm_type FIT type.
+type DiveAlarmType byte
+
+const (
+	DiveAlarmTypeDepth   DiveAlarmType = 0
+	DiveAlarmTypeTime    DiveAlarmType = 1
+	DiveAlarmTypeInvalid DiveAlarmType = 0xFF
+)
+
+// DiveBacklightMode represents the dive_backlight_mode FIT type.
+type DiveBacklightMode byte
+
+const (
+	DiveBacklightModeAtDepth  DiveBacklightMode = 0
+	DiveBacklightModeAlwaysOn DiveBacklightMode = 1
+	DiveBacklightModeInvalid  DiveBacklightMode = 0xFF
+)
+
+// DiveGasStatus represents the dive_gas_status FIT type.
+type DiveGasStatus byte
+
+const (
+	DiveGasStatusDisabled   DiveGasStatus = 0
+	DiveGasStatusEnabled    DiveGasStatus = 1
+	DiveGasStatusBackupOnly DiveGasStatus = 2
+	DiveGasStatusInvalid    DiveGasStatus = 0xFF
 )
 
 // Event represents the event FIT type.
@@ -880,6 +1299,7 @@ const (
 	ExdQualifiersLastSport                ExdQualifiers = 31
 	ExdQualifiersMoving                   ExdQualifiers = 32
 	ExdQualifiersStopped                  ExdQualifiers = 33
+	ExdQualifiersEstimatedTotal           ExdQualifiers = 34
 	ExdQualifiersZone9                    ExdQualifiers = 242
 	ExdQualifiersZone8                    ExdQualifiers = 243
 	ExdQualifiersZone7                    ExdQualifiers = 244
@@ -890,6 +1310,56 @@ const (
 	ExdQualifiersZone2                    ExdQualifiers = 249
 	ExdQualifiersZone1                    ExdQualifiers = 250
 	ExdQualifiersInvalid                  ExdQualifiers = 0xFF
+)
+
+// ExerciseCategory represents the exercise_category FIT type.
+type ExerciseCategory uint16
+
+const (
+	ExerciseCategoryBenchPress        ExerciseCategory = 0
+	ExerciseCategoryCalfRaise         ExerciseCategory = 1
+	ExerciseCategoryCardio            ExerciseCategory = 2
+	ExerciseCategoryCarry             ExerciseCategory = 3
+	ExerciseCategoryChop              ExerciseCategory = 4
+	ExerciseCategoryCore              ExerciseCategory = 5
+	ExerciseCategoryCrunch            ExerciseCategory = 6
+	ExerciseCategoryCurl              ExerciseCategory = 7
+	ExerciseCategoryDeadlift          ExerciseCategory = 8
+	ExerciseCategoryFlye              ExerciseCategory = 9
+	ExerciseCategoryHipRaise          ExerciseCategory = 10
+	ExerciseCategoryHipStability      ExerciseCategory = 11
+	ExerciseCategoryHipSwing          ExerciseCategory = 12
+	ExerciseCategoryHyperextension    ExerciseCategory = 13
+	ExerciseCategoryLateralRaise      ExerciseCategory = 14
+	ExerciseCategoryLegCurl           ExerciseCategory = 15
+	ExerciseCategoryLegRaise          ExerciseCategory = 16
+	ExerciseCategoryLunge             ExerciseCategory = 17
+	ExerciseCategoryOlympicLift       ExerciseCategory = 18
+	ExerciseCategoryPlank             ExerciseCategory = 19
+	ExerciseCategoryPlyo              ExerciseCategory = 20
+	ExerciseCategoryPullUp            ExerciseCategory = 21
+	ExerciseCategoryPushUp            ExerciseCategory = 22
+	ExerciseCategoryRow               ExerciseCategory = 23
+	ExerciseCategoryShoulderPress     ExerciseCategory = 24
+	ExerciseCategoryShoulderStability ExerciseCategory = 25
+	ExerciseCategoryShrug             ExerciseCategory = 26
+	ExerciseCategorySitUp             ExerciseCategory = 27
+	ExerciseCategorySquat             ExerciseCategory = 28
+	ExerciseCategoryTotalBody         ExerciseCategory = 29
+	ExerciseCategoryTricepsExtension  ExerciseCategory = 30
+	ExerciseCategoryWarmUp            ExerciseCategory = 31
+	ExerciseCategoryRun               ExerciseCategory = 32
+	ExerciseCategoryUnknown           ExerciseCategory = 65534
+	ExerciseCategoryInvalid           ExerciseCategory = 0xFFFF
+)
+
+// FaveroProduct represents the favero_product FIT type.
+type FaveroProduct uint16
+
+const (
+	FaveroProductAssiomaUno FaveroProduct = 10
+	FaveroProductAssiomaDuo FaveroProduct = 12
+	FaveroProductInvalid    FaveroProduct = 0xFFFF
 )
 
 // FileFlags represents the file_flags FIT type.
@@ -972,6 +1442,23 @@ const (
 	FitnessEquipmentStatePaused  FitnessEquipmentState = 2
 	FitnessEquipmentStateUnknown FitnessEquipmentState = 3 // lost connection to fitness equipment
 	FitnessEquipmentStateInvalid FitnessEquipmentState = 0xFF
+)
+
+// FlyeExerciseName represents the flye_exercise_name FIT type.
+type FlyeExerciseName uint16
+
+const (
+	FlyeExerciseNameCableCrossover                    FlyeExerciseName = 0
+	FlyeExerciseNameDeclineDumbbellFlye               FlyeExerciseName = 1
+	FlyeExerciseNameDumbbellFlye                      FlyeExerciseName = 2
+	FlyeExerciseNameInclineDumbbellFlye               FlyeExerciseName = 3
+	FlyeExerciseNameKettlebellFlye                    FlyeExerciseName = 4
+	FlyeExerciseNameKneelingRearFlye                  FlyeExerciseName = 5
+	FlyeExerciseNameSingleArmStandingCableReverseFlye FlyeExerciseName = 6
+	FlyeExerciseNameSwissBallDumbbellFlye             FlyeExerciseName = 7
+	FlyeExerciseNameArmRotations                      FlyeExerciseName = 8
+	FlyeExerciseNameHugATree                          FlyeExerciseName = 9
+	FlyeExerciseNameInvalid                           FlyeExerciseName = 0xFFFF
 )
 
 // GarminProduct represents the garmin_product FIT type.
@@ -1085,6 +1572,7 @@ const (
 	GarminProductFr225                     GarminProduct = 2153
 	GarminProductFr630                     GarminProduct = 2156
 	GarminProductFr230                     GarminProduct = 2157
+	GarminProductFr735xt                   GarminProduct = 2158
 	GarminProductVivoActiveApac            GarminProduct = 2160
 	GarminProductVector2                   GarminProduct = 2161
 	GarminProductVector2s                  GarminProduct = 2162
@@ -1104,6 +1592,7 @@ const (
 	GarminProductD2Bravo                   GarminProduct = 2262
 	GarminProductApproachS20               GarminProduct = 2266
 	GarminProductVariaRemote               GarminProduct = 2276
+	GarminProductApproachX40               GarminProduct = 2292
 	GarminProductHrm4Run                   GarminProduct = 2327
 	GarminProductVivoActiveHr              GarminProduct = 2337
 	GarminProductVivoSmartGpsHr            GarminProduct = 2347
@@ -1121,13 +1610,44 @@ const (
 	GarminProductNautix                    GarminProduct = 2496
 	GarminProductEdge820                   GarminProduct = 2530
 	GarminProductEdgeExplore820            GarminProduct = 2531
+	GarminProductFr735xtApac               GarminProduct = 2533
+	GarminProductFr735xtJapan              GarminProduct = 2534
 	GarminProductFenix5s                   GarminProduct = 2544
 	GarminProductD2BravoTitanium           GarminProduct = 2547
+	GarminProductVariaUt800                GarminProduct = 2567 // Varia UT 800 SW
 	GarminProductRunningDynamicsPod        GarminProduct = 2593
 	GarminProductFenix5x                   GarminProduct = 2604
 	GarminProductVivoFitJr                 GarminProduct = 2606
+	GarminProductVivoSmart3                GarminProduct = 2622
+	GarminProductVivoSport                 GarminProduct = 2623
+	GarminProductApproachS60               GarminProduct = 2656
+	GarminProductVirb360                   GarminProduct = 2687
 	GarminProductFr935                     GarminProduct = 2691
 	GarminProductFenix5                    GarminProduct = 2697
+	GarminProductVivoactive3               GarminProduct = 2700
+	GarminProductForetrex601701            GarminProduct = 2769
+	GarminProductVivoMoveHr                GarminProduct = 2772
+	GarminProductEdge1030                  GarminProduct = 2713
+	GarminProductApproachZ80               GarminProduct = 2806
+	GarminProductVivoSmart3Apac            GarminProduct = 2831
+	GarminProductVivoSportApac             GarminProduct = 2832
+	GarminProductDescent                   GarminProduct = 2859
+	GarminProductFr645                     GarminProduct = 2886
+	GarminProductFr645m                    GarminProduct = 2888
+	GarminProductFenix5sPlus               GarminProduct = 2900
+	GarminProductEdge130                   GarminProduct = 2909
+	GarminProductVivosmart4                GarminProduct = 2927
+	GarminProductApproachX10               GarminProduct = 2962
+	GarminProductVivoactive3mW             GarminProduct = 2988
+	GarminProductEdgeExplore               GarminProduct = 3011
+	GarminProductGpsmap66                  GarminProduct = 3028
+	GarminProductApproachS10               GarminProduct = 3049
+	GarminProductVivoactive3mL             GarminProduct = 3066
+	GarminProductApproachG80               GarminProduct = 3085
+	GarminProductFenix5Plus                GarminProduct = 3110
+	GarminProductFenix5xPlus               GarminProduct = 3111
+	GarminProductEdge520Plus               GarminProduct = 3112
+	GarminProductHrmDual                   GarminProduct = 3299  // HRM-Dual
 	GarminProductSdm4                      GarminProduct = 10007 // SDM4 footpod
 	GarminProductEdgeRemote                GarminProduct = 10014
 	GarminProductTrainingCenter            GarminProduct = 20119
@@ -1183,6 +1703,114 @@ const (
 	GoalSourceInvalid   GoalSource = 0xFF
 )
 
+// HipRaiseExerciseName represents the hip_raise_exercise_name FIT type.
+type HipRaiseExerciseName uint16
+
+const (
+	HipRaiseExerciseNameBarbellHipThrustOnFloor                         HipRaiseExerciseName = 0
+	HipRaiseExerciseNameBarbellHipThrustWithBench                       HipRaiseExerciseName = 1
+	HipRaiseExerciseNameBentKneeSwissBallReverseHipRaise                HipRaiseExerciseName = 2
+	HipRaiseExerciseNameWeightedBentKneeSwissBallReverseHipRaise        HipRaiseExerciseName = 3
+	HipRaiseExerciseNameBridgeWithLegExtension                          HipRaiseExerciseName = 4
+	HipRaiseExerciseNameWeightedBridgeWithLegExtension                  HipRaiseExerciseName = 5
+	HipRaiseExerciseNameClamBridge                                      HipRaiseExerciseName = 6
+	HipRaiseExerciseNameFrontKickTabletop                               HipRaiseExerciseName = 7
+	HipRaiseExerciseNameWeightedFrontKickTabletop                       HipRaiseExerciseName = 8
+	HipRaiseExerciseNameHipExtensionAndCross                            HipRaiseExerciseName = 9
+	HipRaiseExerciseNameWeightedHipExtensionAndCross                    HipRaiseExerciseName = 10
+	HipRaiseExerciseNameHipRaise                                        HipRaiseExerciseName = 11
+	HipRaiseExerciseNameWeightedHipRaise                                HipRaiseExerciseName = 12
+	HipRaiseExerciseNameHipRaiseWithFeetOnSwissBall                     HipRaiseExerciseName = 13
+	HipRaiseExerciseNameWeightedHipRaiseWithFeetOnSwissBall             HipRaiseExerciseName = 14
+	HipRaiseExerciseNameHipRaiseWithHeadOnBosuBall                      HipRaiseExerciseName = 15
+	HipRaiseExerciseNameWeightedHipRaiseWithHeadOnBosuBall              HipRaiseExerciseName = 16
+	HipRaiseExerciseNameHipRaiseWithHeadOnSwissBall                     HipRaiseExerciseName = 17
+	HipRaiseExerciseNameWeightedHipRaiseWithHeadOnSwissBall             HipRaiseExerciseName = 18
+	HipRaiseExerciseNameHipRaiseWithKneeSqueeze                         HipRaiseExerciseName = 19
+	HipRaiseExerciseNameWeightedHipRaiseWithKneeSqueeze                 HipRaiseExerciseName = 20
+	HipRaiseExerciseNameInclineRearLegExtension                         HipRaiseExerciseName = 21
+	HipRaiseExerciseNameWeightedInclineRearLegExtension                 HipRaiseExerciseName = 22
+	HipRaiseExerciseNameKettlebellSwing                                 HipRaiseExerciseName = 23
+	HipRaiseExerciseNameMarchingHipRaise                                HipRaiseExerciseName = 24
+	HipRaiseExerciseNameWeightedMarchingHipRaise                        HipRaiseExerciseName = 25
+	HipRaiseExerciseNameMarchingHipRaiseWithFeetOnASwissBall            HipRaiseExerciseName = 26
+	HipRaiseExerciseNameWeightedMarchingHipRaiseWithFeetOnASwissBall    HipRaiseExerciseName = 27
+	HipRaiseExerciseNameReverseHipRaise                                 HipRaiseExerciseName = 28
+	HipRaiseExerciseNameWeightedReverseHipRaise                         HipRaiseExerciseName = 29
+	HipRaiseExerciseNameSingleLegHipRaise                               HipRaiseExerciseName = 30
+	HipRaiseExerciseNameWeightedSingleLegHipRaise                       HipRaiseExerciseName = 31
+	HipRaiseExerciseNameSingleLegHipRaiseWithFootOnBench                HipRaiseExerciseName = 32
+	HipRaiseExerciseNameWeightedSingleLegHipRaiseWithFootOnBench        HipRaiseExerciseName = 33
+	HipRaiseExerciseNameSingleLegHipRaiseWithFootOnBosuBall             HipRaiseExerciseName = 34
+	HipRaiseExerciseNameWeightedSingleLegHipRaiseWithFootOnBosuBall     HipRaiseExerciseName = 35
+	HipRaiseExerciseNameSingleLegHipRaiseWithFootOnFoamRoller           HipRaiseExerciseName = 36
+	HipRaiseExerciseNameWeightedSingleLegHipRaiseWithFootOnFoamRoller   HipRaiseExerciseName = 37
+	HipRaiseExerciseNameSingleLegHipRaiseWithFootOnMedicineBall         HipRaiseExerciseName = 38
+	HipRaiseExerciseNameWeightedSingleLegHipRaiseWithFootOnMedicineBall HipRaiseExerciseName = 39
+	HipRaiseExerciseNameSingleLegHipRaiseWithHeadOnBosuBall             HipRaiseExerciseName = 40
+	HipRaiseExerciseNameWeightedSingleLegHipRaiseWithHeadOnBosuBall     HipRaiseExerciseName = 41
+	HipRaiseExerciseNameWeightedClamBridge                              HipRaiseExerciseName = 42
+	HipRaiseExerciseNameSingleLegSwissBallHipRaiseAndLegCurl            HipRaiseExerciseName = 43
+	HipRaiseExerciseNameClams                                           HipRaiseExerciseName = 44
+	HipRaiseExerciseNameInnerThighCircles                               HipRaiseExerciseName = 45
+	HipRaiseExerciseNameInnerThighSideLift                              HipRaiseExerciseName = 46
+	HipRaiseExerciseNameLegCircles                                      HipRaiseExerciseName = 47
+	HipRaiseExerciseNameLegLift                                         HipRaiseExerciseName = 48
+	HipRaiseExerciseNameLegLiftInExternalRotation                       HipRaiseExerciseName = 49
+	HipRaiseExerciseNameInvalid                                         HipRaiseExerciseName = 0xFFFF
+)
+
+// HipStabilityExerciseName represents the hip_stability_exercise_name FIT type.
+type HipStabilityExerciseName uint16
+
+const (
+	HipStabilityExerciseNameBandSideLyingLegRaise             HipStabilityExerciseName = 0
+	HipStabilityExerciseNameDeadBug                           HipStabilityExerciseName = 1
+	HipStabilityExerciseNameWeightedDeadBug                   HipStabilityExerciseName = 2
+	HipStabilityExerciseNameExternalHipRaise                  HipStabilityExerciseName = 3
+	HipStabilityExerciseNameWeightedExternalHipRaise          HipStabilityExerciseName = 4
+	HipStabilityExerciseNameFireHydrantKicks                  HipStabilityExerciseName = 5
+	HipStabilityExerciseNameWeightedFireHydrantKicks          HipStabilityExerciseName = 6
+	HipStabilityExerciseNameHipCircles                        HipStabilityExerciseName = 7
+	HipStabilityExerciseNameWeightedHipCircles                HipStabilityExerciseName = 8
+	HipStabilityExerciseNameInnerThighLift                    HipStabilityExerciseName = 9
+	HipStabilityExerciseNameWeightedInnerThighLift            HipStabilityExerciseName = 10
+	HipStabilityExerciseNameLateralWalksWithBandAtAnkles      HipStabilityExerciseName = 11
+	HipStabilityExerciseNamePretzelSideKick                   HipStabilityExerciseName = 12
+	HipStabilityExerciseNameWeightedPretzelSideKick           HipStabilityExerciseName = 13
+	HipStabilityExerciseNameProneHipInternalRotation          HipStabilityExerciseName = 14
+	HipStabilityExerciseNameWeightedProneHipInternalRotation  HipStabilityExerciseName = 15
+	HipStabilityExerciseNameQuadruped                         HipStabilityExerciseName = 16
+	HipStabilityExerciseNameQuadrupedHipExtension             HipStabilityExerciseName = 17
+	HipStabilityExerciseNameWeightedQuadrupedHipExtension     HipStabilityExerciseName = 18
+	HipStabilityExerciseNameQuadrupedWithLegLift              HipStabilityExerciseName = 19
+	HipStabilityExerciseNameWeightedQuadrupedWithLegLift      HipStabilityExerciseName = 20
+	HipStabilityExerciseNameSideLyingLegRaise                 HipStabilityExerciseName = 21
+	HipStabilityExerciseNameWeightedSideLyingLegRaise         HipStabilityExerciseName = 22
+	HipStabilityExerciseNameSlidingHipAdduction               HipStabilityExerciseName = 23
+	HipStabilityExerciseNameWeightedSlidingHipAdduction       HipStabilityExerciseName = 24
+	HipStabilityExerciseNameStandingAdduction                 HipStabilityExerciseName = 25
+	HipStabilityExerciseNameWeightedStandingAdduction         HipStabilityExerciseName = 26
+	HipStabilityExerciseNameStandingCableHipAbduction         HipStabilityExerciseName = 27
+	HipStabilityExerciseNameStandingHipAbduction              HipStabilityExerciseName = 28
+	HipStabilityExerciseNameWeightedStandingHipAbduction      HipStabilityExerciseName = 29
+	HipStabilityExerciseNameStandingRearLegRaise              HipStabilityExerciseName = 30
+	HipStabilityExerciseNameWeightedStandingRearLegRaise      HipStabilityExerciseName = 31
+	HipStabilityExerciseNameSupineHipInternalRotation         HipStabilityExerciseName = 32
+	HipStabilityExerciseNameWeightedSupineHipInternalRotation HipStabilityExerciseName = 33
+	HipStabilityExerciseNameInvalid                           HipStabilityExerciseName = 0xFFFF
+)
+
+// HipSwingExerciseName represents the hip_swing_exercise_name FIT type.
+type HipSwingExerciseName uint16
+
+const (
+	HipSwingExerciseNameSingleArmKettlebellSwing HipSwingExerciseName = 0
+	HipSwingExerciseNameSingleArmDumbbellSwing   HipSwingExerciseName = 1
+	HipSwingExerciseNameStepOutSwing             HipSwingExerciseName = 2
+	HipSwingExerciseNameInvalid                  HipSwingExerciseName = 0xFFFF
+)
+
 // HrType represents the hr_type FIT type.
 type HrType byte
 
@@ -1200,6 +1828,53 @@ const (
 	HrZoneCalcPercentMaxHr HrZoneCalc = 1
 	HrZoneCalcPercentHrr   HrZoneCalc = 2
 	HrZoneCalcInvalid      HrZoneCalc = 0xFF
+)
+
+// HyperextensionExerciseName represents the hyperextension_exercise_name FIT type.
+type HyperextensionExerciseName uint16
+
+const (
+	HyperextensionExerciseNameBackExtensionWithOppositeArmAndLegReach         HyperextensionExerciseName = 0
+	HyperextensionExerciseNameWeightedBackExtensionWithOppositeArmAndLegReach HyperextensionExerciseName = 1
+	HyperextensionExerciseNameBaseRotations                                   HyperextensionExerciseName = 2
+	HyperextensionExerciseNameWeightedBaseRotations                           HyperextensionExerciseName = 3
+	HyperextensionExerciseNameBentKneeReverseHyperextension                   HyperextensionExerciseName = 4
+	HyperextensionExerciseNameWeightedBentKneeReverseHyperextension           HyperextensionExerciseName = 5
+	HyperextensionExerciseNameHollowHoldAndRoll                               HyperextensionExerciseName = 6
+	HyperextensionExerciseNameWeightedHollowHoldAndRoll                       HyperextensionExerciseName = 7
+	HyperextensionExerciseNameKicks                                           HyperextensionExerciseName = 8
+	HyperextensionExerciseNameWeightedKicks                                   HyperextensionExerciseName = 9
+	HyperextensionExerciseNameKneeRaises                                      HyperextensionExerciseName = 10
+	HyperextensionExerciseNameWeightedKneeRaises                              HyperextensionExerciseName = 11
+	HyperextensionExerciseNameKneelingSuperman                                HyperextensionExerciseName = 12
+	HyperextensionExerciseNameWeightedKneelingSuperman                        HyperextensionExerciseName = 13
+	HyperextensionExerciseNameLatPullDownWithRow                              HyperextensionExerciseName = 14
+	HyperextensionExerciseNameMedicineBallDeadliftToReach                     HyperextensionExerciseName = 15
+	HyperextensionExerciseNameOneArmOneLegRow                                 HyperextensionExerciseName = 16
+	HyperextensionExerciseNameOneArmRowWithBand                               HyperextensionExerciseName = 17
+	HyperextensionExerciseNameOverheadLungeWithMedicineBall                   HyperextensionExerciseName = 18
+	HyperextensionExerciseNamePlankKneeTucks                                  HyperextensionExerciseName = 19
+	HyperextensionExerciseNameWeightedPlankKneeTucks                          HyperextensionExerciseName = 20
+	HyperextensionExerciseNameSideStep                                        HyperextensionExerciseName = 21
+	HyperextensionExerciseNameWeightedSideStep                                HyperextensionExerciseName = 22
+	HyperextensionExerciseNameSingleLegBackExtension                          HyperextensionExerciseName = 23
+	HyperextensionExerciseNameWeightedSingleLegBackExtension                  HyperextensionExerciseName = 24
+	HyperextensionExerciseNameSpineExtension                                  HyperextensionExerciseName = 25
+	HyperextensionExerciseNameWeightedSpineExtension                          HyperextensionExerciseName = 26
+	HyperextensionExerciseNameStaticBackExtension                             HyperextensionExerciseName = 27
+	HyperextensionExerciseNameWeightedStaticBackExtension                     HyperextensionExerciseName = 28
+	HyperextensionExerciseNameSupermanFromFloor                               HyperextensionExerciseName = 29
+	HyperextensionExerciseNameWeightedSupermanFromFloor                       HyperextensionExerciseName = 30
+	HyperextensionExerciseNameSwissBallBackExtension                          HyperextensionExerciseName = 31
+	HyperextensionExerciseNameWeightedSwissBallBackExtension                  HyperextensionExerciseName = 32
+	HyperextensionExerciseNameSwissBallHyperextension                         HyperextensionExerciseName = 33
+	HyperextensionExerciseNameWeightedSwissBallHyperextension                 HyperextensionExerciseName = 34
+	HyperextensionExerciseNameSwissBallOppositeArmAndLegLift                  HyperextensionExerciseName = 35
+	HyperextensionExerciseNameWeightedSwissBallOppositeArmAndLegLift          HyperextensionExerciseName = 36
+	HyperextensionExerciseNameSupermanOnSwissBall                             HyperextensionExerciseName = 37
+	HyperextensionExerciseNameCobra                                           HyperextensionExerciseName = 38
+	HyperextensionExerciseNameSupineFloorBarre                                HyperextensionExerciseName = 39
+	HyperextensionExerciseNameInvalid                                         HyperextensionExerciseName = 0xFFFF
 )
 
 // Intensity represents the intensity FIT type.
@@ -1348,6 +2023,47 @@ const (
 	LapTriggerInvalid          LapTrigger = 0xFF
 )
 
+// LateralRaiseExerciseName represents the lateral_raise_exercise_name FIT type.
+type LateralRaiseExerciseName uint16
+
+const (
+	LateralRaiseExerciseName45DegreeCableExternalRotation         LateralRaiseExerciseName = 0
+	LateralRaiseExerciseNameAlternatingLateralRaiseWithStaticHold LateralRaiseExerciseName = 1
+	LateralRaiseExerciseNameBarMuscleUp                           LateralRaiseExerciseName = 2
+	LateralRaiseExerciseNameBentOverLateralRaise                  LateralRaiseExerciseName = 3
+	LateralRaiseExerciseNameCableDiagonalRaise                    LateralRaiseExerciseName = 4
+	LateralRaiseExerciseNameCableFrontRaise                       LateralRaiseExerciseName = 5
+	LateralRaiseExerciseNameCalorieRow                            LateralRaiseExerciseName = 6
+	LateralRaiseExerciseNameComboShoulderRaise                    LateralRaiseExerciseName = 7
+	LateralRaiseExerciseNameDumbbellDiagonalRaise                 LateralRaiseExerciseName = 8
+	LateralRaiseExerciseNameDumbbellVRaise                        LateralRaiseExerciseName = 9
+	LateralRaiseExerciseNameFrontRaise                            LateralRaiseExerciseName = 10
+	LateralRaiseExerciseNameLeaningDumbbellLateralRaise           LateralRaiseExerciseName = 11
+	LateralRaiseExerciseNameLyingDumbbellRaise                    LateralRaiseExerciseName = 12
+	LateralRaiseExerciseNameMuscleUp                              LateralRaiseExerciseName = 13
+	LateralRaiseExerciseNameOneArmCableLateralRaise               LateralRaiseExerciseName = 14
+	LateralRaiseExerciseNameOverhandGripRearLateralRaise          LateralRaiseExerciseName = 15
+	LateralRaiseExerciseNamePlateRaises                           LateralRaiseExerciseName = 16
+	LateralRaiseExerciseNameRingDip                               LateralRaiseExerciseName = 17
+	LateralRaiseExerciseNameWeightedRingDip                       LateralRaiseExerciseName = 18
+	LateralRaiseExerciseNameRingMuscleUp                          LateralRaiseExerciseName = 19
+	LateralRaiseExerciseNameWeightedRingMuscleUp                  LateralRaiseExerciseName = 20
+	LateralRaiseExerciseNameRopeClimb                             LateralRaiseExerciseName = 21
+	LateralRaiseExerciseNameWeightedRopeClimb                     LateralRaiseExerciseName = 22
+	LateralRaiseExerciseNameScaption                              LateralRaiseExerciseName = 23
+	LateralRaiseExerciseNameSeatedLateralRaise                    LateralRaiseExerciseName = 24
+	LateralRaiseExerciseNameSeatedRearLateralRaise                LateralRaiseExerciseName = 25
+	LateralRaiseExerciseNameSideLyingLateralRaise                 LateralRaiseExerciseName = 26
+	LateralRaiseExerciseNameStandingLift                          LateralRaiseExerciseName = 27
+	LateralRaiseExerciseNameSuspendedRow                          LateralRaiseExerciseName = 28
+	LateralRaiseExerciseNameUnderhandGripRearLateralRaise         LateralRaiseExerciseName = 29
+	LateralRaiseExerciseNameWallSlide                             LateralRaiseExerciseName = 30
+	LateralRaiseExerciseNameWeightedWallSlide                     LateralRaiseExerciseName = 31
+	LateralRaiseExerciseNameArmCircles                            LateralRaiseExerciseName = 32
+	LateralRaiseExerciseNameShavingTheHead                        LateralRaiseExerciseName = 33
+	LateralRaiseExerciseNameInvalid                               LateralRaiseExerciseName = 0xFFFF
+)
+
 // LeftRightBalance represents the left_right_balance FIT type.
 type LeftRightBalance uint8
 
@@ -1366,6 +2082,54 @@ const (
 	LeftRightBalance100Invalid LeftRightBalance100 = 0xFFFF
 )
 
+// LegCurlExerciseName represents the leg_curl_exercise_name FIT type.
+type LegCurlExerciseName uint16
+
+const (
+	LegCurlExerciseNameLegCurl                     LegCurlExerciseName = 0
+	LegCurlExerciseNameWeightedLegCurl             LegCurlExerciseName = 1
+	LegCurlExerciseNameGoodMorning                 LegCurlExerciseName = 2
+	LegCurlExerciseNameSeatedBarbellGoodMorning    LegCurlExerciseName = 3
+	LegCurlExerciseNameSingleLegBarbellGoodMorning LegCurlExerciseName = 4
+	LegCurlExerciseNameSingleLegSlidingLegCurl     LegCurlExerciseName = 5
+	LegCurlExerciseNameSlidingLegCurl              LegCurlExerciseName = 6
+	LegCurlExerciseNameSplitBarbellGoodMorning     LegCurlExerciseName = 7
+	LegCurlExerciseNameSplitStanceExtension        LegCurlExerciseName = 8
+	LegCurlExerciseNameStaggeredStanceGoodMorning  LegCurlExerciseName = 9
+	LegCurlExerciseNameSwissBallHipRaiseAndLegCurl LegCurlExerciseName = 10
+	LegCurlExerciseNameZercherGoodMorning          LegCurlExerciseName = 11
+	LegCurlExerciseNameInvalid                     LegCurlExerciseName = 0xFFFF
+)
+
+// LegRaiseExerciseName represents the leg_raise_exercise_name FIT type.
+type LegRaiseExerciseName uint16
+
+const (
+	LegRaiseExerciseNameHangingKneeRaise                   LegRaiseExerciseName = 0
+	LegRaiseExerciseNameHangingLegRaise                    LegRaiseExerciseName = 1
+	LegRaiseExerciseNameWeightedHangingLegRaise            LegRaiseExerciseName = 2
+	LegRaiseExerciseNameHangingSingleLegRaise              LegRaiseExerciseName = 3
+	LegRaiseExerciseNameWeightedHangingSingleLegRaise      LegRaiseExerciseName = 4
+	LegRaiseExerciseNameKettlebellLegRaises                LegRaiseExerciseName = 5
+	LegRaiseExerciseNameLegLoweringDrill                   LegRaiseExerciseName = 6
+	LegRaiseExerciseNameWeightedLegLoweringDrill           LegRaiseExerciseName = 7
+	LegRaiseExerciseNameLyingStraightLegRaise              LegRaiseExerciseName = 8
+	LegRaiseExerciseNameWeightedLyingStraightLegRaise      LegRaiseExerciseName = 9
+	LegRaiseExerciseNameMedicineBallLegDrops               LegRaiseExerciseName = 10
+	LegRaiseExerciseNameQuadrupedLegRaise                  LegRaiseExerciseName = 11
+	LegRaiseExerciseNameWeightedQuadrupedLegRaise          LegRaiseExerciseName = 12
+	LegRaiseExerciseNameReverseLegRaise                    LegRaiseExerciseName = 13
+	LegRaiseExerciseNameWeightedReverseLegRaise            LegRaiseExerciseName = 14
+	LegRaiseExerciseNameReverseLegRaiseOnSwissBall         LegRaiseExerciseName = 15
+	LegRaiseExerciseNameWeightedReverseLegRaiseOnSwissBall LegRaiseExerciseName = 16
+	LegRaiseExerciseNameSingleLegLoweringDrill             LegRaiseExerciseName = 17
+	LegRaiseExerciseNameWeightedSingleLegLoweringDrill     LegRaiseExerciseName = 18
+	LegRaiseExerciseNameWeightedHangingKneeRaise           LegRaiseExerciseName = 19
+	LegRaiseExerciseNameLateralStepover                    LegRaiseExerciseName = 20
+	LegRaiseExerciseNameWeightedLateralStepover            LegRaiseExerciseName = 21
+	LegRaiseExerciseNameInvalid                            LegRaiseExerciseName = 0xFFFF
+)
+
 // LengthType represents the length_type FIT type.
 type LengthType byte
 
@@ -1375,11 +2139,106 @@ const (
 	LengthTypeInvalid LengthType = 0xFF
 )
 
+// LocalDeviceType represents the local_device_type FIT type.
+type LocalDeviceType uint8
+
+const (
+	LocalDeviceTypeInvalid LocalDeviceType = 0xFF
+)
+
 // LocaltimeIntoDay represents the localtime_into_day FIT type.
 type LocaltimeIntoDay uint32
 
 const (
 	LocaltimeIntoDayInvalid LocaltimeIntoDay = 0xFFFFFFFF
+)
+
+// LungeExerciseName represents the lunge_exercise_name FIT type.
+type LungeExerciseName uint16
+
+const (
+	LungeExerciseNameOverheadLunge                                 LungeExerciseName = 0
+	LungeExerciseNameLungeMatrix                                   LungeExerciseName = 1
+	LungeExerciseNameWeightedLungeMatrix                           LungeExerciseName = 2
+	LungeExerciseNameAlternatingBarbellForwardLunge                LungeExerciseName = 3
+	LungeExerciseNameAlternatingDumbbellLungeWithReach             LungeExerciseName = 4
+	LungeExerciseNameBackFootElevatedDumbbellSplitSquat            LungeExerciseName = 5
+	LungeExerciseNameBarbellBoxLunge                               LungeExerciseName = 6
+	LungeExerciseNameBarbellBulgarianSplitSquat                    LungeExerciseName = 7
+	LungeExerciseNameBarbellCrossoverLunge                         LungeExerciseName = 8
+	LungeExerciseNameBarbellFrontSplitSquat                        LungeExerciseName = 9
+	LungeExerciseNameBarbellLunge                                  LungeExerciseName = 10
+	LungeExerciseNameBarbellReverseLunge                           LungeExerciseName = 11
+	LungeExerciseNameBarbellSideLunge                              LungeExerciseName = 12
+	LungeExerciseNameBarbellSplitSquat                             LungeExerciseName = 13
+	LungeExerciseNameCoreControlRearLunge                          LungeExerciseName = 14
+	LungeExerciseNameDiagonalLunge                                 LungeExerciseName = 15
+	LungeExerciseNameDropLunge                                     LungeExerciseName = 16
+	LungeExerciseNameDumbbellBoxLunge                              LungeExerciseName = 17
+	LungeExerciseNameDumbbellBulgarianSplitSquat                   LungeExerciseName = 18
+	LungeExerciseNameDumbbellCrossoverLunge                        LungeExerciseName = 19
+	LungeExerciseNameDumbbellDiagonalLunge                         LungeExerciseName = 20
+	LungeExerciseNameDumbbellLunge                                 LungeExerciseName = 21
+	LungeExerciseNameDumbbellLungeAndRotation                      LungeExerciseName = 22
+	LungeExerciseNameDumbbellOverheadBulgarianSplitSquat           LungeExerciseName = 23
+	LungeExerciseNameDumbbellReverseLungeToHighKneeAndPress        LungeExerciseName = 24
+	LungeExerciseNameDumbbellSideLunge                             LungeExerciseName = 25
+	LungeExerciseNameElevatedFrontFootBarbellSplitSquat            LungeExerciseName = 26
+	LungeExerciseNameFrontFootElevatedDumbbellSplitSquat           LungeExerciseName = 27
+	LungeExerciseNameGunslingerLunge                               LungeExerciseName = 28
+	LungeExerciseNameLawnmowerLunge                                LungeExerciseName = 29
+	LungeExerciseNameLowLungeWithIsometricAdduction                LungeExerciseName = 30
+	LungeExerciseNameLowSideToSideLunge                            LungeExerciseName = 31
+	LungeExerciseNameLunge                                         LungeExerciseName = 32
+	LungeExerciseNameWeightedLunge                                 LungeExerciseName = 33
+	LungeExerciseNameLungeWithArmReach                             LungeExerciseName = 34
+	LungeExerciseNameLungeWithDiagonalReach                        LungeExerciseName = 35
+	LungeExerciseNameLungeWithSideBend                             LungeExerciseName = 36
+	LungeExerciseNameOffsetDumbbellLunge                           LungeExerciseName = 37
+	LungeExerciseNameOffsetDumbbellReverseLunge                    LungeExerciseName = 38
+	LungeExerciseNameOverheadBulgarianSplitSquat                   LungeExerciseName = 39
+	LungeExerciseNameOverheadDumbbellReverseLunge                  LungeExerciseName = 40
+	LungeExerciseNameOverheadDumbbellSplitSquat                    LungeExerciseName = 41
+	LungeExerciseNameOverheadLungeWithRotation                     LungeExerciseName = 42
+	LungeExerciseNameReverseBarbellBoxLunge                        LungeExerciseName = 43
+	LungeExerciseNameReverseBoxLunge                               LungeExerciseName = 44
+	LungeExerciseNameReverseDumbbellBoxLunge                       LungeExerciseName = 45
+	LungeExerciseNameReverseDumbbellCrossoverLunge                 LungeExerciseName = 46
+	LungeExerciseNameReverseDumbbellDiagonalLunge                  LungeExerciseName = 47
+	LungeExerciseNameReverseLungeWithReachBack                     LungeExerciseName = 48
+	LungeExerciseNameWeightedReverseLungeWithReachBack             LungeExerciseName = 49
+	LungeExerciseNameReverseLungeWithTwistAndOverheadReach         LungeExerciseName = 50
+	LungeExerciseNameWeightedReverseLungeWithTwistAndOverheadReach LungeExerciseName = 51
+	LungeExerciseNameReverseSlidingBoxLunge                        LungeExerciseName = 52
+	LungeExerciseNameWeightedReverseSlidingBoxLunge                LungeExerciseName = 53
+	LungeExerciseNameReverseSlidingLunge                           LungeExerciseName = 54
+	LungeExerciseNameWeightedReverseSlidingLunge                   LungeExerciseName = 55
+	LungeExerciseNameRunnersLungeToBalance                         LungeExerciseName = 56
+	LungeExerciseNameWeightedRunnersLungeToBalance                 LungeExerciseName = 57
+	LungeExerciseNameShiftingSideLunge                             LungeExerciseName = 58
+	LungeExerciseNameSideAndCrossoverLunge                         LungeExerciseName = 59
+	LungeExerciseNameWeightedSideAndCrossoverLunge                 LungeExerciseName = 60
+	LungeExerciseNameSideLunge                                     LungeExerciseName = 61
+	LungeExerciseNameWeightedSideLunge                             LungeExerciseName = 62
+	LungeExerciseNameSideLungeAndPress                             LungeExerciseName = 63
+	LungeExerciseNameSideLungeJumpOff                              LungeExerciseName = 64
+	LungeExerciseNameSideLungeSweep                                LungeExerciseName = 65
+	LungeExerciseNameWeightedSideLungeSweep                        LungeExerciseName = 66
+	LungeExerciseNameSideLungeToCrossoverTap                       LungeExerciseName = 67
+	LungeExerciseNameWeightedSideLungeToCrossoverTap               LungeExerciseName = 68
+	LungeExerciseNameSideToSideLungeChops                          LungeExerciseName = 69
+	LungeExerciseNameWeightedSideToSideLungeChops                  LungeExerciseName = 70
+	LungeExerciseNameSiffJumpLunge                                 LungeExerciseName = 71
+	LungeExerciseNameWeightedSiffJumpLunge                         LungeExerciseName = 72
+	LungeExerciseNameSingleArmReverseLungeAndPress                 LungeExerciseName = 73
+	LungeExerciseNameSlidingLateralLunge                           LungeExerciseName = 74
+	LungeExerciseNameWeightedSlidingLateralLunge                   LungeExerciseName = 75
+	LungeExerciseNameWalkingBarbellLunge                           LungeExerciseName = 76
+	LungeExerciseNameWalkingDumbbellLunge                          LungeExerciseName = 77
+	LungeExerciseNameWalkingLunge                                  LungeExerciseName = 78
+	LungeExerciseNameWeightedWalkingLunge                          LungeExerciseName = 79
+	LungeExerciseNameWideGripOverheadBarbellSplitSquat             LungeExerciseName = 80
+	LungeExerciseNameInvalid                                       LungeExerciseName = 0xFFFF
 )
 
 // Manufacturer represents the manufacturer FIT type.
@@ -1498,6 +2357,18 @@ const (
 	ManufacturerLatitudeLimited        Manufacturer = 113
 	ManufacturerSoaringTechnology      Manufacturer = 114
 	ManufacturerIgpsport               Manufacturer = 115
+	ManufacturerThinkrider             Manufacturer = 116
+	ManufacturerGopherSport            Manufacturer = 117
+	ManufacturerWaterrower             Manufacturer = 118
+	ManufacturerOrangetheory           Manufacturer = 119
+	ManufacturerInpeak                 Manufacturer = 120
+	ManufacturerKinetic                Manufacturer = 121
+	ManufacturerJohnsonHealthTech      Manufacturer = 122
+	ManufacturerPolarElectro           Manufacturer = 123
+	ManufacturerSeesense               Manufacturer = 124
+	ManufacturerNciTechnology          Manufacturer = 125
+	ManufacturerIqsquare               Manufacturer = 126
+	ManufacturerLeomo                  Manufacturer = 127
 	ManufacturerDevelopment            Manufacturer = 255
 	ManufacturerHealthandlife          Manufacturer = 257
 	ManufacturerLezyne                 Manufacturer = 258
@@ -1526,6 +2397,21 @@ const (
 	ManufacturerTrainerRoad            Manufacturer = 281
 	ManufacturerTheSufferfest          Manufacturer = 282
 	ManufacturerFullspeedahead         Manufacturer = 283
+	ManufacturerVirtualtraining        Manufacturer = 284
+	ManufacturerFeedbacksports         Manufacturer = 285
+	ManufacturerOmata                  Manufacturer = 286
+	ManufacturerVdo                    Manufacturer = 287
+	ManufacturerMagneticdays           Manufacturer = 288
+	ManufacturerHammerhead             Manufacturer = 289
+	ManufacturerKineticByKurt          Manufacturer = 290
+	ManufacturerShapelog               Manufacturer = 291
+	ManufacturerDabuziduo              Manufacturer = 292
+	ManufacturerJetblack               Manufacturer = 293
+	ManufacturerCoros                  Manufacturer = 294
+	ManufacturerVirtugo                Manufacturer = 295
+	ManufacturerVelosense              Manufacturer = 296
+	ManufacturerCycligentinc           Manufacturer = 297
+	ManufacturerTrailforks             Manufacturer = 298
 	ManufacturerActigraphcorp          Manufacturer = 5759
 	ManufacturerInvalid                Manufacturer = 0xFFFF
 )
@@ -1621,6 +2507,15 @@ const (
 	MesgNumFieldDescription            MesgNum = 206
 	MesgNumDeveloperDataId             MesgNum = 207
 	MesgNumMagnetometerData            MesgNum = 208
+	MesgNumBarometerData               MesgNum = 209
+	MesgNumOneDSensorCalibration       MesgNum = 210
+	MesgNumSet                         MesgNum = 225
+	MesgNumStressLevel                 MesgNum = 227
+	MesgNumDiveSettings                MesgNum = 258
+	MesgNumDiveGas                     MesgNum = 259
+	MesgNumDiveAlarm                   MesgNum = 262
+	MesgNumExerciseTitle               MesgNum = 264
+	MesgNumDiveSummary                 MesgNum = 268
 	MesgNumMfgRangeMin                 MesgNum = 0xFF00 // 0xFF00 - 0xFFFE reserved for manufacturer specific messages
 	MesgNumMfgRangeMax                 MesgNum = 0xFFFE // 0xFF00 - 0xFFFE reserved for manufacturer specific messages
 	MesgNumInvalid                     MesgNum = 0xFFFF
@@ -1636,6 +2531,216 @@ const (
 	MessageIndexInvalid  MessageIndex = 0xFFFF
 )
 
+// OlympicLiftExerciseName represents the olympic_lift_exercise_name FIT type.
+type OlympicLiftExerciseName uint16
+
+const (
+	OlympicLiftExerciseNameBarbellHangPowerClean      OlympicLiftExerciseName = 0
+	OlympicLiftExerciseNameBarbellHangSquatClean      OlympicLiftExerciseName = 1
+	OlympicLiftExerciseNameBarbellPowerClean          OlympicLiftExerciseName = 2
+	OlympicLiftExerciseNameBarbellPowerSnatch         OlympicLiftExerciseName = 3
+	OlympicLiftExerciseNameBarbellSquatClean          OlympicLiftExerciseName = 4
+	OlympicLiftExerciseNameCleanAndJerk               OlympicLiftExerciseName = 5
+	OlympicLiftExerciseNameBarbellHangPowerSnatch     OlympicLiftExerciseName = 6
+	OlympicLiftExerciseNameBarbellHangPull            OlympicLiftExerciseName = 7
+	OlympicLiftExerciseNameBarbellHighPull            OlympicLiftExerciseName = 8
+	OlympicLiftExerciseNameBarbellSnatch              OlympicLiftExerciseName = 9
+	OlympicLiftExerciseNameBarbellSplitJerk           OlympicLiftExerciseName = 10
+	OlympicLiftExerciseNameClean                      OlympicLiftExerciseName = 11
+	OlympicLiftExerciseNameDumbbellClean              OlympicLiftExerciseName = 12
+	OlympicLiftExerciseNameDumbbellHangPull           OlympicLiftExerciseName = 13
+	OlympicLiftExerciseNameOneHandDumbbellSplitSnatch OlympicLiftExerciseName = 14
+	OlympicLiftExerciseNamePushJerk                   OlympicLiftExerciseName = 15
+	OlympicLiftExerciseNameSingleArmDumbbellSnatch    OlympicLiftExerciseName = 16
+	OlympicLiftExerciseNameSingleArmHangSnatch        OlympicLiftExerciseName = 17
+	OlympicLiftExerciseNameSingleArmKettlebellSnatch  OlympicLiftExerciseName = 18
+	OlympicLiftExerciseNameSplitJerk                  OlympicLiftExerciseName = 19
+	OlympicLiftExerciseNameSquatCleanAndJerk          OlympicLiftExerciseName = 20
+	OlympicLiftExerciseNameInvalid                    OlympicLiftExerciseName = 0xFFFF
+)
+
+// PlankExerciseName represents the plank_exercise_name FIT type.
+type PlankExerciseName uint16
+
+const (
+	PlankExerciseName45DegreePlank                                    PlankExerciseName = 0
+	PlankExerciseNameWeighted45DegreePlank                            PlankExerciseName = 1
+	PlankExerciseName90DegreeStaticHold                               PlankExerciseName = 2
+	PlankExerciseNameWeighted90DegreeStaticHold                       PlankExerciseName = 3
+	PlankExerciseNameBearCrawl                                        PlankExerciseName = 4
+	PlankExerciseNameWeightedBearCrawl                                PlankExerciseName = 5
+	PlankExerciseNameCrossBodyMountainClimber                         PlankExerciseName = 6
+	PlankExerciseNameWeightedCrossBodyMountainClimber                 PlankExerciseName = 7
+	PlankExerciseNameElbowPlankPikeJacks                              PlankExerciseName = 8
+	PlankExerciseNameWeightedElbowPlankPikeJacks                      PlankExerciseName = 9
+	PlankExerciseNameElevatedFeetPlank                                PlankExerciseName = 10
+	PlankExerciseNameWeightedElevatedFeetPlank                        PlankExerciseName = 11
+	PlankExerciseNameElevatorAbs                                      PlankExerciseName = 12
+	PlankExerciseNameWeightedElevatorAbs                              PlankExerciseName = 13
+	PlankExerciseNameExtendedPlank                                    PlankExerciseName = 14
+	PlankExerciseNameWeightedExtendedPlank                            PlankExerciseName = 15
+	PlankExerciseNameFullPlankPasseTwist                              PlankExerciseName = 16
+	PlankExerciseNameWeightedFullPlankPasseTwist                      PlankExerciseName = 17
+	PlankExerciseNameInchingElbowPlank                                PlankExerciseName = 18
+	PlankExerciseNameWeightedInchingElbowPlank                        PlankExerciseName = 19
+	PlankExerciseNameInchwormToSidePlank                              PlankExerciseName = 20
+	PlankExerciseNameWeightedInchwormToSidePlank                      PlankExerciseName = 21
+	PlankExerciseNameKneelingPlank                                    PlankExerciseName = 22
+	PlankExerciseNameWeightedKneelingPlank                            PlankExerciseName = 23
+	PlankExerciseNameKneelingSidePlankWithLegLift                     PlankExerciseName = 24
+	PlankExerciseNameWeightedKneelingSidePlankWithLegLift             PlankExerciseName = 25
+	PlankExerciseNameLateralRoll                                      PlankExerciseName = 26
+	PlankExerciseNameWeightedLateralRoll                              PlankExerciseName = 27
+	PlankExerciseNameLyingReversePlank                                PlankExerciseName = 28
+	PlankExerciseNameWeightedLyingReversePlank                        PlankExerciseName = 29
+	PlankExerciseNameMedicineBallMountainClimber                      PlankExerciseName = 30
+	PlankExerciseNameWeightedMedicineBallMountainClimber              PlankExerciseName = 31
+	PlankExerciseNameModifiedMountainClimberAndExtension              PlankExerciseName = 32
+	PlankExerciseNameWeightedModifiedMountainClimberAndExtension      PlankExerciseName = 33
+	PlankExerciseNameMountainClimber                                  PlankExerciseName = 34
+	PlankExerciseNameWeightedMountainClimber                          PlankExerciseName = 35
+	PlankExerciseNameMountainClimberOnSlidingDiscs                    PlankExerciseName = 36
+	PlankExerciseNameWeightedMountainClimberOnSlidingDiscs            PlankExerciseName = 37
+	PlankExerciseNameMountainClimberWithFeetOnBosuBall                PlankExerciseName = 38
+	PlankExerciseNameWeightedMountainClimberWithFeetOnBosuBall        PlankExerciseName = 39
+	PlankExerciseNameMountainClimberWithHandsOnBench                  PlankExerciseName = 40
+	PlankExerciseNameMountainClimberWithHandsOnSwissBall              PlankExerciseName = 41
+	PlankExerciseNameWeightedMountainClimberWithHandsOnSwissBall      PlankExerciseName = 42
+	PlankExerciseNamePlank                                            PlankExerciseName = 43
+	PlankExerciseNamePlankJacksWithFeetOnSlidingDiscs                 PlankExerciseName = 44
+	PlankExerciseNameWeightedPlankJacksWithFeetOnSlidingDiscs         PlankExerciseName = 45
+	PlankExerciseNamePlankKneeTwist                                   PlankExerciseName = 46
+	PlankExerciseNameWeightedPlankKneeTwist                           PlankExerciseName = 47
+	PlankExerciseNamePlankPikeJumps                                   PlankExerciseName = 48
+	PlankExerciseNameWeightedPlankPikeJumps                           PlankExerciseName = 49
+	PlankExerciseNamePlankPikes                                       PlankExerciseName = 50
+	PlankExerciseNameWeightedPlankPikes                               PlankExerciseName = 51
+	PlankExerciseNamePlankToStandUp                                   PlankExerciseName = 52
+	PlankExerciseNameWeightedPlankToStandUp                           PlankExerciseName = 53
+	PlankExerciseNamePlankWithArmRaise                                PlankExerciseName = 54
+	PlankExerciseNameWeightedPlankWithArmRaise                        PlankExerciseName = 55
+	PlankExerciseNamePlankWithKneeToElbow                             PlankExerciseName = 56
+	PlankExerciseNameWeightedPlankWithKneeToElbow                     PlankExerciseName = 57
+	PlankExerciseNamePlankWithObliqueCrunch                           PlankExerciseName = 58
+	PlankExerciseNameWeightedPlankWithObliqueCrunch                   PlankExerciseName = 59
+	PlankExerciseNamePlyometricSidePlank                              PlankExerciseName = 60
+	PlankExerciseNameWeightedPlyometricSidePlank                      PlankExerciseName = 61
+	PlankExerciseNameRollingSidePlank                                 PlankExerciseName = 62
+	PlankExerciseNameWeightedRollingSidePlank                         PlankExerciseName = 63
+	PlankExerciseNameSideKickPlank                                    PlankExerciseName = 64
+	PlankExerciseNameWeightedSideKickPlank                            PlankExerciseName = 65
+	PlankExerciseNameSidePlank                                        PlankExerciseName = 66
+	PlankExerciseNameWeightedSidePlank                                PlankExerciseName = 67
+	PlankExerciseNameSidePlankAndRow                                  PlankExerciseName = 68
+	PlankExerciseNameWeightedSidePlankAndRow                          PlankExerciseName = 69
+	PlankExerciseNameSidePlankLift                                    PlankExerciseName = 70
+	PlankExerciseNameWeightedSidePlankLift                            PlankExerciseName = 71
+	PlankExerciseNameSidePlankWithElbowOnBosuBall                     PlankExerciseName = 72
+	PlankExerciseNameWeightedSidePlankWithElbowOnBosuBall             PlankExerciseName = 73
+	PlankExerciseNameSidePlankWithFeetOnBench                         PlankExerciseName = 74
+	PlankExerciseNameWeightedSidePlankWithFeetOnBench                 PlankExerciseName = 75
+	PlankExerciseNameSidePlankWithKneeCircle                          PlankExerciseName = 76
+	PlankExerciseNameWeightedSidePlankWithKneeCircle                  PlankExerciseName = 77
+	PlankExerciseNameSidePlankWithKneeTuck                            PlankExerciseName = 78
+	PlankExerciseNameWeightedSidePlankWithKneeTuck                    PlankExerciseName = 79
+	PlankExerciseNameSidePlankWithLegLift                             PlankExerciseName = 80
+	PlankExerciseNameWeightedSidePlankWithLegLift                     PlankExerciseName = 81
+	PlankExerciseNameSidePlankWithReachUnder                          PlankExerciseName = 82
+	PlankExerciseNameWeightedSidePlankWithReachUnder                  PlankExerciseName = 83
+	PlankExerciseNameSingleLegElevatedFeetPlank                       PlankExerciseName = 84
+	PlankExerciseNameWeightedSingleLegElevatedFeetPlank               PlankExerciseName = 85
+	PlankExerciseNameSingleLegFlexAndExtend                           PlankExerciseName = 86
+	PlankExerciseNameWeightedSingleLegFlexAndExtend                   PlankExerciseName = 87
+	PlankExerciseNameSingleLegSidePlank                               PlankExerciseName = 88
+	PlankExerciseNameWeightedSingleLegSidePlank                       PlankExerciseName = 89
+	PlankExerciseNameSpidermanPlank                                   PlankExerciseName = 90
+	PlankExerciseNameWeightedSpidermanPlank                           PlankExerciseName = 91
+	PlankExerciseNameStraightArmPlank                                 PlankExerciseName = 92
+	PlankExerciseNameWeightedStraightArmPlank                         PlankExerciseName = 93
+	PlankExerciseNameStraightArmPlankWithShoulderTouch                PlankExerciseName = 94
+	PlankExerciseNameWeightedStraightArmPlankWithShoulderTouch        PlankExerciseName = 95
+	PlankExerciseNameSwissBallPlank                                   PlankExerciseName = 96
+	PlankExerciseNameWeightedSwissBallPlank                           PlankExerciseName = 97
+	PlankExerciseNameSwissBallPlankLegLift                            PlankExerciseName = 98
+	PlankExerciseNameWeightedSwissBallPlankLegLift                    PlankExerciseName = 99
+	PlankExerciseNameSwissBallPlankLegLiftAndHold                     PlankExerciseName = 100
+	PlankExerciseNameSwissBallPlankWithFeetOnBench                    PlankExerciseName = 101
+	PlankExerciseNameWeightedSwissBallPlankWithFeetOnBench            PlankExerciseName = 102
+	PlankExerciseNameSwissBallProneJackknife                          PlankExerciseName = 103
+	PlankExerciseNameWeightedSwissBallProneJackknife                  PlankExerciseName = 104
+	PlankExerciseNameSwissBallSidePlank                               PlankExerciseName = 105
+	PlankExerciseNameWeightedSwissBallSidePlank                       PlankExerciseName = 106
+	PlankExerciseNameThreeWayPlank                                    PlankExerciseName = 107
+	PlankExerciseNameWeightedThreeWayPlank                            PlankExerciseName = 108
+	PlankExerciseNameTowelPlankAndKneeIn                              PlankExerciseName = 109
+	PlankExerciseNameWeightedTowelPlankAndKneeIn                      PlankExerciseName = 110
+	PlankExerciseNameTStabilization                                   PlankExerciseName = 111
+	PlankExerciseNameWeightedTStabilization                           PlankExerciseName = 112
+	PlankExerciseNameTurkishGetUpToSidePlank                          PlankExerciseName = 113
+	PlankExerciseNameWeightedTurkishGetUpToSidePlank                  PlankExerciseName = 114
+	PlankExerciseNameTwoPointPlank                                    PlankExerciseName = 115
+	PlankExerciseNameWeightedTwoPointPlank                            PlankExerciseName = 116
+	PlankExerciseNameWeightedPlank                                    PlankExerciseName = 117
+	PlankExerciseNameWideStancePlankWithDiagonalArmLift               PlankExerciseName = 118
+	PlankExerciseNameWeightedWideStancePlankWithDiagonalArmLift       PlankExerciseName = 119
+	PlankExerciseNameWideStancePlankWithDiagonalLegLift               PlankExerciseName = 120
+	PlankExerciseNameWeightedWideStancePlankWithDiagonalLegLift       PlankExerciseName = 121
+	PlankExerciseNameWideStancePlankWithLegLift                       PlankExerciseName = 122
+	PlankExerciseNameWeightedWideStancePlankWithLegLift               PlankExerciseName = 123
+	PlankExerciseNameWideStancePlankWithOppositeArmAndLegLift         PlankExerciseName = 124
+	PlankExerciseNameWeightedMountainClimberWithHandsOnBench          PlankExerciseName = 125
+	PlankExerciseNameWeightedSwissBallPlankLegLiftAndHold             PlankExerciseName = 126
+	PlankExerciseNameWeightedWideStancePlankWithOppositeArmAndLegLift PlankExerciseName = 127
+	PlankExerciseNamePlankWithFeetOnSwissBall                         PlankExerciseName = 128
+	PlankExerciseNameSidePlankToPlankWithReachUnder                   PlankExerciseName = 129
+	PlankExerciseNameBridgeWithGluteLowerLift                         PlankExerciseName = 130
+	PlankExerciseNameBridgeOneLegBridge                               PlankExerciseName = 131
+	PlankExerciseNamePlankWithArmVariations                           PlankExerciseName = 132
+	PlankExerciseNamePlankWithLegLift                                 PlankExerciseName = 133
+	PlankExerciseNameReversePlankWithLegPull                          PlankExerciseName = 134
+	PlankExerciseNameInvalid                                          PlankExerciseName = 0xFFFF
+)
+
+// PlyoExerciseName represents the plyo_exercise_name FIT type.
+type PlyoExerciseName uint16
+
+const (
+	PlyoExerciseNameAlternatingJumpLunge                  PlyoExerciseName = 0
+	PlyoExerciseNameWeightedAlternatingJumpLunge          PlyoExerciseName = 1
+	PlyoExerciseNameBarbellJumpSquat                      PlyoExerciseName = 2
+	PlyoExerciseNameBodyWeightJumpSquat                   PlyoExerciseName = 3
+	PlyoExerciseNameWeightedJumpSquat                     PlyoExerciseName = 4
+	PlyoExerciseNameCrossKneeStrike                       PlyoExerciseName = 5
+	PlyoExerciseNameWeightedCrossKneeStrike               PlyoExerciseName = 6
+	PlyoExerciseNameDepthJump                             PlyoExerciseName = 7
+	PlyoExerciseNameWeightedDepthJump                     PlyoExerciseName = 8
+	PlyoExerciseNameDumbbellJumpSquat                     PlyoExerciseName = 9
+	PlyoExerciseNameDumbbellSplitJump                     PlyoExerciseName = 10
+	PlyoExerciseNameFrontKneeStrike                       PlyoExerciseName = 11
+	PlyoExerciseNameWeightedFrontKneeStrike               PlyoExerciseName = 12
+	PlyoExerciseNameHighBoxJump                           PlyoExerciseName = 13
+	PlyoExerciseNameWeightedHighBoxJump                   PlyoExerciseName = 14
+	PlyoExerciseNameIsometricExplosiveBodyWeightJumpSquat PlyoExerciseName = 15
+	PlyoExerciseNameWeightedIsometricExplosiveJumpSquat   PlyoExerciseName = 16
+	PlyoExerciseNameLateralLeapAndHop                     PlyoExerciseName = 17
+	PlyoExerciseNameWeightedLateralLeapAndHop             PlyoExerciseName = 18
+	PlyoExerciseNameLateralPlyoSquats                     PlyoExerciseName = 19
+	PlyoExerciseNameWeightedLateralPlyoSquats             PlyoExerciseName = 20
+	PlyoExerciseNameLateralSlide                          PlyoExerciseName = 21
+	PlyoExerciseNameWeightedLateralSlide                  PlyoExerciseName = 22
+	PlyoExerciseNameMedicineBallOverheadThrows            PlyoExerciseName = 23
+	PlyoExerciseNameMedicineBallSideThrow                 PlyoExerciseName = 24
+	PlyoExerciseNameMedicineBallSlam                      PlyoExerciseName = 25
+	PlyoExerciseNameSideToSideMedicineBallThrows          PlyoExerciseName = 26
+	PlyoExerciseNameSideToSideShuffleJump                 PlyoExerciseName = 27
+	PlyoExerciseNameWeightedSideToSideShuffleJump         PlyoExerciseName = 28
+	PlyoExerciseNameSquatJumpOntoBox                      PlyoExerciseName = 29
+	PlyoExerciseNameWeightedSquatJumpOntoBox              PlyoExerciseName = 30
+	PlyoExerciseNameSquatJumpsInAndOut                    PlyoExerciseName = 31
+	PlyoExerciseNameWeightedSquatJumpsInAndOut            PlyoExerciseName = 32
+	PlyoExerciseNameInvalid                               PlyoExerciseName = 0xFFFF
+)
+
 // PowerPhaseType represents the power_phase_type FIT type.
 type PowerPhaseType byte
 
@@ -1645,6 +2750,138 @@ const (
 	PowerPhaseTypePowerPhaseArcLength  PowerPhaseType = 2
 	PowerPhaseTypePowerPhaseCenter     PowerPhaseType = 3
 	PowerPhaseTypeInvalid              PowerPhaseType = 0xFF
+)
+
+// PullUpExerciseName represents the pull_up_exercise_name FIT type.
+type PullUpExerciseName uint16
+
+const (
+	PullUpExerciseNameBandedPullUps                    PullUpExerciseName = 0
+	PullUpExerciseName30DegreeLatPulldown              PullUpExerciseName = 1
+	PullUpExerciseNameBandAssistedChinUp               PullUpExerciseName = 2
+	PullUpExerciseNameCloseGripChinUp                  PullUpExerciseName = 3
+	PullUpExerciseNameWeightedCloseGripChinUp          PullUpExerciseName = 4
+	PullUpExerciseNameCloseGripLatPulldown             PullUpExerciseName = 5
+	PullUpExerciseNameCrossoverChinUp                  PullUpExerciseName = 6
+	PullUpExerciseNameWeightedCrossoverChinUp          PullUpExerciseName = 7
+	PullUpExerciseNameEzBarPullover                    PullUpExerciseName = 8
+	PullUpExerciseNameHangingHurdle                    PullUpExerciseName = 9
+	PullUpExerciseNameWeightedHangingHurdle            PullUpExerciseName = 10
+	PullUpExerciseNameKneelingLatPulldown              PullUpExerciseName = 11
+	PullUpExerciseNameKneelingUnderhandGripLatPulldown PullUpExerciseName = 12
+	PullUpExerciseNameLatPulldown                      PullUpExerciseName = 13
+	PullUpExerciseNameMixedGripChinUp                  PullUpExerciseName = 14
+	PullUpExerciseNameWeightedMixedGripChinUp          PullUpExerciseName = 15
+	PullUpExerciseNameMixedGripPullUp                  PullUpExerciseName = 16
+	PullUpExerciseNameWeightedMixedGripPullUp          PullUpExerciseName = 17
+	PullUpExerciseNameReverseGripPulldown              PullUpExerciseName = 18
+	PullUpExerciseNameStandingCablePullover            PullUpExerciseName = 19
+	PullUpExerciseNameStraightArmPulldown              PullUpExerciseName = 20
+	PullUpExerciseNameSwissBallEzBarPullover           PullUpExerciseName = 21
+	PullUpExerciseNameTowelPullUp                      PullUpExerciseName = 22
+	PullUpExerciseNameWeightedTowelPullUp              PullUpExerciseName = 23
+	PullUpExerciseNameWeightedPullUp                   PullUpExerciseName = 24
+	PullUpExerciseNameWideGripLatPulldown              PullUpExerciseName = 25
+	PullUpExerciseNameWideGripPullUp                   PullUpExerciseName = 26
+	PullUpExerciseNameWeightedWideGripPullUp           PullUpExerciseName = 27
+	PullUpExerciseNameBurpeePullUp                     PullUpExerciseName = 28
+	PullUpExerciseNameWeightedBurpeePullUp             PullUpExerciseName = 29
+	PullUpExerciseNameJumpingPullUps                   PullUpExerciseName = 30
+	PullUpExerciseNameWeightedJumpingPullUps           PullUpExerciseName = 31
+	PullUpExerciseNameKippingPullUp                    PullUpExerciseName = 32
+	PullUpExerciseNameWeightedKippingPullUp            PullUpExerciseName = 33
+	PullUpExerciseNameLPullUp                          PullUpExerciseName = 34
+	PullUpExerciseNameWeightedLPullUp                  PullUpExerciseName = 35
+	PullUpExerciseNameSuspendedChinUp                  PullUpExerciseName = 36
+	PullUpExerciseNameWeightedSuspendedChinUp          PullUpExerciseName = 37
+	PullUpExerciseNamePullUp                           PullUpExerciseName = 38
+	PullUpExerciseNameInvalid                          PullUpExerciseName = 0xFFFF
+)
+
+// PushUpExerciseName represents the push_up_exercise_name FIT type.
+type PushUpExerciseName uint16
+
+const (
+	PushUpExerciseNameChestPressWithBand                         PushUpExerciseName = 0
+	PushUpExerciseNameAlternatingStaggeredPushUp                 PushUpExerciseName = 1
+	PushUpExerciseNameWeightedAlternatingStaggeredPushUp         PushUpExerciseName = 2
+	PushUpExerciseNameAlternatingHandsMedicineBallPushUp         PushUpExerciseName = 3
+	PushUpExerciseNameWeightedAlternatingHandsMedicineBallPushUp PushUpExerciseName = 4
+	PushUpExerciseNameBosuBallPushUp                             PushUpExerciseName = 5
+	PushUpExerciseNameWeightedBosuBallPushUp                     PushUpExerciseName = 6
+	PushUpExerciseNameClappingPushUp                             PushUpExerciseName = 7
+	PushUpExerciseNameWeightedClappingPushUp                     PushUpExerciseName = 8
+	PushUpExerciseNameCloseGripMedicineBallPushUp                PushUpExerciseName = 9
+	PushUpExerciseNameWeightedCloseGripMedicineBallPushUp        PushUpExerciseName = 10
+	PushUpExerciseNameCloseHandsPushUp                           PushUpExerciseName = 11
+	PushUpExerciseNameWeightedCloseHandsPushUp                   PushUpExerciseName = 12
+	PushUpExerciseNameDeclinePushUp                              PushUpExerciseName = 13
+	PushUpExerciseNameWeightedDeclinePushUp                      PushUpExerciseName = 14
+	PushUpExerciseNameDiamondPushUp                              PushUpExerciseName = 15
+	PushUpExerciseNameWeightedDiamondPushUp                      PushUpExerciseName = 16
+	PushUpExerciseNameExplosiveCrossoverPushUp                   PushUpExerciseName = 17
+	PushUpExerciseNameWeightedExplosiveCrossoverPushUp           PushUpExerciseName = 18
+	PushUpExerciseNameExplosivePushUp                            PushUpExerciseName = 19
+	PushUpExerciseNameWeightedExplosivePushUp                    PushUpExerciseName = 20
+	PushUpExerciseNameFeetElevatedSideToSidePushUp               PushUpExerciseName = 21
+	PushUpExerciseNameWeightedFeetElevatedSideToSidePushUp       PushUpExerciseName = 22
+	PushUpExerciseNameHandReleasePushUp                          PushUpExerciseName = 23
+	PushUpExerciseNameWeightedHandReleasePushUp                  PushUpExerciseName = 24
+	PushUpExerciseNameHandstandPushUp                            PushUpExerciseName = 25
+	PushUpExerciseNameWeightedHandstandPushUp                    PushUpExerciseName = 26
+	PushUpExerciseNameInclinePushUp                              PushUpExerciseName = 27
+	PushUpExerciseNameWeightedInclinePushUp                      PushUpExerciseName = 28
+	PushUpExerciseNameIsometricExplosivePushUp                   PushUpExerciseName = 29
+	PushUpExerciseNameWeightedIsometricExplosivePushUp           PushUpExerciseName = 30
+	PushUpExerciseNameJudoPushUp                                 PushUpExerciseName = 31
+	PushUpExerciseNameWeightedJudoPushUp                         PushUpExerciseName = 32
+	PushUpExerciseNameKneelingPushUp                             PushUpExerciseName = 33
+	PushUpExerciseNameWeightedKneelingPushUp                     PushUpExerciseName = 34
+	PushUpExerciseNameMedicineBallChestPass                      PushUpExerciseName = 35
+	PushUpExerciseNameMedicineBallPushUp                         PushUpExerciseName = 36
+	PushUpExerciseNameWeightedMedicineBallPushUp                 PushUpExerciseName = 37
+	PushUpExerciseNameOneArmPushUp                               PushUpExerciseName = 38
+	PushUpExerciseNameWeightedOneArmPushUp                       PushUpExerciseName = 39
+	PushUpExerciseNameWeightedPushUp                             PushUpExerciseName = 40
+	PushUpExerciseNamePushUpAndRow                               PushUpExerciseName = 41
+	PushUpExerciseNameWeightedPushUpAndRow                       PushUpExerciseName = 42
+	PushUpExerciseNamePushUpPlus                                 PushUpExerciseName = 43
+	PushUpExerciseNameWeightedPushUpPlus                         PushUpExerciseName = 44
+	PushUpExerciseNamePushUpWithFeetOnSwissBall                  PushUpExerciseName = 45
+	PushUpExerciseNameWeightedPushUpWithFeetOnSwissBall          PushUpExerciseName = 46
+	PushUpExerciseNamePushUpWithOneHandOnMedicineBall            PushUpExerciseName = 47
+	PushUpExerciseNameWeightedPushUpWithOneHandOnMedicineBall    PushUpExerciseName = 48
+	PushUpExerciseNameShoulderPushUp                             PushUpExerciseName = 49
+	PushUpExerciseNameWeightedShoulderPushUp                     PushUpExerciseName = 50
+	PushUpExerciseNameSingleArmMedicineBallPushUp                PushUpExerciseName = 51
+	PushUpExerciseNameWeightedSingleArmMedicineBallPushUp        PushUpExerciseName = 52
+	PushUpExerciseNameSpidermanPushUp                            PushUpExerciseName = 53
+	PushUpExerciseNameWeightedSpidermanPushUp                    PushUpExerciseName = 54
+	PushUpExerciseNameStackedFeetPushUp                          PushUpExerciseName = 55
+	PushUpExerciseNameWeightedStackedFeetPushUp                  PushUpExerciseName = 56
+	PushUpExerciseNameStaggeredHandsPushUp                       PushUpExerciseName = 57
+	PushUpExerciseNameWeightedStaggeredHandsPushUp               PushUpExerciseName = 58
+	PushUpExerciseNameSuspendedPushUp                            PushUpExerciseName = 59
+	PushUpExerciseNameWeightedSuspendedPushUp                    PushUpExerciseName = 60
+	PushUpExerciseNameSwissBallPushUp                            PushUpExerciseName = 61
+	PushUpExerciseNameWeightedSwissBallPushUp                    PushUpExerciseName = 62
+	PushUpExerciseNameSwissBallPushUpPlus                        PushUpExerciseName = 63
+	PushUpExerciseNameWeightedSwissBallPushUpPlus                PushUpExerciseName = 64
+	PushUpExerciseNameTPushUp                                    PushUpExerciseName = 65
+	PushUpExerciseNameWeightedTPushUp                            PushUpExerciseName = 66
+	PushUpExerciseNameTripleStopPushUp                           PushUpExerciseName = 67
+	PushUpExerciseNameWeightedTripleStopPushUp                   PushUpExerciseName = 68
+	PushUpExerciseNameWideHandsPushUp                            PushUpExerciseName = 69
+	PushUpExerciseNameWeightedWideHandsPushUp                    PushUpExerciseName = 70
+	PushUpExerciseNameParalletteHandstandPushUp                  PushUpExerciseName = 71
+	PushUpExerciseNameWeightedParalletteHandstandPushUp          PushUpExerciseName = 72
+	PushUpExerciseNameRingHandstandPushUp                        PushUpExerciseName = 73
+	PushUpExerciseNameWeightedRingHandstandPushUp                PushUpExerciseName = 74
+	PushUpExerciseNameRingPushUp                                 PushUpExerciseName = 75
+	PushUpExerciseNameWeightedRingPushUp                         PushUpExerciseName = 76
+	PushUpExerciseNamePushUp                                     PushUpExerciseName = 77
+	PushUpExerciseNamePilatesPushup                              PushUpExerciseName = 78
+	PushUpExerciseNameInvalid                                    PushUpExerciseName = 0xFFFF
 )
 
 // PwrZoneCalc represents the pwr_zone_calc FIT type.
@@ -1665,6 +2902,58 @@ const (
 	RiderPositionTypeTransitionToSeated   RiderPositionType = 2
 	RiderPositionTypeTransitionToStanding RiderPositionType = 3
 	RiderPositionTypeInvalid              RiderPositionType = 0xFF
+)
+
+// RowExerciseName represents the row_exercise_name FIT type.
+type RowExerciseName uint16
+
+const (
+	RowExerciseNameBarbellStraightLegDeadliftToRow            RowExerciseName = 0
+	RowExerciseNameCableRowStanding                           RowExerciseName = 1
+	RowExerciseNameDumbbellRow                                RowExerciseName = 2
+	RowExerciseNameElevatedFeetInvertedRow                    RowExerciseName = 3
+	RowExerciseNameWeightedElevatedFeetInvertedRow            RowExerciseName = 4
+	RowExerciseNameFacePull                                   RowExerciseName = 5
+	RowExerciseNameFacePullWithExternalRotation               RowExerciseName = 6
+	RowExerciseNameInvertedRowWithFeetOnSwissBall             RowExerciseName = 7
+	RowExerciseNameWeightedInvertedRowWithFeetOnSwissBall     RowExerciseName = 8
+	RowExerciseNameKettlebellRow                              RowExerciseName = 9
+	RowExerciseNameModifiedInvertedRow                        RowExerciseName = 10
+	RowExerciseNameWeightedModifiedInvertedRow                RowExerciseName = 11
+	RowExerciseNameNeutralGripAlternatingDumbbellRow          RowExerciseName = 12
+	RowExerciseNameOneArmBentOverRow                          RowExerciseName = 13
+	RowExerciseNameOneLeggedDumbbellRow                       RowExerciseName = 14
+	RowExerciseNameRenegadeRow                                RowExerciseName = 15
+	RowExerciseNameReverseGripBarbellRow                      RowExerciseName = 16
+	RowExerciseNameRopeHandleCableRow                         RowExerciseName = 17
+	RowExerciseNameSeatedCableRow                             RowExerciseName = 18
+	RowExerciseNameSeatedDumbbellRow                          RowExerciseName = 19
+	RowExerciseNameSingleArmCableRow                          RowExerciseName = 20
+	RowExerciseNameSingleArmCableRowAndRotation               RowExerciseName = 21
+	RowExerciseNameSingleArmInvertedRow                       RowExerciseName = 22
+	RowExerciseNameWeightedSingleArmInvertedRow               RowExerciseName = 23
+	RowExerciseNameSingleArmNeutralGripDumbbellRow            RowExerciseName = 24
+	RowExerciseNameSingleArmNeutralGripDumbbellRowAndRotation RowExerciseName = 25
+	RowExerciseNameSuspendedInvertedRow                       RowExerciseName = 26
+	RowExerciseNameWeightedSuspendedInvertedRow               RowExerciseName = 27
+	RowExerciseNameTBarRow                                    RowExerciseName = 28
+	RowExerciseNameTowelGripInvertedRow                       RowExerciseName = 29
+	RowExerciseNameWeightedTowelGripInvertedRow               RowExerciseName = 30
+	RowExerciseNameUnderhandGripCableRow                      RowExerciseName = 31
+	RowExerciseNameVGripCableRow                              RowExerciseName = 32
+	RowExerciseNameWideGripSeatedCableRow                     RowExerciseName = 33
+	RowExerciseNameInvalid                                    RowExerciseName = 0xFFFF
+)
+
+// RunExerciseName represents the run_exercise_name FIT type.
+type RunExerciseName uint16
+
+const (
+	RunExerciseNameRun     RunExerciseName = 0
+	RunExerciseNameWalk    RunExerciseName = 1
+	RunExerciseNameJog     RunExerciseName = 2
+	RunExerciseNameSprint  RunExerciseName = 3
+	RunExerciseNameInvalid RunExerciseName = 0xFFFF
 )
 
 // Schedule represents the schedule FIT type.
@@ -1729,6 +3018,7 @@ const (
 	SensorTypeAccelerometer SensorType = 0
 	SensorTypeGyroscope     SensorType = 1
 	SensorTypeCompass       SensorType = 2 // Magnetometer
+	SensorTypeBarometer     SensorType = 3
 	SensorTypeInvalid       SensorType = 0xFF
 )
 
@@ -1743,6 +3033,110 @@ const (
 	SessionTriggerInvalid          SessionTrigger = 0xFF
 )
 
+// SetType represents the set_type FIT type.
+type SetType uint8
+
+const (
+	SetTypeRest    SetType = 0
+	SetTypeActive  SetType = 1
+	SetTypeInvalid SetType = 0xFF
+)
+
+// ShoulderPressExerciseName represents the shoulder_press_exercise_name FIT type.
+type ShoulderPressExerciseName uint16
+
+const (
+	ShoulderPressExerciseNameAlternatingDumbbellShoulderPress         ShoulderPressExerciseName = 0
+	ShoulderPressExerciseNameArnoldPress                              ShoulderPressExerciseName = 1
+	ShoulderPressExerciseNameBarbellFrontSquatToPushPress             ShoulderPressExerciseName = 2
+	ShoulderPressExerciseNameBarbellPushPress                         ShoulderPressExerciseName = 3
+	ShoulderPressExerciseNameBarbellShoulderPress                     ShoulderPressExerciseName = 4
+	ShoulderPressExerciseNameDeadCurlPress                            ShoulderPressExerciseName = 5
+	ShoulderPressExerciseNameDumbbellAlternatingShoulderPressAndTwist ShoulderPressExerciseName = 6
+	ShoulderPressExerciseNameDumbbellHammerCurlToLungeToPress         ShoulderPressExerciseName = 7
+	ShoulderPressExerciseNameDumbbellPushPress                        ShoulderPressExerciseName = 8
+	ShoulderPressExerciseNameFloorInvertedShoulderPress               ShoulderPressExerciseName = 9
+	ShoulderPressExerciseNameWeightedFloorInvertedShoulderPress       ShoulderPressExerciseName = 10
+	ShoulderPressExerciseNameInvertedShoulderPress                    ShoulderPressExerciseName = 11
+	ShoulderPressExerciseNameWeightedInvertedShoulderPress            ShoulderPressExerciseName = 12
+	ShoulderPressExerciseNameOneArmPushPress                          ShoulderPressExerciseName = 13
+	ShoulderPressExerciseNameOverheadBarbellPress                     ShoulderPressExerciseName = 14
+	ShoulderPressExerciseNameOverheadDumbbellPress                    ShoulderPressExerciseName = 15
+	ShoulderPressExerciseNameSeatedBarbellShoulderPress               ShoulderPressExerciseName = 16
+	ShoulderPressExerciseNameSeatedDumbbellShoulderPress              ShoulderPressExerciseName = 17
+	ShoulderPressExerciseNameSingleArmDumbbellShoulderPress           ShoulderPressExerciseName = 18
+	ShoulderPressExerciseNameSingleArmStepUpAndPress                  ShoulderPressExerciseName = 19
+	ShoulderPressExerciseNameSmithMachineOverheadPress                ShoulderPressExerciseName = 20
+	ShoulderPressExerciseNameSplitStanceHammerCurlToPress             ShoulderPressExerciseName = 21
+	ShoulderPressExerciseNameSwissBallDumbbellShoulderPress           ShoulderPressExerciseName = 22
+	ShoulderPressExerciseNameWeightPlateFrontRaise                    ShoulderPressExerciseName = 23
+	ShoulderPressExerciseNameInvalid                                  ShoulderPressExerciseName = 0xFFFF
+)
+
+// ShoulderStabilityExerciseName represents the shoulder_stability_exercise_name FIT type.
+type ShoulderStabilityExerciseName uint16
+
+const (
+	ShoulderStabilityExerciseName90DegreeCableExternalRotation          ShoulderStabilityExerciseName = 0
+	ShoulderStabilityExerciseNameBandExternalRotation                   ShoulderStabilityExerciseName = 1
+	ShoulderStabilityExerciseNameBandInternalRotation                   ShoulderStabilityExerciseName = 2
+	ShoulderStabilityExerciseNameBentArmLateralRaiseAndExternalRotation ShoulderStabilityExerciseName = 3
+	ShoulderStabilityExerciseNameCableExternalRotation                  ShoulderStabilityExerciseName = 4
+	ShoulderStabilityExerciseNameDumbbellFacePullWithExternalRotation   ShoulderStabilityExerciseName = 5
+	ShoulderStabilityExerciseNameFloorIRaise                            ShoulderStabilityExerciseName = 6
+	ShoulderStabilityExerciseNameWeightedFloorIRaise                    ShoulderStabilityExerciseName = 7
+	ShoulderStabilityExerciseNameFloorTRaise                            ShoulderStabilityExerciseName = 8
+	ShoulderStabilityExerciseNameWeightedFloorTRaise                    ShoulderStabilityExerciseName = 9
+	ShoulderStabilityExerciseNameFloorYRaise                            ShoulderStabilityExerciseName = 10
+	ShoulderStabilityExerciseNameWeightedFloorYRaise                    ShoulderStabilityExerciseName = 11
+	ShoulderStabilityExerciseNameInclineIRaise                          ShoulderStabilityExerciseName = 12
+	ShoulderStabilityExerciseNameWeightedInclineIRaise                  ShoulderStabilityExerciseName = 13
+	ShoulderStabilityExerciseNameInclineLRaise                          ShoulderStabilityExerciseName = 14
+	ShoulderStabilityExerciseNameWeightedInclineLRaise                  ShoulderStabilityExerciseName = 15
+	ShoulderStabilityExerciseNameInclineTRaise                          ShoulderStabilityExerciseName = 16
+	ShoulderStabilityExerciseNameWeightedInclineTRaise                  ShoulderStabilityExerciseName = 17
+	ShoulderStabilityExerciseNameInclineWRaise                          ShoulderStabilityExerciseName = 18
+	ShoulderStabilityExerciseNameWeightedInclineWRaise                  ShoulderStabilityExerciseName = 19
+	ShoulderStabilityExerciseNameInclineYRaise                          ShoulderStabilityExerciseName = 20
+	ShoulderStabilityExerciseNameWeightedInclineYRaise                  ShoulderStabilityExerciseName = 21
+	ShoulderStabilityExerciseNameLyingExternalRotation                  ShoulderStabilityExerciseName = 22
+	ShoulderStabilityExerciseNameSeatedDumbbellExternalRotation         ShoulderStabilityExerciseName = 23
+	ShoulderStabilityExerciseNameStandingLRaise                         ShoulderStabilityExerciseName = 24
+	ShoulderStabilityExerciseNameSwissBallIRaise                        ShoulderStabilityExerciseName = 25
+	ShoulderStabilityExerciseNameWeightedSwissBallIRaise                ShoulderStabilityExerciseName = 26
+	ShoulderStabilityExerciseNameSwissBallTRaise                        ShoulderStabilityExerciseName = 27
+	ShoulderStabilityExerciseNameWeightedSwissBallTRaise                ShoulderStabilityExerciseName = 28
+	ShoulderStabilityExerciseNameSwissBallWRaise                        ShoulderStabilityExerciseName = 29
+	ShoulderStabilityExerciseNameWeightedSwissBallWRaise                ShoulderStabilityExerciseName = 30
+	ShoulderStabilityExerciseNameSwissBallYRaise                        ShoulderStabilityExerciseName = 31
+	ShoulderStabilityExerciseNameWeightedSwissBallYRaise                ShoulderStabilityExerciseName = 32
+	ShoulderStabilityExerciseNameInvalid                                ShoulderStabilityExerciseName = 0xFFFF
+)
+
+// ShrugExerciseName represents the shrug_exercise_name FIT type.
+type ShrugExerciseName uint16
+
+const (
+	ShrugExerciseNameBarbellJumpShrug               ShrugExerciseName = 0
+	ShrugExerciseNameBarbellShrug                   ShrugExerciseName = 1
+	ShrugExerciseNameBarbellUprightRow              ShrugExerciseName = 2
+	ShrugExerciseNameBehindTheBackSmithMachineShrug ShrugExerciseName = 3
+	ShrugExerciseNameDumbbellJumpShrug              ShrugExerciseName = 4
+	ShrugExerciseNameDumbbellShrug                  ShrugExerciseName = 5
+	ShrugExerciseNameDumbbellUprightRow             ShrugExerciseName = 6
+	ShrugExerciseNameInclineDumbbellShrug           ShrugExerciseName = 7
+	ShrugExerciseNameOverheadBarbellShrug           ShrugExerciseName = 8
+	ShrugExerciseNameOverheadDumbbellShrug          ShrugExerciseName = 9
+	ShrugExerciseNameScaptionAndShrug               ShrugExerciseName = 10
+	ShrugExerciseNameScapularRetraction             ShrugExerciseName = 11
+	ShrugExerciseNameSerratusChairShrug             ShrugExerciseName = 12
+	ShrugExerciseNameWeightedSerratusChairShrug     ShrugExerciseName = 13
+	ShrugExerciseNameSerratusShrug                  ShrugExerciseName = 14
+	ShrugExerciseNameWeightedSerratusShrug          ShrugExerciseName = 15
+	ShrugExerciseNameWideGripJumpShrug              ShrugExerciseName = 16
+	ShrugExerciseNameInvalid                        ShrugExerciseName = 0xFFFF
+)
+
 // Side represents the side FIT type.
 type Side byte
 
@@ -1750,6 +3144,51 @@ const (
 	SideRight   Side = 0
 	SideLeft    Side = 1
 	SideInvalid Side = 0xFF
+)
+
+// SitUpExerciseName represents the sit_up_exercise_name FIT type.
+type SitUpExerciseName uint16
+
+const (
+	SitUpExerciseNameAlternatingSitUp                    SitUpExerciseName = 0
+	SitUpExerciseNameWeightedAlternatingSitUp            SitUpExerciseName = 1
+	SitUpExerciseNameBentKneeVUp                         SitUpExerciseName = 2
+	SitUpExerciseNameWeightedBentKneeVUp                 SitUpExerciseName = 3
+	SitUpExerciseNameButterflySitUp                      SitUpExerciseName = 4
+	SitUpExerciseNameWeightedButterflySitup              SitUpExerciseName = 5
+	SitUpExerciseNameCrossPunchRollUp                    SitUpExerciseName = 6
+	SitUpExerciseNameWeightedCrossPunchRollUp            SitUpExerciseName = 7
+	SitUpExerciseNameCrossedArmsSitUp                    SitUpExerciseName = 8
+	SitUpExerciseNameWeightedCrossedArmsSitUp            SitUpExerciseName = 9
+	SitUpExerciseNameGetUpSitUp                          SitUpExerciseName = 10
+	SitUpExerciseNameWeightedGetUpSitUp                  SitUpExerciseName = 11
+	SitUpExerciseNameHoveringSitUp                       SitUpExerciseName = 12
+	SitUpExerciseNameWeightedHoveringSitUp               SitUpExerciseName = 13
+	SitUpExerciseNameKettlebellSitUp                     SitUpExerciseName = 14
+	SitUpExerciseNameMedicineBallAlternatingVUp          SitUpExerciseName = 15
+	SitUpExerciseNameMedicineBallSitUp                   SitUpExerciseName = 16
+	SitUpExerciseNameMedicineBallVUp                     SitUpExerciseName = 17
+	SitUpExerciseNameModifiedSitUp                       SitUpExerciseName = 18
+	SitUpExerciseNameNegativeSitUp                       SitUpExerciseName = 19
+	SitUpExerciseNameOneArmFullSitUp                     SitUpExerciseName = 20
+	SitUpExerciseNameRecliningCircle                     SitUpExerciseName = 21
+	SitUpExerciseNameWeightedRecliningCircle             SitUpExerciseName = 22
+	SitUpExerciseNameReverseCurlUp                       SitUpExerciseName = 23
+	SitUpExerciseNameWeightedReverseCurlUp               SitUpExerciseName = 24
+	SitUpExerciseNameSingleLegSwissBallJackknife         SitUpExerciseName = 25
+	SitUpExerciseNameWeightedSingleLegSwissBallJackknife SitUpExerciseName = 26
+	SitUpExerciseNameTheTeaser                           SitUpExerciseName = 27
+	SitUpExerciseNameTheTeaserWeighted                   SitUpExerciseName = 28
+	SitUpExerciseNameThreePartRollDown                   SitUpExerciseName = 29
+	SitUpExerciseNameWeightedThreePartRollDown           SitUpExerciseName = 30
+	SitUpExerciseNameVUp                                 SitUpExerciseName = 31
+	SitUpExerciseNameWeightedVUp                         SitUpExerciseName = 32
+	SitUpExerciseNameWeightedRussianTwistOnSwissBall     SitUpExerciseName = 33
+	SitUpExerciseNameWeightedSitUp                       SitUpExerciseName = 34
+	SitUpExerciseNameXAbs                                SitUpExerciseName = 35
+	SitUpExerciseNameWeightedXAbs                        SitUpExerciseName = 36
+	SitUpExerciseNameSitUp                               SitUpExerciseName = 37
+	SitUpExerciseNameInvalid                             SitUpExerciseName = 0xFFFF
 )
 
 // SourceType represents the source_type FIT type.
@@ -1936,6 +3375,105 @@ const (
 	SportEventInvalid        SportEvent = 0xFF
 )
 
+// SquatExerciseName represents the squat_exercise_name FIT type.
+type SquatExerciseName uint16
+
+const (
+	SquatExerciseNameLegPress                                        SquatExerciseName = 0
+	SquatExerciseNameBackSquatWithBodyBar                            SquatExerciseName = 1
+	SquatExerciseNameBackSquats                                      SquatExerciseName = 2
+	SquatExerciseNameWeightedBackSquats                              SquatExerciseName = 3
+	SquatExerciseNameBalancingSquat                                  SquatExerciseName = 4
+	SquatExerciseNameWeightedBalancingSquat                          SquatExerciseName = 5
+	SquatExerciseNameBarbellBackSquat                                SquatExerciseName = 6
+	SquatExerciseNameBarbellBoxSquat                                 SquatExerciseName = 7
+	SquatExerciseNameBarbellFrontSquat                               SquatExerciseName = 8
+	SquatExerciseNameBarbellHackSquat                                SquatExerciseName = 9
+	SquatExerciseNameBarbellHangSquatSnatch                          SquatExerciseName = 10
+	SquatExerciseNameBarbellLateralStepUp                            SquatExerciseName = 11
+	SquatExerciseNameBarbellQuarterSquat                             SquatExerciseName = 12
+	SquatExerciseNameBarbellSiffSquat                                SquatExerciseName = 13
+	SquatExerciseNameBarbellSquatSnatch                              SquatExerciseName = 14
+	SquatExerciseNameBarbellSquatWithHeelsRaised                     SquatExerciseName = 15
+	SquatExerciseNameBarbellStepover                                 SquatExerciseName = 16
+	SquatExerciseNameBarbellStepUp                                   SquatExerciseName = 17
+	SquatExerciseNameBenchSquatWithRotationalChop                    SquatExerciseName = 18
+	SquatExerciseNameWeightedBenchSquatWithRotationalChop            SquatExerciseName = 19
+	SquatExerciseNameBodyWeightWallSquat                             SquatExerciseName = 20
+	SquatExerciseNameWeightedWallSquat                               SquatExerciseName = 21
+	SquatExerciseNameBoxStepSquat                                    SquatExerciseName = 22
+	SquatExerciseNameWeightedBoxStepSquat                            SquatExerciseName = 23
+	SquatExerciseNameBracedSquat                                     SquatExerciseName = 24
+	SquatExerciseNameCrossedArmBarbellFrontSquat                     SquatExerciseName = 25
+	SquatExerciseNameCrossoverDumbbellStepUp                         SquatExerciseName = 26
+	SquatExerciseNameDumbbellFrontSquat                              SquatExerciseName = 27
+	SquatExerciseNameDumbbellSplitSquat                              SquatExerciseName = 28
+	SquatExerciseNameDumbbellSquat                                   SquatExerciseName = 29
+	SquatExerciseNameDumbbellSquatClean                              SquatExerciseName = 30
+	SquatExerciseNameDumbbellStepover                                SquatExerciseName = 31
+	SquatExerciseNameDumbbellStepUp                                  SquatExerciseName = 32
+	SquatExerciseNameElevatedSingleLegSquat                          SquatExerciseName = 33
+	SquatExerciseNameWeightedElevatedSingleLegSquat                  SquatExerciseName = 34
+	SquatExerciseNameFigureFourSquats                                SquatExerciseName = 35
+	SquatExerciseNameWeightedFigureFourSquats                        SquatExerciseName = 36
+	SquatExerciseNameGobletSquat                                     SquatExerciseName = 37
+	SquatExerciseNameKettlebellSquat                                 SquatExerciseName = 38
+	SquatExerciseNameKettlebellSwingOverhead                         SquatExerciseName = 39
+	SquatExerciseNameKettlebellSwingWithFlipToSquat                  SquatExerciseName = 40
+	SquatExerciseNameLateralDumbbellStepUp                           SquatExerciseName = 41
+	SquatExerciseNameOneLeggedSquat                                  SquatExerciseName = 42
+	SquatExerciseNameOverheadDumbbellSquat                           SquatExerciseName = 43
+	SquatExerciseNameOverheadSquat                                   SquatExerciseName = 44
+	SquatExerciseNamePartialSingleLegSquat                           SquatExerciseName = 45
+	SquatExerciseNameWeightedPartialSingleLegSquat                   SquatExerciseName = 46
+	SquatExerciseNamePistolSquat                                     SquatExerciseName = 47
+	SquatExerciseNameWeightedPistolSquat                             SquatExerciseName = 48
+	SquatExerciseNamePlieSlides                                      SquatExerciseName = 49
+	SquatExerciseNameWeightedPlieSlides                              SquatExerciseName = 50
+	SquatExerciseNamePlieSquat                                       SquatExerciseName = 51
+	SquatExerciseNameWeightedPlieSquat                               SquatExerciseName = 52
+	SquatExerciseNamePrisonerSquat                                   SquatExerciseName = 53
+	SquatExerciseNameWeightedPrisonerSquat                           SquatExerciseName = 54
+	SquatExerciseNameSingleLegBenchGetUp                             SquatExerciseName = 55
+	SquatExerciseNameWeightedSingleLegBenchGetUp                     SquatExerciseName = 56
+	SquatExerciseNameSingleLegBenchSquat                             SquatExerciseName = 57
+	SquatExerciseNameWeightedSingleLegBenchSquat                     SquatExerciseName = 58
+	SquatExerciseNameSingleLegSquatOnSwissBall                       SquatExerciseName = 59
+	SquatExerciseNameWeightedSingleLegSquatOnSwissBall               SquatExerciseName = 60
+	SquatExerciseNameSquat                                           SquatExerciseName = 61
+	SquatExerciseNameWeightedSquat                                   SquatExerciseName = 62
+	SquatExerciseNameSquatsWithBand                                  SquatExerciseName = 63
+	SquatExerciseNameStaggeredSquat                                  SquatExerciseName = 64
+	SquatExerciseNameWeightedStaggeredSquat                          SquatExerciseName = 65
+	SquatExerciseNameStepUp                                          SquatExerciseName = 66
+	SquatExerciseNameWeightedStepUp                                  SquatExerciseName = 67
+	SquatExerciseNameSuitcaseSquats                                  SquatExerciseName = 68
+	SquatExerciseNameSumoSquat                                       SquatExerciseName = 69
+	SquatExerciseNameSumoSquatSlideIn                                SquatExerciseName = 70
+	SquatExerciseNameWeightedSumoSquatSlideIn                        SquatExerciseName = 71
+	SquatExerciseNameSumoSquatToHighPull                             SquatExerciseName = 72
+	SquatExerciseNameSumoSquatToStand                                SquatExerciseName = 73
+	SquatExerciseNameWeightedSumoSquatToStand                        SquatExerciseName = 74
+	SquatExerciseNameSumoSquatWithRotation                           SquatExerciseName = 75
+	SquatExerciseNameWeightedSumoSquatWithRotation                   SquatExerciseName = 76
+	SquatExerciseNameSwissBallBodyWeightWallSquat                    SquatExerciseName = 77
+	SquatExerciseNameWeightedSwissBallWallSquat                      SquatExerciseName = 78
+	SquatExerciseNameThrusters                                       SquatExerciseName = 79
+	SquatExerciseNameUnevenSquat                                     SquatExerciseName = 80
+	SquatExerciseNameWeightedUnevenSquat                             SquatExerciseName = 81
+	SquatExerciseNameWaistSlimmingSquat                              SquatExerciseName = 82
+	SquatExerciseNameWallBall                                        SquatExerciseName = 83
+	SquatExerciseNameWideStanceBarbellSquat                          SquatExerciseName = 84
+	SquatExerciseNameWideStanceGobletSquat                           SquatExerciseName = 85
+	SquatExerciseNameZercherSquat                                    SquatExerciseName = 86
+	SquatExerciseNameKbsOverhead                                     SquatExerciseName = 87
+	SquatExerciseNameSquatAndSideKick                                SquatExerciseName = 88
+	SquatExerciseNameSquatJumpsInNOut                                SquatExerciseName = 89
+	SquatExerciseNamePilatesPlieSquatsParallelTurnedOutFlatAndHeels  SquatExerciseName = 90
+	SquatExerciseNameReleveStraightLegAndKneeBentWithOneLegVariation SquatExerciseName = 91
+	SquatExerciseNameInvalid                                         SquatExerciseName = 0xFFFF
+)
+
 // StrokeType represents the stroke_type FIT type.
 type StrokeType byte
 
@@ -1977,7 +3515,7 @@ const (
 	SubSportWarmUp               SubSport = 21 // Tennis
 	SubSportMatch                SubSport = 22 // Tennis
 	SubSportExercise             SubSport = 23 // Tennis
-	SubSportChallenge            SubSport = 24 // Tennis
+	SubSportChallenge            SubSport = 24
 	SubSportIndoorSkiing         SubSport = 25 // Fitness Equipment
 	SubSportCardioTraining       SubSport = 26 // Training
 	SubSportIndoorWalking        SubSport = 27 // Walking/Fitness Equipment
@@ -1997,7 +3535,7 @@ const (
 	SubSportWhitewater           SubSport = 41 // Kayaking/Rafting
 	SubSportSkateSkiing          SubSport = 42 // Cross Country Skiing
 	SubSportYoga                 SubSport = 43 // Training
-	SubSportPilates              SubSport = 44 // Training
+	SubSportPilates              SubSport = 44 // Fitness Equipment
 	SubSportIndoorRunning        SubSport = 45 // Run
 	SubSportGravelCycling        SubSport = 46 // Cycling
 	SubSportEBikeMountain        SubSport = 47 // Cycling
@@ -2006,6 +3544,11 @@ const (
 	SubSportNavigate             SubSport = 50
 	SubSportTrackMe              SubSport = 51
 	SubSportMap                  SubSport = 52
+	SubSportSingleGasDiving      SubSport = 53 // Diving
+	SubSportMultiGasDiving       SubSport = 54 // Diving
+	SubSportGaugeDiving          SubSport = 55 // Diving
+	SubSportApneaDiving          SubSport = 56 // Diving
+	SubSportApneaHunting         SubSport = 57 // Diving
 	SubSportVirtualActivity      SubSport = 58
 	SubSportObstacle             SubSport = 59 // Used for events where participants run, crawl through mud, climb over walls, etc.
 	SubSportAll                  SubSport = 254
@@ -2194,6 +3737,93 @@ const (
 	TimerTriggerInvalid          TimerTrigger = 0xFF
 )
 
+// TissueModelType represents the tissue_model_type FIT type.
+type TissueModelType byte
+
+const (
+	TissueModelTypeZhl16c  TissueModelType = 0 // Buhlmann's decompression algorithm, version C
+	TissueModelTypeInvalid TissueModelType = 0xFF
+)
+
+// Tone represents the tone FIT type.
+type Tone byte
+
+const (
+	ToneOff            Tone = 0
+	ToneTone           Tone = 1
+	ToneVibrate        Tone = 2
+	ToneToneAndVibrate Tone = 3
+	ToneInvalid        Tone = 0xFF
+)
+
+// TotalBodyExerciseName represents the total_body_exercise_name FIT type.
+type TotalBodyExerciseName uint16
+
+const (
+	TotalBodyExerciseNameBurpee                           TotalBodyExerciseName = 0
+	TotalBodyExerciseNameWeightedBurpee                   TotalBodyExerciseName = 1
+	TotalBodyExerciseNameBurpeeBoxJump                    TotalBodyExerciseName = 2
+	TotalBodyExerciseNameWeightedBurpeeBoxJump            TotalBodyExerciseName = 3
+	TotalBodyExerciseNameHighPullBurpee                   TotalBodyExerciseName = 4
+	TotalBodyExerciseNameManMakers                        TotalBodyExerciseName = 5
+	TotalBodyExerciseNameOneArmBurpee                     TotalBodyExerciseName = 6
+	TotalBodyExerciseNameSquatThrusts                     TotalBodyExerciseName = 7
+	TotalBodyExerciseNameWeightedSquatThrusts             TotalBodyExerciseName = 8
+	TotalBodyExerciseNameSquatPlankPushUp                 TotalBodyExerciseName = 9
+	TotalBodyExerciseNameWeightedSquatPlankPushUp         TotalBodyExerciseName = 10
+	TotalBodyExerciseNameStandingTRotationBalance         TotalBodyExerciseName = 11
+	TotalBodyExerciseNameWeightedStandingTRotationBalance TotalBodyExerciseName = 12
+	TotalBodyExerciseNameInvalid                          TotalBodyExerciseName = 0xFFFF
+)
+
+// TricepsExtensionExerciseName represents the triceps_extension_exercise_name FIT type.
+type TricepsExtensionExerciseName uint16
+
+const (
+	TricepsExtensionExerciseNameBenchDip                                     TricepsExtensionExerciseName = 0
+	TricepsExtensionExerciseNameWeightedBenchDip                             TricepsExtensionExerciseName = 1
+	TricepsExtensionExerciseNameBodyWeightDip                                TricepsExtensionExerciseName = 2
+	TricepsExtensionExerciseNameCableKickback                                TricepsExtensionExerciseName = 3
+	TricepsExtensionExerciseNameCableLyingTricepsExtension                   TricepsExtensionExerciseName = 4
+	TricepsExtensionExerciseNameCableOverheadTricepsExtension                TricepsExtensionExerciseName = 5
+	TricepsExtensionExerciseNameDumbbellKickback                             TricepsExtensionExerciseName = 6
+	TricepsExtensionExerciseNameDumbbellLyingTricepsExtension                TricepsExtensionExerciseName = 7
+	TricepsExtensionExerciseNameEzBarOverheadTricepsExtension                TricepsExtensionExerciseName = 8
+	TricepsExtensionExerciseNameInclineDip                                   TricepsExtensionExerciseName = 9
+	TricepsExtensionExerciseNameWeightedInclineDip                           TricepsExtensionExerciseName = 10
+	TricepsExtensionExerciseNameInclineEzBarLyingTricepsExtension            TricepsExtensionExerciseName = 11
+	TricepsExtensionExerciseNameLyingDumbbellPulloverToExtension             TricepsExtensionExerciseName = 12
+	TricepsExtensionExerciseNameLyingEzBarTricepsExtension                   TricepsExtensionExerciseName = 13
+	TricepsExtensionExerciseNameLyingTricepsExtensionToCloseGripBenchPress   TricepsExtensionExerciseName = 14
+	TricepsExtensionExerciseNameOverheadDumbbellTricepsExtension             TricepsExtensionExerciseName = 15
+	TricepsExtensionExerciseNameRecliningTricepsPress                        TricepsExtensionExerciseName = 16
+	TricepsExtensionExerciseNameReverseGripPressdown                         TricepsExtensionExerciseName = 17
+	TricepsExtensionExerciseNameReverseGripTricepsPressdown                  TricepsExtensionExerciseName = 18
+	TricepsExtensionExerciseNameRopePressdown                                TricepsExtensionExerciseName = 19
+	TricepsExtensionExerciseNameSeatedBarbellOverheadTricepsExtension        TricepsExtensionExerciseName = 20
+	TricepsExtensionExerciseNameSeatedDumbbellOverheadTricepsExtension       TricepsExtensionExerciseName = 21
+	TricepsExtensionExerciseNameSeatedEzBarOverheadTricepsExtension          TricepsExtensionExerciseName = 22
+	TricepsExtensionExerciseNameSeatedSingleArmOverheadDumbbellExtension     TricepsExtensionExerciseName = 23
+	TricepsExtensionExerciseNameSingleArmDumbbellOverheadTricepsExtension    TricepsExtensionExerciseName = 24
+	TricepsExtensionExerciseNameSingleDumbbellSeatedOverheadTricepsExtension TricepsExtensionExerciseName = 25
+	TricepsExtensionExerciseNameSingleLegBenchDipAndKick                     TricepsExtensionExerciseName = 26
+	TricepsExtensionExerciseNameWeightedSingleLegBenchDipAndKick             TricepsExtensionExerciseName = 27
+	TricepsExtensionExerciseNameSingleLegDip                                 TricepsExtensionExerciseName = 28
+	TricepsExtensionExerciseNameWeightedSingleLegDip                         TricepsExtensionExerciseName = 29
+	TricepsExtensionExerciseNameStaticLyingTricepsExtension                  TricepsExtensionExerciseName = 30
+	TricepsExtensionExerciseNameSuspendedDip                                 TricepsExtensionExerciseName = 31
+	TricepsExtensionExerciseNameWeightedSuspendedDip                         TricepsExtensionExerciseName = 32
+	TricepsExtensionExerciseNameSwissBallDumbbellLyingTricepsExtension       TricepsExtensionExerciseName = 33
+	TricepsExtensionExerciseNameSwissBallEzBarLyingTricepsExtension          TricepsExtensionExerciseName = 34
+	TricepsExtensionExerciseNameSwissBallEzBarOverheadTricepsExtension       TricepsExtensionExerciseName = 35
+	TricepsExtensionExerciseNameTabletopDip                                  TricepsExtensionExerciseName = 36
+	TricepsExtensionExerciseNameWeightedTabletopDip                          TricepsExtensionExerciseName = 37
+	TricepsExtensionExerciseNameTricepsExtensionOnFloor                      TricepsExtensionExerciseName = 38
+	TricepsExtensionExerciseNameTricepsPressdown                             TricepsExtensionExerciseName = 39
+	TricepsExtensionExerciseNameWeightedDip                                  TricepsExtensionExerciseName = 40
+	TricepsExtensionExerciseNameInvalid                                      TricepsExtensionExerciseName = 0xFFFF
+)
+
 // TurnType represents the turn_type FIT type.
 type TurnType byte
 
@@ -2252,6 +3882,44 @@ const (
 	UserLocalIdInvalid       UserLocalId = 0xFFFF
 )
 
+// WarmUpExerciseName represents the warm_up_exercise_name FIT type.
+type WarmUpExerciseName uint16
+
+const (
+	WarmUpExerciseNameQuadrupedRocking            WarmUpExerciseName = 0
+	WarmUpExerciseNameNeckTilts                   WarmUpExerciseName = 1
+	WarmUpExerciseNameAnkleCircles                WarmUpExerciseName = 2
+	WarmUpExerciseNameAnkleDorsiflexionWithBand   WarmUpExerciseName = 3
+	WarmUpExerciseNameAnkleInternalRotation       WarmUpExerciseName = 4
+	WarmUpExerciseNameArmCircles                  WarmUpExerciseName = 5
+	WarmUpExerciseNameBentOverReachToSky          WarmUpExerciseName = 6
+	WarmUpExerciseNameCatCamel                    WarmUpExerciseName = 7
+	WarmUpExerciseNameElbowToFootLunge            WarmUpExerciseName = 8
+	WarmUpExerciseNameForwardAndBackwardLegSwings WarmUpExerciseName = 9
+	WarmUpExerciseNameGroiners                    WarmUpExerciseName = 10
+	WarmUpExerciseNameInvertedHamstringStretch    WarmUpExerciseName = 11
+	WarmUpExerciseNameLateralDuckUnder            WarmUpExerciseName = 12
+	WarmUpExerciseNameNeckRotations               WarmUpExerciseName = 13
+	WarmUpExerciseNameOppositeArmAndLegBalance    WarmUpExerciseName = 14
+	WarmUpExerciseNameReachRollAndLift            WarmUpExerciseName = 15
+	WarmUpExerciseNameScorpion                    WarmUpExerciseName = 16
+	WarmUpExerciseNameShoulderCircles             WarmUpExerciseName = 17
+	WarmUpExerciseNameSideToSideLegSwings         WarmUpExerciseName = 18
+	WarmUpExerciseNameSleeperStretch              WarmUpExerciseName = 19
+	WarmUpExerciseNameSlideOut                    WarmUpExerciseName = 20
+	WarmUpExerciseNameSwissBallHipCrossover       WarmUpExerciseName = 21
+	WarmUpExerciseNameSwissBallReachRollAndLift   WarmUpExerciseName = 22
+	WarmUpExerciseNameSwissBallWindshieldWipers   WarmUpExerciseName = 23
+	WarmUpExerciseNameThoracicRotation            WarmUpExerciseName = 24
+	WarmUpExerciseNameWalkingHighKicks            WarmUpExerciseName = 25
+	WarmUpExerciseNameWalkingHighKnees            WarmUpExerciseName = 26
+	WarmUpExerciseNameWalkingKneeHugs             WarmUpExerciseName = 27
+	WarmUpExerciseNameWalkingLegCradles           WarmUpExerciseName = 28
+	WarmUpExerciseNameWalkout                     WarmUpExerciseName = 29
+	WarmUpExerciseNameWalkoutFromPushUpPosition   WarmUpExerciseName = 30
+	WarmUpExerciseNameInvalid                     WarmUpExerciseName = 0xFFFF
+)
+
 // WatchfaceMode represents the watchface_mode FIT type.
 type WatchfaceMode byte
 
@@ -2261,6 +3929,17 @@ const (
 	WatchfaceModeConnectIq WatchfaceMode = 2
 	WatchfaceModeDisabled  WatchfaceMode = 3
 	WatchfaceModeInvalid   WatchfaceMode = 0xFF
+)
+
+// WaterType represents the water_type FIT type.
+type WaterType byte
+
+const (
+	WaterTypeFresh   WaterType = 0
+	WaterTypeSalt    WaterType = 1
+	WaterTypeEn13319 WaterType = 2
+	WaterTypeCustom  WaterType = 3
+	WaterTypeInvalid WaterType = 0xFF
 )
 
 // WeatherReport represents the weather_report FIT type.
@@ -2447,6 +4126,7 @@ const (
 	WktStepDurationPowerLapGreaterThan                WktStepDuration = 26
 	WktStepDurationRepeatUntilTrainingPeaksTss        WktStepDuration = 27
 	WktStepDurationRepetitionTime                     WktStepDuration = 28
+	WktStepDurationReps                               WktStepDuration = 29
 	WktStepDurationInvalid                            WktStepDuration = 0xFF
 )
 

@@ -56,3 +56,7 @@ $ go get github.com/tormoder/fit
 - [Upcoming Features](https://github.com/tormoder/fit/wiki/Upcoming-Features)
 - [Contributing](https://github.com/tormoder/fit/blob/master/CONTRIBUTING.md)
 - [License](https://github.com/tormoder/fit/wiki/License)
+
+### Contributors
+
+- [unusedbytes](https://github.com/usedbytes)

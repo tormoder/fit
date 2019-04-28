@@ -24,6 +24,7 @@ var (
 
 func (i Bool) String() string {
 	switch {
+	//lint:ignore SA4003 Check unsigned >= 0, but this matches the stringer autogen output
 	case 0 <= i && i <= 1:
 		return _Bool_name_0[_Bool_index_0[i]:_Bool_index_0[i+1]]
 	case i == 255:

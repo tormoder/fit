@@ -658,7 +658,7 @@ func (d *decoder) parseDataMessage(recordHeader byte, compressed bool) (reflect.
 	}
 
 	timeOffset := int32(recordHeader & compressedTimeMask)
-	d.timestamp += uint32((timeOffset - d.lastTimeOffset) & compressedTimeMask)
+	d.timestamp += uint32((timeOffset - d.lastTimeOffset) & int32(compressedTimeMask))
 	d.lastTimeOffset = timeOffset
 
 	fieldTimestamp, found := getField(dm.globalMsgNum, fieldNumTimeStamp)
@@ -909,7 +909,7 @@ func (d *decoder) parseTimeStamp(dm *defmsg, fieldv reflect.Value, pfield *field
 	if pfield.t.Kind() == types.TimeUTC {
 		if pfield.num == fieldNumTimeStamp {
 			d.timestamp = u32
-			d.lastTimeOffset = int32(d.timestamp & compressedTimeMask)
+			d.lastTimeOffset = int32(d.timestamp & uint32(compressedTimeMask))
 		}
 		t := decodeDateTime(u32)
 		fieldv.Set(reflect.ValueOf(t))

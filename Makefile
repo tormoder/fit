@@ -22,7 +22,7 @@ CHECK_TOOLS :=	golang.org/x/tools/cmd/goimports \
 		github.com/mdempsky/unconvert \
 		mvdan.cc/interfacer \
 		github.com/client9/misspell/cmd/misspell \
-		honnef.co/go/tools/cmd/megacheck/ \
+		honnef.co/go/tools/cmd/staticcheck/ \
 		golang.org/x/tools/go/analysis/passes/shadow/cmd/shadow \
 
 .PHONY: all
@@ -153,5 +153,5 @@ checkfull: getchecktools
 	@interfacer $(FIT_PKGS)
 	@echo "misspell"
 	@! misspell ./**/* | grep -vE '(messages.go|/vendor/|profile/testdata)'
-	@echo "megacheck"
-	@! megacheck $(FIT_PKGS) | grep -vE '(tdoStderrLogger)'
+	@echo "staticcheck"
+	@! staticcheck $(FIT_PKGS) | grep -vE '(tdoStderrLogger)'

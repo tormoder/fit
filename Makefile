@@ -1,4 +1,5 @@
-FIT_PKGS 	:= $(shell go list ./... | grep -v /vendor/)
+GO		= go
+FIT_PKGS 	:= $(shell $(GO) list ./... | grep -v /vendor/)
 FIT_FILES	:= $(shell find . -name '*.go' -not -path "*vendor*")
 FIT_DIRS 	:= $(shell find . -type f -not -path "*vendor*" -not -path "./.git*" -not -path "*testdata*" -name "*.go" -printf "%h\n" | sort -u)
 
@@ -29,42 +30,42 @@ all: deps testdeps build test testrace checkfull
 
 .PHONY: deps
 deps:
-	@echo "go get:"
-	go get -u $(LATLONG_PKG_PATH)
+	@echo "$(GO) get:"
+	$(GO) get -u $(LATLONG_PKG_PATH)
 
 .PHONY: testdeps
 testdeps:
-	@echo "go get -u:"
-	go get -u $(UTTER_PKG_PATH)
-	go get -u $(XXHASH_PKG_PATH)
+	@echo "$(GO) get -u:"
+	$(GO) get -u $(UTTER_PKG_PATH)
+	$(GO) get -u $(XXHASH_PKG_PATH)
 
 .PHONY: build
 build:
-	@echo "go build:"
-	go build -v -i $(FIT_PKGS)
+	@echo "$(GO) build:"
+	$(GO) build -v -i $(FIT_PKGS)
 
 .PHONY: test
 test:
-	@echo "go test:"
-	go test -v -cpu=2 $(FIT_PKGS)
+	@echo "$(GO) test:"
+	$(GO) test -v -cpu=2 $(FIT_PKGS)
 
 .PHONY: testrace
 testrace:
-	@echo "go test -race:"
-	go test -v -cpu=1,2,4 -race $(FIT_PKGS)
+	@echo "$(GO) test -race:"
+	$(GO) test -v -cpu=1,2,4 -race $(FIT_PKGS)
 
 .PHONY: bench
 bench:
-	go test -v -run=^$$ -bench=. $(FIT_PKGS) -benchtime=5s
+	$(GO) test -v -run=^$$ -bench=. $(FIT_PKGS) -benchtime=5s
 
 .PHONY: fitgen
 fitgen:
-	go install $(FITGEN_PKG_PATH)
+	$(GO) install $(FITGEN_PKG_PATH)
 
 .PHONY: gofuzz
 gofuzz:
-	go get -u $(GOFUZZ_PKG_PATH)/go-fuzz
-	go get -u $(GOFUZZ_PKG_PATH)/go-fuzz-build
+	$(GO) get -u $(GOFUZZ_PKG_PATH)/go-fuzz
+	$(GO) get -u $(GOFUZZ_PKG_PATH)/go-fuzz-build
 	go-fuzz-build $(FIT_PKG_PATH)
 
 .PHONY: gofuzzclean
@@ -75,7 +76,7 @@ gofuzzclean: gofuzz
 
 .PHONY: clean
 clean:
-	go clean -i ./...
+	$(GO) clean -i ./...
 	rm -f fit-fuzz.zip
 	find . -name '*.prof' -type f -exec rm -f {} \;
 	find . -name '*.test' -type f -exec rm -f {} \;
@@ -88,18 +89,18 @@ gcoprofile:
 
 .PHONY: profcpu
 profcpu:
-	go test -run=^$$ -cpuprofile=cpu.prof -bench=$(DECODE_BENCH_NAME) -benchtime=$(DECODE_BENCH_TIME)
-	go tool pprof fit.test cpu.prof
+	$(GO) test -run=^$$ -cpuprofile=cpu.prof -bench=$(DECODE_BENCH_NAME) -benchtime=$(DECODE_BENCH_TIME)
+	$(GO) tool pprof fit.test cpu.prof
 
 .PHONY: profmem
 profmem:
-	go test -run^$$ =-memprofile=allocmem.prof -bench=$(DECODE_BENCH_NAME) -benchtime=$(DECODE_BENCH_TIME)
-	go tool pprof -alloc_space fit.test allocmem.prof
+	$(GO) test -run^$$ =-memprofile=allocmem.prof -bench=$(DECODE_BENCH_NAME) -benchtime=$(DECODE_BENCH_TIME)
+	$(GO) tool pprof -alloc_space fit.test allocmem.prof
 
 .PHONY: profobj
 profobj:
-	go test -run=^$$ -memprofile=allocobj.prof -bench=$(DECODE_BENCH_NAME) -benchtime=$(DECODE_BENCH_TIME)
-	go tool pprof -alloc_objects fit.test allocobj.prof
+	$(GO) test -run=^$$ -memprofile=allocobj.prof -bench=$(DECODE_BENCH_NAME) -benchtime=$(DECODE_BENCH_TIME)
+	$(GO) tool pprof -alloc_objects fit.test allocobj.prof
 
 .PHONY: mdgen
 mdgen:
@@ -107,20 +108,20 @@ mdgen:
 
 .PHONY: getdep
 getdep:
-	go get -u github.com/golang/dep
+	$(GO) get -u github.com/golang/dep
 
 .PHONY: getchecktools
 getchecktools:
-	@echo "go get'ing (-u) tools for static analysis"
-	@go get -u $(CHECK_TOOLS)
+	@echo "$(GO) get'ing (-u) tools for static analysis"
+	@$(GO) get -u $(CHECK_TOOLS)
 
 .PHONY: check
 check:
 	@echo "check (basic)":
 	@echo "gofmt (simplify)"
 	@gofmt -s -l .
-	@echo "go vet"
-	@go vet ./...
+	@echo "$(GO) vet"
+	@$(GO) vet ./...
 
 .PHONY: checkfull
 checkfull: getchecktools
@@ -130,10 +131,10 @@ checkfull: getchecktools
 	@echo "goimports"
 	@! goimports -l $(FIT_FILES) | grep -vF 'No Exceptions'
 	@echo "vet"
-	@! go vet $(FIT_DIRS) 2>&1 | \
+	@! $(GO) vet $(FIT_DIRS) 2>&1 | \
 		grep -vF 'vendor/'
 	@echo "vet --shadow"
-	@! go vet -vettool=$(which shadow) $(FIT_DIRS) 2>&1 | grep -vF 'vendor/'
+	@! $(GO) vet -vettool=$(which shadow) $(FIT_DIRS) 2>&1 | grep -vF 'vendor/'
 	@echo "golint"
 	@! golint $(FIT_PKGS) | grep -vE '(FileId|SegmentId|messages.go|types.*.\go|fitgen/internal|cmd/stringer)'
 	@echo "goconst"

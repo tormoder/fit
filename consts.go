@@ -48,25 +48,25 @@ const (
 
 const (
 	headerTypeMask             byte = 0xF0
-	compressedHeaderMask            = 0x80
-	compressedTimeMask              = 0x1F
-	compressedLocalMesgNumMask      = 0x60
+	compressedHeaderMask       byte = 0x80
+	compressedTimeMask         byte = 0x1F
+	compressedLocalMesgNumMask byte = 0x60
 
 	mesgDefinitionMask byte = 0x40
-	mesgHeaderMask          = 0x00
-	localMesgNumMask        = 0x0F
+	mesgHeaderMask     byte = 0x00
+	localMesgNumMask   byte = 0x0F
 
-	maxLocalMesgs = localMesgNumMask + 1
-	maxFieldSize  = 255
+	maxLocalMesgs byte = localMesgNumMask + 1
+	maxFieldSize  byte = 255
 
-	littleEndian = 0x00
-	bigEndian    = 0x01
+	littleEndian byte = 0x00
+	bigEndian    byte = 0x01
 
-	bytesForCRC          = 2
+	bytesForCRC     byte = 2
 	headerSizeCRC   byte = 14
-	headerSizeNoCRC      = (headerSizeCRC - bytesForCRC)
+	headerSizeNoCRC byte = (headerSizeCRC - bytesForCRC)
 
-	fitDataTypeString = ".FIT"
+	fitDataTypeString string = ".FIT"
 
-	fieldNumTimeStamp = 253
+	fieldNumTimeStamp byte = 253
 )

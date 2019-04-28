@@ -56,17 +56,14 @@ type msgAdder interface {
 
 func (f *File) add(msg reflect.Value) {
 	x := msg.Interface()
-	switch x.(type) {
+	switch tmp := x.(type) {
 	case FileIdMsg:
-		f.FileId = x.(FileIdMsg)
+		f.FileId = tmp
 	case FileCreatorMsg:
-		tmp := x.(FileCreatorMsg)
 		f.FileCreator = &tmp
 	case TimestampCorrelationMsg:
-		tmp := x.(TimestampCorrelationMsg)
 		f.TimestampCorrelation = &tmp
 	case DeviceInfoMsg:
-		tmp := x.(DeviceInfoMsg)
 		f.DeviceInfo = &tmp
 	default:
 		f.msgAdder.add(msg)

@@ -4,6 +4,7 @@ import (
 	"archive/zip"
 	"flag"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"os"
@@ -177,6 +178,18 @@ func runGoInstall(pkgDir string) error {
 }
 
 func runStringerOnTypes(stringerPath, fitSrcDir, typesStringOut, fitTypes string) error {
+	tmpFile, err := ioutil.TempFile("", "stringer")
+	if err != nil {
+		return fmt.Errorf("stringer: error getting temporary file: %v", err)
+	}
+	defer func() {
+		_ = tmpFile.Close()
+		err = os.Remove(tmpFile.Name())
+		if err != nil {
+			fmt.Printf("stringer: error removing temporary file: %v\n", err)
+		}
+	}()
+
 	stringerCmd := exec.Command(
 		"go",
 		"run",
@@ -184,13 +197,34 @@ func runStringerOnTypes(stringerPath, fitSrcDir, typesStringOut, fitTypes string
 		"-trimprefix",
 		"-type", fitTypes,
 		"-output",
-		typesStringOut,
+		tmpFile.Name(),
 		fitSrcDir,
 	)
 
 	output, err := stringerCmd.CombinedOutput()
 	if err != nil {
 		return fmt.Errorf("stringer: error running on types: %v\n%s", err, output)
+	}
+
+	outFile, err := os.Create(typesStringOut)
+	if err != nil {
+		return fmt.Errorf("stringer: error creating output file: %v", err)
+	}
+	defer func() { _ = outFile.Close() }()
+
+	_, err = outFile.WriteString("//lint:file-ignore SA4003 Ignore checks of unsigned types >= 0. stringer generates these.\n")
+	if err != nil {
+		return fmt.Errorf("stringer: error creating output file: %v", err)
+	}
+
+	_, err = tmpFile.Seek(0, 0)
+	if err != nil {
+		return fmt.Errorf("stringer: error seeking output file: %v", err)
+	}
+
+	_, err = io.Copy(outFile, tmpFile)
+	if err != nil {
+		return fmt.Errorf("stringer: error creating output file: %v", err)
 	}
 
 	return nil

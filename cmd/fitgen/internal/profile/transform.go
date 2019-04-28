@@ -147,6 +147,19 @@ func TransformMsgs(pmsgs []*PMsg, ftypes map[string]*Type, logger *log.Logger) (
 	return msgs, nil
 }
 
+func (f *Field) setLength() {
+	if f.Array == "N" || f.FType.BaseType() == types.BaseString {
+		// Profile-defined length
+		f.Length = f.Example
+	} else if f.Array != "0" {
+		// Globally defined length
+		f.Length = f.Array
+	} else {
+		// Not an array or string
+		f.Length = "1"
+	}
+}
+
 func (f *Field) transform(subfield bool, ftypes map[string]*Type, logger *log.Logger) (skip bool, err error) {
 	if f.data[mEXAMPLE] == "" || f.data[mEXAMPLE] == "0" {
 		return true, nil
@@ -166,6 +179,8 @@ func (f *Field) transform(subfield bool, ftypes map[string]*Type, logger *log.Lo
 	f.Units = f.data[mUNITS]
 	f.Comment = f.data[mCOMMENT]
 	f.Example = f.data[mEXAMPLE]
+
+	f.setLength()
 
 	if subfield {
 		f.parseRefFields()
@@ -191,7 +206,7 @@ func (f *Field) parseArray() {
 	case "":
 		f.Array = "0"
 	case "N":
-		f.Array = "255"
+		f.Array = "N"
 	default:
 		f.Array = arrayStr
 	}

@@ -26,18 +26,7 @@ CHECK_TOOLS :=	golang.org/x/tools/cmd/goimports \
 		golang.org/x/tools/go/analysis/passes/shadow/cmd/shadow \
 
 .PHONY: all
-all: deps testdeps build test testrace checkfull
-
-.PHONY: deps
-deps:
-	@echo "$(GO) get:"
-	$(GO) get -u $(LATLONG_PKG_PATH)
-
-.PHONY: testdeps
-testdeps:
-	@echo "$(GO) get -u:"
-	$(GO) get -u $(UTTER_PKG_PATH)
-	$(GO) get -u $(XXHASH_PKG_PATH)
+all: build test testrace checkfull
 
 .PHONY: build
 build:
@@ -105,10 +94,6 @@ profobj:
 .PHONY: mdgen
 mdgen:
 	godoc2md $(FIT_PKG_PATH) Fit Header CheckIntegrity > MainApiReference.md
-
-.PHONY: getdep
-getdep:
-	$(GO) get -u github.com/golang/dep
 
 .PHONY: getchecktools
 getchecktools:

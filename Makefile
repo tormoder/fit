@@ -14,17 +14,6 @@ XXHASH_PKG_PATH := github.com/cespare/xxhash
 DECODE_BENCH_NAME := DecodeActivity$$/Small
 DECODE_BENCH_TIME := 5s
 
-CHECK_TOOLS :=	golang.org/x/tools/cmd/goimports \
-		golang.org/x/lint/golint \
-		github.com/jgautheron/goconst/cmd/goconst \
-		github.com/kisielk/errcheck \
-		github.com/gordonklaus/ineffassign \
-		github.com/mdempsky/unconvert \
-		mvdan.cc/interfacer \
-		github.com/client9/misspell/cmd/misspell \
-		honnef.co/go/tools/cmd/staticcheck/ \
-		golang.org/x/tools/go/analysis/passes/shadow/cmd/shadow \
-
 .PHONY: all
 all: build test testrace checkfull
 
@@ -95,11 +84,6 @@ profobj:
 mdgen:
 	godoc2md $(FIT_PKG_PATH) Fit Header CheckIntegrity > MainApiReference.md
 
-.PHONY: getchecktools
-getchecktools:
-	@echo "$(GO) get'ing (-u) tools for static analysis"
-	@$(GO) get -u $(CHECK_TOOLS)
-
 .PHONY: check
 check:
 	@echo "check (basic)":
@@ -109,23 +93,20 @@ check:
 	@$(GO) vet $(FIT_PKGS)
 
 .PHONY: checkfull
-checkfull: getchecktools
+checkfull:
 	@echo "check (full):"
 	@echo "gofmt (simplify)"
 	@! gofmt -s -l $(FIT_FILES) | grep -vF 'No Exceptions'
 	@echo "goimports"
 	@! goimports -l $(FIT_FILES) | grep -vF 'No Exceptions'
 	@echo "vet"
-	@! $(GO) vet $(FIT_DIRS) 2>&1 | \
-		grep -vF 'vendor/'
+	@ $(GO) vet $(FIT_PKGS)
 	@echo "vet --shadow"
-	@! $(GO) vet -vettool=$(which shadow) $(FIT_DIRS) 2>&1 | grep -vF 'vendor/'
+	@ $(GO) vet -vettool=$(which shadow) $(FIT_PKGS)
 	@echo "golint"
 	@! golint $(FIT_PKGS) | grep -vE '(FileId|SegmentId|messages.go|types.*.\go|fitgen/internal|cmd/stringer)'
 	@echo "goconst"
-	@for dir in $(FIT_DIRS); do \
-		goconst $$dir ; \
-	done
+	@ goconst $(FIT_PKGS)
 	@echo "errcheck"
 	@errcheck -ignore 'fmt:Fprinf*,bytes:Write*,archive/zip:Close,io:Close,Write' $(FIT_PKGS)
 	@echo "ineffassign"

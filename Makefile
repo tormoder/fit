@@ -1,5 +1,5 @@
 GO		:= go
-FIT_PKGS 	:= $(shell $(GO) list ./... | grep -v /vendor/)
+FIT_PKGS 	:= ./...
 FIT_FILES	:= $(shell find . -name '*.go' -not -path "*vendor*")
 FIT_DIRS 	:= $(shell find . -type f -not -path "*vendor*" -not -path "./.git*" -not -path "*testdata*" -name "*.go" -printf "%h\n" | sort -u)
 
@@ -45,7 +45,7 @@ testrace:
 
 .PHONY: bench
 bench:
-	$(GO) test -v -run=^$$ -bench=. $(FIT_PKGS) -benchtime=5s
+	$(GO) test -v -run=^$$ -bench=. -benchtime=5s $(FIT_PKGS)
 
 .PHONY: fitgen
 fitgen:
@@ -106,7 +106,7 @@ check:
 	@echo "gofmt (simplify)"
 	@gofmt -s -l .
 	@echo "$(GO) vet"
-	@$(GO) vet ./...
+	@$(GO) vet $(FIT_PKGS)
 
 .PHONY: checkfull
 checkfull: getchecktools

@@ -115,8 +115,6 @@ checkfull:
 	done
 	@echo "unconvert"
 	@! unconvert $(FIT_PKGS) | grep -vF 'messages.go'
-	@echo "interfacer"
-	@interfacer $(FIT_PKGS)
 	@echo "misspell"
 	@! misspell ./**/* | grep -vE '(messages.go|/vendor/|profile/testdata)'
 	@echo "staticcheck"

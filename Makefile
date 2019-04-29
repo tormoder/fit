@@ -4,7 +4,7 @@ FIT_FILES	:= $(shell find . -name '*.go' -not -path "*vendor*")
 FIT_DIRS 	:= $(shell find . -type f -not -path "*vendor*" -not -path "./.git*" -not -path "*testdata*" -name "*.go" -printf "%h\n" | sort -u)
 
 FIT_PKG_PATH 	:= github.com/tormoder/fit
-FITGEN_PKG_PATH := $(FIT_PKG_PATH)/cmd/fitgen
+FITGEN_REL_PATH := ./cmd/fitgen
 
 GOFUZZ_PKG_PATH := github.com/dvyukov/go-fuzz
 LATLONG_PKG_PATH:= github.com/bradfitz/latlong
@@ -60,7 +60,7 @@ bench:
 
 .PHONY: fitgen
 fitgen:
-	$(GO) install $(FITGEN_PKG_PATH)
+	$(GO) install $(FITGEN_REL_PATH)
 
 .PHONY: gofuzz
 gofuzz:

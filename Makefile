@@ -15,7 +15,7 @@ DECODE_BENCH_NAME := DecodeActivity$$/Small
 DECODE_BENCH_TIME := 5s
 
 .PHONY: all
-all: build test testrace check
+all: build test testrace
 
 .PHONY: build
 build:

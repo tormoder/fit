@@ -16,8 +16,6 @@ import (
 	"github.com/tormoder/fit/cmd/fitgen/internal/profile"
 )
 
-const fitPkgImportPath = "github.com/tormoder/fit"
-
 const (
 	workbookNameXLS  = "Profile.xls"
 	workbookNameXLSX = "Profile.xlsx"
@@ -143,7 +141,7 @@ func main() {
 	logMesgNumVsMessages(fitProfile.MesgNumsWithoutMessage, l)
 
 	if *runTests {
-		err = runAllTests(fitPkgImportPath)
+		err = runAllTests(fitSrcDir)
 		if err != nil {
 			l.Fatal(err)
 		}

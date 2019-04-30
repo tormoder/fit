@@ -24,22 +24,6 @@ const (
 )
 
 func main() {
-	l := log.New(os.Stdout, "fitgen:\t", 0)
-
-	fitSrcDir, err := goPackagePath(fitPkgImportPath)
-	if err != nil {
-		l.Fatalf("can't find fit package root src directory for %q", fitPkgImportPath)
-	}
-	l.Println("root src directory:", fitSrcDir)
-
-	var (
-		messagesOut    = filepath.Join(fitSrcDir, "messages.go")
-		typesOut       = filepath.Join(fitSrcDir, "types.go")
-		profileOut     = filepath.Join(fitSrcDir, "profile.go")
-		stringerPath   = filepath.Join(fitSrcDir, "cmd/stringer/stringer.go")
-		typesStringOut = filepath.Join(fitSrcDir, "types_string.go")
-	)
-
 	sdkOverride := flag.String(
 		"sdk",
 		"",
@@ -67,20 +51,34 @@ func main() {
 	)
 
 	flag.Usage = func() {
-		fmt.Fprintf(os.Stderr, "usage: fitgen [flags] [path to sdk zip, xls or xlsx file]\n")
+		fmt.Fprintf(os.Stderr, "usage: fitgen [flags] [path to sdk zip, xls or xlsx file] [output directory]\n")
 		flag.PrintDefaults()
 	}
 
 	flag.Parse()
-	if flag.NArg() != 1 {
+	if flag.NArg() != 2 {
 		flag.Usage()
 		os.Exit(2)
 	}
+
+	l := log.New(os.Stdout, "fitgen:\t", 0)
+
+	fitSrcDir := flag.Arg(1)
+	l.Println("fit source output directory:", fitSrcDir)
+
+	var (
+		messagesOut    = filepath.Join(fitSrcDir, "messages.go")
+		typesOut       = filepath.Join(fitSrcDir, "types.go")
+		profileOut     = filepath.Join(fitSrcDir, "profile.go")
+		typesStringOut = filepath.Join(fitSrcDir, "types_string.go")
+		stringerPath   = filepath.Join(fitSrcDir, "cmd/stringer/stringer.go")
+	)
 
 	var (
 		inputData []byte
 		input     = flag.Arg(0)
 		inputExt  = filepath.Ext(input)
+		err       error
 	)
 
 	switch inputExt {
@@ -268,28 +266,6 @@ func logMesgNumVsMessages(msgs []string, l *log.Logger) {
 	for _, msg := range msgs {
 		l.Printf("mesgnum-vs-msgs: ----> mesgnum %q has no corresponding message\n", msg)
 	}
-}
-
-func goPackagePath(pkg string) (path string, err error) {
-	gp := os.Getenv("GOPATH")
-	if gp == "" {
-		return path, os.ErrNotExist
-	}
-	for _, p := range filepath.SplitList(gp) {
-		dir := filepath.Join(p, "src", filepath.FromSlash(pkg))
-		fi, err := os.Stat(dir)
-		if os.IsNotExist(err) {
-			continue
-		}
-		if err != nil {
-			return "", err
-		}
-		if !fi.IsDir() {
-			continue
-		}
-		return dir, nil
-	}
-	return path, os.ErrNotExist
 }
 
 func readDataFromZIP(path string) ([]byte, error) {

@@ -1,4 +1,9 @@
+PWD 		= $(shell pwd)
+BIN		= bin/
+
 GO		:= go
+GO_BIN		:= GOBIN=$(PWD)/$(BIN)
+
 FIT_PKGS 	:= ./...
 FIT_FILES	:= $(shell find . -name '*.go' -not -path "*vendor*")
 FIT_DIRS 	:= $(shell find . -type f -not -path "*vendor*" -not -path "./.git*" -not -path "*testdata*" -name "*.go" -printf "%h\n" | sort -u)
@@ -6,16 +11,11 @@ FIT_DIRS 	:= $(shell find . -type f -not -path "*vendor*" -not -path "./.git*" -
 FIT_PKG_PATH 	:= github.com/tormoder/fit
 FITGEN_REL_PATH := ./cmd/fitgen
 
-GOFUZZ_PKG_PATH := github.com/dvyukov/go-fuzz
-LATLONG_PKG_PATH:= github.com/bradfitz/latlong
-UTTER_PKG_PATH	:= github.com/kortschak/utter
-XXHASH_PKG_PATH := github.com/cespare/xxhash
-
 DECODE_BENCH_NAME := DecodeActivity$$/Small
 DECODE_BENCH_TIME := 5s
 
 .PHONY: all
-all: build test testrace
+all: build test testrace checkfull
 
 .PHONY: build
 build:
@@ -93,29 +93,40 @@ check:
 	@$(GO) vet $(FIT_PKGS)
 
 .PHONY: checkfull
-checkfull:
+checkfull: checkdeps
 	@echo "check (full):"
 	@echo "gofmt (simplify)"
 	@! gofmt -s -l $(FIT_FILES) | grep -vF 'No Exceptions'
 	@echo "goimports"
-	@! goimports -l $(FIT_FILES) | grep -vF 'No Exceptions'
+	@! $(BIN)goimports -l $(FIT_FILES) | grep -vF 'No Exceptions'
 	@echo "vet"
-	@ $(GO) vet $(FIT_PKGS)
+	@$(GO) vet $(FIT_PKGS)
 	@echo "vet --shadow"
-	@ $(GO) vet -vettool=$(which shadow) $(FIT_PKGS)
+	@$(GO) vet -vettool=$(which shadow) $(FIT_PKGS)
 	@echo "golint"
-	@! golint $(FIT_PKGS) | grep -vE '(FileId|SegmentId|messages.go|types.*.\go|fitgen/internal|cmd/stringer)'
+	@! $(BIN)golint $(FIT_PKGS) | grep -vE '(FileId|SegmentId|messages.go|types.*.\go|fitgen/internal|cmd/stringer)'
 	@echo "goconst"
-	@ goconst $(FIT_PKGS)
+	@$(BIN)goconst $(FIT_PKGS)
 	@echo "errcheck"
-	@errcheck -ignore 'fmt:Fprinf*,bytes:Write*,archive/zip:Close,io:Close,Write' $(FIT_PKGS)
+	@$(BIN)errcheck -ignore 'fmt:Fprinf*,bytes:Write*,archive/zip:Close,io:Close,Write' $(FIT_PKGS)
 	@echo "ineffassign"
 	@for dir in $(FIT_DIRS); do \
-		ineffassign -n $$dir ; \
+		$(BIN)ineffassign -n $$dir ; \
 	done
 	@echo "unconvert"
-	@! unconvert $(FIT_PKGS) | grep -vF 'messages.go'
+	@! $(BIN)unconvert $(FIT_PKGS) | grep -vF 'messages.go'
 	@echo "misspell"
-	@! misspell ./**/* | grep -vE '(messages.go|/vendor/|profile/testdata)'
+	@! $(BIN)misspell ./**/* | grep -vE '(messages.go|/vendor/|profile/testdata)'
 	@echo "staticcheck"
-	@! staticcheck $(FIT_PKGS) | grep -vE '(tdoStderrLogger)'
+	@! $(BIN)staticcheck $(FIT_PKGS) | grep -vE '(tdoStderrLogger)'
+
+.PHONY: checkdeps
+checkdeps:
+	$(GO_BIN) $(GO) install github.com/client9/misspell/cmd/misspell
+	$(GO_BIN) $(GO) install github.com/gordonklaus/ineffassign
+	$(GO_BIN) $(GO) install github.com/jgautheron/goconst/cmd/goconst
+	$(GO_BIN) $(GO) install github.com/kisielk/errcheck
+	$(GO_BIN) $(GO) install github.com/mdempsky/unconvert
+	$(GO_BIN) $(GO) install golang.org/x/lint/golint
+	$(GO_BIN) $(GO) install golang.org/x/tools/cmd/goimports
+	$(GO_BIN) $(GO) install honnef.co/go/tools/cmd/staticcheck

@@ -42,3 +42,6 @@ cmd/stringer/stringer
 # testing related
 *.current
 *.current.gz
+
+# repo scope bin directory
+bin/

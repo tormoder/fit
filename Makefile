@@ -118,7 +118,7 @@ checkfull: checkdeps
 	@echo "misspell"
 	@! $(BIN)misspell ./**/* | grep -vE '(messages.go|/vendor/|profile/testdata)'
 	@echo "staticcheck"
-	@! $(BIN)staticcheck $(FIT_PKGS) | grep -vE '(tdoStderrLogger)'
+	@$(BIN)staticcheck $(FIT_PKGS)
 
 .PHONY: checkdeps
 checkdeps:

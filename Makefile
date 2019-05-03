@@ -19,7 +19,7 @@ all: build test testrace checkfull
 .PHONY: build
 build:
 	@echo "$(GO) build:"
-	$(GO) build -v -i $(FIT_PKGS)
+	$(GO) build -v $(FIT_PKGS)
 
 .PHONY: test
 test:

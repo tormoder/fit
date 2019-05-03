@@ -100,7 +100,7 @@ checkfull: checkdeps
 	@echo "goimports"
 	@! $(BIN)goimports -l $(FIT_FILES) | grep -vF 'No Exceptions'
 	@echo "gofumports"
-	@$(BIN)gofumports -l $(FIT_FILES) | grep -vF 'No Exceptions'
+	@! $(BIN)gofumports -l $(FIT_FILES) | grep -vE '(types.go|types_man.go)'
 	@echo "vet"
 	@$(GO) vet $(FIT_PKGS)
 	@echo "vet --shadow"

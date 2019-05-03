@@ -341,7 +341,6 @@ func BenchmarkDecodeHeader(b *testing.B) {
 			b.Fatalf("%q: error decoding header: %v", activitySmallPath, err)
 		}
 	}
-
 }
 
 func BenchmarkDecodeHeaderAndFileID(b *testing.B) {

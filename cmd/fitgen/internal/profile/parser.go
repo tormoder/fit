@@ -154,7 +154,6 @@ func (p *Parser) ParseMsg() (*PMsg, error) {
 			return m, nil
 		}
 	}
-
 }
 
 type unexpectedErr struct {

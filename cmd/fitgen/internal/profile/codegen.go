@@ -565,7 +565,6 @@ func (g *codeGenerator) genExpandComponentsDyn(msg *Msg, field *Field, dcsfis []
 	}
 	g.p("}")
 	g.p("}")
-
 }
 
 func (g *codeGenerator) genExpandComponentsMaskShift(msg *Msg, field *Field) {

@@ -239,7 +239,6 @@ func (d *decoder) checkCRC() error {
 	d.file.CRC = le.Uint16(d.tmp[:bytesForCRC])
 	if d.debug {
 		d.opts.logger.Printf("read crc value: 0x%x", d.file.CRC)
-
 	}
 	if d.crc.Sum16() != 0x0000 {
 		return IntegrityError("file checksum failed")
@@ -673,7 +672,6 @@ func (d *decoder) parseDataMessage(recordHeader byte, compressed bool) (reflect.
 		d.opts.logger.Println(
 			"warning: parsing message with compressed timestamp header,",
 			"but did not find timestamp field in message of type", dm.globalMsgNum)
-
 	}
 
 	return d.parseDataFields(dm, knownMsg, msgv)

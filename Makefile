@@ -99,6 +99,8 @@ checkfull: checkdeps
 	@! gofmt -s -l $(FIT_FILES) | grep -vF 'No Exceptions'
 	@echo "goimports"
 	@! $(BIN)goimports -l $(FIT_FILES) | grep -vF 'No Exceptions'
+	@echo "gofumports"
+	@$(BIN)gofumports -l $(FIT_FILES) | grep -vF 'No Exceptions'
 	@echo "vet"
 	@$(GO) vet $(FIT_PKGS)
 	@echo "vet --shadow"
@@ -130,3 +132,4 @@ checkdeps:
 	$(GO_BIN) $(GO) install golang.org/x/lint/golint
 	$(GO_BIN) $(GO) install golang.org/x/tools/cmd/goimports
 	$(GO_BIN) $(GO) install honnef.co/go/tools/cmd/staticcheck
+	$(GO_BIN) $(GO) install mvdan.cc/gofumpt/gofumports

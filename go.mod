@@ -14,4 +14,5 @@ require (
 	golang.org/x/lint v0.0.0-20190409202823-959b441ac422 // indirect
 	golang.org/x/tools v0.0.0-20190501045030-23463209683d // indirect
 	honnef.co/go/tools v0.0.0-20190418001031-e561f6794a2a // indirect
+	mvdan.cc/gofumpt v0.0.0-20190427031043-b295af7664cd // indirect
 )

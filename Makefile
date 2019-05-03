@@ -5,7 +5,6 @@ GO		:= go
 GO_BIN		:= GOBIN=$(PWD)/$(BIN)
 
 FIT_PKGS 	:= ./...
-FIT_FILES	:= $(shell find . -name '*.go' -not -path "*vendor*")
 FIT_DIRS 	:= $(shell find . -type f -not -path "*vendor*" -not -path "./.git*" -not -path "*testdata*" -name "*.go" -printf "%h\n" | sort -u)
 
 FIT_PKG_PATH 	:= github.com/tormoder/fit
@@ -96,11 +95,11 @@ check:
 checkfull: checkdeps
 	@echo "check (full):"
 	@echo "gofmt (simplify)"
-	@! gofmt -s -l $(FIT_FILES) | grep -vF 'No Exceptions'
+	@! gofmt -s -l . | grep -vF 'No Exceptions'
 	@echo "goimports"
-	@! $(BIN)goimports -l $(FIT_FILES) | grep -vF 'No Exceptions'
+	@! $(BIN)goimports -l . | grep -vF 'No Exceptions'
 	@echo "gofumports"
-	@! $(BIN)gofumports -l $(FIT_FILES) | grep -vE '(types.go|types_man.go)'
+	@! $(BIN)gofumports -l . | grep -vE '(types.go|types_man.go)'
 	@echo "vet"
 	@$(GO) vet $(FIT_PKGS)
 	@echo "vet --shadow"

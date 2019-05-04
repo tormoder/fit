@@ -11,6 +11,12 @@ for information about profile generation.
 
 * FIT SDK Zip or workbook file available.
 
+## Quirks
+
+* The provided output directory for `fitgen` currently needs to be the root
+  `fit` repository. This is so that the forked `stringer` tool can be invoked
+  correctly. This will change.
+
 ## Usage
 
 ```shell

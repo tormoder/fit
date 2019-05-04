@@ -9,7 +9,6 @@ for information about profile generation.
 
 ## Prerequisites
 
-* ```$GOPATH``` set.
 * FIT SDK Zip or workbook file available.
 
 ## Usage

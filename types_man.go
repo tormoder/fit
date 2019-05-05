@@ -1,6 +1,6 @@
 package fit
 
-import "fmt"
+import "strconv"
 
 // Manually generated types: The 'Bool' type is not found in the SDK
 // specification, so it won't be auto-generated, but it is also not a base
@@ -13,13 +13,23 @@ const (
 	BoolTrue    Bool = 1
 	BoolInvalid Bool = 255
 )
+
+func _() {
+	// An "invalid array index" compiler error signifies that the constant values have changed.
+	// Re-run the stringer command to generate them again.
+	var x [1]struct{}
+	_ = x[BoolFalse-0]
+	_ = x[BoolTrue-1]
+	_ = x[BoolInvalid-255]
+}
+
 const (
-	_Bool_name_0 = "FalseTrue"
-	_Bool_name_1 = "Invalid"
+	_Bool_name_0 = "BoolFalseBoolTrue"
+	_Bool_name_1 = "BoolInvalid"
 )
 
 var (
-	_Bool_index_0 = [...]uint8{0, 5, 9}
+	_Bool_index_0 = [...]uint8{0, 9, 17}
 )
 
 func (i Bool) String() string {
@@ -30,6 +40,6 @@ func (i Bool) String() string {
 	case i == 255:
 		return _Bool_name_1
 	default:
-		return fmt.Sprintf("Bool(%d)", i)
+		return "Bool(" + strconv.FormatInt(int64(i), 10) + ")"
 	}
 }

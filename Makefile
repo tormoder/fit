@@ -106,8 +106,6 @@ checkfull: checkdeps
 	@$(GO) vet -vettool=$(which shadow) $(FIT_PKGS)
 	@echo "golint"
 	@! $(BIN)golint $(FIT_PKGS) | grep -vE '(FileId|SegmentId|messages.go|types.*.\go|fitgen/internal|cmd/stringer)'
-	@echo "goconst"
-	@$(BIN)goconst $(FIT_PKGS)
 	@echo "errcheck"
 	@$(BIN)errcheck -ignore 'fmt:Fprinf*,bytes:Write*,archive/zip:Close,io:Close,Write' $(FIT_PKGS)
 	@echo "ineffassign"
@@ -125,7 +123,6 @@ checkfull: checkdeps
 checkdeps:
 	$(GO_BIN) $(GO) install github.com/client9/misspell/cmd/misspell
 	$(GO_BIN) $(GO) install github.com/gordonklaus/ineffassign
-	$(GO_BIN) $(GO) install github.com/jgautheron/goconst/cmd/goconst
 	$(GO_BIN) $(GO) install github.com/kisielk/errcheck
 	$(GO_BIN) $(GO) install github.com/mdempsky/unconvert
 	$(GO_BIN) $(GO) install golang.org/x/lint/golint

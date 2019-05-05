@@ -1,7 +1,6 @@
 package profile
 
 import (
-	"bytes"
 	"errors"
 	"fmt"
 	"io"
@@ -15,7 +14,7 @@ type Profile struct {
 	TypesSource            []byte
 	MessagesSource         []byte
 	ProfileSource          []byte
-	StringerInput          string
+	StringerInput          []string
 	MesgNumsWithoutMessage []string
 }
 
@@ -188,15 +187,13 @@ func (g *Generator) genStringerTypeInput() error {
 	}
 	sort.Strings(tkeys)
 
-	var allTypesBuf bytes.Buffer
+	allTypes := make([]string, 0, len(tkeys))
 	for _, tkey := range tkeys {
 		t := g.types[tkey]
-		allTypesBuf.WriteString(t.Name)
-		allTypesBuf.WriteByte(',')
+		allTypes = append(allTypes, t.Name)
 	}
 
-	allTypes := allTypesBuf.Bytes()
-	g.p.StringerInput = string(allTypes[:len(allTypes)-1]) // last comma
+	g.p.StringerInput = allTypes
 
 	return nil
 }

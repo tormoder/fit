@@ -2479,6 +2479,7 @@ const (
 	WorkoutPowerWattsOffset WorkoutPower = 1000
 	WorkoutPowerInvalid     WorkoutPower = 0xFFFFFFFF
 )
+
 // MESSAGES
 // Code generated using the program found in 'cmd/fitgen/main.go'. DO NOT EDIT.
 
@@ -6330,6 +6331,7 @@ type DeveloperDataIdMsg struct {
 	DeveloperDataIndex uint8
 	ApplicationVersion uint32
 }
+
 // PROFILE
 // Code generated using the program found in 'cmd/fitgen/main.go'. DO NOT EDIT.
 
@@ -8353,7 +8355,122 @@ func getMesgAllInvalid(mn MesgNum) reflect.Value {
 	val.Set(msgsAllInvalid[mn])
 	return val
 }
-// STRINGER TYPE INPUT
-ActivityClass,ActivityLevel,ActivityMode,ActivitySubtype,ActivityType,AnalogWatchfaceLayout,AntNetwork,AntplusDeviceType,AttitudeStage,AttitudeValidity,AutoActivityDetect,AutoSyncFrequency,AutolapTrigger,Autoscroll,BacklightMode,BatteryStatus,BikeLightBeamAngleMode,BikeLightNetworkConfigType,BodyLocation,BpStatus,CameraEventType,CameraOrientationType,Checksum,CommTimeoutType,ConnectivityCapabilities,CourseCapabilities,CoursePoint,DateMode,DayOfWeek,DeviceIndex,DigitalWatchfaceLayout,DisplayHeart,DisplayMeasure,DisplayOrientation,DisplayPosition,DisplayPower,Event,EventType,ExdDataUnits,ExdDescriptors,ExdDisplayType,ExdLayout,ExdQualifiers,FileFlags,FileType,FitBaseType,FitBaseUnit,FitnessEquipmentState,GarminProduct,Gender,Goal,GoalRecurrence,GoalSource,HrType,HrZoneCalc,Intensity,Language,LanguageBits0,LanguageBits1,LanguageBits2,LanguageBits3,LanguageBits4,LapTrigger,LeftRightBalance,LeftRightBalance100,LengthType,LocaltimeIntoDay,Manufacturer,MesgCount,MesgNum,MessageIndex,PowerPhaseType,PwrZoneCalc,RiderPositionType,Schedule,SegmentDeleteStatus,SegmentLapStatus,SegmentLeaderboardType,SegmentSelectionType,SensorType,SessionTrigger,Side,SourceType,Sport,SportBits0,SportBits1,SportBits2,SportBits3,SportBits4,SportBits5,SportBits6,SportEvent,StrokeType,SubSport,SupportedExdScreenLayouts,SwimStroke,Switch,TimeIntoDay,TimeMode,TimeZone,TimerTrigger,TurnType,UserLocalId,WatchfaceMode,WeatherReport,WeatherSevereType,WeatherSeverity,WeatherStatus,Weight,WktStepDuration,WktStepTarget,WorkoutCapabilities,WorkoutHr,WorkoutPower
+
+// FITSTRINGER TYPE INPUT
+ActivityClass
+ActivityLevel
+ActivityMode
+ActivitySubtype
+ActivityType
+AnalogWatchfaceLayout
+AntNetwork
+AntplusDeviceType
+AttitudeStage
+AttitudeValidity
+AutoActivityDetect
+AutoSyncFrequency
+AutolapTrigger
+Autoscroll
+BacklightMode
+BatteryStatus
+BikeLightBeamAngleMode
+BikeLightNetworkConfigType
+BodyLocation
+BpStatus
+CameraEventType
+CameraOrientationType
+Checksum
+CommTimeoutType
+ConnectivityCapabilities
+CourseCapabilities
+CoursePoint
+DateMode
+DayOfWeek
+DeviceIndex
+DigitalWatchfaceLayout
+DisplayHeart
+DisplayMeasure
+DisplayOrientation
+DisplayPosition
+DisplayPower
+Event
+EventType
+ExdDataUnits
+ExdDescriptors
+ExdDisplayType
+ExdLayout
+ExdQualifiers
+FileFlags
+FileType
+FitBaseType
+FitBaseUnit
+FitnessEquipmentState
+GarminProduct
+Gender
+Goal
+GoalRecurrence
+GoalSource
+HrType
+HrZoneCalc
+Intensity
+Language
+LanguageBits0
+LanguageBits1
+LanguageBits2
+LanguageBits3
+LanguageBits4
+LapTrigger
+LeftRightBalance
+LeftRightBalance100
+LengthType
+LocaltimeIntoDay
+Manufacturer
+MesgCount
+MesgNum
+MessageIndex
+PowerPhaseType
+PwrZoneCalc
+RiderPositionType
+Schedule
+SegmentDeleteStatus
+SegmentLapStatus
+SegmentLeaderboardType
+SegmentSelectionType
+SensorType
+SessionTrigger
+Side
+SourceType
+Sport
+SportBits0
+SportBits1
+SportBits2
+SportBits3
+SportBits4
+SportBits5
+SportBits6
+SportEvent
+StrokeType
+SubSport
+SupportedExdScreenLayouts
+SwimStroke
+Switch
+TimeIntoDay
+TimeMode
+TimeZone
+TimerTrigger
+TurnType
+UserLocalId
+WatchfaceMode
+WeatherReport
+WeatherSevereType
+WeatherSeverity
+WeatherStatus
+Weight
+WktStepDuration
+WktStepTarget
+WorkoutCapabilities
+WorkoutHr
+WorkoutPower
+
 // MESSAGE NUMS WITHOUT MESSAGE
 Pad

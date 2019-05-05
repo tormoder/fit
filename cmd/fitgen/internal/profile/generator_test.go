@@ -43,12 +43,15 @@ func writeProfile(p *profile.Profile, w io.Writer) error {
 	}
 	write([]byte("// TYPES\n"))
 	write(p.TypesSource)
-	write([]byte("// MESSAGES\n"))
+	write([]byte("\n// MESSAGES\n"))
 	write(p.MessagesSource)
-	write([]byte("// PROFILE\n"))
+	write([]byte("\n// PROFILE\n"))
 	write(p.ProfileSource)
-	write([]byte("// STRINGER TYPE INPUT\n"))
-	write([]byte(p.StringerInput))
+	write([]byte("\n// FITSTRINGER TYPE INPUT\n"))
+	for _, t := range p.StringerInput {
+		write([]byte(t))
+		write([]byte{'\n'})
+	}
 	write([]byte("\n// MESSAGE NUMS WITHOUT MESSAGE\n"))
 	for _, mn := range p.MesgNumsWithoutMessage {
 		write([]byte(mn))
@@ -78,10 +81,10 @@ type sdk struct {
 }
 
 var sdks = []sdk{
-	{16, 20, 9140511954122483521},
-	{20, 14, 1110026377375606382},
-	{20, 27, 17729391755185608044},
-	{20, 43, 2113486054852011886},
+	{16, 20, 18062740196559836474},
+	{20, 14, 3924874714243287142},
+	{20, 27, 7008931037264316719},
+	{20, 43, 8070657066305942728},
 }
 
 func TestMain(m *testing.M) {

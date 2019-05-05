@@ -4,7 +4,6 @@ import (
 	"archive/zip"
 	"flag"
 	"fmt"
-	"io"
 	"io/ioutil"
 	"log"
 	"os"
@@ -13,6 +12,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/tormoder/fit/cmd/fitgen/internal/fitstringer"
 	"github.com/tormoder/fit/cmd/fitgen/internal/profile"
 )
 
@@ -64,7 +64,6 @@ func main() {
 		typesOut       = filepath.Join(fitSrcDir, "types.go")
 		profileOut     = filepath.Join(fitSrcDir, "profile.go")
 		typesStringOut = filepath.Join(fitSrcDir, "types_string.go")
-		stringerPath   = filepath.Join(fitSrcDir, "cmd/stringer/stringer.go")
 	)
 
 	var (
@@ -131,12 +130,12 @@ func main() {
 		l.Fatalf("typegen: error writing profile output file: %v", err)
 	}
 
-	l.Println("running stringer")
-	err = runStringerOnTypes(stringerPath, fitSrcDir, typesStringOut, fitProfile.StringerInput)
+	l.Println("fitstringer: generating string methods for types")
+	err = runStringerOnTypes(typesOut, typesStringOut, fitProfile.StringerInput)
 	if err != nil {
 		l.Fatal(err)
 	}
-	l.Println("stringer: types done")
+	l.Println("fitstringer: done")
 
 	logMesgNumVsMessages(fitProfile.MesgNumsWithoutMessage, l)
 
@@ -151,54 +150,14 @@ func main() {
 	l.Println("done")
 }
 
-func runStringerOnTypes(stringerPath, fitSrcDir, typesStringOut, fitTypes string) error {
-	tmpFile, err := ioutil.TempFile("", "stringer")
+func runStringerOnTypes(typesIn, typesStringOut string, fitTypes []string) error {
+	output, err := fitstringer.Generate(fitTypes, typesIn)
 	if err != nil {
-		return fmt.Errorf("stringer: error getting temporary file: %v", err)
-	}
-	defer func() {
-		_ = tmpFile.Close()
-		err = os.Remove(tmpFile.Name())
-		if err != nil {
-			fmt.Printf("stringer: error removing temporary file: %v\n", err)
-		}
-	}()
-
-	stringerCmd := exec.Command(
-		"go",
-		"run",
-		stringerPath,
-		"-trimprefix",
-		"-type", fitTypes,
-		"-output",
-		tmpFile.Name(),
-		fitSrcDir,
-	)
-
-	output, err := stringerCmd.CombinedOutput()
-	if err != nil {
-		return fmt.Errorf("stringer: error running on types: %v\n%s", err, output)
+		return fmt.Errorf("fitstringer: generation failed: %v", err)
 	}
 
-	outFile, err := os.Create(typesStringOut)
-	if err != nil {
-		return fmt.Errorf("stringer: error creating output file: %v", err)
-	}
-	defer func() { _ = outFile.Close() }()
-
-	_, err = outFile.WriteString("//lint:file-ignore SA4003 Ignore checks of unsigned types >= 0. stringer generates these.\n")
-	if err != nil {
-		return fmt.Errorf("stringer: error creating output file: %v", err)
-	}
-
-	_, err = tmpFile.Seek(0, 0)
-	if err != nil {
-		return fmt.Errorf("stringer: error seeking output file: %v", err)
-	}
-
-	_, err = io.Copy(outFile, tmpFile)
-	if err != nil {
-		return fmt.Errorf("stringer: error creating output file: %v", err)
+	if err := ioutil.WriteFile(typesStringOut, output, 0644); err != nil {
+		return fmt.Errorf("error writing fitstringer output: %v", err)
 	}
 
 	return nil

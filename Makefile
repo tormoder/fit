@@ -105,7 +105,7 @@ checkfull: checkdeps
 	@echo "vet --shadow"
 	@$(GO) vet -vettool=$(which shadow) $(FIT_PKGS)
 	@echo "golint"
-	@! $(BIN)golint $(FIT_PKGS) | grep -vE '(FileId|SegmentId|messages.go|types.*.\go|fitgen/internal|cmd/stringer)'
+	@! $(BIN)golint $(FIT_PKGS) | grep -vE '(FileId|SegmentId|messages.go|types.*.\go|fitgen/internal/profile)'
 	@echo "errcheck"
 	@$(BIN)errcheck -ignore 'fmt:Fprinf*,bytes:Write*,archive/zip:Close,io:Close,Write' $(FIT_PKGS)
 	@echo "ineffassign"

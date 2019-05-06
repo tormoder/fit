@@ -68,4 +68,4 @@ $ go get github.com/tormoder/fit
 
 ### Contributors
 
-- [unusedbytes](https://github.com/usedbytes)
+- [usedbytes](https://github.com/usedbytes)

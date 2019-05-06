@@ -278,7 +278,8 @@ func (g *codeGenerator) genDynamicGetter(msg *Msg, fieldIndex int) {
 			}
 		}
 		if refFieldNameToType[rfn] == "" {
-			panic("genMsgs: could not find type for ref field name")
+			err := fmt.Sprintf("genMsgs: could not find type for ref field name %q", rfn)
+			panic(err)
 		}
 	}
 

@@ -10,6 +10,9 @@ FIT_DIRS 	:= $(shell find . -type f -not -path "*vendor*" -not -path "./.git*" -
 FIT_PKG_PATH 	:= github.com/tormoder/fit
 FITGEN_REL_PATH := ./cmd/fitgen
 
+GOMODULE_OFF	:= GO111MODULE=off
+GOFUZZ_PKG_PATH	:= github.com/dvyukov/go-fuzz
+
 DECODE_BENCH_NAME := DecodeActivity$$/Small
 DECODE_BENCH_TIME := 5s
 
@@ -41,8 +44,10 @@ fitgen:
 
 .PHONY: gofuzz
 gofuzz:
-	$(GO) get -u $(GOFUZZ_PKG_PATH)/go-fuzz
-	$(GO) get -u $(GOFUZZ_PKG_PATH)/go-fuzz-build
+	@echo "This target must be ran with the repo located under GOPATH with GOBIN set"
+	@echo "Use '-workdir=workdir' to use inital corpus copied by 'gofuzzclean' target"
+	$(GOMODULE_OFF) $(GO) get -u $(GOFUZZ_PKG_PATH)/go-fuzz
+	$(GOMODULE_OFF) $(GO) get -u $(GOFUZZ_PKG_PATH)/go-fuzz-build
 	go-fuzz-build $(FIT_PKG_PATH)
 
 .PHONY: gofuzzclean

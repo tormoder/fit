@@ -1,16 +1,15 @@
-PWD 		= $(shell pwd)
-BIN		= bin/
+PWD		:= $(shell pwd)
+BIN		:= bin/
 
 GO		:= go
 GO_BIN		:= GOBIN=$(PWD)/$(BIN)
+GOMODULE_OFF	:= GO111MODULE=off
 
 FIT_PKGS 	:= ./...
 FIT_DIRS 	:= $(shell find . -type f -not -path "*vendor*" -not -path "./.git*" -not -path "*testdata*" -name "*.go" -printf "%h\n" | sort -u)
-
 FIT_PKG_PATH 	:= github.com/tormoder/fit
 FITGEN_REL_PATH := ./cmd/fitgen
 
-GOMODULE_OFF	:= GO111MODULE=off
 GOFUZZ_PKG_PATH	:= github.com/dvyukov/go-fuzz
 
 DECODE_BENCH_NAME := DecodeActivity$$/Small

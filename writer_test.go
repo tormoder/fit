@@ -85,3 +85,35 @@ func TestDecodeEncodeDecode(t *testing.T) {
 		}
 	})
 }
+
+func BenchmarkEncode(b *testing.B) {
+	files := []struct {
+		desc, path string
+	}{
+		{"ActivitySmall", activitySmallPath},
+		{"ActivityLarge", activityLargePath},
+		{"ActivityWithComponents", activityComponentsPath},
+		{"MonitoringFile", monitoringPath},
+	}
+	for _, file := range files {
+		b.Run(file.desc, func(b *testing.B) {
+			data, err := ioutil.ReadFile(file.path)
+			if err != nil {
+				b.Fatalf("%q: error reading file: %v", file.path, err)
+			}
+			fitFile, err := fit.Decode(bytes.NewReader(data))
+			if err != nil {
+				b.Fatalf("%q: error decoding file: %v", file.path, err)
+			}
+			b.ReportAllocs()
+			b.ResetTimer()
+			for i := 0; i < b.N; i++ {
+				var buf bytes.Buffer
+				err := fit.Encode(&buf, fitFile, binary.LittleEndian)
+				if err != nil {
+					b.Fatalf("%q: error encoding file: %v", file.path, err)
+				}
+			}
+		})
+	}
+}

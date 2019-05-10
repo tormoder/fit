@@ -3,7 +3,10 @@
 // the Known method before calling any other methods (except String).
 package types
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
 const (
 	pkg         = "types"
@@ -71,6 +74,13 @@ func (t Base) Size() int {
 func (t Base) String() string {
 	if t.Known() {
 		return bname[t]
+	}
+	return fmt.Sprintf("unknown (0x%X)", byte(t))
+}
+
+func (t Base) Invalid() interface{} {
+	if t.Known() {
+		return goinvalid[t]
 	}
 	return fmt.Sprintf("unknown (0x%X)", byte(t))
 }
@@ -193,6 +203,26 @@ var binvalid = [...]string{
 	"0x7FFFFFFFFFFFFFFF",
 	"0xFFFFFFFFFFFFFFFF",
 	"0x0000000000000000",
+}
+
+var goinvalid = [...]interface{}{
+	byte(0xFF),
+	int8(0x7F),
+	uint8(0xFF),
+	int16(0x7FFF),
+	uint16(0xFFFF),
+	int32(0x7FFFFFFF),
+	uint32(0xFFFFFFFF),
+	string(""),
+	math.Float32frombits(0xFFFFFFFF),
+	math.Float64frombits(0xFFFFFFFFFFFFFFFF),
+	uint8(0x00),
+	uint16(0x0000),
+	uint32(0x00000000),
+	byte(0xFF),
+	int64(0x7FFFFFFFFFFFFFFF),
+	uint64(0xFFFFFFFFFFFFFFFF),
+	uint64(0x0000000000000000),
 }
 
 func BaseFromString(s string) (Base, error) {

@@ -26,13 +26,14 @@ type Field struct {
 	DefNum string
 	Name   string
 	CCName string
-	Array  string // 255=N
+	Array  string
 	Scale  string
 	Offset string
 	Units  string
 
 	TypeName string
 	FType    types.Fit
+	Length   string
 
 	Components []Component
 

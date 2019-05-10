@@ -155,6 +155,8 @@ func (g *codeGenerator) genMsgs(msgs []*Msg) {
 		g.p("// ", msg.CCName, "Msg represents the ", msg.Name, " FIT message type.")
 		g.p("type ", msg.CCName, "Msg", " struct {")
 		scaledfs, dynfs, compfs, dyncompfs := g.genFields(msg)
+		g.p("}")
+		g.genConstructor(msg)
 		for _, scaledfi := range scaledfs {
 			g.genScaledGetter(msg, scaledfi)
 		}
@@ -196,8 +198,19 @@ func (g *codeGenerator) genFields(msg *Msg) (scaledfi, dynfi, compfi []int, dync
 			compfi = append(compfi, i)
 		}
 	}
-	g.p("}")
 	return
+}
+
+func (g *codeGenerator) genConstructor(msg *Msg) {
+	g.p("// New", msg.CCName, "Msg returns a ", msg.Name, " FIT message")
+	g.p("// initialized to all-invalid values.")
+	g.p("func New", msg.CCName, "Msg() *", msg.CCName, "Msg {")
+	g.p("return &", msg.CCName, "Msg{")
+	for _, f := range msg.Fields {
+		g.p(f.CCName, ": ", f.FType.GoInvalidValue(), ",")
+	}
+	g.p("}")
+	g.p("}")
 }
 
 func (g *codeGenerator) genScaledGetter(msg *Msg, fieldIndex int) {
@@ -624,7 +637,8 @@ func (g *codeGenerator) genProfile(types map[string]*Type, msgs []*Msg) {
 	g.genFieldsArray(msgs)
 	g.genGetFieldArrayLookup()
 	g.genMsgTypesArray(msgs)
-	g.genZeroValueMsgsArray(msgs)
+	g.genGetGlobalMesgNum()
+	g.genNewMesgFuncsArray(msgs)
 	g.genGetZeroValueMsgsArrayLookup()
 }
 
@@ -699,7 +713,7 @@ func (g *codeGenerator) genFieldsArray(msgs []*Msg) {
 		g.p("MesgNum", msg.CCName, ": {")
 		for i := 0; i < len(msg.Fields); i++ {
 			f := msg.Fields[i]
-			g.p(f.DefNum, ": {", i, ", ", f.DefNum, ", ", f.FType.ValueString(), "},")
+			g.p(f.DefNum, ": {", i, ", ", f.DefNum, ", ", f.FType.ValueString(), ", ", f.Length, "},")
 		}
 		g.p("},")
 		g.p()
@@ -721,16 +735,12 @@ func (g *codeGenerator) genGetFieldArrayLookup() {
 	g.p("}")
 }
 
-func (g *codeGenerator) genZeroValueMsgsArray(msgs []*Msg) {
+func (g *codeGenerator) genNewMesgFuncsArray(msgs []*Msg) {
 	g.p()
-	g.p("var msgsAllInvalid = [...]reflect.Value{")
+	g.p("type newMesgFunc func() reflect.Value")
+	g.p("var newMesgFuncs = [...]newMesgFunc{")
 	for _, msg := range msgs {
-
-		g.p("MesgNum", msg.CCName, ": reflect.ValueOf(", msg.CCName, "Msg{")
-		for _, f := range msg.Fields {
-			g.p(f.FType.GoInvalidValue(), ",")
-		}
-		g.p("}),")
+		g.p("MesgNum", msg.CCName, ": func() reflect.Value { return reflect.ValueOf(New", msg.CCName, "Msg()) },")
 	}
 	g.p("}")
 }
@@ -744,11 +754,21 @@ func (g *codeGenerator) genMsgTypesArray(msgs []*Msg) {
 	g.p("}")
 }
 
+func (g *codeGenerator) genGetGlobalMesgNum() {
+	g.p()
+	g.p("func getGlobalMesgNum(t reflect.Type) MesgNum {")
+	g.p("for i, match := range msgsTypes {")
+	g.p("if t == match {")
+	g.p("return MesgNum(i)")
+	g.p("}")
+	g.p("}")
+	g.p("return MesgNumInvalid")
+	g.p("}")
+}
+
 func (g *codeGenerator) genGetZeroValueMsgsArrayLookup() {
 	g.p()
 	g.p("func getMesgAllInvalid(mn MesgNum) reflect.Value {")
-	g.p("val := reflect.New(msgsTypes[mn]).Elem()")
-	g.p("val.Set(msgsAllInvalid[mn])")
-	g.p("return val")
+	g.p("return newMesgFuncs[mn]().Elem()")
 	g.p("}")
 }

@@ -41,6 +41,7 @@ cmd/fitgen/fitgen
 # testing related
 *.current
 *.current.gz
+*.current.in
 
 # repo scope bin directory
 bin/

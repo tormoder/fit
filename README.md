@@ -6,8 +6,6 @@
 
 <img src="https://raw.githubusercontent.com/hackraft/gophericons/master/png/2.png" width="225" align="right" hspace="25" />
 
-**This library is at the moment not actively maintained.**
-
 fit is a [Go](http://www.golang.org/) package that implements decoding and
 encoding of the [Flexible and Interoperable Data Transfer (FIT)
 Protocol](http://www.thisisant.com/resources/fit). Fit is a "compact binary

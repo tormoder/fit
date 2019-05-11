@@ -35,7 +35,7 @@ func main() {
 	runTests := flag.Bool(
 		"test",
 		false,
-		"run all tests in fit repository after code has been generated",
+		"run all tests in output directory after code has been generated",
 	)
 	verbose := flag.Bool(
 		"verbose",

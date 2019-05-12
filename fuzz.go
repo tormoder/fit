@@ -10,9 +10,6 @@ import (
 func Fuzz(data []byte) int {
 	fitFile, err := Decode(bytes.NewReader(data))
 	if err != nil {
-		if fitFile != nil {
-			panic("fitFile != nil on error")
-		}
 		return 0
 	}
 

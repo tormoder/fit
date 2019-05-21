@@ -17,3 +17,7 @@ matrix:
   allow_failures:
     - go: master
   fast_finish: true
+
+cache:
+  directories:
+    - $HOME/.cache/go-build

@@ -577,7 +577,7 @@ func (d *decoder) validateFieldDef(gmsgnum MesgNum, dfield fieldDef) error {
 		case int(dfield.size) > pfield.t.BaseType().Size():
 			return fmt.Errorf(
 				"field %d: size (%d) is greater than size of profile base type %v (%d)",
-				dfield.num, dfield.size, dfield.btype, dfield.btype.Size())
+				dfield.num, dfield.size, dfield.btype, pfield.t.BaseType().Size())
 
 		case int(dfield.size) <= pfield.t.BaseType().Size() && dfield.btype != pfield.t.BaseType():
 			// Size is less or equal, but we can only allow

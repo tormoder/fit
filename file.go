@@ -155,6 +155,12 @@ func (f *File) Weight() (*WeightFile, error) {
 	return f.weight, nil
 }
 
+// SetWeight sets f's WeightFile.
+func (f *File) SetWeight(wf *WeightFile) error {
+	f.weight = wf
+	return nil
+}
+
 // Totals returns f's Totals file. An error is returned if the FIT file is
 // not of type totals.
 func (f *File) Totals() (*TotalsFile, error) {

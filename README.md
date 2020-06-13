@@ -19,12 +19,13 @@ are required for running the full test suite and benchmarks.
 
 ### FIT SDK Version Support
 
-**Current supported FIT SDK version:** 20.90
+**Current supported FIT SDK version:** 21.32
 
 **Warning:** Data Developers Fields are not yet supported (#21).
 
 Older supported profile versions:
 
+* 20.90
 * 20.43
 * 20.27
 * 20.14

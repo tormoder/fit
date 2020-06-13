@@ -1,6 +1,6 @@
 // Code generated using the program found in 'cmd/fitgen/main.go'. DO NOT EDIT.
 
-// SDK Version: 20.90
+// SDK Version: 21.32
 
 package fit
 
@@ -12,10 +12,10 @@ import (
 
 const (
 	// ProfileMajorVersion is the current supported profile major version of the FIT SDK.
-	ProfileMajorVersion = 20
+	ProfileMajorVersion = 21
 
 	// ProfileMinorVersion is the current supported profile minor version of the FIT SDK.
-	ProfileMinorVersion = 90
+	ProfileMinorVersion = 32
 )
 
 var knownMsgNums = map[MesgNum]bool{
@@ -103,6 +103,8 @@ var knownMsgNums = map[MesgNum]bool{
 	MesgNumDiveAlarm:                   true,
 	MesgNumExerciseTitle:               true,
 	MesgNumDiveSummary:                 true,
+	MesgNumJump:                        true,
+	MesgNumClimbPro:                    true,
 }
 
 var (
@@ -175,22 +177,23 @@ var _fields = [...][256]*field{
 	},
 
 	MesgNumDeviceSettings: {
-		0:  {0, 0, types.Fit(2), 1},
-		1:  {1, 1, types.Fit(6), 1},
-		2:  {2, 2, types.Fit(38), 2},
-		4:  {3, 4, types.Fit(32), 2},
-		5:  {4, 5, types.Fit(33), 2},
-		12: {5, 12, types.Fit(0), 1},
-		36: {6, 36, types.Fit(0), 1},
-		39: {7, 39, types.Fit(70), 1},
-		40: {8, 40, types.Fit(36), 1},
-		46: {9, 46, types.Fit(0), 1},
-		47: {10, 47, types.Fit(0), 1},
-		55: {11, 55, types.Fit(0), 1},
-		56: {12, 56, types.Fit(0), 1},
-		57: {13, 57, types.Fit(36), 1},
-		58: {14, 58, types.Fit(4), 1},
-		59: {15, 59, types.Fit(4), 1},
+		0:   {0, 0, types.Fit(2), 1},
+		1:   {1, 1, types.Fit(6), 1},
+		2:   {2, 2, types.Fit(38), 2},
+		4:   {3, 4, types.Fit(32), 2},
+		5:   {4, 5, types.Fit(33), 2},
+		12:  {5, 12, types.Fit(0), 1},
+		36:  {6, 36, types.Fit(0), 1},
+		39:  {7, 39, types.Fit(70), 1},
+		40:  {8, 40, types.Fit(36), 1},
+		46:  {9, 46, types.Fit(0), 1},
+		47:  {10, 47, types.Fit(0), 1},
+		55:  {11, 55, types.Fit(0), 1},
+		56:  {12, 56, types.Fit(0), 1},
+		57:  {13, 57, types.Fit(36), 1},
+		58:  {14, 58, types.Fit(4), 1},
+		59:  {15, 59, types.Fit(4), 1},
+		174: {16, 174, types.Fit(0), 1},
 	},
 
 	MesgNumUserProfile: {
@@ -641,6 +644,8 @@ var _fields = [...][256]*field{
 		10:  {9, 10, types.Fit(10), 1},
 		11:  {10, 11, types.Fit(10), 1},
 		12:  {11, 12, types.Fit(10), 1},
+		21:  {12, 21, types.Fit(0), 1},
+		22:  {13, 22, types.Fit(2), 1},
 	},
 
 	MesgNumDeviceInfo: {
@@ -765,6 +770,8 @@ var _fields = [...][256]*field{
 	MesgNumSet: {
 		9: {0, 9, types.Fit(4), 1},
 	},
+
+	MesgNumJump: {},
 
 	MesgNumCourse: {
 		4: {0, 4, types.Fit(0), 1},
@@ -1099,6 +1106,8 @@ var _fields = [...][256]*field{
 	},
 
 	MesgNumDiveSummary: {},
+
+	MesgNumClimbPro: {},
 }
 
 func getField(gmn MesgNum, fdn byte) (*field, bool) {
@@ -1169,6 +1178,7 @@ var msgsTypes = [...]reflect.Type{
 	MesgNumVideoDescription:            reflect.TypeOf(VideoDescriptionMsg{}),
 	MesgNumVideoClip:                   reflect.TypeOf(VideoClipMsg{}),
 	MesgNumSet:                         reflect.TypeOf(SetMsg{}),
+	MesgNumJump:                        reflect.TypeOf(JumpMsg{}),
 	MesgNumCourse:                      reflect.TypeOf(CourseMsg{}),
 	MesgNumCoursePoint:                 reflect.TypeOf(CoursePointMsg{}),
 	MesgNumSegmentId:                   reflect.TypeOf(SegmentIdMsg{}),
@@ -1198,6 +1208,7 @@ var msgsTypes = [...]reflect.Type{
 	MesgNumFieldDescription:            reflect.TypeOf(FieldDescriptionMsg{}),
 	MesgNumDeveloperDataId:             reflect.TypeOf(DeveloperDataIdMsg{}),
 	MesgNumDiveSummary:                 reflect.TypeOf(DiveSummaryMsg{}),
+	MesgNumClimbPro:                    reflect.TypeOf(ClimbProMsg{}),
 }
 
 func getGlobalMesgNum(t reflect.Type) MesgNum {
@@ -1268,6 +1279,7 @@ var newMesgFuncs = [...]newMesgFunc{
 	MesgNumVideoDescription:            func() reflect.Value { return reflect.ValueOf(NewVideoDescriptionMsg()) },
 	MesgNumVideoClip:                   func() reflect.Value { return reflect.ValueOf(NewVideoClipMsg()) },
 	MesgNumSet:                         func() reflect.Value { return reflect.ValueOf(NewSetMsg()) },
+	MesgNumJump:                        func() reflect.Value { return reflect.ValueOf(NewJumpMsg()) },
 	MesgNumCourse:                      func() reflect.Value { return reflect.ValueOf(NewCourseMsg()) },
 	MesgNumCoursePoint:                 func() reflect.Value { return reflect.ValueOf(NewCoursePointMsg()) },
 	MesgNumSegmentId:                   func() reflect.Value { return reflect.ValueOf(NewSegmentIdMsg()) },
@@ -1297,6 +1309,7 @@ var newMesgFuncs = [...]newMesgFunc{
 	MesgNumFieldDescription:            func() reflect.Value { return reflect.ValueOf(NewFieldDescriptionMsg()) },
 	MesgNumDeveloperDataId:             func() reflect.Value { return reflect.ValueOf(NewDeveloperDataIdMsg()) },
 	MesgNumDiveSummary:                 func() reflect.Value { return reflect.ValueOf(NewDiveSummaryMsg()) },
+	MesgNumClimbPro:                    func() reflect.Value { return reflect.ValueOf(NewClimbProMsg()) },
 }
 
 func getMesgAllInvalid(mn MesgNum) reflect.Value {

@@ -103,15 +103,6 @@ var decodeTestFiles = [...]struct {
 		false,
 	},
 	{
-		"fitsdk",
-		"WeightScaleSingleUser.fit",
-		false,
-		2611280041225851776,
-		true,
-		tdoNone,
-		false,
-	},
-	{
 		"python-fitparse",
 		"garmin-edge-500-activitiy.fit",
 		false,

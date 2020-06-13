@@ -5,13 +5,14 @@ import "reflect"
 // ActivityFile represents the Activity FIT file type.
 // Records sensor data and events from active sessions.
 type ActivityFile struct {
-	Activity *ActivityMsg
-	Sessions []*SessionMsg
-	Laps     []*LapMsg
-	Lengths  []*LengthMsg
-	Records  []*RecordMsg
-	Events   []*EventMsg
-	Hrvs     []*HrvMsg
+	Activity    *ActivityMsg
+	Sessions    []*SessionMsg
+	Laps        []*LapMsg
+	Lengths     []*LengthMsg
+	Records     []*RecordMsg
+	Events      []*EventMsg
+	Hrvs        []*HrvMsg
+	DeviceInfos []*DeviceInfoMsg
 }
 
 // DeviceFile represents the Device FIT file type.
@@ -75,6 +76,7 @@ type SchedulesFile struct {
 type WeightFile struct {
 	UserProfile  *UserProfileMsg
 	WeightScales []*WeightScaleMsg
+	DeviceInfos  []*DeviceInfoMsg
 }
 
 // TotalsFile represents the Totals FIT file type.
@@ -94,6 +96,7 @@ type GoalsFile struct {
 type BloodPressureFile struct {
 	UserProfile    *UserProfileMsg
 	BloodPressures []*BloodPressureMsg
+	DeviceInfos    []*DeviceInfoMsg
 }
 
 // MonitoringAFile represents the MonitoringA FIT file type.
@@ -101,6 +104,7 @@ type BloodPressureFile struct {
 type MonitoringAFile struct {
 	MonitoringInfo *MonitoringInfoMsg
 	Monitorings    []*MonitoringMsg
+	DeviceInfos    []*DeviceInfoMsg
 }
 
 // ActivitySummaryFile represents the Activity Summary FIT file type.
@@ -123,6 +127,7 @@ type MonitoringDailyFile struct {
 type MonitoringBFile struct {
 	MonitoringInfo *MonitoringInfoMsg
 	Monitorings    []*MonitoringMsg
+	DeviceInfos    []*DeviceInfoMsg
 }
 
 // SegmentFile represents the Segment FIT file type.
@@ -161,6 +166,8 @@ func (a *ActivityFile) add(msg reflect.Value) {
 		a.Events = append(a.Events, &tmp)
 	case HrvMsg:
 		a.Hrvs = append(a.Hrvs, &tmp)
+	case DeviceInfoMsg:
+		a.DeviceInfos = append(a.DeviceInfos, &tmp)
 	default:
 	}
 }
@@ -264,6 +271,8 @@ func (w *WeightFile) add(msg reflect.Value) {
 		w.UserProfile = &tmp
 	case WeightScaleMsg:
 		w.WeightScales = append(w.WeightScales, &tmp)
+	case DeviceInfoMsg:
+		w.DeviceInfos = append(w.DeviceInfos, &tmp)
 	default:
 	}
 }
@@ -293,6 +302,8 @@ func (b *BloodPressureFile) add(msg reflect.Value) {
 		b.UserProfile = &tmp
 	case BloodPressureMsg:
 		b.BloodPressures = append(b.BloodPressures, &tmp)
+	case DeviceInfoMsg:
+		b.DeviceInfos = append(b.DeviceInfos, &tmp)
 	default:
 	}
 }
@@ -304,6 +315,8 @@ func (m *MonitoringAFile) add(msg reflect.Value) {
 		m.MonitoringInfo = &tmp
 	case MonitoringMsg:
 		m.Monitorings = append(m.Monitorings, &tmp)
+	case DeviceInfoMsg:
+		m.DeviceInfos = append(m.DeviceInfos, &tmp)
 	default:
 	}
 }
@@ -341,6 +354,8 @@ func (m *MonitoringBFile) add(msg reflect.Value) {
 		m.MonitoringInfo = &tmp
 	case MonitoringMsg:
 		m.Monitorings = append(m.Monitorings, &tmp)
+	case DeviceInfoMsg:
+		m.DeviceInfos = append(m.DeviceInfos, &tmp)
 	default:
 	}
 }

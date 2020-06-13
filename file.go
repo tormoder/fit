@@ -19,7 +19,6 @@ type File struct {
 	// Common messages for all FIT file types.
 	FileCreator          *FileCreatorMsg
 	TimestampCorrelation *TimestampCorrelationMsg
-	DeviceInfo           *DeviceInfoMsg
 
 	// UnknownMessages is a slice of unknown messages encountered during
 	// decoding. It is sorted by message number.
@@ -63,8 +62,6 @@ func (f *File) add(msg reflect.Value) {
 		f.FileCreator = &tmp
 	case TimestampCorrelationMsg:
 		f.TimestampCorrelation = &tmp
-	case DeviceInfoMsg:
-		f.DeviceInfo = &tmp
 	default:
 		f.msgAdder.add(msg)
 	}

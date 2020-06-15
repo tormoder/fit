@@ -594,16 +594,16 @@ func (g *codeGenerator) genExpandComponentsMaskShift(msg *Msg, field *Field) {
 		if comp.Accumulate {
 			accumulator := "accumu" + comp.Name
 			g.p("if ", accumulator, " == nil {")
-			g.p(accumulator, " = new(", tfield.FType.GoType(), "Accumulator)")
+			g.p(accumulator, " = new(", tfield.TypeName, "Accumulator)")
 			g.p("}")
 			g.p("x.", comp.Name, " = ", accumulator, ".accumulate(")
-			g.p(tfield.FType.GoType(), "(")
+			g.p(tfield.TypeName, "(")
 			g.p("(x.", field.CCName, " >> ", bits, ") & ((1 << ", comp.Bits, ") - 1),")
 			g.p("),")
 			g.p(")")
 			continue
 		}
-		g.p("x.", comp.Name, " = ", tfield.FType.GoType(), "(")
+		g.p("x.", comp.Name, " = ", tfield.TypeName, "(")
 		g.p("(x.", field.CCName, " >> ", bits, ") & ((1 << ", comp.Bits, ") - 1),")
 		g.p(")")
 		bits += comp.BitsInt
@@ -617,7 +617,7 @@ func (g *codeGenerator) genExpandComponentsMaskShiftDyn(msg *Msg, sfield *Field,
 		if !tfound {
 			panic("genExpandComponentsMaskShift: target field not found")
 		}
-		g.p("x.", comp.Name, " = ", tfield.FType.GoType(), "(")
+		g.p("x.", comp.Name, " = ", tfield.TypeName, "(")
 		g.p("(x.", mfield.CCName, " >> ", bits, ") & ((1 << ", comp.Bits, ") - 1),")
 		g.p(")")
 		bits += comp.BitsInt

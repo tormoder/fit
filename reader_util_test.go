@@ -23,7 +23,7 @@ func fitFingerprint(fit *fit.File) uint64 {
 }
 
 func fitUtterDump(fit *fit.File, path string, compressed bool) error {
-	f, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE, 0644)
+	f, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
 	if err != nil {
 		return err
 	}
@@ -101,6 +101,7 @@ var decodeTestFiles = [...]struct {
 	fingerprint uint64
 	compress    bool
 	dopts       testingDecodeOpts
+	skipEncode  bool
 }{
 `
 
@@ -114,6 +115,7 @@ var decodeTestFiles = [...]struct {
 		g.writeUintField(dto.fingerprint)
 		g.writeBoolField(dto.compress)
 		g.writeStringField(dto.dopts.String())
+		g.writeBoolField(dto.skipEncode)
 		g.closeField()
 	}
 

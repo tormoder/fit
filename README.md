@@ -46,7 +46,7 @@ Other profile versions may work, but have not been tested.
 Using Go modules:
 
 ```
-$ go get github.com/tormoder/fit@v0.4.0
+$ go get github.com/tormoder/fit@v0.5.0
 ```
 
 Using `$GOPATH`:

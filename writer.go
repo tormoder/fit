@@ -433,11 +433,6 @@ func Encode(w io.Writer, file *File, arch binary.ByteOrder) error {
 		return fmt.Errorf("encode failed: TimestampCorrelation: %v", err)
 	}
 
-	err = enc.encodeDefAndDataMesg(reflect.ValueOf(file.DeviceInfo))
-	if err != nil {
-		return fmt.Errorf("encode failed: DeviceInfo: %v", err)
-	}
-
 	err = enc.encodeFile(data)
 	if err != nil {
 		return fmt.Errorf("encode failed: %vFile: %v", file.Type(), err)

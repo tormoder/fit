@@ -17,6 +17,10 @@ The two latest versions of Go is supported. The core decoding package has no
 external dependencies. The latest release of Go and a few external dependencies
 are required for running the full test suite and benchmarks.
 
+**Latest release:** 0.6.0
+
+_Note:_ 0.6.0 contains a breaking change, see #46.
+
 ### FIT SDK Version Support
 
 **Current supported FIT SDK version:** 21.32
@@ -46,7 +50,7 @@ Other profile versions may work, but have not been tested.
 Using Go modules:
 
 ```
-$ go get github.com/tormoder/fit@v0.5.0
+$ go get github.com/tormoder/fit@v0.6.0
 ```
 
 Using `$GOPATH`:

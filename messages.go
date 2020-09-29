@@ -1,6 +1,6 @@
 // Code generated using the program found in 'cmd/fitgen/main.go'. DO NOT EDIT.
 
-// SDK Version: 21.32
+// SDK Version: 21.38
 
 package fit
 
@@ -40,7 +40,7 @@ func NewFileIdMsg() *FileIdMsg {
 // then the main field is returned.
 func (x *FileIdMsg) GetProduct() interface{} {
 	switch x.Manufacturer {
-	case ManufacturerGarmin, ManufacturerDynastream, ManufacturerDynastreamOem:
+	case ManufacturerGarmin, ManufacturerDynastream, ManufacturerDynastreamOem, ManufacturerTacx:
 		return GarminProduct(x.Product)
 	default:
 		return x.Product
@@ -120,7 +120,7 @@ func NewSlaveDeviceMsg() *SlaveDeviceMsg {
 // then the main field is returned.
 func (x *SlaveDeviceMsg) GetProduct() interface{} {
 	switch x.Manufacturer {
-	case ManufacturerGarmin, ManufacturerDynastream, ManufacturerDynastreamOem:
+	case ManufacturerGarmin, ManufacturerDynastream, ManufacturerDynastreamOem, ManufacturerTacx:
 		return GarminProduct(x.Product)
 	default:
 		return x.Product
@@ -981,6 +981,7 @@ type SessionMsg struct {
 	NecLong                      Longitude // North east corner longitude
 	SwcLat                       Latitude  // South west corner latitude
 	SwcLong                      Longitude // South west corner longitude
+	NumLengths                   uint16    // # of lengths of swim pool
 	NormalizedPower              uint16
 	TrainingStressScore          uint16
 	IntensityFactor              uint16
@@ -1077,6 +1078,7 @@ func NewSessionMsg() *SessionMsg {
 		NecLong:                      NewLongitudeInvalid(),
 		SwcLat:                       NewLatitudeInvalid(),
 		SwcLong:                      NewLongitudeInvalid(),
+		NumLengths:                   0xFFFF,
 		NormalizedPower:              0xFFFF,
 		TrainingStressScore:          0xFFFF,
 		IntensityFactor:              0xFFFF,
@@ -1637,6 +1639,8 @@ func (x *SessionMsg) GetAvgVamScaled() float64 {
 func (x *SessionMsg) GetTotalCycles() interface{} {
 	switch x.Sport {
 	case SportRunning, SportWalking:
+		return uint32(x.TotalCycles)
+	case SportCycling, SportSwimming, SportRowing, SportStandUpPaddleboarding:
 		return uint32(x.TotalCycles)
 	default:
 		return x.TotalCycles
@@ -2362,6 +2366,8 @@ func (x *LapMsg) GetAvgVamScaled() float64 {
 func (x *LapMsg) GetTotalCycles() interface{} {
 	switch x.Sport {
 	case SportRunning, SportWalking:
+		return uint32(x.TotalCycles)
+	case SportCycling, SportSwimming, SportRowing, SportStandUpPaddleboarding:
 		return uint32(x.TotalCycles)
 	default:
 		return x.TotalCycles
@@ -3209,7 +3215,7 @@ func (x *DeviceInfoMsg) GetDeviceType() interface{} {
 // then the main field is returned.
 func (x *DeviceInfoMsg) GetProduct() interface{} {
 	switch x.Manufacturer {
-	case ManufacturerGarmin, ManufacturerDynastream, ManufacturerDynastreamOem:
+	case ManufacturerGarmin, ManufacturerDynastream, ManufacturerDynastreamOem, ManufacturerTacx:
 		return GarminProduct(x.Product)
 	default:
 		return x.Product
@@ -3245,7 +3251,7 @@ func NewTrainingFileMsg() *TrainingFileMsg {
 // then the main field is returned.
 func (x *TrainingFileMsg) GetProduct() interface{} {
 	switch x.Manufacturer {
-	case ManufacturerGarmin, ManufacturerDynastream, ManufacturerDynastreamOem:
+	case ManufacturerGarmin, ManufacturerDynastream, ManufacturerDynastreamOem, ManufacturerTacx:
 		return GarminProduct(x.Product)
 	default:
 		return x.Product
@@ -4653,7 +4659,7 @@ func NewScheduleMsg() *ScheduleMsg {
 // then the main field is returned.
 func (x *ScheduleMsg) GetProduct() interface{} {
 	switch x.Manufacturer {
-	case ManufacturerGarmin, ManufacturerDynastream, ManufacturerDynastreamOem:
+	case ManufacturerGarmin, ManufacturerDynastream, ManufacturerDynastreamOem, ManufacturerTacx:
 		return GarminProduct(x.Product)
 	default:
 		return x.Product

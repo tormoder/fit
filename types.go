@@ -1,6 +1,6 @@
 // Code generated using the program found in 'cmd/fitgen/main.go'. DO NOT EDIT.
 
-// SDK Version: 21.32
+// SDK Version: 21.38
 
 package fit
 
@@ -609,14 +609,14 @@ const (
 	CoreExerciseNameInchworm                         CoreExerciseName = 44
 	CoreExerciseNameWeightedModifiedFrontLever       CoreExerciseName = 45
 	CoreExerciseNameRussianTwist                     CoreExerciseName = 46
-	CoreExerciseNameAbdominalLegRotations            CoreExerciseName = 47
+	CoreExerciseNameAbdominalLegRotations            CoreExerciseName = 47 // Deprecated do not use
 	CoreExerciseNameArmAndLegExtensionOnKnees        CoreExerciseName = 48
 	CoreExerciseNameBicycle                          CoreExerciseName = 49
 	CoreExerciseNameBicepCurlWithLegExtension        CoreExerciseName = 50
 	CoreExerciseNameCatCow                           CoreExerciseName = 51
 	CoreExerciseNameCorkscrew                        CoreExerciseName = 52
 	CoreExerciseNameCrissCross                       CoreExerciseName = 53
-	CoreExerciseNameCrissCrossWithBall               CoreExerciseName = 54
+	CoreExerciseNameCrissCrossWithBall               CoreExerciseName = 54 // Deprecated do not use
 	CoreExerciseNameDoubleLegStretch                 CoreExerciseName = 55
 	CoreExerciseNameKneeFolds                        CoreExerciseName = 56
 	CoreExerciseNameLowerLift                        CoreExerciseName = 57
@@ -630,7 +630,7 @@ const (
 	CoreExerciseNameScissors                         CoreExerciseName = 65
 	CoreExerciseNameSingleLegCircles                 CoreExerciseName = 66
 	CoreExerciseNameSingleLegStretch                 CoreExerciseName = 67
-	CoreExerciseNameSnakeTwist1And2                  CoreExerciseName = 68
+	CoreExerciseNameSnakeTwist1And2                  CoreExerciseName = 68 // Deprecated do not use
 	CoreExerciseNameSwan                             CoreExerciseName = 69
 	CoreExerciseNameSwimming                         CoreExerciseName = 70
 	CoreExerciseNameTeaser                           CoreExerciseName = 71
@@ -1490,6 +1490,8 @@ const (
 	GarminProductHrmTriSingleByteProductId  GarminProduct = 12 // hrm_tri model for HRM ANT+ messaging
 	GarminProductHrm4RunSingleByteProductId GarminProduct = 13 // hrm4 run model for HRM ANT+ messaging
 	GarminProductFr225SingleByteProductId   GarminProduct = 14 // fr225 model for HRM ANT+ messaging
+	GarminProductGen3BsmSingleByteProductId GarminProduct = 15 // gen3_bsm model for Bike Speed ANT+ messaging
+	GarminProductGen3BcmSingleByteProductId GarminProduct = 16 // gen3_bcm model for Bike Cadence ANT+ messaging
 	GarminProductFr301China                 GarminProduct = 473
 	GarminProductFr301Japan                 GarminProduct = 474
 	GarminProductFr301Korea                 GarminProduct = 475
@@ -1711,6 +1713,7 @@ const (
 	GarminProductFenix5Plus                 GarminProduct = 3110
 	GarminProductFenix5xPlus                GarminProduct = 3111
 	GarminProductEdge520Plus                GarminProduct = 3112
+	GarminProductFr945                      GarminProduct = 3113
 	GarminProductEdge530                    GarminProduct = 3121
 	GarminProductEdge830                    GarminProduct = 3122
 	GarminProductFenix5sPlusApac            GarminProduct = 3134
@@ -1719,6 +1722,8 @@ const (
 	GarminProductFr235lAsia                 GarminProduct = 3144
 	GarminProductFr245Asia                  GarminProduct = 3145
 	GarminProductVivoActive3mApac           GarminProduct = 3163
+	GarminProductGen3Bsm                    GarminProduct = 3192 // gen3 bike speed sensor
+	GarminProductGen3Bcm                    GarminProduct = 3193 // gen3 bike cadence sensor
 	GarminProductVivoSmart4Asia             GarminProduct = 3218
 	GarminProductVivoactive4Small           GarminProduct = 3224
 	GarminProductVivoactive4Large           GarminProduct = 3225
@@ -1748,6 +1753,7 @@ const (
 	GarminProductMarqDriverAsia             GarminProduct = 3420
 	GarminProductMarqAviatorAsia            GarminProduct = 3421
 	GarminProductVivoMove3Asia              GarminProduct = 3422
+	GarminProductFr945Asia                  GarminProduct = 3441
 	GarminProductVivoActive3tChn            GarminProduct = 3446
 	GarminProductMarqCaptainAsia            GarminProduct = 3448
 	GarminProductMarqCommanderAsia          GarminProduct = 3449
@@ -1760,14 +1766,25 @@ const (
 	GarminProductFenix6SportAsia            GarminProduct = 3514
 	GarminProductFenix6Asia                 GarminProduct = 3515
 	GarminProductFenix6xAsia                GarminProduct = 3516
+	GarminProductEdge130Plus                GarminProduct = 3558
+	GarminProductEdge1030Plus               GarminProduct = 3570
 	GarminProductMarqAdventurer             GarminProduct = 3624
 	GarminProductMarqAdventurerAsia         GarminProduct = 3648
 	GarminProductSwim2Apac                  GarminProduct = 3639
 	GarminProductVenuDaimlerAsia            GarminProduct = 3737
+	GarminProductMarqGolfer                 GarminProduct = 3739
 	GarminProductVenuDaimler                GarminProduct = 3740
+	GarminProductEdge1030PlusAsia           GarminProduct = 3812
+	GarminProductEdge130PlusAsia            GarminProduct = 3813
+	GarminProductMarqGolferAsia             GarminProduct = 3850
 	GarminProductSdm4                       GarminProduct = 10007 // SDM4 footpod
 	GarminProductEdgeRemote                 GarminProduct = 10014
+	GarminProductTacxTrainingAppWin         GarminProduct = 20533
+	GarminProductTacxTrainingAppMac         GarminProduct = 20534
 	GarminProductTrainingCenter             GarminProduct = 20119
+	GarminProductTacxTrainingAppAndroid     GarminProduct = 30045
+	GarminProductTacxTrainingAppIos         GarminProduct = 30046
+	GarminProductTacxTrainingAppLegacy      GarminProduct = 30047
 	GarminProductConnectiqSimulator         GarminProduct = 65531
 	GarminProductAndroidAntplusPlugin       GarminProduct = 65532
 	GarminProductConnect                    GarminProduct = 65534 // Garmin Connect website
@@ -1869,8 +1886,8 @@ const (
 	HipRaiseExerciseNameWeightedClamBridge                              HipRaiseExerciseName = 42
 	HipRaiseExerciseNameSingleLegSwissBallHipRaiseAndLegCurl            HipRaiseExerciseName = 43
 	HipRaiseExerciseNameClams                                           HipRaiseExerciseName = 44
-	HipRaiseExerciseNameInnerThighCircles                               HipRaiseExerciseName = 45
-	HipRaiseExerciseNameInnerThighSideLift                              HipRaiseExerciseName = 46
+	HipRaiseExerciseNameInnerThighCircles                               HipRaiseExerciseName = 45 // Deprecated do not use
+	HipRaiseExerciseNameInnerThighSideLift                              HipRaiseExerciseName = 46 // Deprecated do not use
 	HipRaiseExerciseNameLegCircles                                      HipRaiseExerciseName = 47
 	HipRaiseExerciseNameLegLift                                         HipRaiseExerciseName = 48
 	HipRaiseExerciseNameLegLiftInExternalRotation                       HipRaiseExerciseName = 49
@@ -1990,7 +2007,7 @@ const (
 	HyperextensionExerciseNameWeightedSwissBallOppositeArmAndLegLift          HyperextensionExerciseName = 36
 	HyperextensionExerciseNameSupermanOnSwissBall                             HyperextensionExerciseName = 37
 	HyperextensionExerciseNameCobra                                           HyperextensionExerciseName = 38
-	HyperextensionExerciseNameSupineFloorBarre                                HyperextensionExerciseName = 39
+	HyperextensionExerciseNameSupineFloorBarre                                HyperextensionExerciseName = 39 // Deprecated do not use
 	HyperextensionExerciseNameInvalid                                         HyperextensionExerciseName = 0xFFFF
 )
 
@@ -2491,6 +2508,7 @@ const (
 	ManufacturerVersaDesign            Manufacturer = 130
 	ManufacturerChileaf                Manufacturer = 131
 	ManufacturerCycplus                Manufacturer = 132
+	ManufacturerGravaaByte             Manufacturer = 133
 	ManufacturerDevelopment            Manufacturer = 255
 	ManufacturerHealthandlife          Manufacturer = 257
 	ManufacturerLezyne                 Manufacturer = 258
@@ -2540,6 +2558,11 @@ const (
 	ManufacturerZone5cloud             Manufacturer = 302
 	ManufacturerGreenteg               Manufacturer = 303
 	ManufacturerYamahaMotors           Manufacturer = 304
+	ManufacturerWhoop                  Manufacturer = 305
+	ManufacturerGravaa                 Manufacturer = 306
+	ManufacturerOnelap                 Manufacturer = 307
+	ManufacturerMonarkExercise         Manufacturer = 308
+	ManufacturerForm                   Manufacturer = 309
 	ManufacturerActigraphcorp          Manufacturer = 5759
 	ManufacturerInvalid                Manufacturer = 0xFFFF
 )
@@ -3607,7 +3630,7 @@ const (
 	SquatExerciseNameWideStanceBarbellSquat                          SquatExerciseName = 84
 	SquatExerciseNameWideStanceGobletSquat                           SquatExerciseName = 85
 	SquatExerciseNameZercherSquat                                    SquatExerciseName = 86
-	SquatExerciseNameKbsOverhead                                     SquatExerciseName = 87
+	SquatExerciseNameKbsOverhead                                     SquatExerciseName = 87 // Deprecated do not use
 	SquatExerciseNameSquatAndSideKick                                SquatExerciseName = 88
 	SquatExerciseNameSquatJumpsInNOut                                SquatExerciseName = 89
 	SquatExerciseNamePilatesPlieSquatsParallelTurnedOutFlatAndHeels  SquatExerciseName = 90
@@ -4053,7 +4076,7 @@ const (
 	WarmUpExerciseNameNeckRotations               WarmUpExerciseName = 13
 	WarmUpExerciseNameOppositeArmAndLegBalance    WarmUpExerciseName = 14
 	WarmUpExerciseNameReachRollAndLift            WarmUpExerciseName = 15
-	WarmUpExerciseNameScorpion                    WarmUpExerciseName = 16
+	WarmUpExerciseNameScorpion                    WarmUpExerciseName = 16 // Deprecated do not use
 	WarmUpExerciseNameShoulderCircles             WarmUpExerciseName = 17
 	WarmUpExerciseNameSideToSideLegSwings         WarmUpExerciseName = 18
 	WarmUpExerciseNameSleeperStretch              WarmUpExerciseName = 19

@@ -102,6 +102,7 @@ var decodeTestFiles = [...]struct {
 	compress    bool
 	dopts       testingDecodeOpts
 	skipEncode  bool
+	encodeNote  string
 }{
 `
 
@@ -116,6 +117,7 @@ var decodeTestFiles = [...]struct {
 		g.writeBoolField(dto.compress)
 		g.writeStringField(dto.dopts.String())
 		g.writeBoolField(dto.skipEncode)
+		g.writeStringQField(dto.encodeNote)
 		g.closeField()
 	}
 

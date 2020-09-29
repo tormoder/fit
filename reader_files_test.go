@@ -11,6 +11,7 @@ var decodeTestFiles = [...]struct {
 	compress    bool
 	dopts       testingDecodeOpts
 	skipEncode  bool
+	encodeNote  string
 }{
 	{
 		"me",
@@ -19,7 +20,8 @@ var decodeTestFiles = [...]struct {
 		11297915186217814700,
 		true,
 		tdoAllWithDiscardLogger,
-		true, // Decode mismatch due to unknown fields
+		true,
+		"Decode mismatch due to unknown fields",
 	},
 	{
 		"fitsdk",
@@ -29,6 +31,7 @@ var decodeTestFiles = [...]struct {
 		true,
 		tdoNone,
 		false,
+		"",
 	},
 	{
 		"fitsdk",
@@ -37,7 +40,8 @@ var decodeTestFiles = [...]struct {
 		17438554766263628503,
 		true,
 		tdoNone,
-		true, // Fails because first message has different valid fields (#36)
+		true,
+		"Fails because first message has different valid fields (#36)",
 	},
 	{
 		"fitsdk",
@@ -47,6 +51,7 @@ var decodeTestFiles = [...]struct {
 		true,
 		tdoNone,
 		false,
+		"",
 	},
 	{
 		"fitsdk",
@@ -56,6 +61,7 @@ var decodeTestFiles = [...]struct {
 		true,
 		tdoNone,
 		false,
+		"",
 	},
 	{
 		"fitsdk",
@@ -65,6 +71,7 @@ var decodeTestFiles = [...]struct {
 		true,
 		tdoNone,
 		false,
+		"",
 	},
 	{
 		"fitsdk",
@@ -74,6 +81,7 @@ var decodeTestFiles = [...]struct {
 		true,
 		tdoNone,
 		false,
+		"",
 	},
 	{
 		"fitsdk",
@@ -83,6 +91,7 @@ var decodeTestFiles = [...]struct {
 		true,
 		tdoNone,
 		false,
+		"",
 	},
 	{
 		"fitsdk",
@@ -92,6 +101,7 @@ var decodeTestFiles = [...]struct {
 		true,
 		tdoNone,
 		false,
+		"",
 	},
 	{
 		"fitsdk",
@@ -101,6 +111,7 @@ var decodeTestFiles = [...]struct {
 		true,
 		tdoNone,
 		false,
+		"",
 	},
 	{
 		"python-fitparse",
@@ -110,6 +121,7 @@ var decodeTestFiles = [...]struct {
 		true,
 		tdoNone,
 		false,
+		"",
 	},
 	{
 		"python-fitparse",
@@ -118,7 +130,8 @@ var decodeTestFiles = [...]struct {
 		6384198383276191715,
 		true,
 		tdoNone,
-		true, // Fails because first message has different valid fields (#36)
+		true,
+		"Fails because first message has different valid fields (#36)",
 	},
 	{
 		"python-fitparse",
@@ -128,6 +141,7 @@ var decodeTestFiles = [...]struct {
 		false,
 		tdoNone,
 		false,
+		"",
 	},
 	{
 		"python-fitparse",
@@ -136,7 +150,8 @@ var decodeTestFiles = [...]struct {
 		14798701571659473253,
 		true,
 		tdoNone,
-		true, // Fails because first message has different valid fields (#36)
+		true,
+		"Fails because first message has different valid fields (#36)",
 	},
 	{
 		"sram",
@@ -145,7 +160,8 @@ var decodeTestFiles = [...]struct {
 		15334527618026463003,
 		true,
 		tdoNone,
-		true, // Fails due to encoder using profile length for arrays (#37)
+		true,
+		"Fails due to encoder using profile length for arrays (#37)",
 	},
 	{
 		"sram",
@@ -154,7 +170,8 @@ var decodeTestFiles = [...]struct {
 		3203160144706376883,
 		true,
 		tdoNone,
-		true, // Fails due to encoder using profile length for arrays (#37)
+		true,
+		"Fails due to encoder using profile length for arrays (#37)",
 	},
 	{
 		"dcrainmaker",
@@ -163,7 +180,8 @@ var decodeTestFiles = [...]struct {
 		16296406423933334795,
 		true,
 		tdoNone,
-		true, // Fails because first message has different valid fields (#36)
+		true,
+		"Fails because first message has different valid fields (#36)",
 	},
 	{
 		"misc",
@@ -173,6 +191,7 @@ var decodeTestFiles = [...]struct {
 		true,
 		tdoNone,
 		false,
+		"",
 	},
 	{
 		"misc",
@@ -182,6 +201,7 @@ var decodeTestFiles = [...]struct {
 		true,
 		tdoNone,
 		false,
+		"",
 	},
 	{
 		"corrupt",
@@ -191,6 +211,7 @@ var decodeTestFiles = [...]struct {
 		true,
 		tdoNone,
 		false,
+		"",
 	},
 	{
 		"corrupt",
@@ -200,5 +221,6 @@ var decodeTestFiles = [...]struct {
 		true,
 		tdoNone,
 		false,
+		"",
 	},
 }

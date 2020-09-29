@@ -23,12 +23,13 @@ _Note:_ 0.6.0 contains a breaking change, see #46.
 
 ### FIT SDK Version Support
 
-**Current supported FIT SDK version:** 21.32
+**Current supported FIT SDK version:** 21.38
 
 **Warning:** Data Developers Fields are not yet supported (#21).
 
 Older supported profile versions:
 
+* 21.32
 * 20.90
 * 20.43
 * 20.27

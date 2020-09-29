@@ -56,13 +56,14 @@ const (
 	tdfolder      = "testdata"
 )
 
+const goMajorVersionForDecodeGolden = "go1.15"
+
 func TestMain(m *testing.M) {
 	flag.Parse()
 	os.Exit(m.Run())
 }
 
 func TestDecode(t *testing.T) {
-	const goMajorVersionForDecodeGolden = "go1.15"
 	testDecodeGolden := true
 	goVersion := runtime.Version()
 	goVersionOK := strings.HasPrefix(goVersion, goMajorVersionForDecodeGolden)

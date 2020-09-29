@@ -6,12 +6,24 @@ import (
 	"fmt"
 	"io/ioutil"
 	"path/filepath"
+	"runtime"
+	"strings"
 	"testing"
 
 	"github.com/tormoder/fit"
 )
 
 func TestDecodeEncodeDecode(t *testing.T) {
+	goVersion := runtime.Version()
+	goVersionOK := strings.HasPrefix(goVersion, goMajorVersionForDecodeGolden)
+	if !goVersionOK {
+		t.Skipf(
+			"skipping round trip test due to Go version (enabled for %s.x, have %q)",
+			goMajorVersionForDecodeGolden,
+			goVersion,
+		)
+	}
+
 	t.Run("Group", func(t *testing.T) {
 		for i, file := range decodeTestFiles {
 			_, file := i, file // Capture range variables.
@@ -36,7 +48,6 @@ func TestDecodeEncodeDecode(t *testing.T) {
 
 				// Sanity check that decoding is OK
 				fp := fitFingerprint(inFile)
-
 				if fp != file.fingerprint {
 					t.Fatalf("decode: fit file fingerprint differs: got: %d, want: %d", fp, file.fingerprint)
 				}

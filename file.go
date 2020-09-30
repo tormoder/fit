@@ -53,6 +53,17 @@ type msgAdder interface {
 	add(reflect.Value)
 }
 
+// NewFile creates a new File of the given type.
+func NewFile(t FileType, h Header) (*File, error) {
+	f := new(File)
+	f.FileId.Type = t
+	f.Header = h
+	if err := f.init(); err != nil {
+		return nil, fmt.Errorf("error creating file: %w", err)
+	}
+	return f, nil
+}
+
 func (f *File) add(msg reflect.Value) {
 	x := msg.Interface()
 	switch tmp := x.(type) {
@@ -65,6 +76,79 @@ func (f *File) add(msg reflect.Value) {
 	default:
 		f.msgAdder.add(msg)
 	}
+}
+
+func (f *File) init() error {
+	t := f.Type()
+	switch t {
+	case FileTypeActivity:
+		f.activity = new(ActivityFile)
+		f.msgAdder = f.activity
+	case FileTypeDevice:
+		f.device = new(DeviceFile)
+		f.msgAdder = f.device
+	case FileTypeSettings:
+		f.settings = new(SettingsFile)
+		f.msgAdder = f.settings
+	case FileTypeSport:
+		f.sport = new(SportFile)
+		f.msgAdder = f.sport
+	case FileTypeWorkout:
+		f.workout = new(WorkoutFile)
+		f.msgAdder = f.workout
+	case FileTypeCourse:
+		f.course = new(CourseFile)
+		f.msgAdder = f.course
+	case FileTypeSchedules:
+		f.schedules = new(SchedulesFile)
+		f.msgAdder = f.schedules
+	case FileTypeWeight:
+		f.weight = new(WeightFile)
+		f.msgAdder = f.weight
+	case FileTypeTotals:
+		f.totals = new(TotalsFile)
+		f.msgAdder = f.totals
+	case FileTypeGoals:
+		f.goals = new(GoalsFile)
+		f.msgAdder = f.goals
+	case FileTypeBloodPressure:
+		f.bloodPressure = new(BloodPressureFile)
+		f.msgAdder = f.bloodPressure
+	case FileTypeMonitoringA:
+		f.monitoringA = new(MonitoringAFile)
+		f.msgAdder = f.monitoringA
+	case FileTypeActivitySummary:
+		f.activitySummary = new(ActivitySummaryFile)
+		f.msgAdder = f.activitySummary
+	case FileTypeMonitoringDaily:
+		f.monitoringDaily = new(MonitoringDailyFile)
+		f.msgAdder = f.monitoringDaily
+	case FileTypeMonitoringB:
+		f.monitoringB = new(MonitoringBFile)
+		f.msgAdder = f.monitoringB
+	case FileTypeSegment:
+		f.segment = new(SegmentFile)
+		f.msgAdder = f.segment
+	case FileTypeSegmentList:
+		f.segmentList = new(SegmentListFile)
+		f.msgAdder = f.segmentList
+	case FileTypeInvalid:
+		return FormatError("file type was set invalid")
+	default:
+		switch {
+		case t > FileTypeMonitoringB && t < FileTypeMfgRangeMin:
+			return FormatError(
+				fmt.Sprintf("unknown file type: %v", t),
+			)
+		case t >= FileTypeMfgRangeMin && t <= FileTypeMfgRangeMax:
+			return NotSupportedError("manufacturer specific file types")
+		default:
+			return FormatError(
+				fmt.Sprintf("unknown file type: %v", t),
+			)
+		}
+	}
+	return nil
 }
 
 // Type returns the FIT file type.

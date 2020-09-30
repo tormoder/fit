@@ -73,3 +73,4 @@ $ go get github.com/tormoder/fit
 ### Contributors
 
 - [usedbytes](https://github.com/usedbytes)
+- [colinrgodsey](https://github.com/colinrgodsey)

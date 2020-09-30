@@ -9,6 +9,7 @@ import (
 	"runtime"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/tormoder/fit"
 )
@@ -95,6 +96,37 @@ func TestDecodeEncodeDecode(t *testing.T) {
 			})
 		}
 	})
+}
+
+func TestSimpleEncode(t *testing.T) {
+	h := fit.NewHeader(fit.V20, false)
+	file, err := fit.NewFile(fit.FileTypeActivity, h)
+	if err != nil {
+		t.Fatalf("new file: got error, want none; error is: %v", err)
+	}
+
+	act, err := file.Activity()
+	if err != nil {
+		t.Fatalf("activity: got error, want none; error is: %v", err)
+	}
+
+	ev := fit.NewEventMsg()
+	ev.Timestamp = time.Now()
+	ev.Event = fit.EventTimer
+	ev.EventType = fit.EventTypeStart
+	act.Events = append(act.Events, ev)
+
+	outBuf := &bytes.Buffer{}
+
+	err = fit.Encode(outBuf, file, binary.LittleEndian)
+	if err != nil {
+		t.Fatalf("encode: got error, want none; error is: %v", err)
+	}
+
+	_, err = fit.Decode(bytes.NewReader(outBuf.Bytes()))
+	if err != nil {
+		t.Fatalf("decode: got error, want none; error is: %v", err)
+	}
 }
 
 func BenchmarkEncode(b *testing.B) {

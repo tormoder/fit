@@ -163,7 +163,7 @@ func (d *decoder) decode(r io.Reader, headerOnly, fileIDOnly, crcOnly bool) erro
 		return nil
 	}
 
-	err = d.initFileType()
+	err = d.file.init()
 	if err != nil {
 		return err
 	}
@@ -382,79 +382,6 @@ func (d *decoder) parseFileIdMsg() error {
 
 	d.file.add(msg)
 
-	return nil
-}
-
-func (d *decoder) initFileType() error {
-	t := d.file.FileId.Type
-	switch t {
-	case FileTypeActivity:
-		d.file.activity = new(ActivityFile)
-		d.file.msgAdder = d.file.activity
-	case FileTypeDevice:
-		d.file.device = new(DeviceFile)
-		d.file.msgAdder = d.file.device
-	case FileTypeSettings:
-		d.file.settings = new(SettingsFile)
-		d.file.msgAdder = d.file.settings
-	case FileTypeSport:
-		d.file.sport = new(SportFile)
-		d.file.msgAdder = d.file.sport
-	case FileTypeWorkout:
-		d.file.workout = new(WorkoutFile)
-		d.file.msgAdder = d.file.workout
-	case FileTypeCourse:
-		d.file.course = new(CourseFile)
-		d.file.msgAdder = d.file.course
-	case FileTypeSchedules:
-		d.file.schedules = new(SchedulesFile)
-		d.file.msgAdder = d.file.schedules
-	case FileTypeWeight:
-		d.file.weight = new(WeightFile)
-		d.file.msgAdder = d.file.weight
-	case FileTypeTotals:
-		d.file.totals = new(TotalsFile)
-		d.file.msgAdder = d.file.totals
-	case FileTypeGoals:
-		d.file.goals = new(GoalsFile)
-		d.file.msgAdder = d.file.goals
-	case FileTypeBloodPressure:
-		d.file.bloodPressure = new(BloodPressureFile)
-		d.file.msgAdder = d.file.bloodPressure
-	case FileTypeMonitoringA:
-		d.file.monitoringA = new(MonitoringAFile)
-		d.file.msgAdder = d.file.monitoringA
-	case FileTypeActivitySummary:
-		d.file.activitySummary = new(ActivitySummaryFile)
-		d.file.msgAdder = d.file.activitySummary
-	case FileTypeMonitoringDaily:
-		d.file.monitoringDaily = new(MonitoringDailyFile)
-		d.file.msgAdder = d.file.monitoringDaily
-	case FileTypeMonitoringB:
-		d.file.monitoringB = new(MonitoringBFile)
-		d.file.msgAdder = d.file.monitoringB
-	case FileTypeSegment:
-		d.file.segment = new(SegmentFile)
-		d.file.msgAdder = d.file.segment
-	case FileTypeSegmentList:
-		d.file.segmentList = new(SegmentListFile)
-		d.file.msgAdder = d.file.segmentList
-	case FileTypeInvalid:
-		return FormatError("file type was set invalid")
-	default:
-		switch {
-		case t > FileTypeMonitoringB && t < FileTypeMfgRangeMin:
-			return FormatError(
-				fmt.Sprintf("unknown file type: %v", t),
-			)
-		case t >= FileTypeMfgRangeMin && t <= FileTypeMfgRangeMax:
-			return NotSupportedError("manufacturer specific file types")
-		default:
-			return FormatError(
-				fmt.Sprintf("unknown file type: %v", t),
-			)
-		}
-	}
 	return nil
 }
 

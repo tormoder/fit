@@ -27,6 +27,20 @@ var (
 	errReadData   = ioError{op: "read data", err: io.ErrUnexpectedEOF}
 )
 
+// NewHeader creates a new Header with required info.
+func NewHeader(v ProtocolVersion, crc bool) Header {
+	h := Header{
+		ProtocolVersion: v.Version(),
+		ProfileVersion:  ProfileVersion,
+		Size:            headerSizeNoCRC,
+	}
+	if crc {
+		h.Size = headerSizeCRC
+	}
+	copy(h.DataType[:], fitDataTypeString[:])
+	return h
+}
+
 func (d *decoder) decodeHeader() error {
 	err := binary.Read(d.r, le, &d.h.Size)
 	if err != nil {

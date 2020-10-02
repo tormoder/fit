@@ -17,7 +17,7 @@ The two latest versions of Go is supported. The core decoding package has no
 external dependencies. The latest release of Go and a few external dependencies
 are required for running the full test suite and benchmarks.
 
-**Latest release:** 0.6.0
+**Latest release:** 0.7.0
 
 _Note:_ 0.6.0 contains a breaking change, see #46.
 

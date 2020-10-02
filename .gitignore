@@ -45,3 +45,6 @@ cmd/fitgen/fitgen
 
 # repo scope bin directory
 bin/
+
+# idea
+.idea

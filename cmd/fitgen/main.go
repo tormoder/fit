@@ -193,17 +193,7 @@ func readDataFromZIP(path string) ([]byte, error) {
 	}
 	defer r.Close()
 
-	var wfile *zip.File
-	for _, f := range r.File {
-		if f.Name == workbookNameXLS {
-			wfile = f
-			break
-		}
-		if f.Name == workbookNameXLSX {
-			wfile = f
-			break
-		}
-	}
+	wfile := scanForWorkbook(r.File)
 	if wfile == nil {
 		return nil, fmt.Errorf(
 			"no file named %q or %q found in zip archive",
@@ -223,6 +213,15 @@ func readDataFromZIP(path string) ([]byte, error) {
 	}
 
 	return data, nil
+}
+
+func scanForWorkbook(files []*zip.File) *zip.File {
+	for _, f := range files {
+		if strings.HasSuffix(f.Name, workbookNameXLS) || strings.HasSuffix(f.Name, workbookNameXLSX) {
+			return f
+		}
+	}
+	return nil
 }
 
 func readDataFromXLSX(path string) ([]byte, error) {

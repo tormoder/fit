@@ -2,7 +2,7 @@
 
 [![license](http://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/tormoder/fit/raw/master/LICENSE)
 [![GoDoc](https://godoc.org/github.com/tormoder/fit?status.svg)](https://godoc.org/github.com/tormoder/fit)
-[![Travis Build Status](https://travis-ci.org/tormoder/fit.svg?branch=master)](https://travis-ci.org/tormoder/fit)
+[![Build](https://github.com/tormoder/fit/workflows/Build/badge.svg)](https://github.com/tormoder/fit/actions?query=workflow%3ABuild)
 
 <img src="https://raw.githubusercontent.com/hackraft/gophericons/master/png/2.png" width="225" align="right" hspace="25" />
 

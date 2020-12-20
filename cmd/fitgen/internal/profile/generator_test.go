@@ -195,6 +195,7 @@ var sdks = []sdk{
 	{20, 14},
 	{20, 27},
 	{20, 43},
+	{21, 40},
 }
 
 func TestMain(m *testing.M) {

@@ -75,3 +75,4 @@ $ go get github.com/tormoder/fit
 
 - [usedbytes](https://github.com/usedbytes)
 - [colinrgodsey](https://github.com/colinrgodsey)
+- [bpg](https://github.com/bpg)

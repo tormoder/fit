@@ -280,11 +280,30 @@ func (e *encoder) encodeFile(file reflect.Value) error {
 			for j := 0; j < v.Len(); j++ {
 				v2 := reflect.Indirect(v.Index(j))
 
-				if j == 0 {
-					def = getEncodeMesgDef(v2, 0)
-					err := e.writeDefMesg(def)
-					if err != nil {
-						return err
+				// Not necessary that the first message will have all defined fields that may appear in the following messages
+				// So we have to build a model first by iterating though all the message and collecting valid definition fields
+				if def == nil {
+					// map to collect field definitions
+					mfields := make(map[byte]*field)
+					for k := 0; k < v.Len(); k++ {
+						r := reflect.Indirect(v.Index(k))
+						def = getEncodeMesgDef(r, 0)
+						for _, f := range def.fields {
+							mfields[f.num] = f
+						}
+					}
+					// should not be nil at this point, but just in case
+					if def != nil {
+						def.fields = make([]*field, 0, len(mfields))
+						for _, f := range mfields {
+							def.fields = append(def.fields, f)
+						}
+						err := e.writeDefMesg(def)
+						if err != nil {
+							return err
+						}
+					} else {
+						return fmt.Errorf("cannot create definition message for %+v", v.Interface())
 					}
 				}
 

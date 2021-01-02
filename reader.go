@@ -434,7 +434,7 @@ func (d *decoder) parseDefinitionMessage(recordHeader byte) (*defmsg, error) {
 		return &dm, nil
 	}
 
-	if err = d.readFull(d.tmp[0 : 3*dm.fields]); err != nil {
+	if err = d.readFull(d.tmp[0 : 3*uint16(dm.fields)]); err != nil {
 		return nil, fmt.Errorf("error parsing fields: %v", err)
 	}
 

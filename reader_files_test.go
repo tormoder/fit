@@ -204,6 +204,16 @@ var decodeTestFiles = [...]struct {
 		"",
 	},
 	{
+		"bpg",
+		"garmin.fit",
+		false,
+		8578045933883478770,
+		true,
+		tdoNone,
+		false,
+		"Has a definition message with number of fields >85",
+	},
+	{
 		"corrupt",
 		"activity-filecrc.fit",
 		true,

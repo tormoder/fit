@@ -56,8 +56,7 @@ const (
 	mesgHeaderMask     byte = 0x00
 	localMesgNumMask   byte = 0x0F
 
-	maxLocalMesgs byte   = localMesgNumMask + 1
-	maxFieldSize  uint16 = 255 * 3
+	maxLocalMesgs byte = localMesgNumMask + 1
 
 	littleEndian byte = 0x00
 	bigEndian    byte = 0x01

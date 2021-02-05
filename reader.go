@@ -29,7 +29,7 @@ type decoder struct {
 	}
 
 	crc     dyncrc16.Hash16
-	tmp     [maxFieldSize]byte
+	tmp     [255 * 3]byte
 	defmsgs [maxLocalMesgs]*defmsg
 
 	timestamp      uint32

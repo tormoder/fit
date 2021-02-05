@@ -57,14 +57,13 @@ const (
 	localMesgNumMask   byte = 0x0F
 
 	maxLocalMesgs byte = localMesgNumMask + 1
-	maxFieldSize  byte = 255
 
 	littleEndian byte = 0x00
 	bigEndian    byte = 0x01
 
 	bytesForCRC     byte = 2
 	headerSizeCRC   byte = 14
-	headerSizeNoCRC byte = (headerSizeCRC - bytesForCRC)
+	headerSizeNoCRC byte = headerSizeCRC - bytesForCRC
 
 	fitDataTypeString string = ".FIT"
 

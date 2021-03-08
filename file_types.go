@@ -62,6 +62,7 @@ type CourseFile struct {
 	Course       *CourseMsg
 	Laps         []*LapMsg
 	CoursePoints []*CoursePointMsg
+	Events       []*EventMsg
 	Records      []*RecordMsg
 }
 

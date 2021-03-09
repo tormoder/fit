@@ -252,6 +252,9 @@ func (c *CourseFile) add(msg reflect.Value) {
 	case RecordMsg:
 		tmp.expandComponents()
 		c.Records = append(c.Records, &tmp)
+	case EventMsg:
+		tmp.expandComponents()
+		c.Events = append(c.Events, &tmp)
 	default:
 	}
 }

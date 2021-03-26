@@ -58,7 +58,7 @@ func NewFile(t FileType, h Header) (*File, error) {
 	f := new(File)
 	f.FileId.Type = t
 	f.Header = h
-	if err := f.init(); err != nil {
+	if err := f.checkAndSetMsgAdder(); err != nil {
 		return nil, fmt.Errorf("error creating file: %w", err)
 	}
 	return f, nil
@@ -66,6 +66,7 @@ func NewFile(t FileType, h Header) (*File, error) {
 
 func (f *File) add(msg reflect.Value) {
 	x := msg.Interface()
+	_ = f.checkAndSetMsgAdder()
 	switch tmp := x.(type) {
 	case FileIdMsg:
 		f.FileId = tmp
@@ -78,59 +79,95 @@ func (f *File) add(msg reflect.Value) {
 	}
 }
 
-func (f *File) init() error {
+// checkAndSetMsgAdder check message type and set msgAdder
+func (f *File) checkAndSetMsgAdder() error {
 	t := f.Type()
 	switch t {
 	case FileTypeActivity:
-		f.activity = new(ActivityFile)
+		if f.activity == nil {
+			f.activity = new(ActivityFile)
+		}
 		f.msgAdder = f.activity
 	case FileTypeDevice:
-		f.device = new(DeviceFile)
+		if f.device == nil {
+			f.device = new(DeviceFile)
+		}
 		f.msgAdder = f.device
 	case FileTypeSettings:
-		f.settings = new(SettingsFile)
+		if f.settings == nil {
+			f.settings = new(SettingsFile)
+		}
 		f.msgAdder = f.settings
 	case FileTypeSport:
-		f.sport = new(SportFile)
+		if f.sport == nil {
+			f.sport = new(SportFile)
+		}
 		f.msgAdder = f.sport
 	case FileTypeWorkout:
-		f.workout = new(WorkoutFile)
+		if f.workout == nil {
+			f.workout = new(WorkoutFile)
+		}
 		f.msgAdder = f.workout
 	case FileTypeCourse:
-		f.course = new(CourseFile)
+		if f.course == nil {
+			f.course = new(CourseFile)
+		}
 		f.msgAdder = f.course
 	case FileTypeSchedules:
-		f.schedules = new(SchedulesFile)
+		if f.schedules == nil {
+			f.schedules = new(SchedulesFile)
+		}
 		f.msgAdder = f.schedules
 	case FileTypeWeight:
-		f.weight = new(WeightFile)
+		if f.weight == nil {
+			f.weight = new(WeightFile)
+		}
 		f.msgAdder = f.weight
 	case FileTypeTotals:
-		f.totals = new(TotalsFile)
+		if f.totals == nil {
+			f.totals = new(TotalsFile)
+		}
 		f.msgAdder = f.totals
 	case FileTypeGoals:
-		f.goals = new(GoalsFile)
+		if f.goals == nil {
+			f.goals = new(GoalsFile)
+		}
 		f.msgAdder = f.goals
 	case FileTypeBloodPressure:
-		f.bloodPressure = new(BloodPressureFile)
+		if f.bloodPressure == nil {
+			f.bloodPressure = new(BloodPressureFile)
+		}
 		f.msgAdder = f.bloodPressure
 	case FileTypeMonitoringA:
-		f.monitoringA = new(MonitoringAFile)
+		if f.monitoringA == nil {
+			f.monitoringA = new(MonitoringAFile)
+		}
+
 		f.msgAdder = f.monitoringA
 	case FileTypeActivitySummary:
-		f.activitySummary = new(ActivitySummaryFile)
+		if f.activitySummary == nil {
+			f.activitySummary = new(ActivitySummaryFile)
+		}
 		f.msgAdder = f.activitySummary
 	case FileTypeMonitoringDaily:
-		f.monitoringDaily = new(MonitoringDailyFile)
+		if f.monitoringDaily == nil {
+			f.monitoringDaily = new(MonitoringDailyFile)
+		}
 		f.msgAdder = f.monitoringDaily
 	case FileTypeMonitoringB:
-		f.monitoringB = new(MonitoringBFile)
+		if f.monitoringB == nil {
+			f.monitoringB = new(MonitoringBFile)
+		}
 		f.msgAdder = f.monitoringB
 	case FileTypeSegment:
-		f.segment = new(SegmentFile)
+		if f.segment == nil {
+			f.segment = new(SegmentFile)
+		}
 		f.msgAdder = f.segment
 	case FileTypeSegmentList:
-		f.segmentList = new(SegmentListFile)
+		if f.segmentList == nil {
+			f.segmentList = new(SegmentListFile)
+		}
 		f.msgAdder = f.segmentList
 	case FileTypeInvalid:
 		return FormatError("file type was set invalid")

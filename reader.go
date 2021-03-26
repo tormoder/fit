@@ -155,18 +155,7 @@ func (d *decoder) decode(r io.Reader, headerOnly, fileIDOnly, crcOnly bool) erro
 		defer d.handleUnknownMessages()
 	}
 
-	err = d.parseFileIdMsg()
-	if err != nil {
-		return fmt.Errorf("error parsing file id message: %v", err)
-	}
-	if fileIDOnly {
-		return nil
-	}
 
-	err = d.file.init()
-	if err != nil {
-		return err
-	}
 
 	err = d.decodeFileData()
 	if err != nil {

@@ -4,7 +4,6 @@ import (
 	"encoding/binary"
 	"fmt"
 	"io"
-	"log"
 	"math"
 	"reflect"
 	"sort"
@@ -412,8 +411,6 @@ func (d *decoder) parseDefinitionMessage(recordHeader byte) (*defmsg, error) {
 			dm.fieldDevDefs[i] = fdd
 		}
 	}
-
-	log.Println(dm)
 	return &dm, nil
 }
 

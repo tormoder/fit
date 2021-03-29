@@ -359,7 +359,7 @@ func BenchmarkDecodeHeaderAndFileID(b *testing.B) {
 }
 
 func TestDecodeXZ(t *testing.T) {
-	testFile := filepath.Join("testdata", "0134902991.fit")
+	testFile := filepath.Join("testdata", "python-fitparse","antfs-dump.63.fit")
 	testData, err := ioutil.ReadFile(testFile)
 	if err != nil {
 		fmt.Println(err)
@@ -392,7 +392,7 @@ func TestDecodeXZ(t *testing.T) {
 		if !record.PositionLat.Invalid(){
 			log.Println(record.PositionLat, record.PositionLong)
 		}
-
+		break
 	}
 
 	// Print the sport of the first Session message

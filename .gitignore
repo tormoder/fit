@@ -48,3 +48,4 @@ bin/
 
 # idea
 .idea
+.DS_Store

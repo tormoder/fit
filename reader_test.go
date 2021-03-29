@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -358,7 +359,7 @@ func BenchmarkDecodeHeaderAndFileID(b *testing.B) {
 }
 
 func TestDecodeXZ(t *testing.T) {
-	testFile := filepath.Join("testdata", "0137001239.fit")
+	testFile := filepath.Join("testdata", "0134902991.fit")
 	testData, err := ioutil.ReadFile(testFile)
 	if err != nil {
 		fmt.Println(err)
@@ -387,11 +388,11 @@ func TestDecodeXZ(t *testing.T) {
 	}
 
 	// Print the latitude and longitude of the first Record message
-	for idx, record := range activity.Records {
-		fmt.Println(record.PositionLat, record.PositionLong)
-		if idx > 500 {
-			break
+	for _, record := range activity.Records {
+		if !record.PositionLat.Invalid(){
+			log.Println(record.PositionLat, record.PositionLong)
 		}
+
 	}
 
 	// Print the sport of the first Session message

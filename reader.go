@@ -192,7 +192,7 @@ func (d *decoder) decodeFileData() error {
 			if msg.IsValid() {
 				d.file.add(msg)
 			}
-		case b & 0x40 > 0:
+		case b&0x40 > 0:
 			dm, err = d.parseDefinitionMessage(b)
 			if err != nil {
 				return fmt.Errorf("parsing definition message: %v", err)
@@ -299,6 +299,7 @@ type defmsg struct {
 	globalMsgNum MesgNum
 	fields       byte
 	fieldDefs    []fieldDef
+	fieldDevDefs []fieldDevDef
 }
 
 func (dm defmsg) String() string {
@@ -312,6 +313,12 @@ type fieldDef struct {
 	num   byte
 	size  byte
 	btype types.Base
+}
+
+type fieldDevDef struct {
+	fieldNum byte
+	size byte
+	devDataIndex byte
 }
 
 func (fd fieldDef) String() string {
@@ -388,12 +395,22 @@ func (d *decoder) parseDefinitionMessage(recordHeader byte) (*defmsg, error) {
 	if d.debug {
 		d.opts.logger.Println("definition message parsed:", dm)
 	}
-	if recordHeader & 0x20 != 0 {
+	if recordHeader&0x20 != 0 {
 		devFieldsNum, err := d.readByte()
-		if err!=nil{
-			log.Println(err)
+		if err != nil {
+			return nil, err
 		}
-		log.Println(devFieldsNum)
+		if err = d.readFull(d.tmp[0 : 3*uint16(devFieldsNum)]); err != nil {
+			return nil, fmt.Errorf("error parsing fields: %v", err)
+		}
+
+		dm.fieldDevDefs = make([]fieldDevDef, devFieldsNum)
+		for i, fdd := range dm.fieldDevDefs {
+			fdd.fieldNum = d.tmp[i*3]
+			fdd.size = d.tmp[(i*3)+1]
+			fdd.devDataIndex = d.tmp[(i*3)+2]
+			dm.fieldDevDefs[i] = fdd
+		}
 	}
 
 	log.Println(dm)
@@ -611,6 +628,15 @@ func (d *decoder) parseDataFields(dm *defmsg, knownMsg bool, msgv reflect.Value)
 		}
 	}
 
+	for i, ddfield := range dm.fieldDevDefs{
+		dsize := int(ddfield.size)
+		err := d.readFull(d.tmp[0:dsize])
+		if err != nil {
+			return reflect.Value{}, fmt.Errorf(
+				"error parsing data developer message: %v (field %d [%v] for [%v])",
+				err, i, ddfield, dm)
+		}
+	}
 	if knownMsg && !msgv.IsValid() {
 		panic("internal decoder error: parse data fields: known message, but not (reflect) valid")
 	}

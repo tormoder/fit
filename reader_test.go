@@ -356,3 +356,47 @@ func BenchmarkDecodeHeaderAndFileID(b *testing.B) {
 		}
 	}
 }
+
+func TestDecodeXZ(t *testing.T) {
+	testFile := filepath.Join("testdata", "0137001239.fit")
+	testData, err := ioutil.ReadFile(testFile)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	// Decode the FIT file data
+	fit1, err := fit.Decode(bytes.NewReader(testData))
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	// Inspect the TimeCreated field in the FileId message
+	fmt.Println(fit1.FileId.TimeCreated)
+
+	// Inspect the dynamic Product field in the FileId message
+	fmt.Println(fit1.FileId.GetProduct(), fit1.FileId.Manufacturer, fit1.FileId.ProductName,
+		fit1.FileId.SerialNumber)
+
+	// Get the actual activity
+	activity, err := fit1.Activity()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	// Print the latitude and longitude of the first Record message
+	for idx, record := range activity.Records {
+		fmt.Println(record.PositionLat, record.PositionLong)
+		if idx > 500 {
+			break
+		}
+	}
+
+	// Print the sport of the first Session message
+	for _, session := range activity.Sessions {
+		fmt.Println(session.Sport)
+		break
+	}
+}

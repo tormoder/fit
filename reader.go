@@ -2,9 +2,9 @@ package fit
 
 import (
 	"encoding/binary"
-	"errors"
 	"fmt"
 	"io"
+	"log"
 	"math"
 	"reflect"
 	"sort"
@@ -155,8 +155,6 @@ func (d *decoder) decode(r io.Reader, headerOnly, fileIDOnly, crcOnly bool) erro
 		defer d.handleUnknownMessages()
 	}
 
-
-
 	err = d.decodeFileData()
 	if err != nil {
 		return err
@@ -186,28 +184,20 @@ func (d *decoder) decodeFileData() error {
 		}
 
 		switch {
-		case (b & compressedHeaderMask) == compressedHeaderMask:
-			msg, err = d.parseDataMessage(b, true)
+		case (b & 0x40) == 0:
+			msg, err = d.parseDataMessage(b)
 			if err != nil {
 				return fmt.Errorf("parsing compressed timestamp message: %v", err)
 			}
 			if msg.IsValid() {
 				d.file.add(msg)
 			}
-		case (b & headerTypeMask) == mesgDefinitionMask:
+		case b & 0x40 > 0:
 			dm, err = d.parseDefinitionMessage(b)
 			if err != nil {
 				return fmt.Errorf("parsing definition message: %v", err)
 			}
 			d.defmsgs[dm.localMsgType] = dm
-		case (b & mesgHeaderMask) == mesgHeaderMask:
-			msg, err = d.parseDataMessage(b, false)
-			if err != nil {
-				return fmt.Errorf("parsing data message: %v", err)
-			}
-			if msg.IsValid() {
-				d.file.add(msg)
-			}
 		default:
 			return fmt.Errorf("unknown record header, got: %#x", b)
 		}
@@ -328,52 +318,6 @@ func (fd fieldDef) String() string {
 	return fmt.Sprintf("num: %d | size: %d | btype: %v", fd.num, fd.size, fd.btype)
 }
 
-func (d *decoder) parseFileIdMsg() error {
-	b, err := d.readByte()
-	if err != nil {
-		return fmt.Errorf("error parsing record header: %v", err)
-	}
-
-	if !((b & mesgDefinitionMask) == mesgDefinitionMask) {
-		return fmt.Errorf("expected record header byte for definition message, got %#x - %8b", b, b)
-	}
-
-	dm, err := d.parseDefinitionMessage(b)
-	if err != nil {
-		return fmt.Errorf("error parsing definition message: %v", err)
-	}
-	if dm.globalMsgNum != MesgNumFileId {
-		return fmt.Errorf("parsed definition message was not for file_id (was %v)", dm.globalMsgNum)
-	}
-	d.defmsgs[dm.localMsgType] = dm
-
-	b, err = d.readByte()
-	if err != nil {
-		return fmt.Errorf("error parsing record header: %v", err)
-	}
-
-	if !((b & mesgHeaderMask) == mesgHeaderMask) {
-		return fmt.Errorf("expected record header byte for data message, got %#x - %8b", b, b)
-	}
-	msg, err := d.parseDataMessage(b, false)
-	if err != nil {
-		return fmt.Errorf("error reading data message:  %v", err)
-	}
-
-	_, ok := msg.Interface().(FileIdMsg)
-	if !ok {
-		return errors.New("parsed message was not of type file_id")
-	}
-
-	if d.debug {
-		d.opts.logger.Println("parsed file_id message:", msg)
-	}
-
-	d.file.add(msg)
-
-	return nil
-}
-
 func (d *decoder) parseDefinitionMessage(recordHeader byte) (*defmsg, error) {
 	dm := defmsg{}
 	dm.localMsgType = recordHeader & localMesgNumMask
@@ -444,7 +388,15 @@ func (d *decoder) parseDefinitionMessage(recordHeader byte) (*defmsg, error) {
 	if d.debug {
 		d.opts.logger.Println("definition message parsed:", dm)
 	}
+	if recordHeader & 0x20 != 0 {
+		devFieldsNum, err := d.readByte()
+		if err!=nil{
+			log.Println(err)
+		}
+		log.Println(devFieldsNum)
+	}
 
+	log.Println(dm)
 	return &dm, nil
 }
 
@@ -533,9 +485,10 @@ func (d *decoder) validateFieldDef(gmsgnum MesgNum, dfield fieldDef) error {
 	}
 }
 
-func (d *decoder) parseDataMessage(recordHeader byte, compressed bool) (reflect.Value, error) {
+func (d *decoder) parseDataMessage(recordHeader byte) (reflect.Value, error) {
 	var localMsgNum byte
-	if compressed {
+	compressed := recordHeader & 0x80
+	if compressed == 1 {
 		localMsgNum = (recordHeader & compressedLocalMesgNumMask) >> 5
 	} else {
 		localMsgNum = recordHeader & localMesgNumMask
@@ -556,7 +509,7 @@ func (d *decoder) parseDataMessage(recordHeader byte, compressed bool) (reflect.
 		d.unknownMessages[dm.globalMsgNum]++
 	}
 
-	if !compressed {
+	if compressed == 0 {
 		return d.parseDataFields(dm, knownMsg, msgv)
 	}
 

@@ -88,8 +88,15 @@ func TestDecode(t *testing.T) {
 	regenTestTable := struct {
 		sync.Mutex // Protects val and decodeTestFiles slice in reader_util_test.go.
 		val        bool
-	}{}
+	}{val: true}
 
+	if regenTestTable.val || *fupdate {
+		t.Logf("regenerating table for decode test files...")
+		err := regenerateDecodeTestTable()
+		if err != nil {
+			t.Fatalf("error regenerating table for decode test files: %v", err)
+		}
+	}
 	t.Run("Group", func(t *testing.T) {
 		for i, file := range decodeTestFiles {
 			i, file := i, file // Capture range variables.
@@ -144,14 +151,6 @@ func TestDecode(t *testing.T) {
 			})
 		}
 	})
-
-	if regenTestTable.val || *fupdate {
-		t.Logf("regenerating table for decode test files...")
-		err := regenerateDecodeTestTable()
-		if err != nil {
-			t.Fatalf("error regenerating table for decode test files: %v", err)
-		}
-	}
 }
 
 func TestDecodeChained(t *testing.T) {
@@ -359,45 +358,51 @@ func BenchmarkDecodeHeaderAndFileID(b *testing.B) {
 }
 
 func TestDecodeXZ(t *testing.T) {
-	testFile := filepath.Join("testdata", "python-fitparse","antfs-dump.63.fit")
-	testData, err := ioutil.ReadFile(testFile)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+	path := "/Users/xingzhe/project/xingzhe/golang/sprinter-go/volumes/fits/"
+	dir, _ := ioutil.ReadDir(path)
+	for _, fi := range dir {
+		if filepath.Ext(path+fi.Name()) == ".fit" {
+			testData, err := ioutil.ReadFile(path + fi.Name())
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
 
-	// Decode the FIT file data
-	fit1, err := fit.Decode(bytes.NewReader(testData))
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+			// Decode the FIT file data
+			fit1, err := fit.Decode(bytes.NewReader(testData))
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
 
-	// Inspect the TimeCreated field in the FileId message
-	fmt.Println(fit1.FileId.TimeCreated)
+			// Inspect the TimeCreated field in the FileId message
+			fmt.Println(fit1.FileId.TimeCreated)
 
-	// Inspect the dynamic Product field in the FileId message
-	fmt.Println(fit1.FileId.GetProduct(), fit1.FileId.Manufacturer, fit1.FileId.ProductName,
-		fit1.FileId.SerialNumber)
+			// Inspect the dynamic Product field in the FileId message
+			fmt.Println(fit1.FileId.GetProduct(), fit1.FileId.Manufacturer, fit1.FileId.ProductName,
+				fit1.FileId.SerialNumber)
 
-	// Get the actual activity
-	activity, err := fit1.Activity()
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+			// Get the actual activity
+			activity, err := fit1.Activity()
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
 
-	// Print the latitude and longitude of the first Record message
-	for _, record := range activity.Records {
-		if !record.PositionLat.Invalid(){
-			log.Println(record.PositionLat, record.PositionLong)
+			// Print the latitude and longitude of the first Record message
+			for _, record := range activity.Records {
+				if !record.PositionLat.Invalid() {
+					log.Println(record.PositionLat, record.PositionLong)
+				}
+				break
+			}
+
+			// Print the sport of the first Session message
+			for _, session := range activity.Sessions {
+				fmt.Println(session.Sport)
+				break
+			}
 		}
-		break
 	}
 
-	// Print the sport of the first Session message
-	for _, session := range activity.Sessions {
-		fmt.Println(session.Sport)
-		break
-	}
 }

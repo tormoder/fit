@@ -183,7 +183,7 @@ func (d *decoder) decodeFileData() error {
 		}
 
 		switch {
-		case (b & 0x40) == 0:
+		case b&0x80 > 0:
 			msg, err = d.parseDataMessage(b)
 			if err != nil {
 				return fmt.Errorf("parsing compressed timestamp message: %v", err)
@@ -197,6 +197,14 @@ func (d *decoder) decodeFileData() error {
 				return fmt.Errorf("parsing definition message: %v", err)
 			}
 			d.defmsgs[dm.localMsgType] = dm
+		case (b & 0x40) == 0:
+			msg, err = d.parseDataMessage(b)
+			if err != nil {
+				return fmt.Errorf("parsing compressed timestamp message: %v", err)
+			}
+			if msg.IsValid() {
+				d.file.add(msg)
+			}
 		default:
 			return fmt.Errorf("unknown record header, got: %#x", b)
 		}
@@ -315,8 +323,8 @@ type fieldDef struct {
 }
 
 type fieldDevDef struct {
-	fieldNum byte
-	size byte
+	fieldNum     byte
+	size         byte
 	devDataIndex byte
 }
 
@@ -502,7 +510,7 @@ func (d *decoder) validateFieldDef(gmsgnum MesgNum, dfield fieldDef) error {
 func (d *decoder) parseDataMessage(recordHeader byte) (reflect.Value, error) {
 	var localMsgNum byte
 	compressed := recordHeader & 0x80
-	if compressed == 1 {
+	if compressed > 0 {
 		localMsgNum = (recordHeader & compressedLocalMesgNumMask) >> 5
 	} else {
 		localMsgNum = recordHeader & localMesgNumMask
@@ -625,7 +633,7 @@ func (d *decoder) parseDataFields(dm *defmsg, knownMsg bool, msgv reflect.Value)
 		}
 	}
 
-	for i, ddfield := range dm.fieldDevDefs{
+	for i, ddfield := range dm.fieldDevDefs {
 		dsize := int(ddfield.size)
 		err := d.readFull(d.tmp[0:dsize])
 		if err != nil {

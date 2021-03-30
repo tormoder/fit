@@ -48,14 +48,14 @@ type decoder struct {
 // verified if headerOnly is true.
 func CheckIntegrity(r io.Reader, headerOnly bool) error {
 	var d decoder
-	return d.decode(r, headerOnly, false, true)
+	return d.decode(r, headerOnly, true)
 }
 
 // DecodeHeader returns the FIT file header without decoding the entire FIT
 // file.
 func DecodeHeader(r io.Reader) (Header, error) {
 	var d decoder
-	if err := d.decode(r, true, false, false); err != nil {
+	if err := d.decode(r, true, false); err != nil {
 		return Header{}, err
 	}
 	return d.h, nil
@@ -66,7 +66,7 @@ func DecodeHeader(r io.Reader) (Header, error) {
 // files.
 func DecodeHeaderAndFileID(r io.Reader) (Header, FileIdMsg, error) {
 	var d decoder
-	if err := d.decode(r, false, true, false); err != nil {
+	if err := d.decode(r, false, false); err != nil {
 		return Header{}, FileIdMsg{}, err
 	}
 	return d.h, d.file.FileId, nil
@@ -80,7 +80,7 @@ func Decode(r io.Reader, opts ...DecodeOption) (*File, error) {
 	for _, opt := range opts {
 		opt(&d.opts)
 	}
-	err := d.decode(r, false, false, false)
+	err := d.decode(r, false, false)
 	return d.file, err
 }
 
@@ -95,7 +95,7 @@ func DecodeChained(r io.Reader, opts ...DecodeOption) ([]*File, error) {
 		for _, opt := range opts {
 			opt(&d.opts)
 		}
-		err := d.decode(r, false, false, false)
+		err := d.decode(r, false, false)
 		if err != nil {
 			if d.h.Size == 0 && i != 0 {
 				// Header not read, and not first file:
@@ -112,7 +112,7 @@ func DecodeChained(r io.Reader, opts ...DecodeOption) ([]*File, error) {
 	}
 }
 
-func (d *decoder) decode(r io.Reader, headerOnly, fileIDOnly, crcOnly bool) error {
+func (d *decoder) decode(r io.Reader, headerOnly, crcOnly bool) error {
 	if d.opts.logger != nil {
 		d.debug = true
 	}
@@ -183,7 +183,7 @@ func (d *decoder) decodeFileData() error {
 		}
 
 		switch {
-		case b&0x80 > 0:
+		case b&0x80 > 0: // compressed timestamp
 			msg, err = d.parseDataMessage(b)
 			if err != nil {
 				return fmt.Errorf("parsing compressed timestamp message: %v", err)
@@ -191,13 +191,13 @@ func (d *decoder) decodeFileData() error {
 			if msg.IsValid() {
 				d.file.add(msg)
 			}
-		case b&0x40 > 0:
+		case b&0x40 > 0: // definition message
 			dm, err = d.parseDefinitionMessage(b)
 			if err != nil {
 				return fmt.Errorf("parsing definition message: %v", err)
 			}
 			d.defmsgs[dm.localMsgType] = dm
-		case (b & 0x40) == 0:
+		case (b & 0x40) == 0: // data message
 			msg, err = d.parseDataMessage(b)
 			if err != nil {
 				return fmt.Errorf("parsing compressed timestamp message: %v", err)

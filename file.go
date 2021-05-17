@@ -74,6 +74,11 @@ func (f *File) add(msg reflect.Value) {
 		f.FileCreator = &tmp
 	case TimestampCorrelationMsg:
 		f.TimestampCorrelation = &tmp
+	case ZonesTargetMsg:
+		if f.sport == nil {
+			f.sport = new(SportFile)
+		}
+		f.sport.add(msg)
 	default:
 		f.msgAdder.add(msg)
 	}
@@ -231,9 +236,9 @@ func (f *File) Settings() (*SettingsFile, error) {
 // Sport returns f's Sport file. An error is returned if the FIT file is
 // not of type sport.
 func (f *File) Sport() (*SportFile, error) {
-	if !(f.FileId.Type == FileTypeSport) {
-		return nil, wrongFileTypeError{f.FileId.Type, FileTypeSport}
-	}
+	//if !(f.FileId.Type == FileTypeSport) {
+	//	return nil, wrongFileTypeError{f.FileId.Type, FileTypeSport}
+	//}
 	return f.sport, nil
 }
 

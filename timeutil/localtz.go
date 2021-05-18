@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/beyoung/fit"
 	"github.com/bradfitz/latlong"
-	"github.com/tormoder/fit"
 )
 
 var (

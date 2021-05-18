@@ -7,7 +7,7 @@ GOMODULE_OFF	:= GO111MODULE=off
 
 FIT_PKGS 	:= ./...
 FIT_DIRS 	:= $(shell find . -type f -not -path "*vendor*" -not -path "./.git*" -not -path "*testdata*" -name "*.go" -printf "%h\n" | sort -u)
-FIT_PKG_PATH 	:= github.com/tormoder/fit
+FIT_PKG_PATH 	:= github.com/beyoung/fit
 FITGEN_REL_PATH := ./cmd/fitgen
 
 GOFUZZ_PKG_PATH	:= github.com/dvyukov/go-fuzz

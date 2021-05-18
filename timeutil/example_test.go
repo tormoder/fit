@@ -6,8 +6,8 @@ import (
 	"io/ioutil"
 	"path/filepath"
 
-	"github.com/tormoder/fit"
-	"github.com/tormoder/fit/timeutil"
+	"github.com/beyoung/fit"
+	"github.com/beyoung/fit/timeutil"
 )
 
 func ExampleSetLocalTimeZone() {

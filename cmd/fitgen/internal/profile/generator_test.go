@@ -14,7 +14,7 @@ import (
 	"testing"
 
 	"github.com/cespare/xxhash"
-	"github.com/tormoder/fit/cmd/fitgen/internal/profile"
+	"github.com/beyoung/fit/cmd/fitgen/internal/profile"
 )
 
 const (

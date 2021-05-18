@@ -1,6 +1,6 @@
 package profile
 
-import "github.com/tormoder/fit/internal/types"
+import "github.com/beyoung/fit/internal/types"
 
 type Type struct {
 	Name     string

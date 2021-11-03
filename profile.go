@@ -986,6 +986,7 @@ var _fields = [...][256]*field{
 		10:  {10, 10, types.Fit(2), 1},
 		11:  {11, 11, types.Fit(2), 1},
 		12:  {12, 12, types.Fit(4), 1},
+		13:  {13, 13, types.Fit(4), 1},
 	},
 
 	MesgNumBloodPressure: {

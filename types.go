@@ -1,6 +1,6 @@
 // Code generated using the program found in 'cmd/fitgen/main.go'. DO NOT EDIT.
 
-// SDK Version: 21.60
+// SDK Version: 21.67
 
 package fit
 
@@ -114,6 +114,7 @@ const (
 	AntplusDeviceTypeRacquet                 AntplusDeviceType = 26
 	AntplusDeviceTypeControlHub              AntplusDeviceType = 27
 	AntplusDeviceTypeMuscleOxygen            AntplusDeviceType = 31
+	AntplusDeviceTypeShifting                AntplusDeviceType = 34
 	AntplusDeviceTypeBikeLightMain           AntplusDeviceType = 35
 	AntplusDeviceTypeBikeLightShared         AntplusDeviceType = 36
 	AntplusDeviceTypeExd                     AntplusDeviceType = 38
@@ -1792,8 +1793,9 @@ const (
 	GarminProductLily                       GarminProduct = 3615
 	GarminProductMarqAdventurer             GarminProduct = 3624
 	GarminProductEnduro                     GarminProduct = 3638
-	GarminProductMarqAdventurerAsia         GarminProduct = 3648
 	GarminProductSwim2Apac                  GarminProduct = 3639
+	GarminProductMarqAdventurerAsia         GarminProduct = 3648
+	GarminProductFr945Lte                   GarminProduct = 3652
 	GarminProductDescentMk2Asia             GarminProduct = 3702 // Mk2 and Mk2i
 	GarminProductVenu2                      GarminProduct = 3703
 	GarminProductVenu2s                     GarminProduct = 3704
@@ -1808,14 +1810,17 @@ const (
 	GarminProductEnduroAsia                 GarminProduct = 3872
 	GarminProductVenusqAsia                 GarminProduct = 3837
 	GarminProductMarqGolferAsia             GarminProduct = 3850
+	GarminProductFr55                       GarminProduct = 3869
 	GarminProductApproachG12                GarminProduct = 3927
 	GarminProductDescentMk2sAsia            GarminProduct = 3930
 	GarminProductApproachS42                GarminProduct = 3934
 	GarminProductVenu2sAsia                 GarminProduct = 3949
 	GarminProductVenu2Asia                  GarminProduct = 3950
+	GarminProductFr945LteAsia               GarminProduct = 3978
 	GarminProductApproachS12Asia            GarminProduct = 3986
 	GarminProductApproachG12Asia            GarminProduct = 4001
 	GarminProductApproachS42Asia            GarminProduct = 4002
+	GarminProductFr55Asia                   GarminProduct = 4033
 	GarminProductSdm4                       GarminProduct = 10007 // SDM4 footpod
 	GarminProductEdgeRemote                 GarminProduct = 10014
 	GarminProductTacxTrainingAppWin         GarminProduct = 20533
@@ -2554,6 +2559,7 @@ const (
 	ManufacturerGravaaByte             Manufacturer = 133
 	ManufacturerSigeyi                 Manufacturer = 134
 	ManufacturerCoospo                 Manufacturer = 135
+	ManufacturerGeoid                  Manufacturer = 136
 	ManufacturerDevelopment            Manufacturer = 255
 	ManufacturerHealthandlife          Manufacturer = 257
 	ManufacturerLezyne                 Manufacturer = 258
@@ -3763,7 +3769,11 @@ const (
 	SubSportApneaHunting         SubSport = 57 // Diving
 	SubSportVirtualActivity      SubSport = 58
 	SubSportObstacle             SubSport = 59 // Used for events where participants run, crawl through mud, climb over walls, etc.
+	SubSportBreathing            SubSport = 62
 	SubSportSailRace             SubSport = 65 // Sailing
+	SubSportUltra                SubSport = 67 // Ultramarathon
+	SubSportIndoorClimbing       SubSport = 68 // Climbing
+	SubSportBouldering           SubSport = 69 // Climbing
 	SubSportAll                  SubSport = 254
 	SubSportInvalid              SubSport = 0xFF
 )

@@ -1,6 +1,6 @@
 // Code generated using the program found in 'cmd/fitgen/main.go'. DO NOT EDIT.
 
-// SDK Version: 21.60
+// SDK Version: 21.67
 
 package fit
 
@@ -3258,33 +3258,6 @@ func (x *TrainingFileMsg) GetProduct() interface{} {
 	}
 }
 
-// HrvMsg represents the hrv FIT message type.
-type HrvMsg struct {
-	Time []uint16 // Time between beats
-}
-
-// NewHrvMsg returns a hrv FIT message
-// initialized to all-invalid values.
-func NewHrvMsg() *HrvMsg {
-	return &HrvMsg{
-		Time: nil,
-	}
-}
-
-// GetTimeScaled returns Time
-// as a slice with scale and any offset applied to every element.
-// Units: s
-func (x *HrvMsg) GetTimeScaled() []float64 {
-	if len(x.Time) == 0 {
-		return nil
-	}
-	s := make([]float64, len(x.Time))
-	for i, v := range x.Time {
-		s[i] = float64(v) / 1000
-	}
-	return s
-}
-
 // WeatherConditionsMsg represents the weather_conditions FIT message type.
 type WeatherConditionsMsg struct {
 	Timestamp                time.Time     // time of update for current conditions, else forecast time
@@ -3673,6 +3646,68 @@ type JumpMsg struct {
 // initialized to all-invalid values.
 func NewJumpMsg() *JumpMsg {
 	return &JumpMsg{}
+}
+
+// ClimbProMsg represents the climb_pro FIT message type.
+type ClimbProMsg struct {
+}
+
+// NewClimbProMsg returns a climb_pro FIT message
+// initialized to all-invalid values.
+func NewClimbProMsg() *ClimbProMsg {
+	return &ClimbProMsg{}
+}
+
+// FieldDescriptionMsg represents the field_description FIT message type.
+type FieldDescriptionMsg struct {
+	DeveloperDataIndex    uint8
+	FieldDefinitionNumber uint8
+	FitBaseTypeId         FitBaseType
+	FieldName             []string
+	Scale                 uint8
+	Offset                int8
+	Units                 []string
+	FitBaseUnitId         FitBaseUnit
+	NativeMesgNum         MesgNum
+	NativeFieldNum        uint8
+}
+
+// NewFieldDescriptionMsg returns a field_description FIT message
+// initialized to all-invalid values.
+func NewFieldDescriptionMsg() *FieldDescriptionMsg {
+	return &FieldDescriptionMsg{
+		DeveloperDataIndex:    0xFF,
+		FieldDefinitionNumber: 0xFF,
+		FitBaseTypeId:         0xFF,
+		FieldName:             nil,
+		Scale:                 0xFF,
+		Offset:                0x7F,
+		Units:                 nil,
+		FitBaseUnitId:         0xFFFF,
+		NativeMesgNum:         0xFFFF,
+		NativeFieldNum:        0xFF,
+	}
+}
+
+// DeveloperDataIdMsg represents the developer_data_id FIT message type.
+type DeveloperDataIdMsg struct {
+	DeveloperId        []byte
+	ApplicationId      []byte
+	ManufacturerId     Manufacturer
+	DeveloperDataIndex uint8
+	ApplicationVersion uint32
+}
+
+// NewDeveloperDataIdMsg returns a developer_data_id FIT message
+// initialized to all-invalid values.
+func NewDeveloperDataIdMsg() *DeveloperDataIdMsg {
+	return &DeveloperDataIdMsg{
+		DeveloperId:        nil,
+		ApplicationId:      nil,
+		ManufacturerId:     0xFFFF,
+		DeveloperDataIndex: 0xFF,
+		ApplicationVersion: 0xFFFFFFFF,
+	}
 }
 
 // CourseMsg represents the course FIT message type.
@@ -5241,58 +5276,6 @@ func (x *ExdDataConceptConfigurationMsg) expandComponents() {
 	}
 }
 
-// FieldDescriptionMsg represents the field_description FIT message type.
-type FieldDescriptionMsg struct {
-	DeveloperDataIndex    uint8
-	FieldDefinitionNumber uint8
-	FitBaseTypeId         FitBaseType
-	FieldName             []string
-	Scale                 uint8
-	Offset                int8
-	Units                 []string
-	FitBaseUnitId         FitBaseUnit
-	NativeMesgNum         MesgNum
-	NativeFieldNum        uint8
-}
-
-// NewFieldDescriptionMsg returns a field_description FIT message
-// initialized to all-invalid values.
-func NewFieldDescriptionMsg() *FieldDescriptionMsg {
-	return &FieldDescriptionMsg{
-		DeveloperDataIndex:    0xFF,
-		FieldDefinitionNumber: 0xFF,
-		FitBaseTypeId:         0xFF,
-		FieldName:             nil,
-		Scale:                 0xFF,
-		Offset:                0x7F,
-		Units:                 nil,
-		FitBaseUnitId:         0xFFFF,
-		NativeMesgNum:         0xFFFF,
-		NativeFieldNum:        0xFF,
-	}
-}
-
-// DeveloperDataIdMsg represents the developer_data_id FIT message type.
-type DeveloperDataIdMsg struct {
-	DeveloperId        []byte
-	ApplicationId      []byte
-	ManufacturerId     Manufacturer
-	DeveloperDataIndex uint8
-	ApplicationVersion uint32
-}
-
-// NewDeveloperDataIdMsg returns a developer_data_id FIT message
-// initialized to all-invalid values.
-func NewDeveloperDataIdMsg() *DeveloperDataIdMsg {
-	return &DeveloperDataIdMsg{
-		DeveloperId:        nil,
-		ApplicationId:      nil,
-		ManufacturerId:     0xFFFF,
-		DeveloperDataIndex: 0xFF,
-		ApplicationVersion: 0xFFFFFFFF,
-	}
-}
-
 // DiveSummaryMsg represents the dive_summary FIT message type.
 type DiveSummaryMsg struct {
 }
@@ -5303,12 +5286,29 @@ func NewDiveSummaryMsg() *DiveSummaryMsg {
 	return &DiveSummaryMsg{}
 }
 
-// ClimbProMsg represents the climb_pro FIT message type.
-type ClimbProMsg struct {
+// HrvMsg represents the hrv FIT message type.
+type HrvMsg struct {
+	Time []uint16 // Time between beats
 }
 
-// NewClimbProMsg returns a climb_pro FIT message
+// NewHrvMsg returns a hrv FIT message
 // initialized to all-invalid values.
-func NewClimbProMsg() *ClimbProMsg {
-	return &ClimbProMsg{}
+func NewHrvMsg() *HrvMsg {
+	return &HrvMsg{
+		Time: nil,
+	}
+}
+
+// GetTimeScaled returns Time
+// as a slice with scale and any offset applied to every element.
+// Units: s
+func (x *HrvMsg) GetTimeScaled() []float64 {
+	if len(x.Time) == 0 {
+		return nil
+	}
+	s := make([]float64, len(x.Time))
+	for i, v := range x.Time {
+		s[i] = float64(v) / 1000
+	}
+	return s
 }

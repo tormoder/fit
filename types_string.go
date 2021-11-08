@@ -262,6 +262,7 @@ func _() {
 	_ = x[AntplusDeviceTypeRacquet-26]
 	_ = x[AntplusDeviceTypeControlHub-27]
 	_ = x[AntplusDeviceTypeMuscleOxygen-31]
+	_ = x[AntplusDeviceTypeShifting-34]
 	_ = x[AntplusDeviceTypeBikeLightMain-35]
 	_ = x[AntplusDeviceTypeBikeLightShared-36]
 	_ = x[AntplusDeviceTypeExd-38]
@@ -276,7 +277,7 @@ func _() {
 	_ = x[AntplusDeviceTypeInvalid-255]
 }
 
-const _AntplusDeviceType_name = "AntfsBikePowerEnvironmentSensorLegacyMultiSportSpeedDistanceControlFitnessEquipmentBloodPressureGeocacheNodeLightElectricVehicleEnvSensorRacquetControlHubMuscleOxygenBikeLightMainBikeLightSharedExdBikeRadarBikeAeroWeightScaleHeartRateBikeSpeedCadenceBikeCadenceBikeSpeedStrideSpeedDistanceInvalid"
+const _AntplusDeviceType_name = "AntfsBikePowerEnvironmentSensorLegacyMultiSportSpeedDistanceControlFitnessEquipmentBloodPressureGeocacheNodeLightElectricVehicleEnvSensorRacquetControlHubMuscleOxygenShiftingBikeLightMainBikeLightSharedExdBikeRadarBikeAeroWeightScaleHeartRateBikeSpeedCadenceBikeCadenceBikeSpeedStrideSpeedDistanceInvalid"
 
 var _AntplusDeviceType_map = map[AntplusDeviceType]string{
 	1:   _AntplusDeviceType_name[0:5],
@@ -292,18 +293,19 @@ var _AntplusDeviceType_map = map[AntplusDeviceType]string{
 	26:  _AntplusDeviceType_name[137:144],
 	27:  _AntplusDeviceType_name[144:154],
 	31:  _AntplusDeviceType_name[154:166],
-	35:  _AntplusDeviceType_name[166:179],
-	36:  _AntplusDeviceType_name[179:194],
-	38:  _AntplusDeviceType_name[194:197],
-	40:  _AntplusDeviceType_name[197:206],
-	46:  _AntplusDeviceType_name[206:214],
-	119: _AntplusDeviceType_name[214:225],
-	120: _AntplusDeviceType_name[225:234],
-	121: _AntplusDeviceType_name[234:250],
-	122: _AntplusDeviceType_name[250:261],
-	123: _AntplusDeviceType_name[261:270],
-	124: _AntplusDeviceType_name[270:289],
-	255: _AntplusDeviceType_name[289:296],
+	34:  _AntplusDeviceType_name[166:174],
+	35:  _AntplusDeviceType_name[174:187],
+	36:  _AntplusDeviceType_name[187:202],
+	38:  _AntplusDeviceType_name[202:205],
+	40:  _AntplusDeviceType_name[205:214],
+	46:  _AntplusDeviceType_name[214:222],
+	119: _AntplusDeviceType_name[222:233],
+	120: _AntplusDeviceType_name[233:242],
+	121: _AntplusDeviceType_name[242:258],
+	122: _AntplusDeviceType_name[258:269],
+	123: _AntplusDeviceType_name[269:278],
+	124: _AntplusDeviceType_name[278:297],
+	255: _AntplusDeviceType_name[297:304],
 }
 
 func (i AntplusDeviceType) String() string {
@@ -3218,8 +3220,9 @@ func _() {
 	_ = x[GarminProductLily-3615]
 	_ = x[GarminProductMarqAdventurer-3624]
 	_ = x[GarminProductEnduro-3638]
-	_ = x[GarminProductMarqAdventurerAsia-3648]
 	_ = x[GarminProductSwim2Apac-3639]
+	_ = x[GarminProductMarqAdventurerAsia-3648]
+	_ = x[GarminProductFr945Lte-3652]
 	_ = x[GarminProductDescentMk2Asia-3702]
 	_ = x[GarminProductVenu2-3703]
 	_ = x[GarminProductVenu2s-3704]
@@ -3234,14 +3237,17 @@ func _() {
 	_ = x[GarminProductEnduroAsia-3872]
 	_ = x[GarminProductVenusqAsia-3837]
 	_ = x[GarminProductMarqGolferAsia-3850]
+	_ = x[GarminProductFr55-3869]
 	_ = x[GarminProductApproachG12-3927]
 	_ = x[GarminProductDescentMk2sAsia-3930]
 	_ = x[GarminProductApproachS42-3934]
 	_ = x[GarminProductVenu2sAsia-3949]
 	_ = x[GarminProductVenu2Asia-3950]
+	_ = x[GarminProductFr945LteAsia-3978]
 	_ = x[GarminProductApproachS12Asia-3986]
 	_ = x[GarminProductApproachG12Asia-4001]
 	_ = x[GarminProductApproachS42Asia-4002]
+	_ = x[GarminProductFr55Asia-4033]
 	_ = x[GarminProductSdm4-10007]
 	_ = x[GarminProductEdgeRemote-10014]
 	_ = x[GarminProductTacxTrainingAppWin-20533]
@@ -3256,7 +3262,7 @@ func _() {
 	_ = x[GarminProductInvalid-65535]
 }
 
-const _GarminProduct_name = "Hrm1Axh01Axb01Axb02Hrm2ssDsiAlf02Hrm3ssHrmRunSingleByteProductIdBsmBcmAxs01HrmTriSingleByteProductIdHrm4RunSingleByteProductIdFr225SingleByteProductIdGen3BsmSingleByteProductIdGen3BcmSingleByteProductIdFr301ChinaFr301JapanFr301KoreaFr301TaiwanFr405Fr50Fr405JapanFr60DsiAlf01Fr310xtEdge500Fr110Edge800Edge500TaiwanEdge500JapanChirpFr110JapanEdge200Fr910xtEdge800TaiwanEdge800JapanAlf04Fr610Fr210JapanVectorSsVectorCpEdge800ChinaEdge500ChinaApproachG10Fr610JapanEdge500KoreaFr70Fr310xt4tAmxFr10Edge800KoreaSwimFr910xtChinaFenixEdge200TaiwanEdge510Edge810TempeFr910xtJapanFr620Fr220Fr910xtKoreaFr10JapanEdge810JapanVirbEliteEdgeTouringEdge510JapanHrmTriHrmRunFr920xtEdge510AsiaEdge810ChinaEdge810TaiwanEdge1000VivoFitVirbRemoteVivoKiFr15VivoActiveEdge510KoreaFr620JapanFr620ChinaFr220JapanFr220ChinaApproachS6VivoSmartFenix2EpixFenix3Edge1000TaiwanEdge1000JapanFr15JapanEdge520Edge1000ChinaFr620RussiaFr220RussiaVectorSEdge1000KoreaFr920xtTaiwanFr920xtChinaFr920xtJapanVirbxVivoSmartApacEtrexTouchEdge25Fr25VivoFit2Fr225Fr630Fr230Fr735xtVivoActiveApacVector2Vector2sVirbxeFr620TaiwanFr220TaiwanTruswingD2airvenuFenix3ChinaFenix3TwnVariaHeadlightVariaTaillightOldEdgeExplore1000Fr225AsiaVariaRadarTaillightVariaRadarDisplayEdge20Edge520AsiaEdge520JapanD2BravoApproachS20VivoSmart2Edge1000ThaiVariaRemoteEdge25AsiaEdge25JpnEdge20AsiaApproachX40Fenix3JapanVivoSmartEmeaFr630AsiaFr630JpnFr230JpnHrm4RunEpixJapanVivoActiveHrVivoSmartGpsHrVivoSmartHrVivoSmartHrAsiaVivoSmartGpsHrAsiaVivoMoveVariaTaillightFr235AsiaFr235JapanVariaVisionVivoFit3Fenix3KoreaFenix3SeaFenix3HrVirbUltra30IndexSmartScaleFr235Fenix3ChronosOregon7xxRino7xxEpixKoreaFenix3HrChnFenix3HrTwnFenix3HrJpnFenix3HrSeaFenix3HrKorNautixVivoActiveHrApacOregon7xxWwEdge820EdgeExplore820Fr735xtApacFr735xtJapanFenix5sD2BravoTitaniumVariaUt800RunningDynamicsPodEdge820ChinaEdge820JapanFenix5xVivoFitJrVivoSmart3VivoSportEdge820TaiwanEdge820KoreaEdge820SeaFr35HebrewApproachS60Fr35ApacFr35JapanFenix3ChronosAsiaVirb360Fr935Fenix5Vivoactive3Edge1030Fr235ChinaNfcForetrex601701VivoMoveHrVector3Fenix5AsiaFenix5sAsiaFenix5xAsiaApproachZ80Fr35KoreaD2charlieVivoSmart3ApacVivoSportApacFr935AsiaDescentVivoFit4Fr645Fr645mFr30Fenix5sPlusEdge130Edge1030AsiaVivosmart4VivoMoveHrAsiaApproachX10Fr30AsiaVivoactive3mWFr645AsiaFr645mAsiaEdgeExploreGpsmap66ApproachS10Vivoactive3mLApproachG80Edge130AsiaEdge1030BontragerFenix5PlusFenix5xPlusEdge520PlusFr945Edge530Edge830InstinctEsportsFenix5sPlusApacFenix5xPlusApacEdge520PlusApacFr235lAsiaFr245AsiaVivoActive3mApacGen3BsmGen3BcmVivoSmart4AsiaVivoactive4SmallVivoactive4LargeVenuMarqDriverMarqAviatorMarqCaptainMarqCommanderMarqExpeditionMarqAthleteDescentMk2Gpsmap66iFenix6SSportFenix6SFenix6SportFenix6Fenix6xHrmDualHrmProVivoMove3PremiumApproachS40Fr245mAsiaEdge530ApacEdge830ApacVivoMove3VivoActive4SmallAsiaVivoActive4LargeAsiaVivoActive4OledAsiaSwim2MarqDriverAsiaMarqAviatorAsiaVivoMove3AsiaFr945AsiaVivoActive3tChnMarqCaptainAsiaMarqCommanderAsiaMarqExpeditionAsiaMarqAthleteAsiaFr45AsiaVivoactive3DaimlerLegacyReyLegacyDarthVaderLegacyCaptainMarvelLegacyFirstAvengerFenix6sSportAsiaFenix6sAsiaFenix6SportAsiaFenix6AsiaFenix6xAsiaLegacyCaptainMarvelAsiaLegacyFirstAvengerAsiaLegacyReyAsiaLegacyDarthVaderAsiaDescentMk2sEdge130PlusEdge1030PlusRally200Fr745VenusqLilyMarqAdventurerEnduroSwim2ApacMarqAdventurerAsiaDescentMk2AsiaVenu2Venu2sVenuDaimlerAsiaMarqGolferVenuDaimlerFr745AsiaLilyAsiaEdge1030PlusAsiaEdge130PlusAsiaApproachS12VenusqAsiaMarqGolferAsiaEnduroAsiaApproachG12DescentMk2sAsiaApproachS42Venu2sAsiaVenu2AsiaApproachS12AsiaApproachG12AsiaApproachS42AsiaSdm4EdgeRemoteTrainingCenterTacxTrainingAppWinTacxTrainingAppMacTacxTrainingAppAndroidTacxTrainingAppIosTacxTrainingAppLegacyConnectiqSimulatorAndroidAntplusPluginConnectInvalid"
+const _GarminProduct_name = "Hrm1Axh01Axb01Axb02Hrm2ssDsiAlf02Hrm3ssHrmRunSingleByteProductIdBsmBcmAxs01HrmTriSingleByteProductIdHrm4RunSingleByteProductIdFr225SingleByteProductIdGen3BsmSingleByteProductIdGen3BcmSingleByteProductIdFr301ChinaFr301JapanFr301KoreaFr301TaiwanFr405Fr50Fr405JapanFr60DsiAlf01Fr310xtEdge500Fr110Edge800Edge500TaiwanEdge500JapanChirpFr110JapanEdge200Fr910xtEdge800TaiwanEdge800JapanAlf04Fr610Fr210JapanVectorSsVectorCpEdge800ChinaEdge500ChinaApproachG10Fr610JapanEdge500KoreaFr70Fr310xt4tAmxFr10Edge800KoreaSwimFr910xtChinaFenixEdge200TaiwanEdge510Edge810TempeFr910xtJapanFr620Fr220Fr910xtKoreaFr10JapanEdge810JapanVirbEliteEdgeTouringEdge510JapanHrmTriHrmRunFr920xtEdge510AsiaEdge810ChinaEdge810TaiwanEdge1000VivoFitVirbRemoteVivoKiFr15VivoActiveEdge510KoreaFr620JapanFr620ChinaFr220JapanFr220ChinaApproachS6VivoSmartFenix2EpixFenix3Edge1000TaiwanEdge1000JapanFr15JapanEdge520Edge1000ChinaFr620RussiaFr220RussiaVectorSEdge1000KoreaFr920xtTaiwanFr920xtChinaFr920xtJapanVirbxVivoSmartApacEtrexTouchEdge25Fr25VivoFit2Fr225Fr630Fr230Fr735xtVivoActiveApacVector2Vector2sVirbxeFr620TaiwanFr220TaiwanTruswingD2airvenuFenix3ChinaFenix3TwnVariaHeadlightVariaTaillightOldEdgeExplore1000Fr225AsiaVariaRadarTaillightVariaRadarDisplayEdge20Edge520AsiaEdge520JapanD2BravoApproachS20VivoSmart2Edge1000ThaiVariaRemoteEdge25AsiaEdge25JpnEdge20AsiaApproachX40Fenix3JapanVivoSmartEmeaFr630AsiaFr630JpnFr230JpnHrm4RunEpixJapanVivoActiveHrVivoSmartGpsHrVivoSmartHrVivoSmartHrAsiaVivoSmartGpsHrAsiaVivoMoveVariaTaillightFr235AsiaFr235JapanVariaVisionVivoFit3Fenix3KoreaFenix3SeaFenix3HrVirbUltra30IndexSmartScaleFr235Fenix3ChronosOregon7xxRino7xxEpixKoreaFenix3HrChnFenix3HrTwnFenix3HrJpnFenix3HrSeaFenix3HrKorNautixVivoActiveHrApacOregon7xxWwEdge820EdgeExplore820Fr735xtApacFr735xtJapanFenix5sD2BravoTitaniumVariaUt800RunningDynamicsPodEdge820ChinaEdge820JapanFenix5xVivoFitJrVivoSmart3VivoSportEdge820TaiwanEdge820KoreaEdge820SeaFr35HebrewApproachS60Fr35ApacFr35JapanFenix3ChronosAsiaVirb360Fr935Fenix5Vivoactive3Edge1030Fr235ChinaNfcForetrex601701VivoMoveHrVector3Fenix5AsiaFenix5sAsiaFenix5xAsiaApproachZ80Fr35KoreaD2charlieVivoSmart3ApacVivoSportApacFr935AsiaDescentVivoFit4Fr645Fr645mFr30Fenix5sPlusEdge130Edge1030AsiaVivosmart4VivoMoveHrAsiaApproachX10Fr30AsiaVivoactive3mWFr645AsiaFr645mAsiaEdgeExploreGpsmap66ApproachS10Vivoactive3mLApproachG80Edge130AsiaEdge1030BontragerFenix5PlusFenix5xPlusEdge520PlusFr945Edge530Edge830InstinctEsportsFenix5sPlusApacFenix5xPlusApacEdge520PlusApacFr235lAsiaFr245AsiaVivoActive3mApacGen3BsmGen3BcmVivoSmart4AsiaVivoactive4SmallVivoactive4LargeVenuMarqDriverMarqAviatorMarqCaptainMarqCommanderMarqExpeditionMarqAthleteDescentMk2Gpsmap66iFenix6SSportFenix6SFenix6SportFenix6Fenix6xHrmDualHrmProVivoMove3PremiumApproachS40Fr245mAsiaEdge530ApacEdge830ApacVivoMove3VivoActive4SmallAsiaVivoActive4LargeAsiaVivoActive4OledAsiaSwim2MarqDriverAsiaMarqAviatorAsiaVivoMove3AsiaFr945AsiaVivoActive3tChnMarqCaptainAsiaMarqCommanderAsiaMarqExpeditionAsiaMarqAthleteAsiaFr45AsiaVivoactive3DaimlerLegacyReyLegacyDarthVaderLegacyCaptainMarvelLegacyFirstAvengerFenix6sSportAsiaFenix6sAsiaFenix6SportAsiaFenix6AsiaFenix6xAsiaLegacyCaptainMarvelAsiaLegacyFirstAvengerAsiaLegacyReyAsiaLegacyDarthVaderAsiaDescentMk2sEdge130PlusEdge1030PlusRally200Fr745VenusqLilyMarqAdventurerEnduroSwim2ApacMarqAdventurerAsiaFr945LteDescentMk2AsiaVenu2Venu2sVenuDaimlerAsiaMarqGolferVenuDaimlerFr745AsiaLilyAsiaEdge1030PlusAsiaEdge130PlusAsiaApproachS12VenusqAsiaMarqGolferAsiaFr55EnduroAsiaApproachG12DescentMk2sAsiaApproachS42Venu2sAsiaVenu2AsiaFr945LteAsiaApproachS12AsiaApproachG12AsiaApproachS42AsiaFr55AsiaSdm4EdgeRemoteTrainingCenterTacxTrainingAppWinTacxTrainingAppMacTacxTrainingAppAndroidTacxTrainingAppIosTacxTrainingAppLegacyConnectiqSimulatorAndroidAntplusPluginConnectInvalid"
 
 var _GarminProduct_map = map[GarminProduct]string{
 	1:     _GarminProduct_name[0:4],
@@ -3576,40 +3582,44 @@ var _GarminProduct_map = map[GarminProduct]string{
 	3638:  _GarminProduct_name[3275:3281],
 	3639:  _GarminProduct_name[3281:3290],
 	3648:  _GarminProduct_name[3290:3308],
-	3702:  _GarminProduct_name[3308:3322],
-	3703:  _GarminProduct_name[3322:3327],
-	3704:  _GarminProduct_name[3327:3333],
-	3737:  _GarminProduct_name[3333:3348],
-	3739:  _GarminProduct_name[3348:3358],
-	3740:  _GarminProduct_name[3358:3369],
-	3794:  _GarminProduct_name[3369:3378],
-	3809:  _GarminProduct_name[3378:3386],
-	3812:  _GarminProduct_name[3386:3402],
-	3813:  _GarminProduct_name[3402:3417],
-	3823:  _GarminProduct_name[3417:3428],
-	3837:  _GarminProduct_name[3428:3438],
-	3850:  _GarminProduct_name[3438:3452],
-	3872:  _GarminProduct_name[3452:3462],
-	3927:  _GarminProduct_name[3462:3473],
-	3930:  _GarminProduct_name[3473:3488],
-	3934:  _GarminProduct_name[3488:3499],
-	3949:  _GarminProduct_name[3499:3509],
-	3950:  _GarminProduct_name[3509:3518],
-	3986:  _GarminProduct_name[3518:3533],
-	4001:  _GarminProduct_name[3533:3548],
-	4002:  _GarminProduct_name[3548:3563],
-	10007: _GarminProduct_name[3563:3567],
-	10014: _GarminProduct_name[3567:3577],
-	20119: _GarminProduct_name[3577:3591],
-	20533: _GarminProduct_name[3591:3609],
-	20534: _GarminProduct_name[3609:3627],
-	30045: _GarminProduct_name[3627:3649],
-	30046: _GarminProduct_name[3649:3667],
-	30047: _GarminProduct_name[3667:3688],
-	65531: _GarminProduct_name[3688:3706],
-	65532: _GarminProduct_name[3706:3726],
-	65534: _GarminProduct_name[3726:3733],
-	65535: _GarminProduct_name[3733:3740],
+	3652:  _GarminProduct_name[3308:3316],
+	3702:  _GarminProduct_name[3316:3330],
+	3703:  _GarminProduct_name[3330:3335],
+	3704:  _GarminProduct_name[3335:3341],
+	3737:  _GarminProduct_name[3341:3356],
+	3739:  _GarminProduct_name[3356:3366],
+	3740:  _GarminProduct_name[3366:3377],
+	3794:  _GarminProduct_name[3377:3386],
+	3809:  _GarminProduct_name[3386:3394],
+	3812:  _GarminProduct_name[3394:3410],
+	3813:  _GarminProduct_name[3410:3425],
+	3823:  _GarminProduct_name[3425:3436],
+	3837:  _GarminProduct_name[3436:3446],
+	3850:  _GarminProduct_name[3446:3460],
+	3869:  _GarminProduct_name[3460:3464],
+	3872:  _GarminProduct_name[3464:3474],
+	3927:  _GarminProduct_name[3474:3485],
+	3930:  _GarminProduct_name[3485:3500],
+	3934:  _GarminProduct_name[3500:3511],
+	3949:  _GarminProduct_name[3511:3521],
+	3950:  _GarminProduct_name[3521:3530],
+	3978:  _GarminProduct_name[3530:3542],
+	3986:  _GarminProduct_name[3542:3557],
+	4001:  _GarminProduct_name[3557:3572],
+	4002:  _GarminProduct_name[3572:3587],
+	4033:  _GarminProduct_name[3587:3595],
+	10007: _GarminProduct_name[3595:3599],
+	10014: _GarminProduct_name[3599:3609],
+	20119: _GarminProduct_name[3609:3623],
+	20533: _GarminProduct_name[3623:3641],
+	20534: _GarminProduct_name[3641:3659],
+	30045: _GarminProduct_name[3659:3681],
+	30046: _GarminProduct_name[3681:3699],
+	30047: _GarminProduct_name[3699:3720],
+	65531: _GarminProduct_name[3720:3738],
+	65532: _GarminProduct_name[3738:3758],
+	65534: _GarminProduct_name[3758:3765],
+	65535: _GarminProduct_name[3765:3772],
 }
 
 func (i GarminProduct) String() string {
@@ -4910,6 +4920,7 @@ func _() {
 	_ = x[ManufacturerGravaaByte-133]
 	_ = x[ManufacturerSigeyi-134]
 	_ = x[ManufacturerCoospo-135]
+	_ = x[ManufacturerGeoid-136]
 	_ = x[ManufacturerDevelopment-255]
 	_ = x[ManufacturerHealthandlife-257]
 	_ = x[ManufacturerLezyne-258]
@@ -4972,7 +4983,7 @@ func _() {
 
 const (
 	_Manufacturer_name_0 = "GarminGarminFr405AntfsZephyrDaytonIdtSrmQuarqIbikeSarisSparkHkTanitaEchowellDynastreamOemNautilusDynastreamTimexMetrigearXelicBeurerCardiosportAAndDHmmSuuntoThitaElektronikGpulseCleanMobilePedalBrainPeakswareSaxonarLemondFitnessDexcomWahooFitnessOctaneFitnessArchinoeticsTheHurtBoxCitizenSystemsMagellanOsynceHoluxConcept2ShimanoOneGiantLeapAceSensorBrimBrothersXplovaPerceptionDigitalBf1systemsPioneerSpantecMetalogics4iiiisSeikoEpsonSeikoEpsonOemIforPowellMaxwellGuiderStarTracBreakawayAlatechTechnologyLtdMioTechnologyEuropeRotorGeonauteIdBikeSpecializedWtekPhysicalEnterprisesNorthPoleEngineeringBkoolCateyeStagesCyclingSigmasportTomtomPeripedalWattbike"
-	_Manufacturer_name_1 = "MoxyCiclosportPowerbahnAcornProjectsApsLifebeamBontragerWellgoScoscheMaguraWoodwayEliteNielsenKellermanDkCityTacxDirectionTechnologyMagtonic1partcarbonInsideRideTechnologiesSoundOfMotionStrydIcgMiPulseBsxAthleticsLookCampagnoloSrlBodyBikeSmartPraxisworksLimitsTechnologyTopactionTechnologyCosinussFitcareMageneGiantManufacturingCoTigrasportSalutronTechnogymBrytonSensorsLatitudeLimitedSoaringTechnologyIgpsportThinkriderGopherSportWaterrowerOrangetheoryInpeakKineticJohnsonHealthTechPolarElectroSeesenseNciTechnologyIqsquareLeomoIfitComCorosByteVersaDesignChileafCycplusGravaaByteSigeyiCoospo"
+	_Manufacturer_name_1 = "MoxyCiclosportPowerbahnAcornProjectsApsLifebeamBontragerWellgoScoscheMaguraWoodwayEliteNielsenKellermanDkCityTacxDirectionTechnologyMagtonic1partcarbonInsideRideTechnologiesSoundOfMotionStrydIcgMiPulseBsxAthleticsLookCampagnoloSrlBodyBikeSmartPraxisworksLimitsTechnologyTopactionTechnologyCosinussFitcareMageneGiantManufacturingCoTigrasportSalutronTechnogymBrytonSensorsLatitudeLimitedSoaringTechnologyIgpsportThinkriderGopherSportWaterrowerOrangetheoryInpeakKineticJohnsonHealthTechPolarElectroSeesenseNciTechnologyIqsquareLeomoIfitComCorosByteVersaDesignChileafCycplusGravaaByteSigeyiCoospoGeoid"
 	_Manufacturer_name_2 = "Development"
 	_Manufacturer_name_3 = "HealthandlifeLezyneScribeLabsZwiftWatteamReconFaveroElectronicsDynoveloStravaPrecorBrytonSramNavmanCobiSpiviMioMagellanEvesportsSensitivusGaugePodoonLifeTimeFitnessFalcoEMotorsMinouraCycliqLuxotticaTrainerRoadTheSufferfestFullspeedaheadVirtualtrainingFeedbacksportsOmataVdoMagneticdaysHammerheadKineticByKurtShapelogDabuziduoJetblackCorosVirtugoVelosenseCycligentincTrailforksMahleEbikemotionNurvvMicroprogramZone5cloudGreentegYamahaMotorsWhoopGravaaOnelapMonarkExerciseFormDecathlonSyncros"
 	_Manufacturer_name_4 = "Actigraphcorp"
@@ -4981,7 +4992,7 @@ const (
 
 var (
 	_Manufacturer_index_0 = [...]uint16{0, 6, 22, 28, 34, 37, 40, 45, 50, 55, 62, 68, 76, 89, 97, 107, 112, 121, 126, 132, 143, 148, 151, 157, 172, 178, 189, 199, 208, 215, 228, 234, 246, 259, 271, 281, 295, 303, 309, 314, 322, 329, 341, 350, 362, 368, 385, 395, 402, 409, 419, 425, 435, 448, 458, 471, 479, 488, 508, 527, 532, 540, 546, 557, 561, 580, 600, 605, 611, 624, 634, 640, 649, 657}
-	_Manufacturer_index_1 = [...]uint16{0, 4, 14, 23, 39, 47, 56, 62, 69, 75, 82, 87, 103, 109, 113, 132, 140, 151, 173, 186, 191, 194, 201, 213, 217, 230, 243, 254, 270, 289, 297, 304, 310, 330, 340, 348, 357, 370, 385, 402, 410, 420, 431, 441, 453, 459, 466, 483, 495, 503, 516, 524, 529, 536, 545, 556, 563, 570, 580, 586, 592}
+	_Manufacturer_index_1 = [...]uint16{0, 4, 14, 23, 39, 47, 56, 62, 69, 75, 82, 87, 103, 109, 113, 132, 140, 151, 173, 186, 191, 194, 201, 213, 217, 230, 243, 254, 270, 289, 297, 304, 310, 330, 340, 348, 357, 370, 385, 402, 410, 420, 431, 441, 453, 459, 466, 483, 495, 503, 516, 524, 529, 536, 545, 556, 563, 570, 580, 586, 592, 597}
 	_Manufacturer_index_3 = [...]uint16{0, 13, 19, 29, 34, 41, 46, 63, 71, 77, 83, 89, 93, 99, 103, 108, 119, 128, 143, 149, 164, 176, 183, 189, 198, 209, 222, 236, 251, 265, 270, 273, 285, 295, 308, 316, 325, 333, 338, 345, 354, 366, 376, 392, 397, 409, 419, 427, 439, 444, 450, 456, 470, 474, 483, 490}
 )
 
@@ -4990,7 +5001,7 @@ func (i Manufacturer) String() string {
 	case 1 <= i && i <= 73:
 		i -= 1
 		return _Manufacturer_name_0[_Manufacturer_index_0[i]:_Manufacturer_index_0[i+1]]
-	case 76 <= i && i <= 135:
+	case 76 <= i && i <= 136:
 		i -= 76
 		return _Manufacturer_name_1[_Manufacturer_index_1[i]:_Manufacturer_index_1[i+1]]
 	case i == 255:
@@ -7067,31 +7078,43 @@ func _() {
 	_ = x[SubSportApneaHunting-57]
 	_ = x[SubSportVirtualActivity-58]
 	_ = x[SubSportObstacle-59]
+	_ = x[SubSportBreathing-62]
 	_ = x[SubSportSailRace-65]
+	_ = x[SubSportUltra-67]
+	_ = x[SubSportIndoorClimbing-68]
+	_ = x[SubSportBouldering-69]
 	_ = x[SubSportAll-254]
 	_ = x[SubSportInvalid-255]
 }
 
 const (
 	_SubSport_name_0 = "GenericTreadmillStreetTrailTrackSpinIndoorCyclingRoadMountainDownhillRecumbentCyclocrossHandCyclingTrackCyclingIndoorRowingEllipticalStairClimbingLapSwimmingOpenWaterFlexibilityTrainingStrengthTrainingWarmUpMatchExerciseChallengeIndoorSkiingCardioTrainingIndoorWalkingEBikeFitnessBmxCasualWalkingSpeedWalkingBikeToRunTransitionRunToBikeTransitionSwimToBikeTransitionAtvMotocrossBackcountryResortRcDroneWingsuitWhitewaterSkateSkiingYogaPilatesIndoorRunningGravelCyclingEBikeMountainCommutingMixedSurfaceNavigateTrackMeMapSingleGasDivingMultiGasDivingGaugeDivingApneaDivingApneaHuntingVirtualActivityObstacle"
-	_SubSport_name_1 = "SailRace"
-	_SubSport_name_2 = "AllInvalid"
+	_SubSport_name_1 = "Breathing"
+	_SubSport_name_2 = "SailRace"
+	_SubSport_name_3 = "UltraIndoorClimbingBouldering"
+	_SubSport_name_4 = "AllInvalid"
 )
 
 var (
 	_SubSport_index_0 = [...]uint16{0, 7, 16, 22, 27, 32, 36, 49, 53, 61, 69, 78, 88, 99, 111, 123, 133, 146, 157, 166, 185, 201, 207, 212, 220, 229, 241, 255, 268, 280, 283, 296, 308, 327, 346, 366, 369, 378, 389, 395, 402, 410, 420, 431, 435, 442, 455, 468, 481, 490, 502, 510, 517, 520, 535, 549, 560, 571, 583, 598, 606}
-	_SubSport_index_2 = [...]uint8{0, 3, 10}
+	_SubSport_index_3 = [...]uint8{0, 5, 19, 29}
+	_SubSport_index_4 = [...]uint8{0, 3, 10}
 )
 
 func (i SubSport) String() string {
 	switch {
 	case 0 <= i && i <= 59:
 		return _SubSport_name_0[_SubSport_index_0[i]:_SubSport_index_0[i+1]]
-	case i == 65:
+	case i == 62:
 		return _SubSport_name_1
+	case i == 65:
+		return _SubSport_name_2
+	case 67 <= i && i <= 69:
+		i -= 67
+		return _SubSport_name_3[_SubSport_index_3[i]:_SubSport_index_3[i+1]]
 	case 254 <= i && i <= 255:
 		i -= 254
-		return _SubSport_name_2[_SubSport_index_2[i]:_SubSport_index_2[i+1]]
+		return _SubSport_name_4[_SubSport_index_4[i]:_SubSport_index_4[i+1]]
 	default:
 		return "SubSport(" + strconv.FormatInt(int64(i), 10) + ")"
 	}

@@ -18,7 +18,7 @@ func parseWorkbook(inputData []byte) (typeData, msgData [][]string, err error) {
 	}
 
 	// file.ToSlice from the xlsx library adjusted to ignore formatting errors.
-	var output = [][][]string{}
+	output := [][][]string{}
 	for _, sheet := range workbook.Sheets {
 		s := [][]string{}
 		ncols := len(sheet.Rows[0].Cells)

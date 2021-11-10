@@ -69,7 +69,7 @@ func writeProfileToFile(p *profile.Profile, path string) error {
 	if err != nil {
 		return err
 	}
-	return ioutil.WriteFile(path, buf.Bytes(), 0644)
+	return ioutil.WriteFile(path, buf.Bytes(), 0o644)
 }
 
 func scanLinesPreserveEOL(data []byte, atEOF bool) (advance int, token []byte, err error) {

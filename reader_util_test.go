@@ -23,7 +23,7 @@ func fitFingerprint(fit *fit.File) uint64 {
 }
 
 func fitUtterDump(fit *fit.File, path string, compressed bool) error {
-	f, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
+	f, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0o644)
 	if err != nil {
 		return err
 	}
@@ -129,7 +129,7 @@ var decodeTestFiles = [...]struct {
 		return fmt.Errorf("format.Source: %v on\n%s", err, preFormat)
 	}
 
-	return ioutil.WriteFile("reader_files_test.go", src, 0644)
+	return ioutil.WriteFile("reader_files_test.go", src, 0o644)
 }
 
 type gen struct {

@@ -22,6 +22,11 @@ const (
 )
 
 func main() {
+	handleHRSTQuirk := flag.Bool(
+		"hrst",
+		false,
+		"handle quirk where needed 'heart rate source type' field not set as active in official profile spreadsheet",
+	)
 	sdkOverride := flag.String(
 		"sdk",
 		"",
@@ -91,6 +96,9 @@ func main() {
 	genOptions := []profile.GeneratorOption{
 		profile.WithGenerationTimestamp(*timestamp),
 		profile.WithLogger(l),
+	}
+	if *handleHRSTQuirk {
+		genOptions = append(genOptions, profile.WithHandleHeartRateSourceTypeQuirk())
 	}
 	if *verbose {
 		genOptions = append(genOptions, profile.WithDebugOutput())

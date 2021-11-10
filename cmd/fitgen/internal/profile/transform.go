@@ -98,7 +98,7 @@ func (t *Type) transform() (skip bool, err error) {
 	return false, nil
 }
 
-func TransformMsgs(pmsgs []*PMsg, ftypes map[string]*Type, logger *log.Logger) ([]*Msg, error) {
+func TransformMsgs(pmsgs []*PMsg, ftypes map[string]*Type, handleHRSTQuirk bool, logger *log.Logger) ([]*Msg, error) {
 	var msgs []*Msg
 	for _, pmsg := range pmsgs {
 		msg := Msg{
@@ -116,7 +116,7 @@ func TransformMsgs(pmsgs []*PMsg, ftypes map[string]*Type, logger *log.Logger) (
 
 		for _, pfield := range pmsg.Fields {
 			f := &Field{data: pfield.Field}
-			skip, err := f.transform(false, ftypes, logger)
+			skip, err := f.transform(false, ftypes, handleHRSTQuirk, logger)
 			if err != nil {
 				return nil, err
 			}
@@ -131,7 +131,7 @@ func TransformMsgs(pmsgs []*PMsg, ftypes map[string]*Type, logger *log.Logger) (
 
 			for _, sfield := range pfield.Subfields {
 				sf := &Field{data: sfield}
-				skip, err := sf.transform(true, ftypes, logger)
+				skip, err := sf.transform(true, ftypes, handleHRSTQuirk, logger)
 				if err != nil {
 					return nil, fmt.Errorf("error parsing subfield: %v", err)
 				}
@@ -160,9 +160,19 @@ func (f *Field) setLength() {
 	}
 }
 
-func (f *Field) transform(subfield bool, ftypes map[string]*Type, logger *log.Logger) (skip bool, err error) {
+func (f *Field) transform(subfield bool, ftypes map[string]*Type, handleHRSTQuirk bool, logger *log.Logger) (skip bool, err error) {
 	if f.data[mEXAMPLE] == "" || f.data[mEXAMPLE] == "0" {
-		return true, nil
+		if f.data[mFNAME] == "heart_rate_source_type" && handleHRSTQuirk {
+			// Don't skip this specific field if we're instructed not to do so.
+			//
+			// Why? Originally spotted by @unusedbytes:
+			// "There's an error in the 20.88 spreadsheet, that in the dive_settings
+			// message, the heart_rate_source_type field is not enabled in the example
+			// product configuration (column P), but the heart_rate_source field which
+			// refers to it is. This causes errors in generation, /.../."
+		} else {
+			return true, nil
+		}
 	}
 
 	f.DefNum = f.data[mFDEFN]

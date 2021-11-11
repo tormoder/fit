@@ -11,7 +11,7 @@ jobs:
       fail-fast: true
       matrix:
         os: [ ubuntu-latest, macos-latest ]
-        go: [ 1.14, 1.15 ]
+        go: [ 1.16, 1.17 ]
 
     runs-on: ${{ matrix.os }}
 

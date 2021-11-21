@@ -1,6 +1,6 @@
 // Code generated using the program found in 'cmd/fitgen/main.go'. DO NOT EDIT.
 
-// SDK Version: 21.40
+// SDK Version: 21.67
 
 package fit
 
@@ -114,6 +114,7 @@ const (
 	AntplusDeviceTypeRacquet                 AntplusDeviceType = 26
 	AntplusDeviceTypeControlHub              AntplusDeviceType = 27
 	AntplusDeviceTypeMuscleOxygen            AntplusDeviceType = 31
+	AntplusDeviceTypeShifting                AntplusDeviceType = 34
 	AntplusDeviceTypeBikeLightMain           AntplusDeviceType = 35
 	AntplusDeviceTypeBikeLightShared         AntplusDeviceType = 36
 	AntplusDeviceTypeExd                     AntplusDeviceType = 38
@@ -1269,6 +1270,7 @@ const (
 	ExdLayoutFullQuarterSplit          ExdLayout = 5
 	ExdLayoutHalfVerticalLeftSplit     ExdLayout = 6
 	ExdLayoutHalfHorizontalTopSplit    ExdLayout = 7
+	ExdLayoutDynamic                   ExdLayout = 8 // The EXD may display the configured concepts in any layout it sees fit.
 	ExdLayoutInvalid                   ExdLayout = 0xFF
 )
 
@@ -1544,7 +1546,7 @@ const (
 	GarminProductVirbElite                  GarminProduct = 1735
 	GarminProductEdgeTouring                GarminProduct = 1736 // Also Edge Touring Plus
 	GarminProductEdge510Japan               GarminProduct = 1742
-	GarminProductHrmTri                     GarminProduct = 1743
+	GarminProductHrmTri                     GarminProduct = 1743 // Also HRM-Swim
 	GarminProductHrmRun                     GarminProduct = 1752
 	GarminProductFr920xt                    GarminProduct = 1765
 	GarminProductEdge510Asia                GarminProduct = 1821
@@ -1630,6 +1632,7 @@ const (
 	GarminProductVivoSmartGpsHrAsia         GarminProduct = 2362
 	GarminProductVivoMove                   GarminProduct = 2368
 	GarminProductVariaTaillight             GarminProduct = 2379
+	GarminProductFr235Asia                  GarminProduct = 2396
 	GarminProductFr235Japan                 GarminProduct = 2397
 	GarminProductVariaVision                GarminProduct = 2398
 	GarminProductVivoFit3                   GarminProduct = 2406
@@ -1681,6 +1684,7 @@ const (
 	GarminProductForetrex601701             GarminProduct = 2769
 	GarminProductVivoMoveHr                 GarminProduct = 2772
 	GarminProductEdge1030                   GarminProduct = 2713
+	GarminProductVector3                    GarminProduct = 2787
 	GarminProductFenix5Asia                 GarminProduct = 2796
 	GarminProductFenix5sAsia                GarminProduct = 2797
 	GarminProductFenix5xAsia                GarminProduct = 2798
@@ -1691,6 +1695,7 @@ const (
 	GarminProductVivoSportApac              GarminProduct = 2832
 	GarminProductFr935Asia                  GarminProduct = 2833
 	GarminProductDescent                    GarminProduct = 2859
+	GarminProductVivoFit4                   GarminProduct = 2878
 	GarminProductFr645                      GarminProduct = 2886
 	GarminProductFr645m                     GarminProduct = 2888
 	GarminProductFr30                       GarminProduct = 2891
@@ -1717,6 +1722,7 @@ const (
 	GarminProductFr945                      GarminProduct = 3113
 	GarminProductEdge530                    GarminProduct = 3121
 	GarminProductEdge830                    GarminProduct = 3122
+	GarminProductInstinctEsports            GarminProduct = 3126
 	GarminProductFenix5sPlusApac            GarminProduct = 3134
 	GarminProductFenix5xPlusApac            GarminProduct = 3135
 	GarminProductEdge520PlusApac            GarminProduct = 3142
@@ -1735,12 +1741,15 @@ const (
 	GarminProductMarqCommander              GarminProduct = 3249
 	GarminProductMarqExpedition             GarminProduct = 3250
 	GarminProductMarqAthlete                GarminProduct = 3251
+	GarminProductDescentMk2                 GarminProduct = 3258
+	GarminProductGpsmap66i                  GarminProduct = 3284
 	GarminProductFenix6SSport               GarminProduct = 3287
 	GarminProductFenix6S                    GarminProduct = 3288
 	GarminProductFenix6Sport                GarminProduct = 3289
 	GarminProductFenix6                     GarminProduct = 3290
 	GarminProductFenix6x                    GarminProduct = 3291
 	GarminProductHrmDual                    GarminProduct = 3299 // HRM-Dual
+	GarminProductHrmPro                     GarminProduct = 3300 // HRM-Pro
 	GarminProductVivoMove3Premium           GarminProduct = 3308
 	GarminProductApproachS40                GarminProduct = 3314
 	GarminProductFr245mAsia                 GarminProduct = 3321
@@ -1762,27 +1771,56 @@ const (
 	GarminProductMarqAthleteAsia            GarminProduct = 3451
 	GarminProductFr45Asia                   GarminProduct = 3469
 	GarminProductVivoactive3Daimler         GarminProduct = 3473
+	GarminProductLegacyRey                  GarminProduct = 3498
+	GarminProductLegacyDarthVader           GarminProduct = 3499
+	GarminProductLegacyCaptainMarvel        GarminProduct = 3500
+	GarminProductLegacyFirstAvenger         GarminProduct = 3501
 	GarminProductFenix6sSportAsia           GarminProduct = 3512
 	GarminProductFenix6sAsia                GarminProduct = 3513
 	GarminProductFenix6SportAsia            GarminProduct = 3514
 	GarminProductFenix6Asia                 GarminProduct = 3515
 	GarminProductFenix6xAsia                GarminProduct = 3516
+	GarminProductLegacyCaptainMarvelAsia    GarminProduct = 3535
+	GarminProductLegacyFirstAvengerAsia     GarminProduct = 3536
+	GarminProductLegacyReyAsia              GarminProduct = 3537
+	GarminProductLegacyDarthVaderAsia       GarminProduct = 3538
+	GarminProductDescentMk2s                GarminProduct = 3542
 	GarminProductEdge130Plus                GarminProduct = 3558
 	GarminProductEdge1030Plus               GarminProduct = 3570
+	GarminProductRally200                   GarminProduct = 3578 // Rally 100/200 Power Meter Series
 	GarminProductFr745                      GarminProduct = 3589
 	GarminProductVenusq                     GarminProduct = 3600
+	GarminProductLily                       GarminProduct = 3615
 	GarminProductMarqAdventurer             GarminProduct = 3624
-	GarminProductMarqAdventurerAsia         GarminProduct = 3648
+	GarminProductEnduro                     GarminProduct = 3638
 	GarminProductSwim2Apac                  GarminProduct = 3639
+	GarminProductMarqAdventurerAsia         GarminProduct = 3648
+	GarminProductFr945Lte                   GarminProduct = 3652
+	GarminProductDescentMk2Asia             GarminProduct = 3702 // Mk2 and Mk2i
+	GarminProductVenu2                      GarminProduct = 3703
+	GarminProductVenu2s                     GarminProduct = 3704
 	GarminProductVenuDaimlerAsia            GarminProduct = 3737
 	GarminProductMarqGolfer                 GarminProduct = 3739
 	GarminProductVenuDaimler                GarminProduct = 3740
 	GarminProductFr745Asia                  GarminProduct = 3794
+	GarminProductLilyAsia                   GarminProduct = 3809
 	GarminProductEdge1030PlusAsia           GarminProduct = 3812
 	GarminProductEdge130PlusAsia            GarminProduct = 3813
+	GarminProductApproachS12                GarminProduct = 3823
+	GarminProductEnduroAsia                 GarminProduct = 3872
 	GarminProductVenusqAsia                 GarminProduct = 3837
 	GarminProductMarqGolferAsia             GarminProduct = 3850
-	GarminProductVenu2plus                  GarminProduct = 3851
+	GarminProductFr55                       GarminProduct = 3869
+	GarminProductApproachG12                GarminProduct = 3927
+	GarminProductDescentMk2sAsia            GarminProduct = 3930
+	GarminProductApproachS42                GarminProduct = 3934
+	GarminProductVenu2sAsia                 GarminProduct = 3949
+	GarminProductVenu2Asia                  GarminProduct = 3950
+	GarminProductFr945LteAsia               GarminProduct = 3978
+	GarminProductApproachS12Asia            GarminProduct = 3986
+	GarminProductApproachG12Asia            GarminProduct = 4001
+	GarminProductApproachS42Asia            GarminProduct = 4002
+	GarminProductFr55Asia                   GarminProduct = 4033
 	GarminProductSdm4                       GarminProduct = 10007 // SDM4 footpod
 	GarminProductEdgeRemote                 GarminProduct = 10014
 	GarminProductTacxTrainingAppWin         GarminProduct = 20533
@@ -2025,6 +2063,9 @@ const (
 	IntensityRest     Intensity = 1
 	IntensityWarmup   Intensity = 2
 	IntensityCooldown Intensity = 3
+	IntensityRecovery Intensity = 4
+	IntensityInterval Intensity = 5
+	IntensityOther    Intensity = 6
 	IntensityInvalid  Intensity = 0xFF
 )
 
@@ -2425,6 +2466,7 @@ const (
 	ManufacturerOsynce                 Manufacturer = 38
 	ManufacturerHolux                  Manufacturer = 39
 	ManufacturerConcept2               Manufacturer = 40
+	ManufacturerShimano                Manufacturer = 41
 	ManufacturerOneGiantLeap           Manufacturer = 42
 	ManufacturerAceSensor              Manufacturer = 43
 	ManufacturerBrimBrothers           Manufacturer = 44
@@ -2515,6 +2557,9 @@ const (
 	ManufacturerChileaf                Manufacturer = 131
 	ManufacturerCycplus                Manufacturer = 132
 	ManufacturerGravaaByte             Manufacturer = 133
+	ManufacturerSigeyi                 Manufacturer = 134
+	ManufacturerCoospo                 Manufacturer = 135
+	ManufacturerGeoid                  Manufacturer = 136
 	ManufacturerDevelopment            Manufacturer = 255
 	ManufacturerHealthandlife          Manufacturer = 257
 	ManufacturerLezyne                 Manufacturer = 258
@@ -2569,6 +2614,8 @@ const (
 	ManufacturerOnelap                 Manufacturer = 307
 	ManufacturerMonarkExercise         Manufacturer = 308
 	ManufacturerForm                   Manufacturer = 309
+	ManufacturerDecathlon              Manufacturer = 310
+	ManufacturerSyncros                Manufacturer = 311
 	ManufacturerActigraphcorp          Manufacturer = 5759
 	ManufacturerInvalid                Manufacturer = 0xFFFF
 )
@@ -3722,6 +3769,11 @@ const (
 	SubSportApneaHunting         SubSport = 57 // Diving
 	SubSportVirtualActivity      SubSport = 58
 	SubSportObstacle             SubSport = 59 // Used for events where participants run, crawl through mud, climb over walls, etc.
+	SubSportBreathing            SubSport = 62
+	SubSportSailRace             SubSport = 65 // Sailing
+	SubSportUltra                SubSport = 67 // Ultramarathon
+	SubSportIndoorClimbing       SubSport = 68 // Climbing
+	SubSportBouldering           SubSport = 69 // Climbing
 	SubSportAll                  SubSport = 254
 	SubSportInvalid              SubSport = 0xFF
 )

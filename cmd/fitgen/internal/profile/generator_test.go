@@ -26,8 +26,6 @@ const (
 
 var update = flag.Bool("update", false, "update .golden output files")
 
-var currentSDK = sdks[0]
-
 var defGenOpts = []profile.GeneratorOption{
 	profile.WithGenerationTimestamp(false),
 }
@@ -69,7 +67,7 @@ func writeProfileToFile(p *profile.Profile, path string) error {
 	if err != nil {
 		return err
 	}
-	return ioutil.WriteFile(path, buf.Bytes(), 0644)
+	return ioutil.WriteFile(path, buf.Bytes(), 0o644)
 }
 
 func scanLinesPreserveEOL(data []byte, atEOF bool) (advance int, token []byte, err error) {
@@ -204,12 +202,14 @@ func TestMain(m *testing.M) {
 }
 
 func TestGenerator(t *testing.T) {
+	latestSDK := sdks[len(sdks)-1]
+
 	for _, sdk := range sdks {
 		sdk := sdk // Capture range variable.
 		sdkFullVer := fmt.Sprintf("%d.%d", sdk.majVer, sdk.minVer)
 		t.Run(sdkFullVer, func(t *testing.T) {
 			t.Parallel()
-			if sdk == currentSDK && testing.Short() {
+			if sdk != latestSDK && testing.Short() {
 				t.Skip("skipping test in short mode")
 			}
 			path := relPath(sdkFullVer)

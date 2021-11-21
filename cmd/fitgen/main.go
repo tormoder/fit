@@ -22,6 +22,11 @@ const (
 )
 
 func main() {
+	handleHRSTQuirk := flag.Bool(
+		"hrst",
+		false,
+		"handle quirk where needed 'heart rate source type' field not set as active in official profile spreadsheet",
+	)
 	sdkOverride := flag.String(
 		"sdk",
 		"",
@@ -92,6 +97,9 @@ func main() {
 		profile.WithGenerationTimestamp(*timestamp),
 		profile.WithLogger(l),
 	}
+	if *handleHRSTQuirk {
+		genOptions = append(genOptions, profile.WithHandleHeartRateSourceTypeQuirk())
+	}
 	if *verbose {
 		genOptions = append(genOptions, profile.WithDebugOutput())
 	}
@@ -118,15 +126,15 @@ func main() {
 		l.Fatal(err)
 	}
 
-	if err = ioutil.WriteFile(typesOut, fitProfile.TypesSource, 0644); err != nil {
+	if err = ioutil.WriteFile(typesOut, fitProfile.TypesSource, 0o644); err != nil {
 		l.Fatalf("typegen: error writing types output file: %v", err)
 	}
 
-	if err = ioutil.WriteFile(messagesOut, fitProfile.MessagesSource, 0644); err != nil {
+	if err = ioutil.WriteFile(messagesOut, fitProfile.MessagesSource, 0o644); err != nil {
 		l.Fatalf("typegen: error writing messages output file: %v", err)
 	}
 
-	if err = ioutil.WriteFile(profileOut, fitProfile.ProfileSource, 0644); err != nil {
+	if err = ioutil.WriteFile(profileOut, fitProfile.ProfileSource, 0o644); err != nil {
 		l.Fatalf("typegen: error writing profile output file: %v", err)
 	}
 
@@ -156,7 +164,7 @@ func runStringerOnTypes(typesIn, typesStringOut string, fitTypes []string) error
 		return fmt.Errorf("fitstringer: generation failed: %v", err)
 	}
 
-	if err := ioutil.WriteFile(typesStringOut, output, 0644); err != nil {
+	if err := ioutil.WriteFile(typesStringOut, output, 0o644); err != nil {
 		return fmt.Errorf("error writing fitstringer output: %v", err)
 	}
 

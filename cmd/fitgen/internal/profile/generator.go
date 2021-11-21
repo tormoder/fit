@@ -19,9 +19,10 @@ type Profile struct {
 }
 
 type generatorOptions struct {
-	genTimestamp bool
-	logger       *log.Logger
-	debug        bool
+	genTimestamp    bool
+	logger          *log.Logger
+	debug           bool
+	handleHRSTQuirk bool
 }
 
 type GeneratorOption func(*generatorOptions)
@@ -41,6 +42,12 @@ func WithLogger(logger *log.Logger) GeneratorOption {
 func WithDebugOutput() GeneratorOption {
 	return func(o *generatorOptions) {
 		o.debug = true
+	}
+}
+
+func WithHandleHeartRateSourceTypeQuirk() GeneratorOption {
+	return func(o *generatorOptions) {
+		o.handleHRSTQuirk = true
 	}
 }
 
@@ -153,7 +160,7 @@ func (g *Generator) parseMsgs() error {
 		pmsgs = append(pmsgs, m)
 	}
 
-	g.msgs, err = TransformMsgs(pmsgs, g.types, g.opts.logger)
+	g.msgs, err = TransformMsgs(pmsgs, g.types, g.opts.handleHRSTQuirk, g.opts.logger)
 	if err != nil {
 		return fmt.Errorf("transform error: %v", err)
 	}

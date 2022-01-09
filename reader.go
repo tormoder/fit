@@ -205,13 +205,13 @@ func (d *decoder) decodeFileData() error {
 			if msg.IsValid() {
 				d.file.add(msg)
 			}
-		case (b & headerTypeMask) == mesgDefinitionMask:
+		case (b & mesgDefinitionMask) == mesgDefinitionMask:
 			dm, err = d.parseDefinitionMessage(b)
 			if err != nil {
 				return fmt.Errorf("parsing definition message: %v", err)
 			}
 			d.defmsgs[dm.localMsgType] = dm
-		case (b & mesgHeaderMask) == mesgHeaderMask:
+		case (b & mesgDefinitionMask) == mesgHeaderMask:
 			msg, err = d.parseDataMessage(b, false)
 			if err != nil {
 				return fmt.Errorf("parsing data message: %v", err)

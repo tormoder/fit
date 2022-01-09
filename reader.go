@@ -315,17 +315,18 @@ func (d *decoder) readFull(p []byte) error {
 }
 
 type defmsg struct {
-	localMsgType uint8
-	arch         binary.ByteOrder
-	globalMsgNum MesgNum
-	fields       byte
-	fieldDefs    []fieldDef
+	localMsgType      uint8
+	arch              binary.ByteOrder
+	globalMsgNum      MesgNum
+	fields            byte
+	fieldDefs         []fieldDef
+	devDataFieldDescs []devDataFieldDesc
 }
 
 func (dm defmsg) String() string {
 	return fmt.Sprintf(
-		"local: %d | global: %v | arch: %v | fields: %d",
-		dm.localMsgType, dm.globalMsgNum, dm.arch, dm.fields,
+		"local: %d | global: %v | arch: %v | fields: %d | data dev fields: %d",
+		dm.localMsgType, dm.globalMsgNum, dm.arch, dm.fields, len(dm.devDataFieldDescs),
 	)
 }
 
@@ -337,6 +338,16 @@ type fieldDef struct {
 
 func (fd fieldDef) String() string {
 	return fmt.Sprintf("num: %d | size: %d | btype: %v", fd.num, fd.size, fd.btype)
+}
+
+type devDataFieldDesc struct {
+	fieldNum     byte
+	size         byte
+	devDataIndex byte
+}
+
+func (ddfd devDataFieldDesc) String() string {
+	return fmt.Sprintf("field number: %d | size: %d | developer data index: %d", ddfd.fieldNum, ddfd.size, ddfd.devDataIndex)
 }
 
 func (d *decoder) parseFileIdMsg() error {
@@ -450,6 +461,26 @@ func (d *decoder) parseDefinitionMessage(recordHeader byte) (*defmsg, error) {
 			return nil, fmt.Errorf("validating %v failed: %v", dm.globalMsgNum, err)
 		}
 		dm.fieldDefs[i] = fd
+	}
+
+	if recordHeader&devDataMask == devDataMask {
+		numDevFields, err := d.readByte()
+		if err != nil {
+			return nil, fmt.Errorf("error reading number of developer data fields: %w", err)
+		}
+
+		if err = d.readFull(d.tmp[0 : 3*uint16(numDevFields)]); err != nil {
+			return nil, fmt.Errorf("error reading developer data field description data: %w", err)
+		}
+
+		dm.devDataFieldDescs = make([]devDataFieldDesc, numDevFields)
+		for i, ddfd := range dm.devDataFieldDescs {
+			ddfd.fieldNum = d.tmp[i*3]
+			ddfd.size = d.tmp[(i*3)+1]
+			ddfd.devDataIndex = d.tmp[(i*3)+2]
+			dm.devDataFieldDescs[i] = ddfd
+		}
+
 	}
 
 	if d.debug {
@@ -666,6 +697,13 @@ func (d *decoder) parseDataFields(dm *defmsg, knownMsg bool, msgv reflect.Value)
 			fieldv.Set(reflect.ValueOf(lng))
 		default:
 			panic("parseDataFields: unreachable: unknown kind")
+		}
+	}
+
+	for i, ddfd := range dm.devDataFieldDescs {
+		err := d.readFull(d.tmp[0:int(ddfd.size)])
+		if err != nil {
+			return reflect.Value{}, fmt.Errorf("error parsing data developer message: %v (field %d [%v] for [%v])", err, i, ddfd, dm)
 		}
 	}
 

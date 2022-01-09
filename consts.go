@@ -53,6 +53,7 @@ const (
 	compressedLocalMesgNumMask byte = 0x60
 
 	mesgDefinitionMask byte = 0x40
+	devDataMask        byte = 0x20
 	mesgHeaderMask     byte = 0x00
 	localMesgNumMask   byte = 0x0F
 

@@ -21,25 +21,21 @@ are required for running the full test suite and benchmarks.
 
 _Note:_ 0.6.0 contains a breaking change, see #46.
 
-### FIT SDK Version Support
+### Version Support
 
-**Current supported FIT SDK version:** 21.67
+The current supported FIT SDK version is **21.67**.
 
-**Warning:** Data Developers Fields are not yet supported (#21).
+Developer data fields are currently only _partially_ supported.
+At the moment the decoder parses Developer Data Field Descriptions, Developer Data ID Messages and Field Description Messages.
+The decoder currently discards developer data fields found in records. 
 
-Older supported profile versions:
+The encoder will currently (silently) ignore anything related to Developer data fields,
+This also means that encoding will not fail if protocol version 2 is specified for a file header.
 
-* 21.60
-* 21.40
-* 21.38
-* 21.32
-* 20.90
-* 20.43
-* 20.27
-* 20.14
-* 16.20
-
-Other profile versions may work, but have not been tested.
+Developer data fields support is tracked by
+[#21](https://github.com/tormoder/fit/issues/21)
+and
+[#64](https://github.com/tormoder/fit/issues/64).
 
 ### Features
 
@@ -79,3 +75,4 @@ $ go get github.com/tormoder/fit
 - [colinrgodsey](https://github.com/colinrgodsey)
 - [bpg](https://github.com/bpg)
 - [pieterclaerhout](https://github.com/pieterclaerhout)
+- [beyoung](https://github.com/beyoung)

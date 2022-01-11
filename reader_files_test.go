@@ -6,6 +6,7 @@ package fit_test
 var decodeTestFiles = [...]struct {
 	folder      string
 	name        string
+	source      string
 	wantErr     bool
 	fingerprint uint64
 	compress    bool
@@ -16,8 +17,9 @@ var decodeTestFiles = [...]struct {
 	{
 		"me",
 		"activity-small-fenix2-run.fit",
+		"",
 		false,
-		4159419868942230381,
+		16272604713108132935,
 		true,
 		tdoAllWithDiscardLogger,
 		true,
@@ -26,8 +28,9 @@ var decodeTestFiles = [...]struct {
 	{
 		"fitsdk",
 		"Activity.fit",
+		"",
 		false,
-		17200987073157828903,
+		5393063379197673570,
 		true,
 		tdoNone,
 		false,
@@ -36,8 +39,9 @@ var decodeTestFiles = [...]struct {
 	{
 		"fitsdk",
 		"MonitoringFile.fit",
+		"",
 		false,
-		17438554766263628503,
+		11936585269915402423,
 		true,
 		tdoNone,
 		true,
@@ -46,8 +50,9 @@ var decodeTestFiles = [...]struct {
 	{
 		"fitsdk",
 		"Settings.fit",
+		"",
 		false,
-		13777716833885766673,
+		18422634047426156243,
 		true,
 		tdoNone,
 		false,
@@ -56,8 +61,9 @@ var decodeTestFiles = [...]struct {
 	{
 		"fitsdk",
 		"WeightScaleMultiUser.fit",
+		"",
 		false,
-		5002902390457186100,
+		15668939108214135507,
 		true,
 		tdoNone,
 		false,
@@ -66,8 +72,9 @@ var decodeTestFiles = [...]struct {
 	{
 		"fitsdk",
 		"WorkoutCustomTargetValues.fit",
+		"",
 		false,
-		1795447305759253807,
+		14786462533817802322,
 		true,
 		tdoNone,
 		false,
@@ -76,8 +83,9 @@ var decodeTestFiles = [...]struct {
 	{
 		"fitsdk",
 		"WorkoutIndividualSteps.fit",
+		"",
 		false,
-		13432157117047365566,
+		5594723163894392697,
 		true,
 		tdoNone,
 		false,
@@ -86,8 +94,9 @@ var decodeTestFiles = [...]struct {
 	{
 		"fitsdk",
 		"WorkoutRepeatGreaterThanStep.fit",
+		"",
 		false,
-		10036597401811670605,
+		17460594330644784595,
 		true,
 		tdoNone,
 		false,
@@ -96,8 +105,9 @@ var decodeTestFiles = [...]struct {
 	{
 		"fitsdk",
 		"WorkoutRepeatSteps.fit",
+		"",
 		false,
-		2000919626000542509,
+		4256650519608265147,
 		true,
 		tdoNone,
 		false,
@@ -106,8 +116,9 @@ var decodeTestFiles = [...]struct {
 	{
 		"fitsdk",
 		"WeightScaleSingleUser.fit",
+		"",
 		false,
-		170466418772016754,
+		16394851171432919279,
 		true,
 		tdoNone,
 		false,
@@ -116,8 +127,9 @@ var decodeTestFiles = [...]struct {
 	{
 		"python-fitparse",
 		"garmin-edge-500-activitiy.fit",
+		"",
 		false,
-		6593572577964555599,
+		17514013668470756651,
 		true,
 		tdoNone,
 		false,
@@ -126,8 +138,9 @@ var decodeTestFiles = [...]struct {
 	{
 		"python-fitparse",
 		"sample-activity-indoor-trainer.fit",
+		"",
 		false,
-		16971736118512546826,
+		945649812206588852,
 		true,
 		tdoNone,
 		true,
@@ -136,6 +149,7 @@ var decodeTestFiles = [...]struct {
 	{
 		"python-fitparse",
 		"compressed-speed-distance.fit",
+		"",
 		false,
 		0,
 		false,
@@ -146,8 +160,9 @@ var decodeTestFiles = [...]struct {
 	{
 		"python-fitparse",
 		"antfs-dump.63.fit",
+		"",
 		false,
-		17636932664957499573,
+		6282273622209975218,
 		true,
 		tdoNone,
 		true,
@@ -156,8 +171,9 @@ var decodeTestFiles = [...]struct {
 	{
 		"sram",
 		"Settings.fit",
+		"",
 		false,
-		15334527618026463003,
+		5866657363356029809,
 		true,
 		tdoNone,
 		true,
@@ -166,8 +182,9 @@ var decodeTestFiles = [...]struct {
 	{
 		"sram",
 		"Settings2.fit",
+		"",
 		false,
-		3203160144706376883,
+		15709312684722569429,
 		true,
 		tdoNone,
 		true,
@@ -176,8 +193,9 @@ var decodeTestFiles = [...]struct {
 	{
 		"dcrainmaker",
 		"Edge810-Vector-2013-08-16-15-35-10.fit",
+		"",
 		false,
-		7445399672663916413,
+		12420128971150793206,
 		true,
 		tdoNone,
 		true,
@@ -186,8 +204,9 @@ var decodeTestFiles = [...]struct {
 	{
 		"misc",
 		"2013-02-06-12-11-14.fit",
+		"",
 		false,
-		13418237519260555178,
+		11959686082894445424,
 		true,
 		tdoNone,
 		false,
@@ -196,8 +215,9 @@ var decodeTestFiles = [...]struct {
 	{
 		"misc",
 		"2015-10-13-08-43-15.fit",
+		"",
 		false,
-		9824244170689694008,
+		16776362073923423348,
 		true,
 		tdoNone,
 		false,
@@ -206,8 +226,9 @@ var decodeTestFiles = [...]struct {
 	{
 		"bpg",
 		"garmin.fit",
+		"https://github.com/tormoder/fit/pull/54",
 		false,
-		8578045933883478770,
+		11468599866908951097,
 		true,
 		tdoNone,
 		false,
@@ -216,8 +237,9 @@ var decodeTestFiles = [...]struct {
 	{
 		"corrupt",
 		"activity-filecrc.fit",
+		"",
 		true,
-		1128179132232601357,
+		13015127050946751954,
 		true,
 		tdoNone,
 		false,
@@ -226,11 +248,45 @@ var decodeTestFiles = [...]struct {
 	{
 		"corrupt",
 		"activity-unexpected-eof.fit",
+		"",
 		true,
-		3268441259118371812,
+		5112456444205297678,
 		true,
 		tdoNone,
 		false,
 		"",
+	},
+	{
+		"misc",
+		"0134902991.fit",
+		"https://github.com/tormoder/fit/pull/59",
+		false,
+		1269717752691992296,
+		true,
+		tdoNone,
+		true,
+		"Contains developer data fields",
+	},
+	{
+		"misc",
+		"mornindew-broken.fit",
+		"https://github.com/tormoder/fit/issues/41",
+		false,
+		864390381975294256,
+		true,
+		tdoNone,
+		true,
+		"Contains developer data fields",
+	},
+	{
+		"fitsdk",
+		"DeveloperData.fit",
+		"",
+		false,
+		7735802126653373100,
+		true,
+		tdoNone,
+		true,
+		"Contains developer data fields",
 	},
 }

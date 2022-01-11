@@ -108,8 +108,6 @@ checkfull: checkdeps
 	@$(GO) vet $(FIT_PKGS)
 	@echo "vet --shadow"
 	@$(GO) vet -vettool=$(which shadow) $(FIT_PKGS)
-	@echo "golint"
-	@! $(BIN)golint $(FIT_PKGS) | grep -vE '(FileId|SegmentId|messages.go|types.*.\go|fitgen/internal/profile)'
 	@echo "errcheck"
 	@$(BIN)errcheck -ignore 'fmt:Fprinf*,bytes:Write*,archive/zip:Close,io:Close,Write' $(FIT_PKGS)
 	@echo "ineffassign"
@@ -129,7 +127,6 @@ checkdeps:
 	$(GO_BIN) $(GO) install github.com/gordonklaus/ineffassign
 	$(GO_BIN) $(GO) install github.com/kisielk/errcheck
 	$(GO_BIN) $(GO) install github.com/mdempsky/unconvert
-	$(GO_BIN) $(GO) install golang.org/x/lint/golint
 	$(GO_BIN) $(GO) install golang.org/x/tools/cmd/goimports
 	$(GO_BIN) $(GO) install honnef.co/go/tools/cmd/staticcheck
 	$(GO_BIN) $(GO) install mvdan.cc/gofumpt/gofumports

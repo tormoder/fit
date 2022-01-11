@@ -20,6 +20,10 @@ type File struct {
 	FileCreator          *FileCreatorMsg
 	TimestampCorrelation *TimestampCorrelationMsg
 
+	// Developer data fields.
+	fieldDescriptionMsgs []*FieldDescriptionMsg
+	developerDataIdMsgs  []*DeveloperDataIdMsg
+
 	// UnknownMessages is a slice of unknown messages encountered during
 	// decoding. It is sorted by message number.
 	UnknownMessages []UnknownMessage
@@ -73,6 +77,10 @@ func (f *File) add(msg reflect.Value) {
 		f.FileCreator = &tmp
 	case TimestampCorrelationMsg:
 		f.TimestampCorrelation = &tmp
+	case FieldDescriptionMsg:
+		f.fieldDescriptionMsgs = append(f.fieldDescriptionMsgs, &tmp)
+	case DeveloperDataIdMsg:
+		f.developerDataIdMsgs = append(f.developerDataIdMsgs, &tmp)
 	default:
 		f.msgAdder.add(msg)
 	}

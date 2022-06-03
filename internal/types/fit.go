@@ -86,7 +86,11 @@ func (f Fit) Array() bool {
 }
 
 func (f Fit) BaseType() Base {
-	return Base(f & 0x1F)
+	t := Base(f & typeNumMask)
+	if t.Size() > 1 {
+		return Base(t | multiByteFlag)
+	}
+	return t
 }
 
 func (f Fit) Valid() bool {

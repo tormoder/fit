@@ -9,8 +9,9 @@ import (
 )
 
 const (
-	pkg         = "types"
-	typeNumMask = 0x1F
+	pkg           = "types"
+	typeNumMask   = 0x1F
+	multiByteFlag = 0x80
 )
 
 type Base byte
@@ -19,24 +20,28 @@ const (
 	BaseEnum    Base = 0x00
 	BaseSint8   Base = 0x01 // 2's complement format
 	BaseUint8   Base = 0x02
-	BaseSint16  Base = 0x03 // 2's complement format
-	BaseUint16  Base = 0x04
-	BaseSint32  Base = 0x05 // 2's complement format
-	BaseUint32  Base = 0x06
+	BaseSint16  Base = 0x83 // 2's complement format
+	BaseUint16  Base = 0x84
+	BaseSint32  Base = 0x85 // 2's complement format
+	BaseUint32  Base = 0x86
 	BaseString  Base = 0x07 // Null terminated string encoded in UTF-8
-	BaseFloat32 Base = 0x08
-	BaseFloat64 Base = 0x09
+	BaseFloat32 Base = 0x88
+	BaseFloat64 Base = 0x89
 	BaseUint8z  Base = 0x0A
-	BaseUint16z Base = 0x0B
-	BaseUint32z Base = 0x0C
+	BaseUint16z Base = 0x8B
+	BaseUint32z Base = 0x8C
 	BaseByte    Base = 0x0D // Array of bytes. Field is invalid if all bytes are invalid
-	BaseSint64  Base = 0x0E // 2's complement format
-	BaseUint64  Base = 0x0F
-	BaseUint64z Base = 0x10
+	BaseSint64  Base = 0x8E // 2's complement format
+	BaseUint64  Base = 0x8F
+	BaseUint64z Base = 0x90
 )
 
-func DecodeBase(b byte) Base {
-	return Base(b & typeNumMask)
+func (t Base) index() byte {
+	return byte(t) & typeNumMask
+}
+
+func (t Base) multibyte() bool {
+	return (byte(t) & multiByteFlag) == multiByteFlag
 }
 
 func (t Base) Float() bool {
@@ -44,19 +49,19 @@ func (t Base) Float() bool {
 }
 
 func (t Base) GoInvalidValue() string {
-	return binvalid[t]
+	return binvalid[t.index()]
 }
 
 func (t Base) GoType() string {
-	return bgotype[t]
+	return bgotype[t.index()]
 }
 
 func (t Base) Integer() bool {
-	return binteger[t]
+	return binteger[t.index()]
 }
 
 func (t Base) Known() bool {
-	return int(t) < len(bname)
+	return int(t.index()) < len(bname) && (t.multibyte() == (t.Size() > 1))
 }
 
 func (t Base) PkgString() string {
@@ -64,23 +69,23 @@ func (t Base) PkgString() string {
 }
 
 func (t Base) Signed() bool {
-	return bsigned[t]
+	return bsigned[t.index()]
 }
 
 func (t Base) Size() int {
-	return bsize[t]
+	return bsize[t.index()]
 }
 
 func (t Base) String() string {
 	if t.Known() {
-		return bname[t]
+		return bname[t.index()]
 	}
 	return fmt.Sprintf("unknown (0x%X)", byte(t))
 }
 
 func (t Base) Invalid() interface{} {
 	if t.Known() {
-		return goinvalid[t]
+		return goinvalid[t.index()]
 	}
 	return fmt.Sprintf("unknown (0x%X)", byte(t))
 }

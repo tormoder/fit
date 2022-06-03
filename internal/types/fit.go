@@ -88,7 +88,7 @@ func (f Fit) Array() bool {
 func (f Fit) BaseType() Base {
 	t := Base(f & typeNumMask)
 	if t.Size() > 1 {
-		return Base(t | multiByteFlag)
+		return t | multiByteFlag
 	}
 	return t
 }

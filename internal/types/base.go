@@ -16,6 +16,8 @@ const (
 
 type Base byte
 
+// Base types for fit data.
+// The base 5 bits increase by 1 for each definition with all multi-byte number types having the MSB set.
 const (
 	BaseEnum    Base = 0x00
 	BaseSint8   Base = 0x01 // 2's complement format
@@ -35,6 +37,53 @@ const (
 	BaseUint64  Base = 0x8F
 	BaseUint64z Base = 0x90
 )
+
+// Internal compressed representation of certain base types.
+// With this, we can fit all base types in 5 bits as opposed to 8 bits.
+// Base types should be decompressed before use.
+const (
+	compressedSint16  byte = 0x03
+	compressedUint16  byte = 0x04
+	compressedSint32  byte = 0x05
+	compressedUint32  byte = 0x06
+	compressedFloat32 byte = 0x08
+	compressedFloat64 byte = 0x09
+	compressedUint16z byte = 0x0B
+	compressedUint32z byte = 0x0C
+	compressedSint64  byte = 0x0E
+	compressedUint64  byte = 0x0F
+	compressedUint64z byte = 0x10
+)
+
+func decompress(b byte) Base {
+	b = b & typeNumMask
+	switch b {
+	case compressedSint16:
+		return BaseSint16
+	case compressedUint16:
+		return BaseUint16
+	case compressedSint32:
+		return BaseSint32
+	case compressedUint32:
+		return BaseUint32
+	case compressedFloat32:
+		return BaseFloat32
+	case compressedFloat64:
+		return BaseFloat64
+	case compressedUint16z:
+		return BaseUint16z
+	case compressedUint32z:
+		return BaseUint32z
+	case compressedSint64:
+		return BaseSint64
+	case compressedUint64:
+		return BaseUint64
+	case compressedUint64z:
+		return BaseUint64z
+	default:
+		return Base(b)
+	}
+}
 
 func (t Base) index() byte {
 	return byte(t) & typeNumMask

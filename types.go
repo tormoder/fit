@@ -1,6 +1,6 @@
 // Code generated using the program found in 'cmd/fitgen/main.go'. DO NOT EDIT.
 
-// SDK Version: 21.67
+// SDK Version: 21.84
 
 package fit
 
@@ -465,7 +465,7 @@ type Checksum uint8
 
 const (
 	ChecksumClear   Checksum = 0 // Allows clear of checksum for flash memory where can only write 1 to 0 without erasing sector.
-	ChecksumOk      Checksum = 1 // Set to mark checksum as valid if computes to invalid values 0 or 0xFF.  Checksum can also be set to ok to save encoding computation time.
+	ChecksumOk      Checksum = 1 // Set to mark checksum as valid if computes to invalid values 0 or 0xFF. Checksum can also be set to ok to save encoding computation time.
 	ChecksumInvalid Checksum = 0xFF
 )
 
@@ -661,33 +661,60 @@ const (
 type CoursePoint byte
 
 const (
-	CoursePointGeneric        CoursePoint = 0
-	CoursePointSummit         CoursePoint = 1
-	CoursePointValley         CoursePoint = 2
-	CoursePointWater          CoursePoint = 3
-	CoursePointFood           CoursePoint = 4
-	CoursePointDanger         CoursePoint = 5
-	CoursePointLeft           CoursePoint = 6
-	CoursePointRight          CoursePoint = 7
-	CoursePointStraight       CoursePoint = 8
-	CoursePointFirstAid       CoursePoint = 9
-	CoursePointFourthCategory CoursePoint = 10
-	CoursePointThirdCategory  CoursePoint = 11
-	CoursePointSecondCategory CoursePoint = 12
-	CoursePointFirstCategory  CoursePoint = 13
-	CoursePointHorsCategory   CoursePoint = 14
-	CoursePointSprint         CoursePoint = 15
-	CoursePointLeftFork       CoursePoint = 16
-	CoursePointRightFork      CoursePoint = 17
-	CoursePointMiddleFork     CoursePoint = 18
-	CoursePointSlightLeft     CoursePoint = 19
-	CoursePointSharpLeft      CoursePoint = 20
-	CoursePointSlightRight    CoursePoint = 21
-	CoursePointSharpRight     CoursePoint = 22
-	CoursePointUTurn          CoursePoint = 23
-	CoursePointSegmentStart   CoursePoint = 24
-	CoursePointSegmentEnd     CoursePoint = 25
-	CoursePointInvalid        CoursePoint = 0xFF
+	CoursePointGeneric         CoursePoint = 0
+	CoursePointSummit          CoursePoint = 1
+	CoursePointValley          CoursePoint = 2
+	CoursePointWater           CoursePoint = 3
+	CoursePointFood            CoursePoint = 4
+	CoursePointDanger          CoursePoint = 5
+	CoursePointLeft            CoursePoint = 6
+	CoursePointRight           CoursePoint = 7
+	CoursePointStraight        CoursePoint = 8
+	CoursePointFirstAid        CoursePoint = 9
+	CoursePointFourthCategory  CoursePoint = 10
+	CoursePointThirdCategory   CoursePoint = 11
+	CoursePointSecondCategory  CoursePoint = 12
+	CoursePointFirstCategory   CoursePoint = 13
+	CoursePointHorsCategory    CoursePoint = 14
+	CoursePointSprint          CoursePoint = 15
+	CoursePointLeftFork        CoursePoint = 16
+	CoursePointRightFork       CoursePoint = 17
+	CoursePointMiddleFork      CoursePoint = 18
+	CoursePointSlightLeft      CoursePoint = 19
+	CoursePointSharpLeft       CoursePoint = 20
+	CoursePointSlightRight     CoursePoint = 21
+	CoursePointSharpRight      CoursePoint = 22
+	CoursePointUTurn           CoursePoint = 23
+	CoursePointSegmentStart    CoursePoint = 24
+	CoursePointSegmentEnd      CoursePoint = 25
+	CoursePointCampsite        CoursePoint = 27
+	CoursePointAidStation      CoursePoint = 28
+	CoursePointRestArea        CoursePoint = 29
+	CoursePointGeneralDistance CoursePoint = 30 // Used with UpAhead
+	CoursePointService         CoursePoint = 31
+	CoursePointEnergyGel       CoursePoint = 32
+	CoursePointSportsDrink     CoursePoint = 33
+	CoursePointMileMarker      CoursePoint = 34
+	CoursePointCheckpoint      CoursePoint = 35
+	CoursePointShelter         CoursePoint = 36
+	CoursePointMeetingSpot     CoursePoint = 37
+	CoursePointOverlook        CoursePoint = 38
+	CoursePointToilet          CoursePoint = 39
+	CoursePointShower          CoursePoint = 40
+	CoursePointGear            CoursePoint = 41
+	CoursePointSharpCurve      CoursePoint = 42
+	CoursePointSteepIncline    CoursePoint = 43
+	CoursePointTunnel          CoursePoint = 44
+	CoursePointBridge          CoursePoint = 45
+	CoursePointObstacle        CoursePoint = 46
+	CoursePointCrossing        CoursePoint = 47
+	CoursePointStore           CoursePoint = 48
+	CoursePointTransition      CoursePoint = 49
+	CoursePointNavaid          CoursePoint = 50
+	CoursePointTransport       CoursePoint = 51
+	CoursePointAlert           CoursePoint = 52
+	CoursePointInfo            CoursePoint = 53
+	CoursePointInvalid         CoursePoint = 0xFF
 )
 
 // CrunchExerciseName represents the crunch_exercise_name FIT type.
@@ -1022,9 +1049,9 @@ const (
 type Event byte
 
 const (
-	EventTimer                 Event = 0  // Group 0.  Start / stop_all
+	EventTimer                 Event = 0  // Group 0. Start / stop_all
 	EventWorkout               Event = 3  // start / stop
-	EventWorkoutStep           Event = 4  // Start at beginning of workout.  Stop at end of each step.
+	EventWorkoutStep           Event = 4  // Start at beginning of workout. Stop at end of each step.
 	EventPowerDown             Event = 5  // stop_all group 0
 	EventPowerUp               Event = 6  // stop_all group 0
 	EventOffCourse             Event = 7  // start / stop group 0
@@ -1032,21 +1059,21 @@ const (
 	EventLap                   Event = 9  // Stop at end of each lap.
 	EventCoursePoint           Event = 10 // marker
 	EventBattery               Event = 11 // marker
-	EventVirtualPartnerPace    Event = 12 // Group 1. Start at beginning of activity if VP enabled, when VP pace is changed during activity or VP enabled mid activity.  stop_disable when VP disabled.
-	EventHrHighAlert           Event = 13 // Group 0.  Start / stop when in alert condition.
-	EventHrLowAlert            Event = 14 // Group 0.  Start / stop when in alert condition.
-	EventSpeedHighAlert        Event = 15 // Group 0.  Start / stop when in alert condition.
-	EventSpeedLowAlert         Event = 16 // Group 0.  Start / stop when in alert condition.
-	EventCadHighAlert          Event = 17 // Group 0.  Start / stop when in alert condition.
-	EventCadLowAlert           Event = 18 // Group 0.  Start / stop when in alert condition.
-	EventPowerHighAlert        Event = 19 // Group 0.  Start / stop when in alert condition.
-	EventPowerLowAlert         Event = 20 // Group 0.  Start / stop when in alert condition.
+	EventVirtualPartnerPace    Event = 12 // Group 1. Start at beginning of activity if VP enabled, when VP pace is changed during activity or VP enabled mid activity. stop_disable when VP disabled.
+	EventHrHighAlert           Event = 13 // Group 0. Start / stop when in alert condition.
+	EventHrLowAlert            Event = 14 // Group 0. Start / stop when in alert condition.
+	EventSpeedHighAlert        Event = 15 // Group 0. Start / stop when in alert condition.
+	EventSpeedLowAlert         Event = 16 // Group 0. Start / stop when in alert condition.
+	EventCadHighAlert          Event = 17 // Group 0. Start / stop when in alert condition.
+	EventCadLowAlert           Event = 18 // Group 0. Start / stop when in alert condition.
+	EventPowerHighAlert        Event = 19 // Group 0. Start / stop when in alert condition.
+	EventPowerLowAlert         Event = 20 // Group 0. Start / stop when in alert condition.
 	EventRecoveryHr            Event = 21 // marker
 	EventBatteryLow            Event = 22 // marker
-	EventTimeDurationAlert     Event = 23 // Group 1.  Start if enabled mid activity (not required at start of activity). Stop when duration is reached.  stop_disable if disabled.
-	EventDistanceDurationAlert Event = 24 // Group 1.  Start if enabled mid activity (not required at start of activity). Stop when duration is reached.  stop_disable if disabled.
-	EventCalorieDurationAlert  Event = 25 // Group 1.  Start if enabled mid activity (not required at start of activity). Stop when duration is reached.  stop_disable if disabled.
-	EventActivity              Event = 26 // Group 1..  Stop at end of activity.
+	EventTimeDurationAlert     Event = 23 // Group 1. Start if enabled mid activity (not required at start of activity). Stop when duration is reached. stop_disable if disabled.
+	EventDistanceDurationAlert Event = 24 // Group 1. Start if enabled mid activity (not required at start of activity). Stop when duration is reached. stop_disable if disabled.
+	EventCalorieDurationAlert  Event = 25 // Group 1. Start if enabled mid activity (not required at start of activity). Stop when duration is reached. stop_disable if disabled.
+	EventActivity              Event = 26 // Group 1.. Stop at end of activity.
 	EventFitnessEquipment      Event = 27 // marker
 	EventLength                Event = 28 // Stop at end of each length.
 	EventUserMarker            Event = 32 // marker
@@ -1055,8 +1082,8 @@ const (
 	EventFrontGearChange       Event = 42 // marker
 	EventRearGearChange        Event = 43 // marker
 	EventRiderPositionChange   Event = 44 // marker
-	EventElevHighAlert         Event = 45 // Group 0.  Start / stop when in alert condition.
-	EventElevLowAlert          Event = 46 // Group 0.  Start / stop when in alert condition.
+	EventElevHighAlert         Event = 45 // Group 0. Start / stop when in alert condition.
+	EventElevLowAlert          Event = 46 // Group 0. Start / stop when in alert condition.
 	EventCommTimeout           Event = 47 // marker
 	EventRadarThreatAlert      Event = 75 // start/stop/marker
 	EventInvalid               Event = 0xFF
@@ -1404,8 +1431,8 @@ const (
 	FileTypeActivitySummary  FileType = 20 // Read/erase, multiple files. Directory=Activities
 	FileTypeMonitoringDaily  FileType = 28
 	FileTypeMonitoringB      FileType = 32   // Read only. Directory=Monitoring. File number=identifier
-	FileTypeSegment          FileType = 34   // Read/write/erase. Multiple Files.  Directory=Segments
-	FileTypeSegmentList      FileType = 35   // Read/write/erase. Single File.  Directory=Segments
+	FileTypeSegment          FileType = 34   // Read/write/erase. Multiple Files. Directory=Segments
+	FileTypeSegmentList      FileType = 35   // Read/write/erase. Single File. Directory=Segments
 	FileTypeExdConfiguration FileType = 40   // Read/write/erase. Single File. Directory=Settings
 	FileTypeMfgRangeMin      FileType = 0xF7 // 0xF7 - 0xFE reserved for manufacturer specific file types
 	FileTypeMfgRangeMax      FileType = 0xFE // 0xF7 - 0xFE reserved for manufacturer specific file types
@@ -1485,15 +1512,16 @@ const (
 	GarminProductHrm2ss                     GarminProduct = 5
 	GarminProductDsiAlf02                   GarminProduct = 6
 	GarminProductHrm3ss                     GarminProduct = 7
-	GarminProductHrmRunSingleByteProductId  GarminProduct = 8  // hrm_run model for HRM ANT+ messaging
-	GarminProductBsm                        GarminProduct = 9  // BSM model for ANT+ messaging
-	GarminProductBcm                        GarminProduct = 10 // BCM model for ANT+ messaging
-	GarminProductAxs01                      GarminProduct = 11 // AXS01 HRM Bike Chipset model for ANT+ messaging
-	GarminProductHrmTriSingleByteProductId  GarminProduct = 12 // hrm_tri model for HRM ANT+ messaging
-	GarminProductHrm4RunSingleByteProductId GarminProduct = 13 // hrm4 run model for HRM ANT+ messaging
-	GarminProductFr225SingleByteProductId   GarminProduct = 14 // fr225 model for HRM ANT+ messaging
-	GarminProductGen3BsmSingleByteProductId GarminProduct = 15 // gen3_bsm model for Bike Speed ANT+ messaging
-	GarminProductGen3BcmSingleByteProductId GarminProduct = 16 // gen3_bcm model for Bike Cadence ANT+ messaging
+	GarminProductHrmRunSingleByteProductId  GarminProduct = 8   // hrm_run model for HRM ANT+ messaging
+	GarminProductBsm                        GarminProduct = 9   // BSM model for ANT+ messaging
+	GarminProductBcm                        GarminProduct = 10  // BCM model for ANT+ messaging
+	GarminProductAxs01                      GarminProduct = 11  // AXS01 HRM Bike Chipset model for ANT+ messaging
+	GarminProductHrmTriSingleByteProductId  GarminProduct = 12  // hrm_tri model for HRM ANT+ messaging
+	GarminProductHrm4RunSingleByteProductId GarminProduct = 13  // hrm4 run model for HRM ANT+ messaging
+	GarminProductFr225SingleByteProductId   GarminProduct = 14  // fr225 model for HRM ANT+ messaging
+	GarminProductGen3BsmSingleByteProductId GarminProduct = 15  // gen3_bsm model for Bike Speed ANT+ messaging
+	GarminProductGen3BcmSingleByteProductId GarminProduct = 16  // gen3_bcm model for Bike Cadence ANT+ messaging
+	GarminProductOHR                        GarminProduct = 255 // Garmin Wearable Optical Heart Rate Sensor for ANT+ HR Profile Broadcasting
 	GarminProductFr301China                 GarminProduct = 473
 	GarminProductFr301Japan                 GarminProduct = 474
 	GarminProductFr301Korea                 GarminProduct = 475
@@ -1769,6 +1797,7 @@ const (
 	GarminProductMarqCommanderAsia          GarminProduct = 3449
 	GarminProductMarqExpeditionAsia         GarminProduct = 3450
 	GarminProductMarqAthleteAsia            GarminProduct = 3451
+	GarminProductInstinctSolar              GarminProduct = 3466
 	GarminProductFr45Asia                   GarminProduct = 3469
 	GarminProductVivoactive3Daimler         GarminProduct = 3473
 	GarminProductLegacyRey                  GarminProduct = 3498
@@ -1810,21 +1839,50 @@ const (
 	GarminProductEnduroAsia                 GarminProduct = 3872
 	GarminProductVenusqAsia                 GarminProduct = 3837
 	GarminProductMarqGolferAsia             GarminProduct = 3850
+	GarminProductVenu2Plus                  GarminProduct = 3851
 	GarminProductFr55                       GarminProduct = 3869
+	GarminProductInstinct2                  GarminProduct = 3888
+	GarminProductFenix7s                    GarminProduct = 3905
+	GarminProductFenix7                     GarminProduct = 3906
+	GarminProductFenix7x                    GarminProduct = 3907
+	GarminProductFenix7sApac                GarminProduct = 3908
+	GarminProductFenix7Apac                 GarminProduct = 3909
+	GarminProductFenix7xApac                GarminProduct = 3910
 	GarminProductApproachG12                GarminProduct = 3927
 	GarminProductDescentMk2sAsia            GarminProduct = 3930
 	GarminProductApproachS42                GarminProduct = 3934
+	GarminProductEpixGen2                   GarminProduct = 3943
+	GarminProductEpixGen2Apac               GarminProduct = 3944
 	GarminProductVenu2sAsia                 GarminProduct = 3949
 	GarminProductVenu2Asia                  GarminProduct = 3950
 	GarminProductFr945LteAsia               GarminProduct = 3978
 	GarminProductApproachS12Asia            GarminProduct = 3986
 	GarminProductApproachG12Asia            GarminProduct = 4001
 	GarminProductApproachS42Asia            GarminProduct = 4002
+	GarminProductDescentG1                  GarminProduct = 4005
+	GarminProductVenu2PlusAsia              GarminProduct = 4017
 	GarminProductFr55Asia                   GarminProduct = 4033
+	GarminProductInstinct2Asia              GarminProduct = 4071
+	GarminProductD2AirX10                   GarminProduct = 4125
+	GarminProductDescentG1Asia              GarminProduct = 4132
+	GarminProductTacxNeoSmart               GarminProduct = 4265 // Neo Smart, Tacx
+	GarminProductTacxNeo2Smart              GarminProduct = 4266 // Neo 2 Smart, Tacx
+	GarminProductTacxNeo2TSmart             GarminProduct = 4267 // Neo 2T Smart, Tacx
+	GarminProductTacxNeoSmartBike           GarminProduct = 4268 // Neo Smart Bike, Tacx
+	GarminProductTacxSatoriSmart            GarminProduct = 4269 // Satori Smart, Tacx
+	GarminProductTacxFlowSmart              GarminProduct = 4270 // Flow Smart, Tacx
+	GarminProductTacxVortexSmart            GarminProduct = 4271 // Vortex Smart, Tacx
+	GarminProductTacxBushidoSmart           GarminProduct = 4272 // Bushido Smart, Tacx
+	GarminProductTacxGeniusSmart            GarminProduct = 4273 // Genius Smart, Tacx
+	GarminProductTacxFluxFluxSSmart         GarminProduct = 4274 // Flux/Flux S Smart, Tacx
+	GarminProductTacxFlux2Smart             GarminProduct = 4275 // Flux 2 Smart, Tacx
+	GarminProductTacxMagnum                 GarminProduct = 4276 // Magnum, Tacx
+	GarminProductTactix7                    GarminProduct = 4135
 	GarminProductSdm4                       GarminProduct = 10007 // SDM4 footpod
 	GarminProductEdgeRemote                 GarminProduct = 10014
 	GarminProductTacxTrainingAppWin         GarminProduct = 20533
 	GarminProductTacxTrainingAppMac         GarminProduct = 20534
+	GarminProductTacxTrainingAppMacCatalyst GarminProduct = 20565
 	GarminProductTrainingCenter             GarminProduct = 20119
 	GarminProductTacxTrainingAppAndroid     GarminProduct = 30045
 	GarminProductTacxTrainingAppIos         GarminProduct = 30046
@@ -1839,9 +1897,10 @@ const (
 type Gender byte
 
 const (
-	GenderFemale  Gender = 0
-	GenderMale    Gender = 1
-	GenderInvalid Gender = 0xFF
+	GenderFemale      Gender = 0
+	GenderMale        Gender = 1
+	GenderUnspecified Gender = 2
+	GenderInvalid     Gender = 0xFF
 )
 
 // Goal represents the goal FIT type.
@@ -2427,7 +2486,7 @@ type Manufacturer uint16
 
 const (
 	ManufacturerGarmin                 Manufacturer = 1
-	ManufacturerGarminFr405Antfs       Manufacturer = 2 // Do not use.  Used by FR405 for ANTFS man id.
+	ManufacturerGarminFr405Antfs       Manufacturer = 2 // Do not use. Used by FR405 for ANTFS man id.
 	ManufacturerZephyr                 Manufacturer = 3
 	ManufacturerDayton                 Manufacturer = 4
 	ManufacturerIdt                    Manufacturer = 5
@@ -2560,6 +2619,12 @@ const (
 	ManufacturerSigeyi                 Manufacturer = 134
 	ManufacturerCoospo                 Manufacturer = 135
 	ManufacturerGeoid                  Manufacturer = 136
+	ManufacturerBosch                  Manufacturer = 137
+	ManufacturerKyto                   Manufacturer = 138
+	ManufacturerKineticSports          Manufacturer = 139
+	ManufacturerDecathlonByte          Manufacturer = 140
+	ManufacturerTqSystems              Manufacturer = 141
+	ManufacturerTagHeuer               Manufacturer = 142
 	ManufacturerDevelopment            Manufacturer = 255
 	ManufacturerHealthandlife          Manufacturer = 257
 	ManufacturerLezyne                 Manufacturer = 258
@@ -2616,6 +2681,13 @@ const (
 	ManufacturerForm                   Manufacturer = 309
 	ManufacturerDecathlon              Manufacturer = 310
 	ManufacturerSyncros                Manufacturer = 311
+	ManufacturerHeatup                 Manufacturer = 312
+	ManufacturerCannondale             Manufacturer = 313
+	ManufacturerTrueFitness            Manufacturer = 314
+	ManufacturerRGTCycling             Manufacturer = 315
+	ManufacturerVasa                   Manufacturer = 316
+	ManufacturerRaceRepublic           Manufacturer = 317
+	ManufacturerFazua                  Manufacturer = 318
 	ManufacturerActigraphcorp          Manufacturer = 5759
 	ManufacturerInvalid                Manufacturer = 0xFFFF
 )
@@ -2722,6 +2794,7 @@ const (
 	MesgNumDiveSummary                 MesgNum = 268
 	MesgNumJump                        MesgNum = 285
 	MesgNumClimbPro                    MesgNum = 317
+	MesgNumDeviceAuxBatteryInfo        MesgNum = 375
 	MesgNumMfgRangeMin                 MesgNum = 0xFF00 // 0xFF00 - 0xFFFE reserved for manufacturer specific messages
 	MesgNumMfgRangeMax                 MesgNum = 0xFFFE // 0xFF00 - 0xFFFE reserved for manufacturer specific messages
 	MesgNumInvalid                     MesgNum = 0xFFFF
@@ -4394,7 +4467,7 @@ const (
 	WorkoutCapabilitiesFitnessEquipment WorkoutCapabilities = 0x00000004
 	WorkoutCapabilitiesFirstbeat        WorkoutCapabilities = 0x00000008
 	WorkoutCapabilitiesNewLeaf          WorkoutCapabilities = 0x00000010
-	WorkoutCapabilitiesTcx              WorkoutCapabilities = 0x00000020 // For backwards compatibility.  Watch should add missing id fields then clear flag.
+	WorkoutCapabilitiesTcx              WorkoutCapabilities = 0x00000020 // For backwards compatibility. Watch should add missing id fields then clear flag.
 	WorkoutCapabilitiesSpeed            WorkoutCapabilities = 0x00000080 // Speed source required for workout step.
 	WorkoutCapabilitiesHeartRate        WorkoutCapabilities = 0x00000100 // Heart rate source required for workout step.
 	WorkoutCapabilitiesDistance         WorkoutCapabilities = 0x00000200 // Distance source required for workout step.

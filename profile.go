@@ -1,6 +1,6 @@
 // Code generated using the program found in 'cmd/fitgen/main.go'. DO NOT EDIT.
 
-// SDK Version: 21.67
+// SDK Version: 21.84
 
 package fit
 
@@ -15,7 +15,7 @@ const (
 	ProfileMajorVersion = 21
 
 	// ProfileMinorVersion is the current supported profile minor version of the FIT SDK.
-	ProfileMinorVersion = 67
+	ProfileMinorVersion = 84
 )
 
 var knownMsgNums = map[MesgNum]bool{
@@ -105,6 +105,7 @@ var knownMsgNums = map[MesgNum]bool{
 	MesgNumDiveSummary:                 true,
 	MesgNumJump:                        true,
 	MesgNumClimbPro:                    true,
+	MesgNumDeviceAuxBatteryInfo:        true,
 }
 
 var (
@@ -670,6 +671,14 @@ var _fields = [...][256]*field{
 		27:  {17, 27, types.Fit(7), 20},
 	},
 
+	MesgNumDeviceAuxBatteryInfo: {
+		253: {0, 253, types.Fit(70), 1},
+		0:   {1, 0, types.Fit(2), 1},
+		1:   {2, 1, types.Fit(4), 1},
+		2:   {3, 2, types.Fit(2), 1},
+		3:   {4, 3, types.Fit(2), 1},
+	},
+
 	MesgNumTrainingFile: {
 		253: {0, 253, types.Fit(70), 1},
 		0:   {1, 0, types.Fit(0), 1},
@@ -960,6 +969,10 @@ var _fields = [...][256]*field{
 		8:   {9, 8, types.Fit(7), 50},
 		9:   {10, 9, types.Fit(0), 1},
 		10:  {11, 10, types.Fit(4), 1},
+		19:  {12, 19, types.Fit(0), 1},
+		20:  {13, 20, types.Fit(6), 1},
+		21:  {14, 21, types.Fit(6), 1},
+		22:  {15, 22, types.Fit(6), 1},
 	},
 
 	MesgNumExerciseTitle: {
@@ -1158,6 +1171,7 @@ var msgsTypes = [...]reflect.Type{
 	MesgNumRecord:                      reflect.TypeOf(RecordMsg{}),
 	MesgNumEvent:                       reflect.TypeOf(EventMsg{}),
 	MesgNumDeviceInfo:                  reflect.TypeOf(DeviceInfoMsg{}),
+	MesgNumDeviceAuxBatteryInfo:        reflect.TypeOf(DeviceAuxBatteryInfoMsg{}),
 	MesgNumTrainingFile:                reflect.TypeOf(TrainingFileMsg{}),
 	MesgNumWeatherConditions:           reflect.TypeOf(WeatherConditionsMsg{}),
 	MesgNumWeatherAlert:                reflect.TypeOf(WeatherAlertMsg{}),
@@ -1259,6 +1273,7 @@ var newMesgFuncs = [...]newMesgFunc{
 	MesgNumRecord:                      func() reflect.Value { return reflect.ValueOf(NewRecordMsg()) },
 	MesgNumEvent:                       func() reflect.Value { return reflect.ValueOf(NewEventMsg()) },
 	MesgNumDeviceInfo:                  func() reflect.Value { return reflect.ValueOf(NewDeviceInfoMsg()) },
+	MesgNumDeviceAuxBatteryInfo:        func() reflect.Value { return reflect.ValueOf(NewDeviceAuxBatteryInfoMsg()) },
 	MesgNumTrainingFile:                func() reflect.Value { return reflect.ValueOf(NewTrainingFileMsg()) },
 	MesgNumWeatherConditions:           func() reflect.Value { return reflect.ValueOf(NewWeatherConditionsMsg()) },
 	MesgNumWeatherAlert:                func() reflect.Value { return reflect.ValueOf(NewWeatherAlertMsg()) },

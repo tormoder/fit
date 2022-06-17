@@ -3,21 +3,36 @@ package profile
 import (
 	"fmt"
 	"log"
-	"regexp"
 	"strconv"
 	"strings"
+	"unicode"
+	"unicode/utf8"
 
 	"github.com/tormoder/fit/internal/types"
 )
 
-var camelRegex = regexp.MustCompile("[0-9A-Za-z]+")
-
 func toCamelCase(s string) string {
-	chunks := camelRegex.FindAllString(s, -1)
+	if s == "" {
+		return s
+	}
+	chunks := strings.Split(s, "_")
 	for i, val := range chunks {
-		chunks[i] = strings.Title(val)
+		chunks[i] = toUpper(val)
 	}
 	return strings.Join(chunks, "")
+}
+
+func toUpper(s string) string {
+	if len(s) > 0 {
+		r, size := utf8.DecodeRuneInString(s)
+		if r != utf8.RuneError || size > 1 {
+			up := unicode.ToUpper(r)
+			if up != r {
+				s = string(up) + s[size:]
+			}
+		}
+	}
+	return s
 }
 
 var typeQuirks = map[string]string{

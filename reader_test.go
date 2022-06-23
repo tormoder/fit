@@ -56,7 +56,7 @@ const (
 	tdfolder      = "testdata"
 )
 
-const goMajorVersionForDecodeGolden = "go1.17"
+const goMajorVersionForDecodeGolden = "go1.18"
 
 func TestMain(m *testing.M) {
 	flag.Parse()

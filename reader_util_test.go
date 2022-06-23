@@ -97,6 +97,7 @@ package fit_test
 var decodeTestFiles = [...]struct {
 	folder      string
 	name        string
+	source      string
 	wantErr     bool
 	fingerprint uint64
 	compress    bool
@@ -112,6 +113,7 @@ var decodeTestFiles = [...]struct {
 		g.openField()
 		g.writeStringQField(dto.folder)
 		g.writeStringQField(dto.name)
+		g.writeStringQField(dto.source)
 		g.writeBoolField(dto.wantErr)
 		g.writeUintField(dto.fingerprint)
 		g.writeBoolField(dto.compress)

@@ -102,8 +102,8 @@ checkfull: checkdeps
 	@! gofmt -s -l . | grep -vF 'No Exceptions'
 	@echo "goimports"
 	@! $(BIN)goimports -l . | grep -vF 'No Exceptions'
-	@echo "gofumports"
-	@! $(BIN)gofumports -l . | grep -vE '(types.go|types_string.go|types_man.go)'
+	@echo "gofumpt"
+	@! $(BIN)gofumpt -l . | grep -vE '(types.go|types_string.go|types_man.go)'
 	@echo "vet"
 	@$(GO) vet $(FIT_PKGS)
 	@echo "vet --shadow"
@@ -129,4 +129,4 @@ checkdeps:
 	$(GO_BIN) $(GO) install github.com/mdempsky/unconvert
 	$(GO_BIN) $(GO) install golang.org/x/tools/cmd/goimports
 	$(GO_BIN) $(GO) install honnef.co/go/tools/cmd/staticcheck
-	$(GO_BIN) $(GO) install mvdan.cc/gofumpt/gofumports
+	$(GO_BIN) $(GO) install mvdan.cc/gofumpt

@@ -6,6 +6,7 @@ import "reflect"
 // Records sensor data and events from active sessions.
 type ActivityFile struct {
 	Activity    *ActivityMsg
+	Sport       *SportMsg
 	Sessions    []*SessionMsg
 	Laps        []*LapMsg
 	Lengths     []*LengthMsg
@@ -151,6 +152,8 @@ func (a *ActivityFile) add(msg reflect.Value) {
 	switch tmp := x.(type) {
 	case ActivityMsg:
 		a.Activity = &tmp
+	case SportMsg:
+		a.Sport = &tmp
 	case SessionMsg:
 		tmp.expandComponents()
 		a.Sessions = append(a.Sessions, &tmp)

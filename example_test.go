@@ -3,7 +3,7 @@ package fit_test
 import (
 	"bytes"
 	"fmt"
-	"io/ioutil"
+	"os"
 	"path/filepath"
 
 	"github.com/tormoder/fit"
@@ -12,7 +12,7 @@ import (
 func Example() {
 	// Read our FIT test file data
 	testFile := filepath.Join("testdata", "fitsdk", "Activity.fit")
-	testData, err := ioutil.ReadFile(testFile)
+	testData, err := os.ReadFile(testFile)
 	if err != nil {
 		fmt.Println(err)
 		return

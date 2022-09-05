@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -32,7 +31,7 @@ func activitySmall() []byte {
 	activitySmallMu.Lock()
 	defer activitySmallMu.Unlock()
 	activitySmallOnce.Do(func() {
-		asd, err := ioutil.ReadFile(activitySmallPath)
+		asd, err := os.ReadFile(activitySmallPath)
 		if err != nil {
 			errDesc := fmt.Sprintf("parseActivitySmallData failed: %v", err)
 			panic(errDesc)
@@ -95,7 +94,7 @@ func TestDecode(t *testing.T) {
 			t.Run(fmt.Sprintf("%s/%s", file.folder, file.name), func(t *testing.T) {
 				t.Parallel()
 				fpath := filepath.Join(tdfolder, file.folder, file.name)
-				data, err := ioutil.ReadFile(fpath)
+				data, err := os.ReadFile(fpath)
 				if err != nil {
 					t.Fatalf("reading file failed: %v", err)
 				}
@@ -196,7 +195,7 @@ func TestDecodeChained(t *testing.T) {
 		ctf := ctf
 		t.Run(ctf.fpath, func(t *testing.T) {
 			t.Parallel()
-			data, err := ioutil.ReadFile(ctf.fpath)
+			data, err := os.ReadFile(ctf.fpath)
 			if err != nil {
 				t.Fatalf("reading file data failed: %v", err)
 			}
@@ -223,7 +222,7 @@ func TestCheckIntegrity(t *testing.T) {
 	})
 	t.Run("ActivitySDK", func(t *testing.T) {
 		fpath := filepath.Join(tdfolder, "fitsdk", "Activity.fit")
-		data, err := ioutil.ReadFile(fpath)
+		data, err := os.ReadFile(fpath)
 		if err != nil {
 			t.Fatalf("reading %q failed: %v", fpath, err)
 		}
@@ -296,7 +295,7 @@ func BenchmarkDecode(b *testing.B) {
 	}
 	for _, file := range files {
 		b.Run(file.desc, func(b *testing.B) {
-			data, err := ioutil.ReadFile(file.path)
+			data, err := os.ReadFile(file.path)
 			if err != nil {
 				b.Fatalf("%q: error reading file: %v", file.path, err)
 			}
@@ -314,7 +313,7 @@ func BenchmarkDecode(b *testing.B) {
 }
 
 func BenchmarkDecodeActivityLargeParallel(b *testing.B) {
-	data, err := ioutil.ReadFile(activityLargePath)
+	data, err := os.ReadFile(activityLargePath)
 	if err != nil {
 		b.Fatal(err)
 	}

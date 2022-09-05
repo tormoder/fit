@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"go/format"
 	"io"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -67,7 +66,7 @@ func writeProfileToFile(p *profile.Profile, path string) error {
 	if err != nil {
 		return err
 	}
-	return ioutil.WriteFile(path, buf.Bytes(), 0o644)
+	return os.WriteFile(path, buf.Bytes(), 0o644)
 }
 
 func scanLinesPreserveEOL(data []byte, atEOF bool) (advance int, token []byte, err error) {
@@ -213,7 +212,7 @@ func TestGenerator(t *testing.T) {
 				t.Skip("skipping test in short mode")
 			}
 			path := relPath(sdkFullVer)
-			data, err := ioutil.ReadFile(path)
+			data, err := os.ReadFile(path)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -265,7 +264,7 @@ func BenchmarkGenerator(b *testing.B) {
 		sdkFullVer := fmt.Sprintf("%d.%d", sdk.majVer, sdk.minVer)
 		b.Run(sdkFullVer, func(b *testing.B) {
 			path := relPath(sdkFullVer)
-			data, err := ioutil.ReadFile(path)
+			data, err := os.ReadFile(path)
 			if err != nil {
 				b.Fatalf("error reading profile workbook: %v", err)
 			}

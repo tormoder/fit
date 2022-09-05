@@ -37,18 +37,26 @@ func (e *encoder) encodeValue(value interface{}, f *field) error {
 	case types.TimeUTC:
 		t := value.(time.Time)
 		u32 := encodeTime(t)
-		binary.Write(e.w, e.arch, u32)
+		if err := binary.Write(e.w, e.arch, u32); err != nil {
+			return fmt.Errorf("can't write UTC time type: %w", err)
+		}
 	case types.TimeLocal:
 		t := value.(time.Time)
 		_, offs := t.Zone()
 		u32 := uint32(int64(encodeTime(t)) + int64(offs))
-		binary.Write(e.w, e.arch, u32)
+		if err := binary.Write(e.w, e.arch, u32); err != nil {
+			return fmt.Errorf("can't write local time type: %w", err)
+		}
 	case types.Lat:
 		lat := value.(Latitude)
-		binary.Write(e.w, e.arch, lat.semicircles)
+		if err := binary.Write(e.w, e.arch, lat.semicircles); err != nil {
+			return fmt.Errorf("can't write latitude type: %w", err)
+		}
 	case types.Lng:
 		lng := value.(Longitude)
-		binary.Write(e.w, e.arch, lng.semicircles)
+		if err := binary.Write(e.w, e.arch, lng.semicircles); err != nil {
+			return fmt.Errorf("can't write longitude type: %w", err)
+		}
 	case types.NativeFit:
 		if f.t.BaseType() == types.BaseString {
 			str, ok := value.(string)
@@ -62,7 +70,9 @@ func (e *encoder) encodeValue(value interface{}, f *field) error {
 				return fmt.Errorf("can't encode %+v as UTF-8 string: %w", value, err)
 			}
 		}
-		binary.Write(e.w, e.arch, value)
+		if err := binary.Write(e.w, e.arch, value); err != nil {
+			return fmt.Errorf("can't write native FIT type: %w", err)
+		}
 	default:
 		return fmt.Errorf("unknown Fit type %+v", f.t)
 	}

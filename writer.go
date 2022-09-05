@@ -3,6 +3,7 @@ package fit
 import (
 	"bytes"
 	"encoding/binary"
+	"errors"
 	"fmt"
 	"io"
 	"reflect"
@@ -76,7 +77,7 @@ func (e *encoder) writeField(value reflect.Value, f *field) error {
 	}
 
 	if f.t.BaseType() == types.BaseString {
-		return fmt.Errorf("can't encode array of strings")
+		return errors.New("can't encode array of strings")
 	}
 
 	invalid := f.t.BaseType().Invalid()

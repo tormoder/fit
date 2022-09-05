@@ -106,7 +106,7 @@ func DecodeChained(r io.Reader, opts ...DecodeOption) ([]*File, error) {
 			if d.file != nil {
 				fitFiles = append(fitFiles, d.file)
 			}
-			return fitFiles, fmt.Errorf("error parsing chained fit: file #%d: %v", i+1, err)
+			return fitFiles, fmt.Errorf("error parsing chained fit: file #%d: %w", i+1, err)
 		}
 		fitFiles = append(fitFiles, d.file)
 		i++
@@ -123,7 +123,7 @@ func (d *decoder) decode(r io.Reader, headerOnly, fileIDOnly, crcOnly bool) erro
 
 	err := d.decodeHeader()
 	if err != nil {
-		return fmt.Errorf("error decoding header: %v", err)
+		return fmt.Errorf("error decoding header: %w", err)
 	}
 
 	d.file = new(File)
@@ -141,7 +141,7 @@ func (d *decoder) decode(r io.Reader, headerOnly, fileIDOnly, crcOnly bool) erro
 	if crcOnly {
 		_, err = io.CopyN(d.crc, d.r, int64(d.h.DataSize))
 		if err != nil {
-			return fmt.Errorf("error parsing data: %v", err)
+			return fmt.Errorf("error parsing data: %w", err)
 		}
 		return d.checkCRC()
 	}
@@ -157,7 +157,7 @@ func (d *decoder) decode(r io.Reader, headerOnly, fileIDOnly, crcOnly bool) erro
 
 	err = d.parseFileIdMsg()
 	if err != nil {
-		return fmt.Errorf("error parsing file id message: %v", err)
+		return fmt.Errorf("error parsing file id message: %w", err)
 	}
 	if fileIDOnly {
 		return nil
@@ -193,14 +193,14 @@ func (d *decoder) decodeFileData() error {
 
 		b, err = d.readByte()
 		if err != nil {
-			return fmt.Errorf("error parsing record header: %v", err)
+			return fmt.Errorf("error parsing record header: %w", err)
 		}
 
 		switch {
 		case (b & compressedHeaderMask) == compressedHeaderMask:
 			msg, err = d.parseDataMessage(b, true)
 			if err != nil {
-				return fmt.Errorf("parsing compressed timestamp message: %v", err)
+				return fmt.Errorf("parsing compressed timestamp message: %w", err)
 			}
 			if msg.IsValid() {
 				d.file.add(msg)
@@ -208,13 +208,13 @@ func (d *decoder) decodeFileData() error {
 		case (b & mesgDefinitionMask) == mesgDefinitionMask:
 			dm, err = d.parseDefinitionMessage(b)
 			if err != nil {
-				return fmt.Errorf("parsing definition message: %v", err)
+				return fmt.Errorf("parsing definition message: %w", err)
 			}
 			d.defmsgs[dm.localMsgType] = dm
 		case (b & mesgDefinitionMask) == mesgHeaderMask:
 			msg, err = d.parseDataMessage(b, false)
 			if err != nil {
-				return fmt.Errorf("parsing data message: %v", err)
+				return fmt.Errorf("parsing data message: %w", err)
 			}
 			if msg.IsValid() {
 				d.file.add(msg)
@@ -233,7 +233,7 @@ func (d *decoder) checkCRC() error {
 	}
 	if _, err := io.ReadFull(d.r, d.tmp[:bytesForCRC]); err != nil {
 		err = noEOF(err)
-		return fmt.Errorf("error parsing file CRC: %v", err)
+		return fmt.Errorf("error parsing file CRC: %w", err)
 	}
 	d.crc.Write(d.tmp[:bytesForCRC])
 	d.file.CRC = le.Uint16(d.tmp[:bytesForCRC])
@@ -353,7 +353,7 @@ func (ddfd devDataFieldDesc) String() string {
 func (d *decoder) parseFileIdMsg() error {
 	b, err := d.readByte()
 	if err != nil {
-		return fmt.Errorf("error parsing record header: %v", err)
+		return fmt.Errorf("error parsing record header: %w", err)
 	}
 
 	if !((b & mesgDefinitionMask) == mesgDefinitionMask) {
@@ -362,7 +362,7 @@ func (d *decoder) parseFileIdMsg() error {
 
 	dm, err := d.parseDefinitionMessage(b)
 	if err != nil {
-		return fmt.Errorf("error parsing definition message: %v", err)
+		return fmt.Errorf("error parsing definition message: %w", err)
 	}
 	if dm.globalMsgNum != MesgNumFileId {
 		return fmt.Errorf("parsed definition message was not for file_id (was %v)", dm.globalMsgNum)
@@ -371,7 +371,7 @@ func (d *decoder) parseFileIdMsg() error {
 
 	b, err = d.readByte()
 	if err != nil {
-		return fmt.Errorf("error parsing record header: %v", err)
+		return fmt.Errorf("error parsing record header: %w", err)
 	}
 
 	if !((b & mesgHeaderMask) == mesgHeaderMask) {
@@ -379,7 +379,7 @@ func (d *decoder) parseFileIdMsg() error {
 	}
 	msg, err := d.parseDataMessage(b, false)
 	if err != nil {
-		return fmt.Errorf("error reading data message:  %v", err)
+		return fmt.Errorf("error reading data message: %w", err)
 	}
 
 	_, ok := msg.Interface().(FileIdMsg)
@@ -426,7 +426,7 @@ func (d *decoder) parseDefinitionMessage(recordHeader byte) (*defmsg, error) {
 	}
 
 	if err = d.readFull(d.tmp[:2]); err != nil {
-		return nil, fmt.Errorf("error parsing global message number: %v", err)
+		return nil, fmt.Errorf("error parsing global message number: %w", err)
 	}
 	dm.globalMsgNum = MesgNum(dm.arch.Uint16(d.tmp[:2]))
 	if dm.globalMsgNum == MesgNumInvalid {
@@ -446,7 +446,7 @@ func (d *decoder) parseDefinitionMessage(recordHeader byte) (*defmsg, error) {
 	}
 
 	if err = d.readFull(d.tmp[0 : 3*uint16(dm.fields)]); err != nil {
-		return nil, fmt.Errorf("error parsing fields: %v", err)
+		return nil, fmt.Errorf("error parsing fields: %w", err)
 	}
 
 	dm.fieldDefs = make([]fieldDef, dm.fields)
@@ -458,7 +458,7 @@ func (d *decoder) parseDefinitionMessage(recordHeader byte) (*defmsg, error) {
 			if d.debug {
 				d.opts.logger.Println("illegal definition message:", dm)
 			}
-			return nil, fmt.Errorf("validating %v failed: %v", dm.globalMsgNum, err)
+			return nil, fmt.Errorf("validating %v failed: %w", dm.globalMsgNum, err)
 		}
 		dm.fieldDefs[i] = fd
 	}
@@ -650,7 +650,7 @@ func (d *decoder) parseDataFields(dm *defmsg, knownMsg bool, msgv reflect.Value)
 		err := d.readFull(d.tmp[0:dsize])
 		if err != nil {
 			return reflect.Value{}, fmt.Errorf(
-				"error parsing data message: %v (field %d [%v] for [%v])",
+				"error parsing data message: %w (field %d [%v] for [%v])",
 				err, i, dfield, dm)
 		}
 
@@ -682,7 +682,7 @@ func (d *decoder) parseDataFields(dm *defmsg, knownMsg bool, msgv reflect.Value)
 			if err == nil {
 				continue
 			}
-			return reflect.Value{}, fmt.Errorf("error parsing data message: %v", err)
+			return reflect.Value{}, fmt.Errorf("error parsing data message: %w", err)
 		case types.TimeUTC, types.TimeLocal:
 			d.parseTimeStamp(dm, fieldv, pfield)
 		case types.Lat:
@@ -701,7 +701,7 @@ func (d *decoder) parseDataFields(dm *defmsg, knownMsg bool, msgv reflect.Value)
 	for i, ddfd := range dm.devDataFieldDescs {
 		err := d.readFull(d.tmp[0:int(ddfd.size)])
 		if err != nil {
-			return reflect.Value{}, fmt.Errorf("error parsing data developer message: %v (field %d [%v] for [%v])", err, i, ddfd, dm)
+			return reflect.Value{}, fmt.Errorf("error parsing data developer message: %w (field %d [%v] for [%v])", err, i, ddfd, dm)
 		}
 	}
 

@@ -4,7 +4,7 @@ import (
 	"archive/zip"
 	"flag"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"os"
 	"os/exec"
@@ -126,15 +126,15 @@ func main() {
 		l.Fatal(err)
 	}
 
-	if err = ioutil.WriteFile(typesOut, fitProfile.TypesSource, 0o644); err != nil {
+	if err = os.WriteFile(typesOut, fitProfile.TypesSource, 0o644); err != nil {
 		l.Fatalf("typegen: error writing types output file: %v", err)
 	}
 
-	if err = ioutil.WriteFile(messagesOut, fitProfile.MessagesSource, 0o644); err != nil {
+	if err = os.WriteFile(messagesOut, fitProfile.MessagesSource, 0o644); err != nil {
 		l.Fatalf("typegen: error writing messages output file: %v", err)
 	}
 
-	if err = ioutil.WriteFile(profileOut, fitProfile.ProfileSource, 0o644); err != nil {
+	if err = os.WriteFile(profileOut, fitProfile.ProfileSource, 0o644); err != nil {
 		l.Fatalf("typegen: error writing profile output file: %v", err)
 	}
 
@@ -164,7 +164,7 @@ func runStringerOnTypes(typesIn, typesStringOut string, fitTypes []string) error
 		return fmt.Errorf("fitstringer: generation failed: %v", err)
 	}
 
-	if err := ioutil.WriteFile(typesStringOut, output, 0o644); err != nil {
+	if err := os.WriteFile(typesStringOut, output, 0o644); err != nil {
 		return fmt.Errorf("error writing fitstringer output: %v", err)
 	}
 
@@ -215,7 +215,7 @@ func readDataFromZIP(path string) ([]byte, error) {
 	}
 	defer rc.Close()
 
-	data, err := ioutil.ReadAll(rc)
+	data, err := io.ReadAll(rc)
 	if err != nil {
 		return nil, fmt.Errorf("error reading %q from archive: %v", wfile.Name, err)
 	}
@@ -233,7 +233,7 @@ func scanForWorkbook(files []*zip.File) *zip.File {
 }
 
 func readDataFromXLSX(path string) ([]byte, error) {
-	return ioutil.ReadFile(path)
+	return os.ReadFile(path)
 }
 
 func parseSDKVersionStringFromZipFilePath(path string) string {

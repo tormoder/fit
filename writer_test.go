@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
-	"io/ioutil"
+	"os"
 	"path/filepath"
 	"runtime"
 	"strings"
@@ -37,7 +37,7 @@ func TestDecodeEncodeDecode(t *testing.T) {
 				t.Parallel()
 				fpath := filepath.Join(tdfolder, file.folder, file.name)
 
-				inData, err := ioutil.ReadFile(fpath)
+				inData, err := os.ReadFile(fpath)
 				if err != nil {
 					t.Fatalf("reading file failed: %v", err)
 				}
@@ -140,7 +140,7 @@ func BenchmarkEncode(b *testing.B) {
 	}
 	for _, file := range files {
 		b.Run(file.desc, func(b *testing.B) {
-			data, err := ioutil.ReadFile(file.path)
+			data, err := os.ReadFile(file.path)
 			if err != nil {
 				b.Fatalf("%q: error reading file: %v", file.path, err)
 			}

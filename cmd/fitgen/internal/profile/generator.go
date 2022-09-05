@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"sort"
 	"strings"
@@ -78,7 +77,7 @@ func NewGenerator(sdkMajVer, sdkMinVer int, workbookData []byte, opts ...Generat
 	// The code generation is not performance critical,
 	// so we can avoid nil-checks when logging.
 	if g.opts.logger == nil {
-		g.opts.logger = log.New(ioutil.Discard, "", 0)
+		g.opts.logger = log.New(io.Discard, "", 0)
 	}
 
 	g.logf("sdk version: %d.%d", sdkMajVer, sdkMinVer)

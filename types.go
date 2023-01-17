@@ -1,6 +1,6 @@
 // Code generated using the program found in 'cmd/fitgen/main.go'. DO NOT EDIT.
 
-// SDK Version: 21.84
+// SDK Version: 21.94
 
 package fit
 
@@ -1021,8 +1021,8 @@ const (
 type DiveAlarmType byte
 
 const (
-	DiveAlarmTypeDepth   DiveAlarmType = 0
-	DiveAlarmTypeTime    DiveAlarmType = 1
+	DiveAlarmTypeDepth   DiveAlarmType = 0 // Alarm when a certain depth is crossed
+	DiveAlarmTypeTime    DiveAlarmType = 1 // Alarm when a certain time has transpired
 	DiveAlarmTypeInvalid DiveAlarmType = 0xFF
 )
 
@@ -1712,6 +1712,7 @@ const (
 	GarminProductForetrex601701             GarminProduct = 2769
 	GarminProductVivoMoveHr                 GarminProduct = 2772
 	GarminProductEdge1030                   GarminProduct = 2713
+	GarminProductFr35Sea                    GarminProduct = 2727
 	GarminProductVector3                    GarminProduct = 2787
 	GarminProductFenix5Asia                 GarminProduct = 2796
 	GarminProductFenix5sAsia                GarminProduct = 2797
@@ -1838,6 +1839,7 @@ const (
 	GarminProductApproachS12                GarminProduct = 3823
 	GarminProductEnduroAsia                 GarminProduct = 3872
 	GarminProductVenusqAsia                 GarminProduct = 3837
+	GarminProductEdge1040                   GarminProduct = 3843
 	GarminProductMarqGolferAsia             GarminProduct = 3850
 	GarminProductVenu2Plus                  GarminProduct = 3851
 	GarminProductFr55                       GarminProduct = 3869
@@ -1856,15 +1858,27 @@ const (
 	GarminProductVenu2sAsia                 GarminProduct = 3949
 	GarminProductVenu2Asia                  GarminProduct = 3950
 	GarminProductFr945LteAsia               GarminProduct = 3978
+	GarminProductVivoMoveSport              GarminProduct = 3982
 	GarminProductApproachS12Asia            GarminProduct = 3986
+	GarminProductFr255Music                 GarminProduct = 3990
+	GarminProductFr255SmallMusic            GarminProduct = 3991
+	GarminProductFr255                      GarminProduct = 3992
+	GarminProductFr255Small                 GarminProduct = 3993
 	GarminProductApproachG12Asia            GarminProduct = 4001
 	GarminProductApproachS42Asia            GarminProduct = 4002
 	GarminProductDescentG1                  GarminProduct = 4005
 	GarminProductVenu2PlusAsia              GarminProduct = 4017
+	GarminProductFr955                      GarminProduct = 4024
 	GarminProductFr55Asia                   GarminProduct = 4033
+	GarminProductVivosmart5                 GarminProduct = 4063
 	GarminProductInstinct2Asia              GarminProduct = 4071
+	GarminProductVenusq2                    GarminProduct = 4115
+	GarminProductVenusq2music               GarminProduct = 4116
 	GarminProductD2AirX10                   GarminProduct = 4125
+	GarminProductHrmProPlus                 GarminProduct = 4130
 	GarminProductDescentG1Asia              GarminProduct = 4132
+	GarminProductTactix7                    GarminProduct = 4135
+	GarminProductEdgeExplore2               GarminProduct = 4169
 	GarminProductTacxNeoSmart               GarminProduct = 4265 // Neo Smart, Tacx
 	GarminProductTacxNeo2Smart              GarminProduct = 4266 // Neo 2 Smart, Tacx
 	GarminProductTacxNeo2TSmart             GarminProduct = 4267 // Neo 2T Smart, Tacx
@@ -1877,7 +1891,8 @@ const (
 	GarminProductTacxFluxFluxSSmart         GarminProduct = 4274 // Flux/Flux S Smart, Tacx
 	GarminProductTacxFlux2Smart             GarminProduct = 4275 // Flux 2 Smart, Tacx
 	GarminProductTacxMagnum                 GarminProduct = 4276 // Magnum, Tacx
-	GarminProductTactix7                    GarminProduct = 4135
+	GarminProductEdge1040Asia               GarminProduct = 4305
+	GarminProductEnduro2                    GarminProduct = 4341
 	GarminProductSdm4                       GarminProduct = 10007 // SDM4 footpod
 	GarminProductEdgeRemote                 GarminProduct = 10014
 	GarminProductTacxTrainingAppWin         GarminProduct = 20533
@@ -1897,10 +1912,9 @@ const (
 type Gender byte
 
 const (
-	GenderFemale      Gender = 0
-	GenderMale        Gender = 1
-	GenderUnspecified Gender = 2
-	GenderInvalid     Gender = 0xFF
+	GenderFemale  Gender = 0
+	GenderMale    Gender = 1
+	GenderInvalid Gender = 0xFF
 )
 
 // Goal represents the goal FIT type.
@@ -2625,6 +2639,8 @@ const (
 	ManufacturerDecathlonByte          Manufacturer = 140
 	ManufacturerTqSystems              Manufacturer = 141
 	ManufacturerTagHeuer               Manufacturer = 142
+	ManufacturerKeiserFitness          Manufacturer = 143
+	ManufacturerZwiftByte              Manufacturer = 144
 	ManufacturerDevelopment            Manufacturer = 255
 	ManufacturerHealthandlife          Manufacturer = 257
 	ManufacturerLezyne                 Manufacturer = 258
@@ -2688,6 +2704,9 @@ const (
 	ManufacturerVasa                   Manufacturer = 316
 	ManufacturerRaceRepublic           Manufacturer = 317
 	ManufacturerFazua                  Manufacturer = 318
+	ManufacturerOrekaTraining          Manufacturer = 319
+	ManufacturerIsec                   Manufacturer = 320 // Lishun Electric & Communication
+	ManufacturerLululemonStudio        Manufacturer = 321
 	ManufacturerActigraphcorp          Manufacturer = 5759
 	ManufacturerInvalid                Manufacturer = 0xFFFF
 )

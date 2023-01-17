@@ -3144,6 +3144,7 @@ func _() {
 	_ = x[GarminProductForetrex601701-2769]
 	_ = x[GarminProductVivoMoveHr-2772]
 	_ = x[GarminProductEdge1030-2713]
+	_ = x[GarminProductFr35Sea-2727]
 	_ = x[GarminProductVector3-2787]
 	_ = x[GarminProductFenix5Asia-2796]
 	_ = x[GarminProductFenix5sAsia-2797]
@@ -3270,6 +3271,7 @@ func _() {
 	_ = x[GarminProductApproachS12-3823]
 	_ = x[GarminProductEnduroAsia-3872]
 	_ = x[GarminProductVenusqAsia-3837]
+	_ = x[GarminProductEdge1040-3843]
 	_ = x[GarminProductMarqGolferAsia-3850]
 	_ = x[GarminProductVenu2Plus-3851]
 	_ = x[GarminProductFr55-3869]
@@ -3288,15 +3290,27 @@ func _() {
 	_ = x[GarminProductVenu2sAsia-3949]
 	_ = x[GarminProductVenu2Asia-3950]
 	_ = x[GarminProductFr945LteAsia-3978]
+	_ = x[GarminProductVivoMoveSport-3982]
 	_ = x[GarminProductApproachS12Asia-3986]
+	_ = x[GarminProductFr255Music-3990]
+	_ = x[GarminProductFr255SmallMusic-3991]
+	_ = x[GarminProductFr255-3992]
+	_ = x[GarminProductFr255Small-3993]
 	_ = x[GarminProductApproachG12Asia-4001]
 	_ = x[GarminProductApproachS42Asia-4002]
 	_ = x[GarminProductDescentG1-4005]
 	_ = x[GarminProductVenu2PlusAsia-4017]
+	_ = x[GarminProductFr955-4024]
 	_ = x[GarminProductFr55Asia-4033]
+	_ = x[GarminProductVivosmart5-4063]
 	_ = x[GarminProductInstinct2Asia-4071]
+	_ = x[GarminProductVenusq2-4115]
+	_ = x[GarminProductVenusq2music-4116]
 	_ = x[GarminProductD2AirX10-4125]
+	_ = x[GarminProductHrmProPlus-4130]
 	_ = x[GarminProductDescentG1Asia-4132]
+	_ = x[GarminProductTactix7-4135]
+	_ = x[GarminProductEdgeExplore2-4169]
 	_ = x[GarminProductTacxNeoSmart-4265]
 	_ = x[GarminProductTacxNeo2Smart-4266]
 	_ = x[GarminProductTacxNeo2TSmart-4267]
@@ -3309,7 +3323,8 @@ func _() {
 	_ = x[GarminProductTacxFluxFluxSSmart-4274]
 	_ = x[GarminProductTacxFlux2Smart-4275]
 	_ = x[GarminProductTacxMagnum-4276]
-	_ = x[GarminProductTactix7-4135]
+	_ = x[GarminProductEdge1040Asia-4305]
+	_ = x[GarminProductEnduro2-4341]
 	_ = x[GarminProductSdm4-10007]
 	_ = x[GarminProductEdgeRemote-10014]
 	_ = x[GarminProductTacxTrainingAppWin-20533]
@@ -3325,7 +3340,7 @@ func _() {
 	_ = x[GarminProductInvalid-65535]
 }
 
-const _GarminProduct_name = "Hrm1Axh01Axb01Axb02Hrm2ssDsiAlf02Hrm3ssHrmRunSingleByteProductIdBsmBcmAxs01HrmTriSingleByteProductIdHrm4RunSingleByteProductIdFr225SingleByteProductIdGen3BsmSingleByteProductIdGen3BcmSingleByteProductIdOHRFr301ChinaFr301JapanFr301KoreaFr301TaiwanFr405Fr50Fr405JapanFr60DsiAlf01Fr310xtEdge500Fr110Edge800Edge500TaiwanEdge500JapanChirpFr110JapanEdge200Fr910xtEdge800TaiwanEdge800JapanAlf04Fr610Fr210JapanVectorSsVectorCpEdge800ChinaEdge500ChinaApproachG10Fr610JapanEdge500KoreaFr70Fr310xt4tAmxFr10Edge800KoreaSwimFr910xtChinaFenixEdge200TaiwanEdge510Edge810TempeFr910xtJapanFr620Fr220Fr910xtKoreaFr10JapanEdge810JapanVirbEliteEdgeTouringEdge510JapanHrmTriHrmRunFr920xtEdge510AsiaEdge810ChinaEdge810TaiwanEdge1000VivoFitVirbRemoteVivoKiFr15VivoActiveEdge510KoreaFr620JapanFr620ChinaFr220JapanFr220ChinaApproachS6VivoSmartFenix2EpixFenix3Edge1000TaiwanEdge1000JapanFr15JapanEdge520Edge1000ChinaFr620RussiaFr220RussiaVectorSEdge1000KoreaFr920xtTaiwanFr920xtChinaFr920xtJapanVirbxVivoSmartApacEtrexTouchEdge25Fr25VivoFit2Fr225Fr630Fr230Fr735xtVivoActiveApacVector2Vector2sVirbxeFr620TaiwanFr220TaiwanTruswingD2airvenuFenix3ChinaFenix3TwnVariaHeadlightVariaTaillightOldEdgeExplore1000Fr225AsiaVariaRadarTaillightVariaRadarDisplayEdge20Edge520AsiaEdge520JapanD2BravoApproachS20VivoSmart2Edge1000ThaiVariaRemoteEdge25AsiaEdge25JpnEdge20AsiaApproachX40Fenix3JapanVivoSmartEmeaFr630AsiaFr630JpnFr230JpnHrm4RunEpixJapanVivoActiveHrVivoSmartGpsHrVivoSmartHrVivoSmartHrAsiaVivoSmartGpsHrAsiaVivoMoveVariaTaillightFr235AsiaFr235JapanVariaVisionVivoFit3Fenix3KoreaFenix3SeaFenix3HrVirbUltra30IndexSmartScaleFr235Fenix3ChronosOregon7xxRino7xxEpixKoreaFenix3HrChnFenix3HrTwnFenix3HrJpnFenix3HrSeaFenix3HrKorNautixVivoActiveHrApacOregon7xxWwEdge820EdgeExplore820Fr735xtApacFr735xtJapanFenix5sD2BravoTitaniumVariaUt800RunningDynamicsPodEdge820ChinaEdge820JapanFenix5xVivoFitJrVivoSmart3VivoSportEdge820TaiwanEdge820KoreaEdge820SeaFr35HebrewApproachS60Fr35ApacFr35JapanFenix3ChronosAsiaVirb360Fr935Fenix5Vivoactive3Edge1030Fr235ChinaNfcForetrex601701VivoMoveHrVector3Fenix5AsiaFenix5sAsiaFenix5xAsiaApproachZ80Fr35KoreaD2charlieVivoSmart3ApacVivoSportApacFr935AsiaDescentVivoFit4Fr645Fr645mFr30Fenix5sPlusEdge130Edge1030AsiaVivosmart4VivoMoveHrAsiaApproachX10Fr30AsiaVivoactive3mWFr645AsiaFr645mAsiaEdgeExploreGpsmap66ApproachS10Vivoactive3mLApproachG80Edge130AsiaEdge1030BontragerFenix5PlusFenix5xPlusEdge520PlusFr945Edge530Edge830InstinctEsportsFenix5sPlusApacFenix5xPlusApacEdge520PlusApacFr235lAsiaFr245AsiaVivoActive3mApacGen3BsmGen3BcmVivoSmart4AsiaVivoactive4SmallVivoactive4LargeVenuMarqDriverMarqAviatorMarqCaptainMarqCommanderMarqExpeditionMarqAthleteDescentMk2Gpsmap66iFenix6SSportFenix6SFenix6SportFenix6Fenix6xHrmDualHrmProVivoMove3PremiumApproachS40Fr245mAsiaEdge530ApacEdge830ApacVivoMove3VivoActive4SmallAsiaVivoActive4LargeAsiaVivoActive4OledAsiaSwim2MarqDriverAsiaMarqAviatorAsiaVivoMove3AsiaFr945AsiaVivoActive3tChnMarqCaptainAsiaMarqCommanderAsiaMarqExpeditionAsiaMarqAthleteAsiaInstinctSolarFr45AsiaVivoactive3DaimlerLegacyReyLegacyDarthVaderLegacyCaptainMarvelLegacyFirstAvengerFenix6sSportAsiaFenix6sAsiaFenix6SportAsiaFenix6AsiaFenix6xAsiaLegacyCaptainMarvelAsiaLegacyFirstAvengerAsiaLegacyReyAsiaLegacyDarthVaderAsiaDescentMk2sEdge130PlusEdge1030PlusRally200Fr745VenusqLilyMarqAdventurerEnduroSwim2ApacMarqAdventurerAsiaFr945LteDescentMk2AsiaVenu2Venu2sVenuDaimlerAsiaMarqGolferVenuDaimlerFr745AsiaLilyAsiaEdge1030PlusAsiaEdge130PlusAsiaApproachS12VenusqAsiaMarqGolferAsiaVenu2PlusFr55EnduroAsiaInstinct2Fenix7sFenix7Fenix7xFenix7sApacFenix7ApacFenix7xApacApproachG12DescentMk2sAsiaApproachS42EpixGen2EpixGen2ApacVenu2sAsiaVenu2AsiaFr945LteAsiaApproachS12AsiaApproachG12AsiaApproachS42AsiaDescentG1Venu2PlusAsiaFr55AsiaInstinct2AsiaD2AirX10DescentG1AsiaTactix7TacxNeoSmartTacxNeo2SmartTacxNeo2TSmartTacxNeoSmartBikeTacxSatoriSmartTacxFlowSmartTacxVortexSmartTacxBushidoSmartTacxGeniusSmartTacxFluxFluxSSmartTacxFlux2SmartTacxMagnumSdm4EdgeRemoteTrainingCenterTacxTrainingAppWinTacxTrainingAppMacTacxTrainingAppMacCatalystTacxTrainingAppAndroidTacxTrainingAppIosTacxTrainingAppLegacyConnectiqSimulatorAndroidAntplusPluginConnectInvalid"
+const _GarminProduct_name = "Hrm1Axh01Axb01Axb02Hrm2ssDsiAlf02Hrm3ssHrmRunSingleByteProductIdBsmBcmAxs01HrmTriSingleByteProductIdHrm4RunSingleByteProductIdFr225SingleByteProductIdGen3BsmSingleByteProductIdGen3BcmSingleByteProductIdOHRFr301ChinaFr301JapanFr301KoreaFr301TaiwanFr405Fr50Fr405JapanFr60DsiAlf01Fr310xtEdge500Fr110Edge800Edge500TaiwanEdge500JapanChirpFr110JapanEdge200Fr910xtEdge800TaiwanEdge800JapanAlf04Fr610Fr210JapanVectorSsVectorCpEdge800ChinaEdge500ChinaApproachG10Fr610JapanEdge500KoreaFr70Fr310xt4tAmxFr10Edge800KoreaSwimFr910xtChinaFenixEdge200TaiwanEdge510Edge810TempeFr910xtJapanFr620Fr220Fr910xtKoreaFr10JapanEdge810JapanVirbEliteEdgeTouringEdge510JapanHrmTriHrmRunFr920xtEdge510AsiaEdge810ChinaEdge810TaiwanEdge1000VivoFitVirbRemoteVivoKiFr15VivoActiveEdge510KoreaFr620JapanFr620ChinaFr220JapanFr220ChinaApproachS6VivoSmartFenix2EpixFenix3Edge1000TaiwanEdge1000JapanFr15JapanEdge520Edge1000ChinaFr620RussiaFr220RussiaVectorSEdge1000KoreaFr920xtTaiwanFr920xtChinaFr920xtJapanVirbxVivoSmartApacEtrexTouchEdge25Fr25VivoFit2Fr225Fr630Fr230Fr735xtVivoActiveApacVector2Vector2sVirbxeFr620TaiwanFr220TaiwanTruswingD2airvenuFenix3ChinaFenix3TwnVariaHeadlightVariaTaillightOldEdgeExplore1000Fr225AsiaVariaRadarTaillightVariaRadarDisplayEdge20Edge520AsiaEdge520JapanD2BravoApproachS20VivoSmart2Edge1000ThaiVariaRemoteEdge25AsiaEdge25JpnEdge20AsiaApproachX40Fenix3JapanVivoSmartEmeaFr630AsiaFr630JpnFr230JpnHrm4RunEpixJapanVivoActiveHrVivoSmartGpsHrVivoSmartHrVivoSmartHrAsiaVivoSmartGpsHrAsiaVivoMoveVariaTaillightFr235AsiaFr235JapanVariaVisionVivoFit3Fenix3KoreaFenix3SeaFenix3HrVirbUltra30IndexSmartScaleFr235Fenix3ChronosOregon7xxRino7xxEpixKoreaFenix3HrChnFenix3HrTwnFenix3HrJpnFenix3HrSeaFenix3HrKorNautixVivoActiveHrApacOregon7xxWwEdge820EdgeExplore820Fr735xtApacFr735xtJapanFenix5sD2BravoTitaniumVariaUt800RunningDynamicsPodEdge820ChinaEdge820JapanFenix5xVivoFitJrVivoSmart3VivoSportEdge820TaiwanEdge820KoreaEdge820SeaFr35HebrewApproachS60Fr35ApacFr35JapanFenix3ChronosAsiaVirb360Fr935Fenix5Vivoactive3Edge1030Fr35SeaFr235ChinaNfcForetrex601701VivoMoveHrVector3Fenix5AsiaFenix5sAsiaFenix5xAsiaApproachZ80Fr35KoreaD2charlieVivoSmart3ApacVivoSportApacFr935AsiaDescentVivoFit4Fr645Fr645mFr30Fenix5sPlusEdge130Edge1030AsiaVivosmart4VivoMoveHrAsiaApproachX10Fr30AsiaVivoactive3mWFr645AsiaFr645mAsiaEdgeExploreGpsmap66ApproachS10Vivoactive3mLApproachG80Edge130AsiaEdge1030BontragerFenix5PlusFenix5xPlusEdge520PlusFr945Edge530Edge830InstinctEsportsFenix5sPlusApacFenix5xPlusApacEdge520PlusApacFr235lAsiaFr245AsiaVivoActive3mApacGen3BsmGen3BcmVivoSmart4AsiaVivoactive4SmallVivoactive4LargeVenuMarqDriverMarqAviatorMarqCaptainMarqCommanderMarqExpeditionMarqAthleteDescentMk2Gpsmap66iFenix6SSportFenix6SFenix6SportFenix6Fenix6xHrmDualHrmProVivoMove3PremiumApproachS40Fr245mAsiaEdge530ApacEdge830ApacVivoMove3VivoActive4SmallAsiaVivoActive4LargeAsiaVivoActive4OledAsiaSwim2MarqDriverAsiaMarqAviatorAsiaVivoMove3AsiaFr945AsiaVivoActive3tChnMarqCaptainAsiaMarqCommanderAsiaMarqExpeditionAsiaMarqAthleteAsiaInstinctSolarFr45AsiaVivoactive3DaimlerLegacyReyLegacyDarthVaderLegacyCaptainMarvelLegacyFirstAvengerFenix6sSportAsiaFenix6sAsiaFenix6SportAsiaFenix6AsiaFenix6xAsiaLegacyCaptainMarvelAsiaLegacyFirstAvengerAsiaLegacyReyAsiaLegacyDarthVaderAsiaDescentMk2sEdge130PlusEdge1030PlusRally200Fr745VenusqLilyMarqAdventurerEnduroSwim2ApacMarqAdventurerAsiaFr945LteDescentMk2AsiaVenu2Venu2sVenuDaimlerAsiaMarqGolferVenuDaimlerFr745AsiaLilyAsiaEdge1030PlusAsiaEdge130PlusAsiaApproachS12VenusqAsiaEdge1040MarqGolferAsiaVenu2PlusFr55EnduroAsiaInstinct2Fenix7sFenix7Fenix7xFenix7sApacFenix7ApacFenix7xApacApproachG12DescentMk2sAsiaApproachS42EpixGen2EpixGen2ApacVenu2sAsiaVenu2AsiaFr945LteAsiaVivoMoveSportApproachS12AsiaFr255MusicFr255SmallMusicFr255Fr255SmallApproachG12AsiaApproachS42AsiaDescentG1Venu2PlusAsiaFr955Fr55AsiaVivosmart5Instinct2AsiaVenusq2Venusq2musicD2AirX10HrmProPlusDescentG1AsiaTactix7EdgeExplore2TacxNeoSmartTacxNeo2SmartTacxNeo2TSmartTacxNeoSmartBikeTacxSatoriSmartTacxFlowSmartTacxVortexSmartTacxBushidoSmartTacxGeniusSmartTacxFluxFluxSSmartTacxFlux2SmartTacxMagnumEdge1040AsiaEnduro2Sdm4EdgeRemoteTrainingCenterTacxTrainingAppWinTacxTrainingAppMacTacxTrainingAppMacCatalystTacxTrainingAppAndroidTacxTrainingAppIosTacxTrainingAppLegacyConnectiqSimulatorAndroidAntplusPluginConnectInvalid"
 
 var _GarminProduct_map = map[GarminProduct]string{
 	1:     _GarminProduct_name[0:4],
@@ -3532,188 +3547,203 @@ var _GarminProduct_map = map[GarminProduct]string{
 	2697:  _GarminProduct_name[1977:1983],
 	2700:  _GarminProduct_name[1983:1994],
 	2713:  _GarminProduct_name[1994:2002],
-	2733:  _GarminProduct_name[2002:2015],
-	2769:  _GarminProduct_name[2015:2029],
-	2772:  _GarminProduct_name[2029:2039],
-	2787:  _GarminProduct_name[2039:2046],
-	2796:  _GarminProduct_name[2046:2056],
-	2797:  _GarminProduct_name[2056:2067],
-	2798:  _GarminProduct_name[2067:2078],
-	2806:  _GarminProduct_name[2078:2089],
-	2814:  _GarminProduct_name[2089:2098],
-	2819:  _GarminProduct_name[2098:2107],
-	2831:  _GarminProduct_name[2107:2121],
-	2832:  _GarminProduct_name[2121:2134],
-	2833:  _GarminProduct_name[2134:2143],
-	2859:  _GarminProduct_name[2143:2150],
-	2878:  _GarminProduct_name[2150:2158],
-	2886:  _GarminProduct_name[2158:2163],
-	2888:  _GarminProduct_name[2163:2169],
-	2891:  _GarminProduct_name[2169:2173],
-	2900:  _GarminProduct_name[2173:2184],
-	2909:  _GarminProduct_name[2184:2191],
-	2924:  _GarminProduct_name[2191:2203],
-	2927:  _GarminProduct_name[2203:2213],
-	2945:  _GarminProduct_name[2213:2227],
-	2962:  _GarminProduct_name[2227:2238],
-	2977:  _GarminProduct_name[2238:2246],
-	2988:  _GarminProduct_name[2246:2259],
-	3003:  _GarminProduct_name[2259:2268],
-	3004:  _GarminProduct_name[2268:2278],
-	3011:  _GarminProduct_name[2278:2289],
-	3028:  _GarminProduct_name[2289:2297],
-	3049:  _GarminProduct_name[2297:2308],
-	3066:  _GarminProduct_name[2308:2321],
-	3085:  _GarminProduct_name[2321:2332],
-	3092:  _GarminProduct_name[2332:2343],
-	3095:  _GarminProduct_name[2343:2360],
-	3110:  _GarminProduct_name[2360:2370],
-	3111:  _GarminProduct_name[2370:2381],
-	3112:  _GarminProduct_name[2381:2392],
-	3113:  _GarminProduct_name[2392:2397],
-	3121:  _GarminProduct_name[2397:2404],
-	3122:  _GarminProduct_name[2404:2411],
-	3126:  _GarminProduct_name[2411:2426],
-	3134:  _GarminProduct_name[2426:2441],
-	3135:  _GarminProduct_name[2441:2456],
-	3142:  _GarminProduct_name[2456:2471],
-	3144:  _GarminProduct_name[2471:2481],
-	3145:  _GarminProduct_name[2481:2490],
-	3163:  _GarminProduct_name[2490:2506],
-	3192:  _GarminProduct_name[2506:2513],
-	3193:  _GarminProduct_name[2513:2520],
-	3218:  _GarminProduct_name[2520:2534],
-	3224:  _GarminProduct_name[2534:2550],
-	3225:  _GarminProduct_name[2550:2566],
-	3226:  _GarminProduct_name[2566:2570],
-	3246:  _GarminProduct_name[2570:2580],
-	3247:  _GarminProduct_name[2580:2591],
-	3248:  _GarminProduct_name[2591:2602],
-	3249:  _GarminProduct_name[2602:2615],
-	3250:  _GarminProduct_name[2615:2629],
-	3251:  _GarminProduct_name[2629:2640],
-	3258:  _GarminProduct_name[2640:2650],
-	3284:  _GarminProduct_name[2650:2659],
-	3287:  _GarminProduct_name[2659:2671],
-	3288:  _GarminProduct_name[2671:2678],
-	3289:  _GarminProduct_name[2678:2689],
-	3290:  _GarminProduct_name[2689:2695],
-	3291:  _GarminProduct_name[2695:2702],
-	3299:  _GarminProduct_name[2702:2709],
-	3300:  _GarminProduct_name[2709:2715],
-	3308:  _GarminProduct_name[2715:2731],
-	3314:  _GarminProduct_name[2731:2742],
-	3321:  _GarminProduct_name[2742:2752],
-	3349:  _GarminProduct_name[2752:2763],
-	3350:  _GarminProduct_name[2763:2774],
-	3378:  _GarminProduct_name[2774:2783],
-	3387:  _GarminProduct_name[2783:2803],
-	3388:  _GarminProduct_name[2803:2823],
-	3389:  _GarminProduct_name[2823:2842],
-	3405:  _GarminProduct_name[2842:2847],
-	3420:  _GarminProduct_name[2847:2861],
-	3421:  _GarminProduct_name[2861:2876],
-	3422:  _GarminProduct_name[2876:2889],
-	3441:  _GarminProduct_name[2889:2898],
-	3446:  _GarminProduct_name[2898:2913],
-	3448:  _GarminProduct_name[2913:2928],
-	3449:  _GarminProduct_name[2928:2945],
-	3450:  _GarminProduct_name[2945:2963],
-	3451:  _GarminProduct_name[2963:2978],
-	3466:  _GarminProduct_name[2978:2991],
-	3469:  _GarminProduct_name[2991:2999],
-	3473:  _GarminProduct_name[2999:3017],
-	3498:  _GarminProduct_name[3017:3026],
-	3499:  _GarminProduct_name[3026:3042],
-	3500:  _GarminProduct_name[3042:3061],
-	3501:  _GarminProduct_name[3061:3079],
-	3512:  _GarminProduct_name[3079:3095],
-	3513:  _GarminProduct_name[3095:3106],
-	3514:  _GarminProduct_name[3106:3121],
-	3515:  _GarminProduct_name[3121:3131],
-	3516:  _GarminProduct_name[3131:3142],
-	3535:  _GarminProduct_name[3142:3165],
-	3536:  _GarminProduct_name[3165:3187],
-	3537:  _GarminProduct_name[3187:3200],
-	3538:  _GarminProduct_name[3200:3220],
-	3542:  _GarminProduct_name[3220:3231],
-	3558:  _GarminProduct_name[3231:3242],
-	3570:  _GarminProduct_name[3242:3254],
-	3578:  _GarminProduct_name[3254:3262],
-	3589:  _GarminProduct_name[3262:3267],
-	3600:  _GarminProduct_name[3267:3273],
-	3615:  _GarminProduct_name[3273:3277],
-	3624:  _GarminProduct_name[3277:3291],
-	3638:  _GarminProduct_name[3291:3297],
-	3639:  _GarminProduct_name[3297:3306],
-	3648:  _GarminProduct_name[3306:3324],
-	3652:  _GarminProduct_name[3324:3332],
-	3702:  _GarminProduct_name[3332:3346],
-	3703:  _GarminProduct_name[3346:3351],
-	3704:  _GarminProduct_name[3351:3357],
-	3737:  _GarminProduct_name[3357:3372],
-	3739:  _GarminProduct_name[3372:3382],
-	3740:  _GarminProduct_name[3382:3393],
-	3794:  _GarminProduct_name[3393:3402],
-	3809:  _GarminProduct_name[3402:3410],
-	3812:  _GarminProduct_name[3410:3426],
-	3813:  _GarminProduct_name[3426:3441],
-	3823:  _GarminProduct_name[3441:3452],
-	3837:  _GarminProduct_name[3452:3462],
-	3850:  _GarminProduct_name[3462:3476],
-	3851:  _GarminProduct_name[3476:3485],
-	3869:  _GarminProduct_name[3485:3489],
-	3872:  _GarminProduct_name[3489:3499],
-	3888:  _GarminProduct_name[3499:3508],
-	3905:  _GarminProduct_name[3508:3515],
-	3906:  _GarminProduct_name[3515:3521],
-	3907:  _GarminProduct_name[3521:3528],
-	3908:  _GarminProduct_name[3528:3539],
-	3909:  _GarminProduct_name[3539:3549],
-	3910:  _GarminProduct_name[3549:3560],
-	3927:  _GarminProduct_name[3560:3571],
-	3930:  _GarminProduct_name[3571:3586],
-	3934:  _GarminProduct_name[3586:3597],
-	3943:  _GarminProduct_name[3597:3605],
-	3944:  _GarminProduct_name[3605:3617],
-	3949:  _GarminProduct_name[3617:3627],
-	3950:  _GarminProduct_name[3627:3636],
-	3978:  _GarminProduct_name[3636:3648],
-	3986:  _GarminProduct_name[3648:3663],
-	4001:  _GarminProduct_name[3663:3678],
-	4002:  _GarminProduct_name[3678:3693],
-	4005:  _GarminProduct_name[3693:3702],
-	4017:  _GarminProduct_name[3702:3715],
-	4033:  _GarminProduct_name[3715:3723],
-	4071:  _GarminProduct_name[3723:3736],
-	4125:  _GarminProduct_name[3736:3744],
-	4132:  _GarminProduct_name[3744:3757],
-	4135:  _GarminProduct_name[3757:3764],
-	4265:  _GarminProduct_name[3764:3776],
-	4266:  _GarminProduct_name[3776:3789],
-	4267:  _GarminProduct_name[3789:3803],
-	4268:  _GarminProduct_name[3803:3819],
-	4269:  _GarminProduct_name[3819:3834],
-	4270:  _GarminProduct_name[3834:3847],
-	4271:  _GarminProduct_name[3847:3862],
-	4272:  _GarminProduct_name[3862:3878],
-	4273:  _GarminProduct_name[3878:3893],
-	4274:  _GarminProduct_name[3893:3911],
-	4275:  _GarminProduct_name[3911:3925],
-	4276:  _GarminProduct_name[3925:3935],
-	10007: _GarminProduct_name[3935:3939],
-	10014: _GarminProduct_name[3939:3949],
-	20119: _GarminProduct_name[3949:3963],
-	20533: _GarminProduct_name[3963:3981],
-	20534: _GarminProduct_name[3981:3999],
-	20565: _GarminProduct_name[3999:4025],
-	30045: _GarminProduct_name[4025:4047],
-	30046: _GarminProduct_name[4047:4065],
-	30047: _GarminProduct_name[4065:4086],
-	65531: _GarminProduct_name[4086:4104],
-	65532: _GarminProduct_name[4104:4124],
-	65534: _GarminProduct_name[4124:4131],
-	65535: _GarminProduct_name[4131:4138],
+	2727:  _GarminProduct_name[2002:2009],
+	2733:  _GarminProduct_name[2009:2022],
+	2769:  _GarminProduct_name[2022:2036],
+	2772:  _GarminProduct_name[2036:2046],
+	2787:  _GarminProduct_name[2046:2053],
+	2796:  _GarminProduct_name[2053:2063],
+	2797:  _GarminProduct_name[2063:2074],
+	2798:  _GarminProduct_name[2074:2085],
+	2806:  _GarminProduct_name[2085:2096],
+	2814:  _GarminProduct_name[2096:2105],
+	2819:  _GarminProduct_name[2105:2114],
+	2831:  _GarminProduct_name[2114:2128],
+	2832:  _GarminProduct_name[2128:2141],
+	2833:  _GarminProduct_name[2141:2150],
+	2859:  _GarminProduct_name[2150:2157],
+	2878:  _GarminProduct_name[2157:2165],
+	2886:  _GarminProduct_name[2165:2170],
+	2888:  _GarminProduct_name[2170:2176],
+	2891:  _GarminProduct_name[2176:2180],
+	2900:  _GarminProduct_name[2180:2191],
+	2909:  _GarminProduct_name[2191:2198],
+	2924:  _GarminProduct_name[2198:2210],
+	2927:  _GarminProduct_name[2210:2220],
+	2945:  _GarminProduct_name[2220:2234],
+	2962:  _GarminProduct_name[2234:2245],
+	2977:  _GarminProduct_name[2245:2253],
+	2988:  _GarminProduct_name[2253:2266],
+	3003:  _GarminProduct_name[2266:2275],
+	3004:  _GarminProduct_name[2275:2285],
+	3011:  _GarminProduct_name[2285:2296],
+	3028:  _GarminProduct_name[2296:2304],
+	3049:  _GarminProduct_name[2304:2315],
+	3066:  _GarminProduct_name[2315:2328],
+	3085:  _GarminProduct_name[2328:2339],
+	3092:  _GarminProduct_name[2339:2350],
+	3095:  _GarminProduct_name[2350:2367],
+	3110:  _GarminProduct_name[2367:2377],
+	3111:  _GarminProduct_name[2377:2388],
+	3112:  _GarminProduct_name[2388:2399],
+	3113:  _GarminProduct_name[2399:2404],
+	3121:  _GarminProduct_name[2404:2411],
+	3122:  _GarminProduct_name[2411:2418],
+	3126:  _GarminProduct_name[2418:2433],
+	3134:  _GarminProduct_name[2433:2448],
+	3135:  _GarminProduct_name[2448:2463],
+	3142:  _GarminProduct_name[2463:2478],
+	3144:  _GarminProduct_name[2478:2488],
+	3145:  _GarminProduct_name[2488:2497],
+	3163:  _GarminProduct_name[2497:2513],
+	3192:  _GarminProduct_name[2513:2520],
+	3193:  _GarminProduct_name[2520:2527],
+	3218:  _GarminProduct_name[2527:2541],
+	3224:  _GarminProduct_name[2541:2557],
+	3225:  _GarminProduct_name[2557:2573],
+	3226:  _GarminProduct_name[2573:2577],
+	3246:  _GarminProduct_name[2577:2587],
+	3247:  _GarminProduct_name[2587:2598],
+	3248:  _GarminProduct_name[2598:2609],
+	3249:  _GarminProduct_name[2609:2622],
+	3250:  _GarminProduct_name[2622:2636],
+	3251:  _GarminProduct_name[2636:2647],
+	3258:  _GarminProduct_name[2647:2657],
+	3284:  _GarminProduct_name[2657:2666],
+	3287:  _GarminProduct_name[2666:2678],
+	3288:  _GarminProduct_name[2678:2685],
+	3289:  _GarminProduct_name[2685:2696],
+	3290:  _GarminProduct_name[2696:2702],
+	3291:  _GarminProduct_name[2702:2709],
+	3299:  _GarminProduct_name[2709:2716],
+	3300:  _GarminProduct_name[2716:2722],
+	3308:  _GarminProduct_name[2722:2738],
+	3314:  _GarminProduct_name[2738:2749],
+	3321:  _GarminProduct_name[2749:2759],
+	3349:  _GarminProduct_name[2759:2770],
+	3350:  _GarminProduct_name[2770:2781],
+	3378:  _GarminProduct_name[2781:2790],
+	3387:  _GarminProduct_name[2790:2810],
+	3388:  _GarminProduct_name[2810:2830],
+	3389:  _GarminProduct_name[2830:2849],
+	3405:  _GarminProduct_name[2849:2854],
+	3420:  _GarminProduct_name[2854:2868],
+	3421:  _GarminProduct_name[2868:2883],
+	3422:  _GarminProduct_name[2883:2896],
+	3441:  _GarminProduct_name[2896:2905],
+	3446:  _GarminProduct_name[2905:2920],
+	3448:  _GarminProduct_name[2920:2935],
+	3449:  _GarminProduct_name[2935:2952],
+	3450:  _GarminProduct_name[2952:2970],
+	3451:  _GarminProduct_name[2970:2985],
+	3466:  _GarminProduct_name[2985:2998],
+	3469:  _GarminProduct_name[2998:3006],
+	3473:  _GarminProduct_name[3006:3024],
+	3498:  _GarminProduct_name[3024:3033],
+	3499:  _GarminProduct_name[3033:3049],
+	3500:  _GarminProduct_name[3049:3068],
+	3501:  _GarminProduct_name[3068:3086],
+	3512:  _GarminProduct_name[3086:3102],
+	3513:  _GarminProduct_name[3102:3113],
+	3514:  _GarminProduct_name[3113:3128],
+	3515:  _GarminProduct_name[3128:3138],
+	3516:  _GarminProduct_name[3138:3149],
+	3535:  _GarminProduct_name[3149:3172],
+	3536:  _GarminProduct_name[3172:3194],
+	3537:  _GarminProduct_name[3194:3207],
+	3538:  _GarminProduct_name[3207:3227],
+	3542:  _GarminProduct_name[3227:3238],
+	3558:  _GarminProduct_name[3238:3249],
+	3570:  _GarminProduct_name[3249:3261],
+	3578:  _GarminProduct_name[3261:3269],
+	3589:  _GarminProduct_name[3269:3274],
+	3600:  _GarminProduct_name[3274:3280],
+	3615:  _GarminProduct_name[3280:3284],
+	3624:  _GarminProduct_name[3284:3298],
+	3638:  _GarminProduct_name[3298:3304],
+	3639:  _GarminProduct_name[3304:3313],
+	3648:  _GarminProduct_name[3313:3331],
+	3652:  _GarminProduct_name[3331:3339],
+	3702:  _GarminProduct_name[3339:3353],
+	3703:  _GarminProduct_name[3353:3358],
+	3704:  _GarminProduct_name[3358:3364],
+	3737:  _GarminProduct_name[3364:3379],
+	3739:  _GarminProduct_name[3379:3389],
+	3740:  _GarminProduct_name[3389:3400],
+	3794:  _GarminProduct_name[3400:3409],
+	3809:  _GarminProduct_name[3409:3417],
+	3812:  _GarminProduct_name[3417:3433],
+	3813:  _GarminProduct_name[3433:3448],
+	3823:  _GarminProduct_name[3448:3459],
+	3837:  _GarminProduct_name[3459:3469],
+	3843:  _GarminProduct_name[3469:3477],
+	3850:  _GarminProduct_name[3477:3491],
+	3851:  _GarminProduct_name[3491:3500],
+	3869:  _GarminProduct_name[3500:3504],
+	3872:  _GarminProduct_name[3504:3514],
+	3888:  _GarminProduct_name[3514:3523],
+	3905:  _GarminProduct_name[3523:3530],
+	3906:  _GarminProduct_name[3530:3536],
+	3907:  _GarminProduct_name[3536:3543],
+	3908:  _GarminProduct_name[3543:3554],
+	3909:  _GarminProduct_name[3554:3564],
+	3910:  _GarminProduct_name[3564:3575],
+	3927:  _GarminProduct_name[3575:3586],
+	3930:  _GarminProduct_name[3586:3601],
+	3934:  _GarminProduct_name[3601:3612],
+	3943:  _GarminProduct_name[3612:3620],
+	3944:  _GarminProduct_name[3620:3632],
+	3949:  _GarminProduct_name[3632:3642],
+	3950:  _GarminProduct_name[3642:3651],
+	3978:  _GarminProduct_name[3651:3663],
+	3982:  _GarminProduct_name[3663:3676],
+	3986:  _GarminProduct_name[3676:3691],
+	3990:  _GarminProduct_name[3691:3701],
+	3991:  _GarminProduct_name[3701:3716],
+	3992:  _GarminProduct_name[3716:3721],
+	3993:  _GarminProduct_name[3721:3731],
+	4001:  _GarminProduct_name[3731:3746],
+	4002:  _GarminProduct_name[3746:3761],
+	4005:  _GarminProduct_name[3761:3770],
+	4017:  _GarminProduct_name[3770:3783],
+	4024:  _GarminProduct_name[3783:3788],
+	4033:  _GarminProduct_name[3788:3796],
+	4063:  _GarminProduct_name[3796:3806],
+	4071:  _GarminProduct_name[3806:3819],
+	4115:  _GarminProduct_name[3819:3826],
+	4116:  _GarminProduct_name[3826:3838],
+	4125:  _GarminProduct_name[3838:3846],
+	4130:  _GarminProduct_name[3846:3856],
+	4132:  _GarminProduct_name[3856:3869],
+	4135:  _GarminProduct_name[3869:3876],
+	4169:  _GarminProduct_name[3876:3888],
+	4265:  _GarminProduct_name[3888:3900],
+	4266:  _GarminProduct_name[3900:3913],
+	4267:  _GarminProduct_name[3913:3927],
+	4268:  _GarminProduct_name[3927:3943],
+	4269:  _GarminProduct_name[3943:3958],
+	4270:  _GarminProduct_name[3958:3971],
+	4271:  _GarminProduct_name[3971:3986],
+	4272:  _GarminProduct_name[3986:4002],
+	4273:  _GarminProduct_name[4002:4017],
+	4274:  _GarminProduct_name[4017:4035],
+	4275:  _GarminProduct_name[4035:4049],
+	4276:  _GarminProduct_name[4049:4059],
+	4305:  _GarminProduct_name[4059:4071],
+	4341:  _GarminProduct_name[4071:4078],
+	10007: _GarminProduct_name[4078:4082],
+	10014: _GarminProduct_name[4082:4092],
+	20119: _GarminProduct_name[4092:4106],
+	20533: _GarminProduct_name[4106:4124],
+	20534: _GarminProduct_name[4124:4142],
+	20565: _GarminProduct_name[4142:4168],
+	30045: _GarminProduct_name[4168:4190],
+	30046: _GarminProduct_name[4190:4208],
+	30047: _GarminProduct_name[4208:4229],
+	65531: _GarminProduct_name[4229:4247],
+	65532: _GarminProduct_name[4247:4267],
+	65534: _GarminProduct_name[4267:4274],
+	65535: _GarminProduct_name[4274:4281],
 }
 
 func (i GarminProduct) String() string {
@@ -3728,22 +3758,21 @@ func _() {
 	var x [1]struct{}
 	_ = x[GenderFemale-0]
 	_ = x[GenderMale-1]
-	_ = x[GenderUnspecified-2]
 	_ = x[GenderInvalid-255]
 }
 
 const (
-	_Gender_name_0 = "FemaleMaleUnspecified"
+	_Gender_name_0 = "FemaleMale"
 	_Gender_name_1 = "Invalid"
 )
 
 var (
-	_Gender_index_0 = [...]uint8{0, 6, 10, 21}
+	_Gender_index_0 = [...]uint8{0, 6, 10}
 )
 
 func (i Gender) String() string {
 	switch {
-	case 0 <= i && i <= 2:
+	case 0 <= i && i <= 1:
 		return _Gender_name_0[_Gender_index_0[i]:_Gender_index_0[i+1]]
 	case i == 255:
 		return _Gender_name_1
@@ -5022,6 +5051,8 @@ func _() {
 	_ = x[ManufacturerDecathlonByte-140]
 	_ = x[ManufacturerTqSystems-141]
 	_ = x[ManufacturerTagHeuer-142]
+	_ = x[ManufacturerKeiserFitness-143]
+	_ = x[ManufacturerZwiftByte-144]
 	_ = x[ManufacturerDevelopment-255]
 	_ = x[ManufacturerHealthandlife-257]
 	_ = x[ManufacturerLezyne-258]
@@ -5085,23 +5116,26 @@ func _() {
 	_ = x[ManufacturerVasa-316]
 	_ = x[ManufacturerRaceRepublic-317]
 	_ = x[ManufacturerFazua-318]
+	_ = x[ManufacturerOrekaTraining-319]
+	_ = x[ManufacturerIsec-320]
+	_ = x[ManufacturerLululemonStudio-321]
 	_ = x[ManufacturerActigraphcorp-5759]
 	_ = x[ManufacturerInvalid-65535]
 }
 
 const (
 	_Manufacturer_name_0 = "GarminGarminFr405AntfsZephyrDaytonIdtSrmQuarqIbikeSarisSparkHkTanitaEchowellDynastreamOemNautilusDynastreamTimexMetrigearXelicBeurerCardiosportAAndDHmmSuuntoThitaElektronikGpulseCleanMobilePedalBrainPeakswareSaxonarLemondFitnessDexcomWahooFitnessOctaneFitnessArchinoeticsTheHurtBoxCitizenSystemsMagellanOsynceHoluxConcept2ShimanoOneGiantLeapAceSensorBrimBrothersXplovaPerceptionDigitalBf1systemsPioneerSpantecMetalogics4iiiisSeikoEpsonSeikoEpsonOemIforPowellMaxwellGuiderStarTracBreakawayAlatechTechnologyLtdMioTechnologyEuropeRotorGeonauteIdBikeSpecializedWtekPhysicalEnterprisesNorthPoleEngineeringBkoolCateyeStagesCyclingSigmasportTomtomPeripedalWattbike"
-	_Manufacturer_name_1 = "MoxyCiclosportPowerbahnAcornProjectsApsLifebeamBontragerWellgoScoscheMaguraWoodwayEliteNielsenKellermanDkCityTacxDirectionTechnologyMagtonic1partcarbonInsideRideTechnologiesSoundOfMotionStrydIcgMiPulseBsxAthleticsLookCampagnoloSrlBodyBikeSmartPraxisworksLimitsTechnologyTopactionTechnologyCosinussFitcareMageneGiantManufacturingCoTigrasportSalutronTechnogymBrytonSensorsLatitudeLimitedSoaringTechnologyIgpsportThinkriderGopherSportWaterrowerOrangetheoryInpeakKineticJohnsonHealthTechPolarElectroSeesenseNciTechnologyIqsquareLeomoIfitComCorosByteVersaDesignChileafCycplusGravaaByteSigeyiCoospoGeoidBoschKytoKineticSportsDecathlonByteTqSystemsTagHeuer"
+	_Manufacturer_name_1 = "MoxyCiclosportPowerbahnAcornProjectsApsLifebeamBontragerWellgoScoscheMaguraWoodwayEliteNielsenKellermanDkCityTacxDirectionTechnologyMagtonic1partcarbonInsideRideTechnologiesSoundOfMotionStrydIcgMiPulseBsxAthleticsLookCampagnoloSrlBodyBikeSmartPraxisworksLimitsTechnologyTopactionTechnologyCosinussFitcareMageneGiantManufacturingCoTigrasportSalutronTechnogymBrytonSensorsLatitudeLimitedSoaringTechnologyIgpsportThinkriderGopherSportWaterrowerOrangetheoryInpeakKineticJohnsonHealthTechPolarElectroSeesenseNciTechnologyIqsquareLeomoIfitComCorosByteVersaDesignChileafCycplusGravaaByteSigeyiCoospoGeoidBoschKytoKineticSportsDecathlonByteTqSystemsTagHeuerKeiserFitnessZwiftByte"
 	_Manufacturer_name_2 = "Development"
-	_Manufacturer_name_3 = "HealthandlifeLezyneScribeLabsZwiftWatteamReconFaveroElectronicsDynoveloStravaPrecorBrytonSramNavmanCobiSpiviMioMagellanEvesportsSensitivusGaugePodoonLifeTimeFitnessFalcoEMotorsMinouraCycliqLuxotticaTrainerRoadTheSufferfestFullspeedaheadVirtualtrainingFeedbacksportsOmataVdoMagneticdaysHammerheadKineticByKurtShapelogDabuziduoJetblackCorosVirtugoVelosenseCycligentincTrailforksMahleEbikemotionNurvvMicroprogramZone5cloudGreentegYamahaMotorsWhoopGravaaOnelapMonarkExerciseFormDecathlonSyncrosHeatupCannondaleTrueFitnessRGTCyclingVasaRaceRepublicFazua"
+	_Manufacturer_name_3 = "HealthandlifeLezyneScribeLabsZwiftWatteamReconFaveroElectronicsDynoveloStravaPrecorBrytonSramNavmanCobiSpiviMioMagellanEvesportsSensitivusGaugePodoonLifeTimeFitnessFalcoEMotorsMinouraCycliqLuxotticaTrainerRoadTheSufferfestFullspeedaheadVirtualtrainingFeedbacksportsOmataVdoMagneticdaysHammerheadKineticByKurtShapelogDabuziduoJetblackCorosVirtugoVelosenseCycligentincTrailforksMahleEbikemotionNurvvMicroprogramZone5cloudGreentegYamahaMotorsWhoopGravaaOnelapMonarkExerciseFormDecathlonSyncrosHeatupCannondaleTrueFitnessRGTCyclingVasaRaceRepublicFazuaOrekaTrainingIsecLululemonStudio"
 	_Manufacturer_name_4 = "Actigraphcorp"
 	_Manufacturer_name_5 = "Invalid"
 )
 
 var (
 	_Manufacturer_index_0 = [...]uint16{0, 6, 22, 28, 34, 37, 40, 45, 50, 55, 62, 68, 76, 89, 97, 107, 112, 121, 126, 132, 143, 148, 151, 157, 172, 178, 189, 199, 208, 215, 228, 234, 246, 259, 271, 281, 295, 303, 309, 314, 322, 329, 341, 350, 362, 368, 385, 395, 402, 409, 419, 425, 435, 448, 458, 471, 479, 488, 508, 527, 532, 540, 546, 557, 561, 580, 600, 605, 611, 624, 634, 640, 649, 657}
-	_Manufacturer_index_1 = [...]uint16{0, 4, 14, 23, 39, 47, 56, 62, 69, 75, 82, 87, 103, 109, 113, 132, 140, 151, 173, 186, 191, 194, 201, 213, 217, 230, 243, 254, 270, 289, 297, 304, 310, 330, 340, 348, 357, 370, 385, 402, 410, 420, 431, 441, 453, 459, 466, 483, 495, 503, 516, 524, 529, 536, 545, 556, 563, 570, 580, 586, 592, 597, 602, 606, 619, 632, 641, 649}
-	_Manufacturer_index_3 = [...]uint16{0, 13, 19, 29, 34, 41, 46, 63, 71, 77, 83, 89, 93, 99, 103, 108, 119, 128, 143, 149, 164, 176, 183, 189, 198, 209, 222, 236, 251, 265, 270, 273, 285, 295, 308, 316, 325, 333, 338, 345, 354, 366, 376, 392, 397, 409, 419, 427, 439, 444, 450, 456, 470, 474, 483, 490, 496, 506, 517, 527, 531, 543, 548}
+	_Manufacturer_index_1 = [...]uint16{0, 4, 14, 23, 39, 47, 56, 62, 69, 75, 82, 87, 103, 109, 113, 132, 140, 151, 173, 186, 191, 194, 201, 213, 217, 230, 243, 254, 270, 289, 297, 304, 310, 330, 340, 348, 357, 370, 385, 402, 410, 420, 431, 441, 453, 459, 466, 483, 495, 503, 516, 524, 529, 536, 545, 556, 563, 570, 580, 586, 592, 597, 602, 606, 619, 632, 641, 649, 662, 671}
+	_Manufacturer_index_3 = [...]uint16{0, 13, 19, 29, 34, 41, 46, 63, 71, 77, 83, 89, 93, 99, 103, 108, 119, 128, 143, 149, 164, 176, 183, 189, 198, 209, 222, 236, 251, 265, 270, 273, 285, 295, 308, 316, 325, 333, 338, 345, 354, 366, 376, 392, 397, 409, 419, 427, 439, 444, 450, 456, 470, 474, 483, 490, 496, 506, 517, 527, 531, 543, 548, 561, 565, 580}
 )
 
 func (i Manufacturer) String() string {
@@ -5109,12 +5143,12 @@ func (i Manufacturer) String() string {
 	case 1 <= i && i <= 73:
 		i -= 1
 		return _Manufacturer_name_0[_Manufacturer_index_0[i]:_Manufacturer_index_0[i+1]]
-	case 76 <= i && i <= 142:
+	case 76 <= i && i <= 144:
 		i -= 76
 		return _Manufacturer_name_1[_Manufacturer_index_1[i]:_Manufacturer_index_1[i+1]]
 	case i == 255:
 		return _Manufacturer_name_2
-	case 257 <= i && i <= 318:
+	case 257 <= i && i <= 321:
 		i -= 257
 		return _Manufacturer_name_3[_Manufacturer_index_3[i]:_Manufacturer_index_3[i+1]]
 	case i == 5759:

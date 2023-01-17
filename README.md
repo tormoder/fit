@@ -21,7 +21,7 @@ are required for running the full test suite and benchmarks.
 
 ### Version Support
 
-The current supported FIT SDK version is **21.84**.
+The current supported FIT SDK version is **21.94**.
 
 Developer data fields are currently only _partially_ supported.
 At the moment the decoder parses Developer Data Field Descriptions, Developer Data ID Messages and Field Description Messages.

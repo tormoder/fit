@@ -478,6 +478,8 @@ func (g *generator) buildOneRun(runs [][]value, typeName string) {
 //	[1]: type name
 //	[2]: size of index element (8 for uint8 etc.)
 //	[3]: less than zero check (for signed types)
+/*
+ */
 const stringOneRun = `func (i %[1]s) String() string {
 	if %[3]si >= %[1]s(len(_%[1]s_index)-1) {
 		return "%[1]s(" + strconv.FormatInt(int64(i), 10) + ")"

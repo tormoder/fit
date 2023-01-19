@@ -33,11 +33,10 @@ func SetLocalTimeZone(fitFile *fit.File) error {
 	)
 
 	switch fitFile.FileId.Type {
-
 	case fit.FileTypeActivity:
 		a, err := fitFile.Activity()
 		if err != nil {
-			return err
+			return fmt.Errorf("error getting activity file: %w", err)
 		}
 
 		if a.Activity == nil {
@@ -62,7 +61,7 @@ func SetLocalTimeZone(fitFile *fit.File) error {
 	case fit.FileTypeActivitySummary:
 		as, err := fitFile.ActivitySummary()
 		if err != nil {
-			return err
+			return fmt.Errorf("error getting activity summary file: %w", err)
 		}
 
 		if as.Activity == nil {
@@ -85,7 +84,6 @@ func SetLocalTimeZone(fitFile *fit.File) error {
 		return fmt.Errorf(
 			"can't set local time zone for provided fit file of type %v",
 			fitFile.FileId.Type)
-
 	}
 
 	if fit.IsBaseTime(activityMsg.LocalTimestamp) {
@@ -114,7 +112,7 @@ func getLocalTimeZone(lat fit.Latitude, lng fit.Longitude) (*time.Location, erro
 
 	location, err := time.LoadLocation(ltz)
 	if err != nil {
-		return nil, fmt.Errorf("error loading location for zone name %q: %v", ltz, err)
+		return nil, fmt.Errorf("error loading location for zone name %q: %w", ltz, err)
 	}
 
 	return location, nil

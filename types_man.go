@@ -28,9 +28,7 @@ const (
 	_Bool_name_1 = "BoolInvalid"
 )
 
-var (
-	_Bool_index_0 = [...]uint8{0, 9, 17}
-)
+var _Bool_index_0 = [...]uint8{0, 9, 17}
 
 func (i Bool) String() string {
 	switch {

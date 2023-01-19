@@ -610,7 +610,7 @@ func (g *codeGenerator) genExpandComponentsMaskShift(msg *Msg, field *Field) {
 	}
 }
 
-func (g *codeGenerator) genExpandComponentsMaskShiftDyn(msg *Msg, sfield *Field, mfield *Field) {
+func (g *codeGenerator) genExpandComponentsMaskShiftDyn(msg *Msg, sfield, mfield *Field) {
 	bits := 0
 	for _, comp := range sfield.Components {
 		tfield, tfound := msg.FieldByName[comp.Name]

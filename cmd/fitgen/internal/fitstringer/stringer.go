@@ -112,7 +112,7 @@ type pkg struct {
 
 // parsePackage analyzes the single package constructed from the patterns and tags.
 // parsePackage exits if there is an error.
-func (g *generator) parsePackage(patterns []string, tags []string) error {
+func (g *generator) parsePackage(patterns, tags []string) error {
 	cfg := &packages.Config{
 		Mode: packages.NeedName | packages.NeedTypes | packages.NeedTypesInfo | packages.NeedSyntax,
 		// TODO: Need to think about constants in test files. Maybe write type_string_test.go
@@ -425,7 +425,7 @@ func (g *generator) declareIndexAndNameVar(run []value, typeName string) {
 }
 
 // createIndexAndNameDecl returns the pair of declarations for the run. The caller will add "const" and "var".
-func (g *generator) createIndexAndNameDecl(run []value, typeName string, suffix string) (string, string) {
+func (g *generator) createIndexAndNameDecl(run []value, typeName, suffix string) (string, string) {
 	b := new(bytes.Buffer)
 	indexes := make([]int, len(run))
 	for i := range run {
@@ -447,7 +447,7 @@ func (g *generator) createIndexAndNameDecl(run []value, typeName string, suffix 
 }
 
 // declareNameVars declares the concatenated names string representing all the values in the runs.
-func (g *generator) declareNameVars(runs [][]value, typeName string, suffix string) {
+func (g *generator) declareNameVars(runs [][]value, typeName, suffix string) {
 	g.Printf("const _%s_name%s = \"", typeName, suffix)
 	for _, run := range runs {
 		for i := range run {

@@ -126,15 +126,15 @@ func main() {
 		l.Fatal(err)
 	}
 
-	if err = os.WriteFile(typesOut, fitProfile.TypesSource, 0o644); err != nil {
+	if err = os.WriteFile(typesOut, fitProfile.TypesSource, 0o600); err != nil {
 		l.Fatalf("typegen: error writing types output file: %v", err)
 	}
 
-	if err = os.WriteFile(messagesOut, fitProfile.MessagesSource, 0o644); err != nil {
+	if err = os.WriteFile(messagesOut, fitProfile.MessagesSource, 0o600); err != nil {
 		l.Fatalf("typegen: error writing messages output file: %v", err)
 	}
 
-	if err = os.WriteFile(profileOut, fitProfile.ProfileSource, 0o644); err != nil {
+	if err = os.WriteFile(profileOut, fitProfile.ProfileSource, 0o600); err != nil {
 		l.Fatalf("typegen: error writing profile output file: %v", err)
 	}
 
@@ -164,7 +164,7 @@ func runStringerOnTypes(typesIn, typesStringOut string, fitTypes []string) error
 		return fmt.Errorf("fitstringer: generation failed: %v", err)
 	}
 
-	if err := os.WriteFile(typesStringOut, output, 0o644); err != nil {
+	if err := os.WriteFile(typesStringOut, output, 0o600); err != nil {
 		return fmt.Errorf("error writing fitstringer output: %v", err)
 	}
 

@@ -126,7 +126,7 @@ func readGoldenProfile(path string) (*profile.Profile, error) {
 	// Format
 	p.TypesSource, err = format.Source(p.TypesSource)
 	if err != nil {
-		return nil, fmt.Errorf("format Types: %v", err)
+		return nil, fmt.Errorf("format Types: %w", err)
 	}
 
 	for scanner.Scan() {
@@ -140,7 +140,7 @@ func readGoldenProfile(path string) (*profile.Profile, error) {
 	// Format
 	p.MessagesSource, err = format.Source(p.MessagesSource)
 	if err != nil {
-		return nil, fmt.Errorf("format Messages: %v", err)
+		return nil, fmt.Errorf("format Messages: %w", err)
 	}
 
 	for scanner.Scan() {
@@ -154,7 +154,7 @@ func readGoldenProfile(path string) (*profile.Profile, error) {
 	// Format
 	p.ProfileSource, err = format.Source(p.ProfileSource)
 	if err != nil {
-		return nil, fmt.Errorf("format Profile: %v", err)
+		return nil, fmt.Errorf("format Profile: %w", err)
 	}
 
 	for scanner.Scan() {

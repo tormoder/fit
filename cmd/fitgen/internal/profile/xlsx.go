@@ -14,7 +14,7 @@ const (
 func parseWorkbook(inputData []byte) (typeData, msgData [][]string, err error) {
 	workbook, err := xlsx.OpenBinary(inputData)
 	if err != nil {
-		return nil, nil, fmt.Errorf("error opening profile workbook: %v", err)
+		return nil, nil, fmt.Errorf("error opening profile workbook: %w", err)
 	}
 
 	// file.ToSlice from the xlsx library adjusted to ignore formatting errors.

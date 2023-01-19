@@ -148,7 +148,7 @@ func TransformMsgs(pmsgs []*PMsg, ftypes map[string]*Type, handleHRSTQuirk bool,
 				sf := &Field{data: sfield}
 				skip, err := sf.transform(true, ftypes, handleHRSTQuirk, logger)
 				if err != nil {
-					return nil, fmt.Errorf("error parsing subfield: %v", err)
+					return nil, fmt.Errorf("error parsing subfield: %w", err)
 				}
 				if skip {
 					continue
@@ -368,14 +368,14 @@ func (f *Field) parseComponents(logger *log.Logger) error {
 		f.Components[i].Bits = strings.TrimSpace(bits[i])
 		f.Components[i].BitsInt, err = strconv.Atoi(f.Components[i].Bits)
 		if err != nil {
-			return fmt.Errorf("parseComponents: error converting bit to integer: %v", err)
+			return fmt.Errorf("parseComponents: error converting bit to integer: %w", err)
 		}
 		bitsTotal += f.Components[i].BitsInt
 		if len(accumulate) == len(components) {
 			tmp := strings.TrimSpace(accumulate[i])
 			f.Components[i].Accumulate, err = strconv.ParseBool(tmp)
 			if err != nil {
-				return fmt.Errorf("parseComponents: %v", err)
+				return fmt.Errorf("parseComponents: %w", err)
 			}
 		}
 	}

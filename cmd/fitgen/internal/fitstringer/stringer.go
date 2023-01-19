@@ -237,7 +237,7 @@ func (g *generator) format() ([]byte, error) {
 	src, err := format.Source(g.buf.Bytes())
 	if err != nil {
 		// Should never happen, but can arise when developing this code.
-		return nil, fmt.Errorf("warning: internal error: invalid Go generated: %s", err)
+		return nil, fmt.Errorf("warning: internal error: invalid Go generated: %w", err)
 	}
 	return src, nil
 }

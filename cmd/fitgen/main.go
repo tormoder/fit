@@ -161,11 +161,11 @@ func main() {
 func runStringerOnTypes(typesIn, typesStringOut string, fitTypes []string) error {
 	output, err := fitstringer.Generate(fitTypes, typesIn)
 	if err != nil {
-		return fmt.Errorf("fitstringer: generation failed: %v", err)
+		return fmt.Errorf("fitstringer: generation failed: %w", err)
 	}
 
 	if err := os.WriteFile(typesStringOut, output, 0o600); err != nil {
-		return fmt.Errorf("error writing fitstringer output: %v", err)
+		return fmt.Errorf("error writing fitstringer output: %w", err)
 	}
 
 	return nil
@@ -176,7 +176,7 @@ func runAllTests(pkgDir string) error {
 	testCmd := exec.Command("go", goTestArgs...)
 	output, err := testCmd.CombinedOutput()
 	if err != nil {
-		return fmt.Errorf("go test: fail: %v\n%s", err, output)
+		return fmt.Errorf("go test: fail: %w\n%s", err, output)
 	}
 
 	return nil
@@ -197,7 +197,7 @@ func logMesgNumVsMessages(msgs []string, l *log.Logger) {
 func readDataFromZIP(path string) ([]byte, error) {
 	r, err := zip.OpenReader(path)
 	if err != nil {
-		return nil, fmt.Errorf("error opening sdk zip file: %v", err)
+		return nil, fmt.Errorf("error opening sdk zip file: %w", err)
 	}
 	defer r.Close()
 
@@ -211,13 +211,13 @@ func readDataFromZIP(path string) ([]byte, error) {
 
 	rc, err := wfile.Open()
 	if err != nil {
-		return nil, fmt.Errorf("error opening zip archive: %v", err)
+		return nil, fmt.Errorf("error opening zip archive: %w", err)
 	}
 	defer rc.Close()
 
 	data, err := io.ReadAll(rc)
 	if err != nil {
-		return nil, fmt.Errorf("error reading %q from archive: %v", wfile.Name, err)
+		return nil, fmt.Errorf("error reading %q from archive: %w", wfile.Name, err)
 	}
 
 	return data, nil

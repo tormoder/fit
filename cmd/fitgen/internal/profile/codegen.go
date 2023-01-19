@@ -82,12 +82,12 @@ func (g *codeGenerator) formatCode() error {
 		for line := 1; s.Scan(); line++ {
 			fmt.Fprintf(&src, "%5d\t%s\n", line, s.Bytes())
 		}
-		return fmt.Errorf("bad Go source code was generated: %v\n%v", err, src.String())
+		return fmt.Errorf("bad Go source code was generated: %w\n%v", err, src.String())
 	}
 	g.Reset()
 	err = (&printer.Config{Mode: printer.TabIndent | printer.UseSpaces, Tabwidth: 8}).Fprint(g, fset, ast)
 	if err != nil {
-		return fmt.Errorf("generated Go source code could not be reformatted: %v", err)
+		return fmt.Errorf("generated Go source code could not be reformatted: %w", err)
 	}
 	return nil
 }

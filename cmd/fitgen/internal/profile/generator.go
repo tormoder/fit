@@ -86,7 +86,7 @@ func NewGenerator(sdkMajVer, sdkMinVer int, workbookData []byte, opts ...Generat
 	var err error
 	g.typesData, g.msgsData, err = parseWorkbook(workbookData)
 	if err != nil {
-		return nil, fmt.Errorf("error creating generator: %v", err)
+		return nil, fmt.Errorf("error creating generator: %w", err)
 	}
 
 	return g, nil
@@ -94,19 +94,19 @@ func NewGenerator(sdkMajVer, sdkMinVer int, workbookData []byte, opts ...Generat
 
 func (g *Generator) GenerateProfile() (*Profile, error) {
 	if err := g.parseTypes(); err != nil {
-		return nil, fmt.Errorf("error parsing types: %v", err)
+		return nil, fmt.Errorf("error parsing types: %w", err)
 	}
 	if err := g.parseMsgs(); err != nil {
-		return nil, fmt.Errorf("error parsing msgs: %v", err)
+		return nil, fmt.Errorf("error parsing msgs: %w", err)
 	}
 	if err := g.genCode(); err != nil {
-		return nil, fmt.Errorf("code generation error: %v", err)
+		return nil, fmt.Errorf("code generation error: %w", err)
 	}
 	if err := g.genStringerTypeInput(); err != nil {
-		return nil, fmt.Errorf("error generating stringer input: %v", err)
+		return nil, fmt.Errorf("error generating stringer input: %w", err)
 	}
 	if err := g.genMsgNumsVsMsgs(); err != nil {
-		return nil, fmt.Errorf("error comparing msgnums vs messages: %v", err)
+		return nil, fmt.Errorf("error comparing msgnums vs messages: %w", err)
 	}
 	return g.p, nil
 }
@@ -116,7 +116,7 @@ func (g *Generator) parseTypes() error {
 
 	parser, err := NewTypeParser(g.typesData)
 	if err != nil {
-		return fmt.Errorf("error creating parser: %v", err)
+		return fmt.Errorf("error creating parser: %w", err)
 	}
 
 	var ptypes []*PType
@@ -133,7 +133,7 @@ func (g *Generator) parseTypes() error {
 
 	g.types, err = TransformTypes(ptypes)
 	if err != nil {
-		return fmt.Errorf("error transforming types: %v", err)
+		return fmt.Errorf("error transforming types: %w", err)
 	}
 
 	return nil
@@ -144,7 +144,7 @@ func (g *Generator) parseMsgs() error {
 
 	parser, err := NewMsgParser(g.msgsData)
 	if err != nil {
-		return fmt.Errorf("parser error: %v", err)
+		return fmt.Errorf("parser error: %w", err)
 	}
 
 	var pmsgs []*PMsg
@@ -154,14 +154,14 @@ func (g *Generator) parseMsgs() error {
 			break
 		}
 		if perr != nil {
-			return fmt.Errorf("parsing error: %v", perr)
+			return fmt.Errorf("parsing error: %w", perr)
 		}
 		pmsgs = append(pmsgs, m)
 	}
 
 	g.msgs, err = TransformMsgs(pmsgs, g.types, g.opts.handleHRSTQuirk, g.opts.logger)
 	if err != nil {
-		return fmt.Errorf("transform error: %v", err)
+		return fmt.Errorf("transform error: %w", err)
 	}
 
 	return nil

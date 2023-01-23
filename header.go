@@ -3,6 +3,7 @@ package fit
 import (
 	"bytes"
 	"encoding/binary"
+	"errors"
 	"fmt"
 	"io"
 
@@ -44,7 +45,7 @@ func NewHeader(v ProtocolVersion, crc bool) Header {
 func (d *decoder) decodeHeader() error {
 	err := binary.Read(d.r, le, &d.h.Size)
 	if err != nil {
-		if err == io.EOF {
+		if errors.Is(err, io.EOF) {
 			return errReadSize
 		}
 		return ioError{"reading size", err}
@@ -55,7 +56,7 @@ func (d *decoder) decodeHeader() error {
 
 	_, err = io.ReadFull(d.r, d.tmp[:d.h.Size-1])
 	if err != nil {
-		if err == io.EOF || err == io.ErrUnexpectedEOF {
+		if errors.Is(err, io.EOF) || errors.Is(err, io.ErrUnexpectedEOF) {
 			return errReadData
 		}
 		return ioError{"reading data", err}

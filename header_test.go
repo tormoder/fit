@@ -2,6 +2,7 @@ package fit
 
 import (
 	"bytes"
+	"errors"
 	"testing"
 
 	"github.com/tormoder/fit/dyncrc16"
@@ -88,7 +89,7 @@ func TestDecodeHeader(t *testing.T) {
 		dec.r = bytes.NewReader(dht.in)
 		dec.crc = dyncrc16.New()
 		err := dec.decodeHeader()
-		if err != dht.err {
+		if !errors.Is(err, dht.err) {
 			t.Errorf("%d: got error: %v, want: %v", i, err, dht.err)
 			continue
 		}

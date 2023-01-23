@@ -233,7 +233,11 @@ func scanForWorkbook(files []*zip.File) *zip.File {
 }
 
 func readDataFromXLSX(path string) ([]byte, error) {
-	return os.ReadFile(path)
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return nil, fmt.Errorf("error reading file: %w", err)
+	}
+	return data, nil
 }
 
 func parseSDKVersionStringFromZipFilePath(path string) string {

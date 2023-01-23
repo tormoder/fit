@@ -57,16 +57,24 @@ func writeProfile(p *profile.Profile, w io.Writer) error {
 		write([]byte(mn))
 		write([]byte{'\n'})
 	}
-	return err
+	if err != nil {
+		return fmt.Errorf("error writing profile: %w", err)
+	}
+
+	return nil
 }
 
 func writeProfileToFile(p *profile.Profile, path string) error {
 	buf := new(bytes.Buffer)
 	err := writeProfile(p, buf)
 	if err != nil {
-		return err
+		return fmt.Errorf("error writing profile to buffer: %w", err)
 	}
-	return os.WriteFile(path, buf.Bytes(), 0o644)
+	if err := os.WriteFile(path, buf.Bytes(), 0o644); err != nil {
+		return fmt.Errorf("error writing to file: %w", err)
+	}
+
+	return nil
 }
 
 func scanLinesPreserveEOL(data []byte, atEOF bool) (advance int, token []byte, err error) {
@@ -88,7 +96,7 @@ func scanLinesPreserveEOL(data []byte, atEOF bool) (advance int, token []byte, e
 func readGoldenProfile(path string) (*profile.Profile, error) {
 	f, err := os.Open(path)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("error opening file for reading: %w", err)
 	}
 	defer func() { _ = f.Close() }() // Sigh. To keep errcheck happy
 
@@ -108,7 +116,7 @@ func readGoldenProfile(path string) (*profile.Profile, error) {
 	scanner.Scan()
 	err = scanner.Err()
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("scan error: %w", err)
 	}
 
 	if !strings.HasPrefix(scanner.Text(), headings[i]) {
@@ -174,7 +182,11 @@ func readGoldenProfile(path string) (*profile.Profile, error) {
 		}
 	}
 
-	return p, scanner.Err()
+	if err := scanner.Err(); err != nil {
+		return nil, fmt.Errorf("scan error: %w", err)
+	}
+
+	return p, nil
 }
 
 func profileFingerprint(p *profile.Profile) uint64 {

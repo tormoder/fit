@@ -122,7 +122,7 @@ func (g *generator) parsePackage(patterns, tags []string) error {
 	}
 	pkgs, err := packages.Load(cfg, patterns...)
 	if err != nil {
-		return err
+		return fmt.Errorf("error loading packages: %w", err)
 	}
 	if len(pkgs) != 1 {
 		return fmt.Errorf("%d packages found", len(pkgs))

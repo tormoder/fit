@@ -94,7 +94,7 @@ func (t *Type) transform() (skip bool, err error) {
 
 	t.BaseType, err = types.BaseFromString(t.data.Header[tBTYPE])
 	if err != nil {
-		return false, err
+		return false, fmt.Errorf("error creating base type from string: %w", err)
 	}
 
 	for _, f := range t.data.Fields {
@@ -278,7 +278,7 @@ func (f *Field) parseType(ftypes map[string]*Type) error {
 	// Assume base type.
 	baseType, err := types.BaseFromString(originalTypeName)
 	if err != nil {
-		return err
+		return fmt.Errorf("error creating base type from string: %w", err)
 	}
 	f.FType = types.MakeNative(baseType, array)
 	f.TypeName = f.FType.GoType()

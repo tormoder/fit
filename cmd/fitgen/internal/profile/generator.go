@@ -122,7 +122,7 @@ func (g *Generator) parseTypes() error {
 	var ptypes []*PType
 	for {
 		t, perr := parser.ParseType()
-		if perr == io.EOF {
+		if errors.Is(perr, io.EOF) {
 			break
 		}
 		if perr != nil {
@@ -150,7 +150,7 @@ func (g *Generator) parseMsgs() error {
 	var pmsgs []*PMsg
 	for {
 		m, perr := parser.ParseMsg()
-		if perr == io.EOF {
+		if errors.Is(perr, io.EOF) {
 			break
 		}
 		if perr != nil {

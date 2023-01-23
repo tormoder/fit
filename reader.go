@@ -480,7 +480,6 @@ func (d *decoder) parseDefinitionMessage(recordHeader byte) (*defmsg, error) {
 			ddfd.devDataIndex = d.tmp[(i*3)+2]
 			dm.devDataFieldDescs[i] = ddfd
 		}
-
 	}
 
 	if d.debug {
@@ -531,7 +530,6 @@ func (d *decoder) validateFieldDef(gmsgnum MesgNum, dfield fieldDef) error {
 		// not greater than the profile base type size. A smaller size
 		// is allowed due to dynamic fields.
 		switch {
-
 		case int(dfield.size) > pfield.t.BaseType().Size():
 			return fmt.Errorf(
 				"field %d: size %d for %v as base type in definition message is greater than size %d for %v as base type from profile",

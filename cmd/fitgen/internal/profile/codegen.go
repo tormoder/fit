@@ -398,7 +398,7 @@ func (g *codeGenerator) genGetterForComponents(msg *Msg, compFieldIndices []int)
 		for _, comp := range f.Components {
 			targetf, found := msg.FieldByName[comp.Name]
 			if !found {
-				panic("genGetterForComponents: target field for component not found")
+				panic(fmt.Sprintf("genGetterForComponents: msg %q: target field for component %q not found", msg.CCName, comp.Name))
 			}
 			if comp.Scale == "" || comp.Scale == "1" {
 				continue

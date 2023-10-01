@@ -74,3 +74,4 @@ $ go get github.com/tormoder/fit
 - [bpg](https://github.com/bpg)
 - [pieterclaerhout](https://github.com/pieterclaerhout)
 - [beyoung](https://github.com/beyoung)
+- [dudanian](https://github.com/dudanian)

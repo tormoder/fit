@@ -86,7 +86,7 @@ func (f Fit) Array() bool {
 }
 
 func (f Fit) BaseType() Base {
-	return Base(f & 0x1F)
+	return decompress(byte(f))
 }
 
 func (f Fit) Valid() bool {

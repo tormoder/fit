@@ -481,8 +481,8 @@ func TestWriteDefMesg(t *testing.T) {
 		byte(MesgNumFileId & 0xFF), byte(MesgNumFileId >> 8),
 		3,
 		0, 1, 0,
-		1, 2, 4,
-		2, 2, 4,
+		1, 2, 132,
+		2, 2, 132,
 	}
 
 	if !bytes.Equal(buf.Bytes(), expect) {

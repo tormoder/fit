@@ -9,34 +9,88 @@ import (
 )
 
 const (
-	pkg         = "types"
-	typeNumMask = 0x1F
+	pkg           = "types"
+	typeNumMask   = 0x1F
+	multiByteFlag = 0x80
 )
 
 type Base byte
 
+// Base types for fit data.
+// The base 5 bits increase by 1 for each definition with all multi-byte number types having the MSB set.
 const (
 	BaseEnum    Base = 0x00
 	BaseSint8   Base = 0x01 // 2's complement format
 	BaseUint8   Base = 0x02
-	BaseSint16  Base = 0x03 // 2's complement format
-	BaseUint16  Base = 0x04
-	BaseSint32  Base = 0x05 // 2's complement format
-	BaseUint32  Base = 0x06
+	BaseSint16  Base = 0x83 // 2's complement format
+	BaseUint16  Base = 0x84
+	BaseSint32  Base = 0x85 // 2's complement format
+	BaseUint32  Base = 0x86
 	BaseString  Base = 0x07 // Null terminated string encoded in UTF-8
-	BaseFloat32 Base = 0x08
-	BaseFloat64 Base = 0x09
+	BaseFloat32 Base = 0x88
+	BaseFloat64 Base = 0x89
 	BaseUint8z  Base = 0x0A
-	BaseUint16z Base = 0x0B
-	BaseUint32z Base = 0x0C
+	BaseUint16z Base = 0x8B
+	BaseUint32z Base = 0x8C
 	BaseByte    Base = 0x0D // Array of bytes. Field is invalid if all bytes are invalid
-	BaseSint64  Base = 0x0E // 2's complement format
-	BaseUint64  Base = 0x0F
-	BaseUint64z Base = 0x10
+	BaseSint64  Base = 0x8E // 2's complement format
+	BaseUint64  Base = 0x8F
+	BaseUint64z Base = 0x90
 )
 
-func DecodeBase(b byte) Base {
-	return Base(b & typeNumMask)
+// Internal compressed representation of certain base types.
+// With this, we can fit all base types in 5 bits as opposed to 8 bits.
+// Base types should be decompressed before use.
+const (
+	compressedSint16  byte = 0x03
+	compressedUint16  byte = 0x04
+	compressedSint32  byte = 0x05
+	compressedUint32  byte = 0x06
+	compressedFloat32 byte = 0x08
+	compressedFloat64 byte = 0x09
+	compressedUint16z byte = 0x0B
+	compressedUint32z byte = 0x0C
+	compressedSint64  byte = 0x0E
+	compressedUint64  byte = 0x0F
+	compressedUint64z byte = 0x10
+)
+
+func decompress(b byte) Base {
+	b = b & typeNumMask
+	switch b {
+	case compressedSint16:
+		return BaseSint16
+	case compressedUint16:
+		return BaseUint16
+	case compressedSint32:
+		return BaseSint32
+	case compressedUint32:
+		return BaseUint32
+	case compressedFloat32:
+		return BaseFloat32
+	case compressedFloat64:
+		return BaseFloat64
+	case compressedUint16z:
+		return BaseUint16z
+	case compressedUint32z:
+		return BaseUint32z
+	case compressedSint64:
+		return BaseSint64
+	case compressedUint64:
+		return BaseUint64
+	case compressedUint64z:
+		return BaseUint64z
+	default:
+		return Base(b)
+	}
+}
+
+func (t Base) index() byte {
+	return byte(t) & typeNumMask
+}
+
+func (t Base) multibyte() bool {
+	return (byte(t) & multiByteFlag) == multiByteFlag
 }
 
 func (t Base) Float() bool {
@@ -44,19 +98,19 @@ func (t Base) Float() bool {
 }
 
 func (t Base) GoInvalidValue() string {
-	return binvalid[t]
+	return binvalid[t.index()]
 }
 
 func (t Base) GoType() string {
-	return bgotype[t]
+	return bgotype[t.index()]
 }
 
 func (t Base) Integer() bool {
-	return binteger[t]
+	return binteger[t.index()]
 }
 
 func (t Base) Known() bool {
-	return int(t) < len(bname)
+	return int(t.index()) < len(bname) && (t.multibyte() == (t.Size() > 1))
 }
 
 func (t Base) PkgString() string {
@@ -64,23 +118,23 @@ func (t Base) PkgString() string {
 }
 
 func (t Base) Signed() bool {
-	return bsigned[t]
+	return bsigned[t.index()]
 }
 
 func (t Base) Size() int {
-	return bsize[t]
+	return bsize[t.index()]
 }
 
 func (t Base) String() string {
 	if t.Known() {
-		return bname[t]
+		return bname[t.index()]
 	}
 	return fmt.Sprintf("unknown (0x%X)", byte(t))
 }
 
 func (t Base) Invalid() interface{} {
 	if t.Known() {
-		return goinvalid[t]
+		return goinvalid[t.index()]
 	}
 	return fmt.Sprintf("unknown (0x%X)", byte(t))
 }

@@ -48,7 +48,7 @@ and
 Using Go modules:
 
 ```
-$ go get github.com/tormoder/fit@v0.14.0
+$ go get github.com/tormoder/fit@v0.15.0
 ```
 
 Using `$GOPATH`:

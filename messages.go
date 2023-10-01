@@ -1,6 +1,6 @@
 // Code generated using the program found in 'cmd/fitgen/main.go'. DO NOT EDIT.
 
-// SDK Version: 21.94
+// SDK Version: 21.115
 
 package fit
 
@@ -660,6 +660,16 @@ func NewOhrSettingsMsg() *OhrSettingsMsg {
 	return &OhrSettingsMsg{}
 }
 
+// TimeInZoneMsg represents the time_in_zone FIT message type.
+type TimeInZoneMsg struct {
+}
+
+// NewTimeInZoneMsg returns a time_in_zone FIT message
+// initialized to all-invalid values.
+func NewTimeInZoneMsg() *TimeInZoneMsg {
+	return &TimeInZoneMsg{}
+}
+
 // ZonesTargetMsg represents the zones_target FIT message type.
 type ZonesTargetMsg struct {
 	MaxHeartRate             uint8
@@ -860,6 +870,16 @@ func NewDiveAlarmMsg() *DiveAlarmMsg {
 	return &DiveAlarmMsg{}
 }
 
+// DiveApneaAlarmMsg represents the dive_apnea_alarm FIT message type.
+type DiveApneaAlarmMsg struct {
+}
+
+// NewDiveApneaAlarmMsg returns a dive_apnea_alarm FIT message
+// initialized to all-invalid values.
+func NewDiveApneaAlarmMsg() *DiveApneaAlarmMsg {
+	return &DiveApneaAlarmMsg{}
+}
+
 // DiveGasMsg represents the dive_gas FIT message type.
 type DiveGasMsg struct {
 }
@@ -986,6 +1006,8 @@ type SessionMsg struct {
 	TrainingStressScore          uint16
 	IntensityFactor              uint16
 	LeftRightBalance             LeftRightBalance100
+	EndPositionLat               Latitude
+	EndPositionLong              Longitude
 	AvgStrokeCount               uint32
 	AvgStrokeDistance            uint16
 	SwimStroke                   SwimStroke
@@ -1027,9 +1049,10 @@ type SessionMsg struct {
 	AvgVerticalOscillation       uint16
 	AvgStanceTimePercent         uint16
 	AvgStanceTime                uint16
-	AvgFractionalCadence         uint8 // fractional part of the avg_cadence
-	MaxFractionalCadence         uint8 // fractional part of the max_cadence
-	TotalFractionalCycles        uint8 // fractional part of the total_cycles
+	AvgFractionalCadence         uint8  // fractional part of the avg_cadence
+	MaxFractionalCadence         uint8  // fractional part of the max_cadence
+	TotalFractionalCycles        uint8  // fractional part of the total_cycles
+	SportProfileName             string // Sport name from associated sport mesg
 	SportIndex                   uint8
 	EnhancedAvgSpeed             uint32 // total_distance / total_timer_time
 	EnhancedMaxSpeed             uint32
@@ -1038,6 +1061,7 @@ type SessionMsg struct {
 	EnhancedMaxAltitude          uint32
 	TotalAnaerobicTrainingEffect uint8
 	AvgVam                       uint16
+	MinTemperature               int8
 }
 
 // NewSessionMsg returns a session FIT message
@@ -1083,6 +1107,8 @@ func NewSessionMsg() *SessionMsg {
 		TrainingStressScore:          0xFFFF,
 		IntensityFactor:              0xFFFF,
 		LeftRightBalance:             0xFFFF,
+		EndPositionLat:               NewLatitudeInvalid(),
+		EndPositionLong:              NewLongitudeInvalid(),
 		AvgStrokeCount:               0xFFFFFFFF,
 		AvgStrokeDistance:            0xFFFF,
 		SwimStroke:                   0xFF,
@@ -1127,6 +1153,7 @@ func NewSessionMsg() *SessionMsg {
 		AvgFractionalCadence:         0xFF,
 		MaxFractionalCadence:         0xFF,
 		TotalFractionalCycles:        0xFF,
+		SportProfileName:             "",
 		SportIndex:                   0xFF,
 		EnhancedAvgSpeed:             0xFFFFFFFF,
 		EnhancedMaxSpeed:             0xFFFFFFFF,
@@ -1135,6 +1162,7 @@ func NewSessionMsg() *SessionMsg {
 		EnhancedMaxAltitude:          0xFFFFFFFF,
 		TotalAnaerobicTrainingEffect: 0xFF,
 		AvgVam:                       0xFFFF,
+		MinTemperature:               0x7F,
 	}
 }
 
@@ -1786,6 +1814,7 @@ type LapMsg struct {
 	EnhancedMinAltitude           uint32
 	EnhancedMaxAltitude           uint32
 	AvgVam                        uint16
+	MinTemperature                int8
 }
 
 // NewLapMsg returns a lap FIT message
@@ -1875,6 +1904,7 @@ func NewLapMsg() *LapMsg {
 		EnhancedMinAltitude:           0xFFFFFFFF,
 		EnhancedMaxAltitude:           0xFFFFFFFF,
 		AvgVam:                        0xFFFF,
+		MinTemperature:                0x7F,
 	}
 }
 
@@ -3195,6 +3225,8 @@ func (x *DeviceInfoMsg) GetDeviceType() interface{} {
 		return AntplusDeviceType(x.DeviceType)
 	case SourceTypeAnt:
 		return uint8(x.DeviceType)
+	case SourceTypeLocal:
+		return LocalDeviceType(x.DeviceType)
 	default:
 		return x.DeviceType
 	}
@@ -3519,7 +3551,7 @@ func (x *AviationAttitudeMsg) GetPitchScaled() []float64 {
 	}
 	s := make([]float64, len(x.Pitch))
 	for i, v := range x.Pitch {
-		s[i] = float64(v) / 10430.38
+		s[i] = float64(v) / 10430.379999999999
 	}
 	return s
 }
@@ -3533,7 +3565,7 @@ func (x *AviationAttitudeMsg) GetRollScaled() []float64 {
 	}
 	s := make([]float64, len(x.Roll))
 	for i, v := range x.Roll {
-		s[i] = float64(v) / 10430.38
+		s[i] = float64(v) / 10430.379999999999
 	}
 	return s
 }
@@ -3589,7 +3621,7 @@ func (x *AviationAttitudeMsg) GetTrackScaled() []float64 {
 	}
 	s := make([]float64, len(x.Track))
 	for i, v := range x.Track {
-		s[i] = float64(v) / 10430.38
+		s[i] = float64(v) / 10430.379999999999
 	}
 	return s
 }
@@ -3669,6 +3701,16 @@ type JumpMsg struct {
 // initialized to all-invalid values.
 func NewJumpMsg() *JumpMsg {
 	return &JumpMsg{}
+}
+
+// SplitMsg represents the split FIT message type.
+type SplitMsg struct {
+}
+
+// NewSplitMsg returns a split FIT message
+// initialized to all-invalid values.
+func NewSplitMsg() *SplitMsg {
+	return &SplitMsg{}
 }
 
 // ClimbProMsg represents the climb_pro FIT message type.
@@ -3855,24 +3897,26 @@ func (x *SegmentLeaderboardEntryMsg) GetSegmentTimeScaled() float64 {
 
 // SegmentPointMsg represents the segment_point FIT message type.
 type SegmentPointMsg struct {
-	MessageIndex MessageIndex
-	PositionLat  Latitude
-	PositionLong Longitude
-	Distance     uint32   // Accumulated distance along the segment at the described point
-	Altitude     uint16   // Accumulated altitude along the segment at the described point
-	LeaderTime   []uint32 // Accumualted time each leader board member required to reach the described point. This value is zero for all leader board members at the starting point of the segment.
+	MessageIndex     MessageIndex
+	PositionLat      Latitude
+	PositionLong     Longitude
+	Distance         uint32   // Accumulated distance along the segment at the described point
+	Altitude         uint16   // Accumulated altitude along the segment at the described point
+	LeaderTime       []uint32 // Accumualted time each leader board member required to reach the described point. This value is zero for all leader board members at the starting point of the segment.
+	EnhancedAltitude uint32   // Accumulated altitude along the segment at the described point
 }
 
 // NewSegmentPointMsg returns a segment_point FIT message
 // initialized to all-invalid values.
 func NewSegmentPointMsg() *SegmentPointMsg {
 	return &SegmentPointMsg{
-		MessageIndex: 0xFFFF,
-		PositionLat:  NewLatitudeInvalid(),
-		PositionLong: NewLongitudeInvalid(),
-		Distance:     0xFFFFFFFF,
-		Altitude:     0xFFFF,
-		LeaderTime:   nil,
+		MessageIndex:     0xFFFF,
+		PositionLat:      NewLatitudeInvalid(),
+		PositionLong:     NewLongitudeInvalid(),
+		Distance:         0xFFFFFFFF,
+		Altitude:         0xFFFF,
+		LeaderTime:       nil,
+		EnhancedAltitude: 0xFFFFFFFF,
 	}
 }
 
@@ -3910,6 +3954,25 @@ func (x *SegmentPointMsg) GetLeaderTimeScaled() []float64 {
 		s[i] = float64(v) / 1000
 	}
 	return s
+}
+
+// GetEnhancedAltitudeScaled returns EnhancedAltitude
+// with scale and any offset applied. NaN is returned if the
+// field has an invalid value (i.e. has not been set).
+// Units: m
+func (x *SegmentPointMsg) GetEnhancedAltitudeScaled() float64 {
+	if x.EnhancedAltitude == 0xFFFFFFFF {
+		return math.NaN()
+	}
+	return float64(x.EnhancedAltitude)/5 - 500
+}
+
+func (x *SegmentPointMsg) expandComponents() {
+	if x.Altitude != 0xFFFF {
+		x.EnhancedAltitude = uint32(
+			(x.Altitude >> 0) & ((1 << 16) - 1),
+		)
+	}
 }
 
 // SegmentLapMsg represents the segment_lap FIT message type.
@@ -3987,6 +4050,9 @@ type SegmentLapMsg struct {
 	TotalFractionalCycles       uint8 // fractional part of the total_cycles
 	FrontGearShiftCount         uint16
 	RearGearShiftCount          uint16
+	EnhancedAvgAltitude         uint32
+	EnhancedMaxAltitude         uint32
+	EnhancedMinAltitude         uint32
 }
 
 // NewSegmentLapMsg returns a segment_lap FIT message
@@ -4066,6 +4132,9 @@ func NewSegmentLapMsg() *SegmentLapMsg {
 		TotalFractionalCycles:       0xFF,
 		FrontGearShiftCount:         0xFFFF,
 		RearGearShiftCount:          0xFFFF,
+		EnhancedAvgAltitude:         0xFFFFFFFF,
+		EnhancedMaxAltitude:         0xFFFFFFFF,
+		EnhancedMinAltitude:         0xFFFFFFFF,
 	}
 }
 
@@ -4422,6 +4491,39 @@ func (x *SegmentLapMsg) GetTotalFractionalCyclesScaled() float64 {
 	return float64(x.TotalFractionalCycles) / 128
 }
 
+// GetEnhancedAvgAltitudeScaled returns EnhancedAvgAltitude
+// with scale and any offset applied. NaN is returned if the
+// field has an invalid value (i.e. has not been set).
+// Units: m
+func (x *SegmentLapMsg) GetEnhancedAvgAltitudeScaled() float64 {
+	if x.EnhancedAvgAltitude == 0xFFFFFFFF {
+		return math.NaN()
+	}
+	return float64(x.EnhancedAvgAltitude)/5 - 500
+}
+
+// GetEnhancedMaxAltitudeScaled returns EnhancedMaxAltitude
+// with scale and any offset applied. NaN is returned if the
+// field has an invalid value (i.e. has not been set).
+// Units: m
+func (x *SegmentLapMsg) GetEnhancedMaxAltitudeScaled() float64 {
+	if x.EnhancedMaxAltitude == 0xFFFFFFFF {
+		return math.NaN()
+	}
+	return float64(x.EnhancedMaxAltitude)/5 - 500
+}
+
+// GetEnhancedMinAltitudeScaled returns EnhancedMinAltitude
+// with scale and any offset applied. NaN is returned if the
+// field has an invalid value (i.e. has not been set).
+// Units: m
+func (x *SegmentLapMsg) GetEnhancedMinAltitudeScaled() float64 {
+	if x.EnhancedMinAltitude == 0xFFFFFFFF {
+		return math.NaN()
+	}
+	return float64(x.EnhancedMinAltitude)/5 - 500
+}
+
 // GetTotalCycles returns the appropriate TotalCycles
 // subfield if a matching reference field/value combination is found.
 // If none of the reference field/value combinations are true
@@ -4432,6 +4534,24 @@ func (x *SegmentLapMsg) GetTotalCycles() interface{} {
 		return uint32(x.TotalCycles)
 	default:
 		return x.TotalCycles
+	}
+}
+
+func (x *SegmentLapMsg) expandComponents() {
+	if x.AvgAltitude != 0xFFFF {
+		x.EnhancedAvgAltitude = uint32(
+			(x.AvgAltitude >> 0) & ((1 << 16) - 1),
+		)
+	}
+	if x.MaxAltitude != 0xFFFF {
+		x.EnhancedMaxAltitude = uint32(
+			(x.MaxAltitude >> 0) & ((1 << 16) - 1),
+		)
+	}
+	if x.MinAltitude != 0xFFFF {
+		x.EnhancedMinAltitude = uint32(
+			(x.MinAltitude >> 0) & ((1 << 16) - 1),
+		)
 	}
 }
 
@@ -4462,6 +4582,7 @@ func NewSegmentFileMsg() *SegmentFileMsg {
 
 // WorkoutMsg represents the workout FIT message type.
 type WorkoutMsg struct {
+	MessageIndex   MessageIndex
 	Sport          Sport
 	Capabilities   WorkoutCapabilities
 	NumValidSteps  uint16 // number of valid steps
@@ -4475,6 +4596,7 @@ type WorkoutMsg struct {
 // initialized to all-invalid values.
 func NewWorkoutMsg() *WorkoutMsg {
 	return &WorkoutMsg{
+		MessageIndex:   0xFFFF,
 		Sport:          0xFF,
 		Capabilities:   0x00000000,
 		NumValidSteps:  0xFFFF,
@@ -4835,6 +4957,7 @@ type WeightScaleMsg struct {
 	MetabolicAge      uint8
 	VisceralFatRating uint8
 	UserProfileIndex  MessageIndex // Associates this weight scale message to a user. This corresponds to the index of the user profile message in the weight scale file.
+	Bmi               uint16
 }
 
 // NewWeightScaleMsg returns a weight_scale FIT message
@@ -4854,6 +4977,7 @@ func NewWeightScaleMsg() *WeightScaleMsg {
 		MetabolicAge:      0xFF,
 		VisceralFatRating: 0xFF,
 		UserProfileIndex:  0xFFFF,
+		Bmi:               0xFFFF,
 	}
 }
 
@@ -4943,6 +5067,17 @@ func (x *WeightScaleMsg) GetActiveMetScaled() float64 {
 		return math.NaN()
 	}
 	return float64(x.ActiveMet) / 4
+}
+
+// GetBmiScaled returns Bmi
+// with scale and any offset applied. NaN is returned if the
+// field has an invalid value (i.e. has not been set).
+// Units: kg/m^2
+func (x *WeightScaleMsg) GetBmiScaled() float64 {
+	if x.Bmi == 0xFFFF {
+		return math.NaN()
+	}
+	return float64(x.Bmi) / 10
 }
 
 // BloodPressureMsg represents the blood_pressure FIT message type.
@@ -5074,6 +5209,33 @@ func (x *MonitoringMsg) GetCycles() interface{} {
 	}
 }
 
+// MonitoringHrDataMsg represents the monitoring_hr_data FIT message type.
+type MonitoringHrDataMsg struct {
+	Timestamp                  time.Time // Must align to logging interval, for example, time must be 00:00:00 for daily log.
+	RestingHeartRate           uint8     // 7-day rolling average
+	CurrentDayRestingHeartRate uint8     // RHR for today only. (Feeds into 7-day average)
+}
+
+// NewMonitoringHrDataMsg returns a monitoring_hr_data FIT message
+// initialized to all-invalid values.
+func NewMonitoringHrDataMsg() *MonitoringHrDataMsg {
+	return &MonitoringHrDataMsg{
+		Timestamp:                  timeBase,
+		RestingHeartRate:           0xFF,
+		CurrentDayRestingHeartRate: 0xFF,
+	}
+}
+
+// Spo2DataMsg represents the spo2_data FIT message type.
+type Spo2DataMsg struct {
+}
+
+// NewSpo2DataMsg returns a spo2_data FIT message
+// initialized to all-invalid values.
+func NewSpo2DataMsg() *Spo2DataMsg {
+	return &Spo2DataMsg{}
+}
+
 // HrMsg represents the hr FIT message type.
 type HrMsg struct {
 	Timestamp           time.Time
@@ -5149,6 +5311,16 @@ func NewStressLevelMsg() *StressLevelMsg {
 	return &StressLevelMsg{}
 }
 
+// MaxMetDataMsg represents the max_met_data FIT message type.
+type MaxMetDataMsg struct {
+}
+
+// NewMaxMetDataMsg returns a max_met_data FIT message
+// initialized to all-invalid values.
+func NewMaxMetDataMsg() *MaxMetDataMsg {
+	return &MaxMetDataMsg{}
+}
+
 // MemoGlobMsg represents the memo_glob FIT message type.
 type MemoGlobMsg struct {
 }
@@ -5157,6 +5329,16 @@ type MemoGlobMsg struct {
 // initialized to all-invalid values.
 func NewMemoGlobMsg() *MemoGlobMsg {
 	return &MemoGlobMsg{}
+}
+
+// SleepLevelMsg represents the sleep_level FIT message type.
+type SleepLevelMsg struct {
+}
+
+// NewSleepLevelMsg returns a sleep_level FIT message
+// initialized to all-invalid values.
+func NewSleepLevelMsg() *SleepLevelMsg {
+	return &SleepLevelMsg{}
 }
 
 // AntChannelIdMsg represents the ant_channel_id FIT message type.
@@ -5401,4 +5583,74 @@ func (x *HrvMsg) GetTimeScaled() []float64 {
 		s[i] = float64(v) / 1000
 	}
 	return s
+}
+
+// BeatIntervalsMsg represents the beat_intervals FIT message type.
+type BeatIntervalsMsg struct {
+}
+
+// NewBeatIntervalsMsg returns a beat_intervals FIT message
+// initialized to all-invalid values.
+func NewBeatIntervalsMsg() *BeatIntervalsMsg {
+	return &BeatIntervalsMsg{}
+}
+
+// HrvStatusSummaryMsg represents the hrv_status_summary FIT message type.
+type HrvStatusSummaryMsg struct {
+}
+
+// NewHrvStatusSummaryMsg returns a hrv_status_summary FIT message
+// initialized to all-invalid values.
+func NewHrvStatusSummaryMsg() *HrvStatusSummaryMsg {
+	return &HrvStatusSummaryMsg{}
+}
+
+// HrvValueMsg represents the hrv_value FIT message type.
+type HrvValueMsg struct {
+}
+
+// NewHrvValueMsg returns a hrv_value FIT message
+// initialized to all-invalid values.
+func NewHrvValueMsg() *HrvValueMsg {
+	return &HrvValueMsg{}
+}
+
+// RespirationRateMsg represents the respiration_rate FIT message type.
+type RespirationRateMsg struct {
+}
+
+// NewRespirationRateMsg returns a respiration_rate FIT message
+// initialized to all-invalid values.
+func NewRespirationRateMsg() *RespirationRateMsg {
+	return &RespirationRateMsg{}
+}
+
+// TankUpdateMsg represents the tank_update FIT message type.
+type TankUpdateMsg struct {
+}
+
+// NewTankUpdateMsg returns a tank_update FIT message
+// initialized to all-invalid values.
+func NewTankUpdateMsg() *TankUpdateMsg {
+	return &TankUpdateMsg{}
+}
+
+// TankSummaryMsg represents the tank_summary FIT message type.
+type TankSummaryMsg struct {
+}
+
+// NewTankSummaryMsg returns a tank_summary FIT message
+// initialized to all-invalid values.
+func NewTankSummaryMsg() *TankSummaryMsg {
+	return &TankSummaryMsg{}
+}
+
+// SleepAssessmentMsg represents the sleep_assessment FIT message type.
+type SleepAssessmentMsg struct {
+}
+
+// NewSleepAssessmentMsg returns a sleep_assessment FIT message
+// initialized to all-invalid values.
+func NewSleepAssessmentMsg() *SleepAssessmentMsg {
+	return &SleepAssessmentMsg{}
 }

@@ -1,6 +1,6 @@
 // Code generated using the program found in 'cmd/fitgen/main.go'. DO NOT EDIT.
 
-// SDK Version: 21.94
+// SDK Version: 21.115
 
 package fit
 
@@ -15,7 +15,7 @@ const (
 	ProfileMajorVersion = 21
 
 	// ProfileMinorVersion is the current supported profile minor version of the FIT SDK.
-	ProfileMinorVersion = 94
+	ProfileMinorVersion = 115
 )
 
 var knownMsgNums = map[MesgNum]bool{
@@ -96,16 +96,30 @@ var knownMsgNums = map[MesgNum]bool{
 	MesgNumMagnetometerData:            true,
 	MesgNumBarometerData:               true,
 	MesgNumOneDSensorCalibration:       true,
+	MesgNumMonitoringHrData:            true,
+	MesgNumTimeInZone:                  true,
 	MesgNumSet:                         true,
 	MesgNumStressLevel:                 true,
+	MesgNumMaxMetData:                  true,
 	MesgNumDiveSettings:                true,
 	MesgNumDiveGas:                     true,
 	MesgNumDiveAlarm:                   true,
 	MesgNumExerciseTitle:               true,
 	MesgNumDiveSummary:                 true,
+	MesgNumSpo2Data:                    true,
+	MesgNumSleepLevel:                  true,
 	MesgNumJump:                        true,
+	MesgNumBeatIntervals:               true,
+	MesgNumRespirationRate:             true,
+	MesgNumSplit:                       true,
 	MesgNumClimbPro:                    true,
+	MesgNumTankUpdate:                  true,
+	MesgNumTankSummary:                 true,
+	MesgNumSleepAssessment:             true,
+	MesgNumHrvStatusSummary:            true,
+	MesgNumHrvValue:                    true,
 	MesgNumDeviceAuxBatteryInfo:        true,
+	MesgNumDiveApneaAlarm:              true,
 }
 
 var (
@@ -299,6 +313,8 @@ var _fields = [...][256]*field{
 
 	MesgNumOhrSettings: {},
 
+	MesgNumTimeInZone: {},
+
 	MesgNumZonesTarget: {
 		1: {0, 1, types.Fit(2), 1},
 		2: {1, 2, types.Fit(2), 1},
@@ -351,6 +367,8 @@ var _fields = [...][256]*field{
 	},
 
 	MesgNumDiveAlarm: {},
+
+	MesgNumDiveApneaAlarm: {},
 
 	MesgNumDiveGas: {},
 
@@ -421,58 +439,62 @@ var _fields = [...][256]*field{
 		35:  {36, 35, types.Fit(4), 1},
 		36:  {37, 36, types.Fit(4), 1},
 		37:  {38, 37, types.Fit(4), 1},
-		41:  {39, 41, types.Fit(6), 1},
-		42:  {40, 42, types.Fit(4), 1},
-		43:  {41, 43, types.Fit(0), 1},
-		44:  {42, 44, types.Fit(4), 1},
-		45:  {43, 45, types.Fit(4), 1},
-		46:  {44, 46, types.Fit(0), 1},
-		47:  {45, 47, types.Fit(4), 1},
-		48:  {46, 48, types.Fit(6), 1},
-		49:  {47, 49, types.Fit(4), 1},
-		50:  {48, 50, types.Fit(4), 1},
-		51:  {49, 51, types.Fit(2), 1},
-		52:  {50, 52, types.Fit(3), 1},
-		53:  {51, 53, types.Fit(3), 1},
-		54:  {52, 54, types.Fit(3), 1},
-		55:  {53, 55, types.Fit(3), 1},
-		56:  {54, 56, types.Fit(3), 1},
-		57:  {55, 57, types.Fit(1), 1},
-		58:  {56, 58, types.Fit(1), 1},
-		59:  {57, 59, types.Fit(6), 1},
-		60:  {58, 60, types.Fit(3), 1},
-		61:  {59, 61, types.Fit(3), 1},
-		62:  {60, 62, types.Fit(3), 1},
-		63:  {61, 63, types.Fit(3), 1},
-		64:  {62, 64, types.Fit(2), 1},
-		65:  {63, 65, types.Fit(38), 1},
-		66:  {64, 66, types.Fit(38), 1},
-		67:  {65, 67, types.Fit(38), 1},
-		68:  {66, 68, types.Fit(38), 1},
-		69:  {67, 69, types.Fit(6), 1},
-		70:  {68, 70, types.Fit(4), 1},
-		71:  {69, 71, types.Fit(4), 1},
-		82:  {70, 82, types.Fit(4), 1},
-		83:  {71, 83, types.Fit(4), 1},
-		84:  {72, 84, types.Fit(7), 1},
-		85:  {73, 85, types.Fit(36), 1},
-		86:  {74, 86, types.Fit(36), 1},
-		87:  {75, 87, types.Fit(4), 1},
-		88:  {76, 88, types.Fit(4), 1},
-		89:  {77, 89, types.Fit(4), 1},
-		90:  {78, 90, types.Fit(4), 1},
-		91:  {79, 91, types.Fit(4), 1},
-		92:  {80, 92, types.Fit(2), 1},
-		93:  {81, 93, types.Fit(2), 1},
-		94:  {82, 94, types.Fit(2), 1},
-		111: {83, 111, types.Fit(2), 1},
-		124: {84, 124, types.Fit(6), 1},
-		125: {85, 125, types.Fit(6), 1},
-		126: {86, 126, types.Fit(6), 1},
-		127: {87, 127, types.Fit(6), 1},
-		128: {88, 128, types.Fit(6), 1},
-		137: {89, 137, types.Fit(2), 1},
-		139: {90, 139, types.Fit(4), 1},
+		38:  {39, 38, types.Fit(197), 1},
+		39:  {40, 39, types.Fit(261), 1},
+		41:  {41, 41, types.Fit(6), 1},
+		42:  {42, 42, types.Fit(4), 1},
+		43:  {43, 43, types.Fit(0), 1},
+		44:  {44, 44, types.Fit(4), 1},
+		45:  {45, 45, types.Fit(4), 1},
+		46:  {46, 46, types.Fit(0), 1},
+		47:  {47, 47, types.Fit(4), 1},
+		48:  {48, 48, types.Fit(6), 1},
+		49:  {49, 49, types.Fit(4), 1},
+		50:  {50, 50, types.Fit(4), 1},
+		51:  {51, 51, types.Fit(2), 1},
+		52:  {52, 52, types.Fit(3), 1},
+		53:  {53, 53, types.Fit(3), 1},
+		54:  {54, 54, types.Fit(3), 1},
+		55:  {55, 55, types.Fit(3), 1},
+		56:  {56, 56, types.Fit(3), 1},
+		57:  {57, 57, types.Fit(1), 1},
+		58:  {58, 58, types.Fit(1), 1},
+		59:  {59, 59, types.Fit(6), 1},
+		60:  {60, 60, types.Fit(3), 1},
+		61:  {61, 61, types.Fit(3), 1},
+		62:  {62, 62, types.Fit(3), 1},
+		63:  {63, 63, types.Fit(3), 1},
+		64:  {64, 64, types.Fit(2), 1},
+		65:  {65, 65, types.Fit(38), 1},
+		66:  {66, 66, types.Fit(38), 1},
+		67:  {67, 67, types.Fit(38), 1},
+		68:  {68, 68, types.Fit(38), 1},
+		69:  {69, 69, types.Fit(6), 1},
+		70:  {70, 70, types.Fit(4), 1},
+		71:  {71, 71, types.Fit(4), 1},
+		82:  {72, 82, types.Fit(4), 1},
+		83:  {73, 83, types.Fit(4), 1},
+		84:  {74, 84, types.Fit(7), 1},
+		85:  {75, 85, types.Fit(36), 1},
+		86:  {76, 86, types.Fit(36), 1},
+		87:  {77, 87, types.Fit(4), 1},
+		88:  {78, 88, types.Fit(4), 1},
+		89:  {79, 89, types.Fit(4), 1},
+		90:  {80, 90, types.Fit(4), 1},
+		91:  {81, 91, types.Fit(4), 1},
+		92:  {82, 92, types.Fit(2), 1},
+		93:  {83, 93, types.Fit(2), 1},
+		94:  {84, 94, types.Fit(2), 1},
+		110: {85, 110, types.Fit(7), 16},
+		111: {86, 111, types.Fit(2), 1},
+		124: {87, 124, types.Fit(6), 1},
+		125: {88, 125, types.Fit(6), 1},
+		126: {89, 126, types.Fit(6), 1},
+		127: {90, 127, types.Fit(6), 1},
+		128: {91, 128, types.Fit(6), 1},
+		137: {92, 137, types.Fit(2), 1},
+		139: {93, 139, types.Fit(4), 1},
+		150: {94, 150, types.Fit(1), 1},
 	},
 
 	MesgNumLap: {
@@ -559,6 +581,7 @@ var _fields = [...][256]*field{
 		113: {80, 113, types.Fit(6), 1},
 		114: {81, 114, types.Fit(6), 1},
 		121: {82, 121, types.Fit(4), 1},
+		124: {83, 124, types.Fit(1), 1},
 	},
 
 	MesgNumLength: {
@@ -779,6 +802,8 @@ var _fields = [...][256]*field{
 
 	MesgNumJump: {},
 
+	MesgNumSplit: {},
+
 	MesgNumClimbPro: {},
 
 	MesgNumFieldDescription: {
@@ -848,6 +873,7 @@ var _fields = [...][256]*field{
 		3:   {3, 3, types.Fit(6), 1},
 		4:   {4, 4, types.Fit(4), 1},
 		5:   {5, 5, types.Fit(38), 1},
+		6:   {6, 6, types.Fit(6), 1},
 	},
 
 	MesgNumSegmentLap: {
@@ -924,6 +950,9 @@ var _fields = [...][256]*field{
 		68:  {70, 68, types.Fit(2), 1},
 		69:  {71, 69, types.Fit(4), 1},
 		70:  {72, 70, types.Fit(4), 1},
+		91:  {73, 91, types.Fit(6), 1},
+		92:  {74, 92, types.Fit(6), 1},
+		93:  {75, 93, types.Fit(6), 1},
 	},
 
 	MesgNumSegmentFile: {
@@ -937,13 +966,14 @@ var _fields = [...][256]*field{
 	},
 
 	MesgNumWorkout: {
-		4:  {0, 4, types.Fit(0), 1},
-		5:  {1, 5, types.Fit(12), 1},
-		6:  {2, 6, types.Fit(4), 1},
-		8:  {3, 8, types.Fit(7), 16},
-		11: {4, 11, types.Fit(0), 1},
-		14: {5, 14, types.Fit(4), 1},
-		15: {6, 15, types.Fit(0), 1},
+		254: {0, 254, types.Fit(4), 1},
+		4:   {1, 4, types.Fit(0), 1},
+		5:   {2, 5, types.Fit(12), 1},
+		6:   {3, 6, types.Fit(4), 1},
+		8:   {4, 8, types.Fit(7), 16},
+		11:  {5, 11, types.Fit(0), 1},
+		14:  {6, 14, types.Fit(4), 1},
+		15:  {7, 15, types.Fit(0), 1},
 	},
 
 	MesgNumWorkoutSession: {
@@ -1018,6 +1048,7 @@ var _fields = [...][256]*field{
 		10:  {10, 10, types.Fit(2), 1},
 		11:  {11, 11, types.Fit(2), 1},
 		12:  {12, 12, types.Fit(4), 1},
+		13:  {13, 13, types.Fit(4), 1},
 	},
 
 	MesgNumBloodPressure: {
@@ -1054,6 +1085,14 @@ var _fields = [...][256]*field{
 		11:  {11, 11, types.Fit(134), 1},
 	},
 
+	MesgNumMonitoringHrData: {
+		253: {0, 253, types.Fit(70), 1},
+		0:   {1, 0, types.Fit(2), 1},
+		1:   {2, 1, types.Fit(2), 1},
+	},
+
+	MesgNumSpo2Data: {},
+
 	MesgNumHr: {
 		253: {0, 253, types.Fit(70), 1},
 		0:   {1, 0, types.Fit(4), 1},
@@ -1065,7 +1104,11 @@ var _fields = [...][256]*field{
 
 	MesgNumStressLevel: {},
 
+	MesgNumMaxMetData: {},
+
 	MesgNumMemoGlob: {},
+
+	MesgNumSleepLevel: {},
 
 	MesgNumAntChannelId: {},
 
@@ -1122,6 +1165,20 @@ var _fields = [...][256]*field{
 	MesgNumHrv: {
 		0: {0, 0, types.Fit(36), 1},
 	},
+
+	MesgNumBeatIntervals: {},
+
+	MesgNumHrvStatusSummary: {},
+
+	MesgNumHrvValue: {},
+
+	MesgNumRespirationRate: {},
+
+	MesgNumTankUpdate: {},
+
+	MesgNumTankSummary: {},
+
+	MesgNumSleepAssessment: {},
 }
 
 func getField(gmn MesgNum, fdn byte) (*field, bool) {
@@ -1153,6 +1210,7 @@ var msgsTypes = [...]reflect.Type{
 	MesgNumConnectivity:                reflect.TypeOf(ConnectivityMsg{}),
 	MesgNumWatchfaceSettings:           reflect.TypeOf(WatchfaceSettingsMsg{}),
 	MesgNumOhrSettings:                 reflect.TypeOf(OhrSettingsMsg{}),
+	MesgNumTimeInZone:                  reflect.TypeOf(TimeInZoneMsg{}),
 	MesgNumZonesTarget:                 reflect.TypeOf(ZonesTargetMsg{}),
 	MesgNumSport:                       reflect.TypeOf(SportMsg{}),
 	MesgNumHrZone:                      reflect.TypeOf(HrZoneMsg{}),
@@ -1162,6 +1220,7 @@ var msgsTypes = [...]reflect.Type{
 	MesgNumMetZone:                     reflect.TypeOf(MetZoneMsg{}),
 	MesgNumDiveSettings:                reflect.TypeOf(DiveSettingsMsg{}),
 	MesgNumDiveAlarm:                   reflect.TypeOf(DiveAlarmMsg{}),
+	MesgNumDiveApneaAlarm:              reflect.TypeOf(DiveApneaAlarmMsg{}),
 	MesgNumDiveGas:                     reflect.TypeOf(DiveGasMsg{}),
 	MesgNumGoal:                        reflect.TypeOf(GoalMsg{}),
 	MesgNumActivity:                    reflect.TypeOf(ActivityMsg{}),
@@ -1193,6 +1252,7 @@ var msgsTypes = [...]reflect.Type{
 	MesgNumVideoClip:                   reflect.TypeOf(VideoClipMsg{}),
 	MesgNumSet:                         reflect.TypeOf(SetMsg{}),
 	MesgNumJump:                        reflect.TypeOf(JumpMsg{}),
+	MesgNumSplit:                       reflect.TypeOf(SplitMsg{}),
 	MesgNumClimbPro:                    reflect.TypeOf(ClimbProMsg{}),
 	MesgNumFieldDescription:            reflect.TypeOf(FieldDescriptionMsg{}),
 	MesgNumDeveloperDataId:             reflect.TypeOf(DeveloperDataIdMsg{}),
@@ -1213,9 +1273,13 @@ var msgsTypes = [...]reflect.Type{
 	MesgNumBloodPressure:               reflect.TypeOf(BloodPressureMsg{}),
 	MesgNumMonitoringInfo:              reflect.TypeOf(MonitoringInfoMsg{}),
 	MesgNumMonitoring:                  reflect.TypeOf(MonitoringMsg{}),
+	MesgNumMonitoringHrData:            reflect.TypeOf(MonitoringHrDataMsg{}),
+	MesgNumSpo2Data:                    reflect.TypeOf(Spo2DataMsg{}),
 	MesgNumHr:                          reflect.TypeOf(HrMsg{}),
 	MesgNumStressLevel:                 reflect.TypeOf(StressLevelMsg{}),
+	MesgNumMaxMetData:                  reflect.TypeOf(MaxMetDataMsg{}),
 	MesgNumMemoGlob:                    reflect.TypeOf(MemoGlobMsg{}),
+	MesgNumSleepLevel:                  reflect.TypeOf(SleepLevelMsg{}),
 	MesgNumAntChannelId:                reflect.TypeOf(AntChannelIdMsg{}),
 	MesgNumAntRx:                       reflect.TypeOf(AntRxMsg{}),
 	MesgNumAntTx:                       reflect.TypeOf(AntTxMsg{}),
@@ -1224,6 +1288,13 @@ var msgsTypes = [...]reflect.Type{
 	MesgNumExdDataConceptConfiguration: reflect.TypeOf(ExdDataConceptConfigurationMsg{}),
 	MesgNumDiveSummary:                 reflect.TypeOf(DiveSummaryMsg{}),
 	MesgNumHrv:                         reflect.TypeOf(HrvMsg{}),
+	MesgNumBeatIntervals:               reflect.TypeOf(BeatIntervalsMsg{}),
+	MesgNumHrvStatusSummary:            reflect.TypeOf(HrvStatusSummaryMsg{}),
+	MesgNumHrvValue:                    reflect.TypeOf(HrvValueMsg{}),
+	MesgNumRespirationRate:             reflect.TypeOf(RespirationRateMsg{}),
+	MesgNumTankUpdate:                  reflect.TypeOf(TankUpdateMsg{}),
+	MesgNumTankSummary:                 reflect.TypeOf(TankSummaryMsg{}),
+	MesgNumSleepAssessment:             reflect.TypeOf(SleepAssessmentMsg{}),
 }
 
 func getGlobalMesgNum(t reflect.Type) MesgNum {
@@ -1255,6 +1326,7 @@ var newMesgFuncs = [...]newMesgFunc{
 	MesgNumConnectivity:                func() reflect.Value { return reflect.ValueOf(NewConnectivityMsg()) },
 	MesgNumWatchfaceSettings:           func() reflect.Value { return reflect.ValueOf(NewWatchfaceSettingsMsg()) },
 	MesgNumOhrSettings:                 func() reflect.Value { return reflect.ValueOf(NewOhrSettingsMsg()) },
+	MesgNumTimeInZone:                  func() reflect.Value { return reflect.ValueOf(NewTimeInZoneMsg()) },
 	MesgNumZonesTarget:                 func() reflect.Value { return reflect.ValueOf(NewZonesTargetMsg()) },
 	MesgNumSport:                       func() reflect.Value { return reflect.ValueOf(NewSportMsg()) },
 	MesgNumHrZone:                      func() reflect.Value { return reflect.ValueOf(NewHrZoneMsg()) },
@@ -1264,6 +1336,7 @@ var newMesgFuncs = [...]newMesgFunc{
 	MesgNumMetZone:                     func() reflect.Value { return reflect.ValueOf(NewMetZoneMsg()) },
 	MesgNumDiveSettings:                func() reflect.Value { return reflect.ValueOf(NewDiveSettingsMsg()) },
 	MesgNumDiveAlarm:                   func() reflect.Value { return reflect.ValueOf(NewDiveAlarmMsg()) },
+	MesgNumDiveApneaAlarm:              func() reflect.Value { return reflect.ValueOf(NewDiveApneaAlarmMsg()) },
 	MesgNumDiveGas:                     func() reflect.Value { return reflect.ValueOf(NewDiveGasMsg()) },
 	MesgNumGoal:                        func() reflect.Value { return reflect.ValueOf(NewGoalMsg()) },
 	MesgNumActivity:                    func() reflect.Value { return reflect.ValueOf(NewActivityMsg()) },
@@ -1295,6 +1368,7 @@ var newMesgFuncs = [...]newMesgFunc{
 	MesgNumVideoClip:                   func() reflect.Value { return reflect.ValueOf(NewVideoClipMsg()) },
 	MesgNumSet:                         func() reflect.Value { return reflect.ValueOf(NewSetMsg()) },
 	MesgNumJump:                        func() reflect.Value { return reflect.ValueOf(NewJumpMsg()) },
+	MesgNumSplit:                       func() reflect.Value { return reflect.ValueOf(NewSplitMsg()) },
 	MesgNumClimbPro:                    func() reflect.Value { return reflect.ValueOf(NewClimbProMsg()) },
 	MesgNumFieldDescription:            func() reflect.Value { return reflect.ValueOf(NewFieldDescriptionMsg()) },
 	MesgNumDeveloperDataId:             func() reflect.Value { return reflect.ValueOf(NewDeveloperDataIdMsg()) },
@@ -1315,9 +1389,13 @@ var newMesgFuncs = [...]newMesgFunc{
 	MesgNumBloodPressure:               func() reflect.Value { return reflect.ValueOf(NewBloodPressureMsg()) },
 	MesgNumMonitoringInfo:              func() reflect.Value { return reflect.ValueOf(NewMonitoringInfoMsg()) },
 	MesgNumMonitoring:                  func() reflect.Value { return reflect.ValueOf(NewMonitoringMsg()) },
+	MesgNumMonitoringHrData:            func() reflect.Value { return reflect.ValueOf(NewMonitoringHrDataMsg()) },
+	MesgNumSpo2Data:                    func() reflect.Value { return reflect.ValueOf(NewSpo2DataMsg()) },
 	MesgNumHr:                          func() reflect.Value { return reflect.ValueOf(NewHrMsg()) },
 	MesgNumStressLevel:                 func() reflect.Value { return reflect.ValueOf(NewStressLevelMsg()) },
+	MesgNumMaxMetData:                  func() reflect.Value { return reflect.ValueOf(NewMaxMetDataMsg()) },
 	MesgNumMemoGlob:                    func() reflect.Value { return reflect.ValueOf(NewMemoGlobMsg()) },
+	MesgNumSleepLevel:                  func() reflect.Value { return reflect.ValueOf(NewSleepLevelMsg()) },
 	MesgNumAntChannelId:                func() reflect.Value { return reflect.ValueOf(NewAntChannelIdMsg()) },
 	MesgNumAntRx:                       func() reflect.Value { return reflect.ValueOf(NewAntRxMsg()) },
 	MesgNumAntTx:                       func() reflect.Value { return reflect.ValueOf(NewAntTxMsg()) },
@@ -1326,6 +1404,13 @@ var newMesgFuncs = [...]newMesgFunc{
 	MesgNumExdDataConceptConfiguration: func() reflect.Value { return reflect.ValueOf(NewExdDataConceptConfigurationMsg()) },
 	MesgNumDiveSummary:                 func() reflect.Value { return reflect.ValueOf(NewDiveSummaryMsg()) },
 	MesgNumHrv:                         func() reflect.Value { return reflect.ValueOf(NewHrvMsg()) },
+	MesgNumBeatIntervals:               func() reflect.Value { return reflect.ValueOf(NewBeatIntervalsMsg()) },
+	MesgNumHrvStatusSummary:            func() reflect.Value { return reflect.ValueOf(NewHrvStatusSummaryMsg()) },
+	MesgNumHrvValue:                    func() reflect.Value { return reflect.ValueOf(NewHrvValueMsg()) },
+	MesgNumRespirationRate:             func() reflect.Value { return reflect.ValueOf(NewRespirationRateMsg()) },
+	MesgNumTankUpdate:                  func() reflect.Value { return reflect.ValueOf(NewTankUpdateMsg()) },
+	MesgNumTankSummary:                 func() reflect.Value { return reflect.ValueOf(NewTankSummaryMsg()) },
+	MesgNumSleepAssessment:             func() reflect.Value { return reflect.ValueOf(NewSleepAssessmentMsg()) },
 }
 
 func getMesgAllInvalid(mn MesgNum) reflect.Value {

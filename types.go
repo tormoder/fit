@@ -1,6 +1,6 @@
 // Code generated using the program found in 'cmd/fitgen/main.go'. DO NOT EDIT.
 
-// SDK Version: 21.94
+// SDK Version: 21.115
 
 package fit
 
@@ -84,6 +84,17 @@ const (
 	AnalogWatchfaceLayoutTraditional AnalogWatchfaceLayout = 1
 	AnalogWatchfaceLayoutModern      AnalogWatchfaceLayout = 2
 	AnalogWatchfaceLayoutInvalid     AnalogWatchfaceLayout = 0xFF
+)
+
+// AntChannelId represents the ant_channel_id FIT type.
+type AntChannelId uint32
+
+const (
+	AntChannelIdAntExtendedDeviceNumberUpperNibble AntChannelId = 0xF0000000
+	AntChannelIdAntTransmissionTypeLowerNibble     AntChannelId = 0x0F000000
+	AntChannelIdAntDeviceType                      AntChannelId = 0x00FF0000
+	AntChannelIdAntDeviceNumber                    AntChannelId = 0x0000FFFF
+	AntChannelIdInvalid                            AntChannelId = 0x00000000
 )
 
 // AntNetwork represents the ant_network FIT type.
@@ -301,6 +312,21 @@ const (
 	BikeLightNetworkConfigTypeInvalid        BikeLightNetworkConfigType = 0xFF
 )
 
+// BleDeviceType represents the ble_device_type FIT type.
+type BleDeviceType uint8
+
+const (
+	BleDeviceTypeConnectedGps     BleDeviceType = 0 // GPS that is provided over a proprietary bluetooth service
+	BleDeviceTypeHeartRate        BleDeviceType = 1
+	BleDeviceTypeBikePower        BleDeviceType = 2
+	BleDeviceTypeBikeSpeedCadence BleDeviceType = 3
+	BleDeviceTypeBikeSpeed        BleDeviceType = 4
+	BleDeviceTypeBikeCadence      BleDeviceType = 5
+	BleDeviceTypeFootpod          BleDeviceType = 6
+	BleDeviceTypeBikeTrainer      BleDeviceType = 7 // Indoor-Bike FTMS protocol
+	BleDeviceTypeInvalid          BleDeviceType = 0xFF
+)
+
 // BodyLocation represents the body_location FIT type.
 type BodyLocation byte
 
@@ -458,6 +484,15 @@ const (
 	CarryExerciseNameHexDumbbellHold   CarryExerciseName = 3
 	CarryExerciseNameOverheadCarry     CarryExerciseName = 4
 	CarryExerciseNameInvalid           CarryExerciseName = 0xFFFF
+)
+
+// CcrSetpointSwitchMode represents the ccr_setpoint_switch_mode FIT type.
+type CcrSetpointSwitchMode byte
+
+const (
+	CcrSetpointSwitchModeManual    CcrSetpointSwitchMode = 0 // User switches setpoints manually
+	CcrSetpointSwitchModeAutomatic CcrSetpointSwitchMode = 1 // Switch automatically based on depth
+	CcrSetpointSwitchModeInvalid   CcrSetpointSwitchMode = 0xFF
 )
 
 // Checksum represents the checksum FIT type.
@@ -654,6 +689,7 @@ const (
 	CourseCapabilitiesTraining   CourseCapabilities = 0x00000100
 	CourseCapabilitiesNavigation CourseCapabilities = 0x00000200
 	CourseCapabilitiesBikeway    CourseCapabilities = 0x00000400
+	CourseCapabilitiesAviation   CourseCapabilities = 0x00001000 // Denote course files to be used as flight plans
 	CourseCapabilitiesInvalid    CourseCapabilities = 0x00000000
 )
 
@@ -1023,7 +1059,54 @@ type DiveAlarmType byte
 const (
 	DiveAlarmTypeDepth   DiveAlarmType = 0 // Alarm when a certain depth is crossed
 	DiveAlarmTypeTime    DiveAlarmType = 1 // Alarm when a certain time has transpired
+	DiveAlarmTypeSpeed   DiveAlarmType = 2 // Alarm when a certain ascent or descent rate is exceeded
 	DiveAlarmTypeInvalid DiveAlarmType = 0xFF
+)
+
+// DiveAlert represents the dive_alert FIT type.
+type DiveAlert byte
+
+const (
+	DiveAlertNdlReached                DiveAlert = 0
+	DiveAlertGasSwitchPrompted         DiveAlert = 1
+	DiveAlertNearSurface               DiveAlert = 2
+	DiveAlertApproachingNdl            DiveAlert = 3
+	DiveAlertPo2Warn                   DiveAlert = 4
+	DiveAlertPo2CritHigh               DiveAlert = 5
+	DiveAlertPo2CritLow                DiveAlert = 6
+	DiveAlertTimeAlert                 DiveAlert = 7
+	DiveAlertDepthAlert                DiveAlert = 8
+	DiveAlertDecoCeilingBroken         DiveAlert = 9
+	DiveAlertDecoComplete              DiveAlert = 10
+	DiveAlertSafetyStopBroken          DiveAlert = 11
+	DiveAlertSafetyStopComplete        DiveAlert = 12
+	DiveAlertCnsWarning                DiveAlert = 13
+	DiveAlertCnsCritical               DiveAlert = 14
+	DiveAlertOtuWarning                DiveAlert = 15
+	DiveAlertOtuCritical               DiveAlert = 16
+	DiveAlertAscentCritical            DiveAlert = 17
+	DiveAlertAlertDismissedByKey       DiveAlert = 18
+	DiveAlertAlertDismissedByTimeout   DiveAlert = 19
+	DiveAlertBatteryLow                DiveAlert = 20
+	DiveAlertBatteryCritical           DiveAlert = 21
+	DiveAlertSafetyStopStarted         DiveAlert = 22
+	DiveAlertApproachingFirstDecoStop  DiveAlert = 23
+	DiveAlertSetpointSwitchAutoLow     DiveAlert = 24
+	DiveAlertSetpointSwitchAutoHigh    DiveAlert = 25
+	DiveAlertSetpointSwitchManualLow   DiveAlert = 26
+	DiveAlertSetpointSwitchManualHigh  DiveAlert = 27
+	DiveAlertAutoSetpointSwitchIgnored DiveAlert = 28
+	DiveAlertSwitchedToOpenCircuit     DiveAlert = 29
+	DiveAlertSwitchedToClosedCircuit   DiveAlert = 30
+	DiveAlertTankBatteryLow            DiveAlert = 32
+	DiveAlertPo2CcrDilLow              DiveAlert = 33 // ccr diluent has low po2
+	DiveAlertDecoStopCleared           DiveAlert = 34 // a deco stop has been cleared
+	DiveAlertApneaNeutralBuoyancy      DiveAlert = 35 // Target Depth Apnea Alarm triggered
+	DiveAlertApneaTargetDepth          DiveAlert = 36 // Neutral Buoyance Apnea Alarm triggered
+	DiveAlertApneaSurface              DiveAlert = 37 // Surface Apnea Alarm triggered
+	DiveAlertApneaHighSpeed            DiveAlert = 38 // High Speed Apnea Alarm triggered
+	DiveAlertApneaLowSpeed             DiveAlert = 39 // Low Speed Apnea Alarm triggered
+	DiveAlertInvalid                   DiveAlert = 0xFF
 )
 
 // DiveBacklightMode represents the dive_backlight_mode FIT type.
@@ -1033,6 +1116,15 @@ const (
 	DiveBacklightModeAtDepth  DiveBacklightMode = 0
 	DiveBacklightModeAlwaysOn DiveBacklightMode = 1
 	DiveBacklightModeInvalid  DiveBacklightMode = 0xFF
+)
+
+// DiveGasMode represents the dive_gas_mode FIT type.
+type DiveGasMode byte
+
+const (
+	DiveGasModeOpenCircuit          DiveGasMode = 0
+	DiveGasModeClosedCircuitDiluent DiveGasMode = 1
+	DiveGasModeInvalid              DiveGasMode = 0xFF
 )
 
 // DiveGasStatus represents the dive_gas_status FIT type.
@@ -1085,7 +1177,16 @@ const (
 	EventElevHighAlert         Event = 45 // Group 0. Start / stop when in alert condition.
 	EventElevLowAlert          Event = 46 // Group 0. Start / stop when in alert condition.
 	EventCommTimeout           Event = 47 // marker
+	EventAutoActivityDetect    Event = 54 // marker
+	EventDiveAlert             Event = 56 // marker
+	EventDiveGasSwitched       Event = 57 // marker
+	EventTankPressureReserve   Event = 71 // marker
+	EventTankPressureCritical  Event = 72 // marker
+	EventTankLost              Event = 73 // marker
 	EventRadarThreatAlert      Event = 75 // start/stop/marker
+	EventTankBatteryLow        Event = 76 // marker
+	EventTankPodConnected      Event = 81 // marker - tank pod has connected
+	EventTankPodDisconnected   Event = 82 // marker - tank pod has lost connection
 	EventInvalid               Event = 0xFF
 )
 
@@ -1681,6 +1782,7 @@ const (
 	GarminProductFenix3HrKor                GarminProduct = 2477
 	GarminProductNautix                     GarminProduct = 2496
 	GarminProductVivoActiveHrApac           GarminProduct = 2497
+	GarminProductFr35                       GarminProduct = 2503
 	GarminProductOregon7xxWw                GarminProduct = 2512
 	GarminProductEdge820                    GarminProduct = 2530
 	GarminProductEdgeExplore820             GarminProduct = 2531
@@ -1755,6 +1857,7 @@ const (
 	GarminProductFenix5sPlusApac            GarminProduct = 3134
 	GarminProductFenix5xPlusApac            GarminProduct = 3135
 	GarminProductEdge520PlusApac            GarminProduct = 3142
+	GarminProductDescentT1                  GarminProduct = 3143
 	GarminProductFr235lAsia                 GarminProduct = 3144
 	GarminProductFr245Asia                  GarminProduct = 3145
 	GarminProductVivoActive3mApac           GarminProduct = 3163
@@ -1842,6 +1945,7 @@ const (
 	GarminProductEdge1040                   GarminProduct = 3843
 	GarminProductMarqGolferAsia             GarminProduct = 3850
 	GarminProductVenu2Plus                  GarminProduct = 3851
+	GarminProductGnss                       GarminProduct = 3865
 	GarminProductFr55                       GarminProduct = 3869
 	GarminProductInstinct2                  GarminProduct = 3888
 	GarminProductFenix7s                    GarminProduct = 3905
@@ -1859,6 +1963,7 @@ const (
 	GarminProductVenu2Asia                  GarminProduct = 3950
 	GarminProductFr945LteAsia               GarminProduct = 3978
 	GarminProductVivoMoveSport              GarminProduct = 3982
+	GarminProductVivomoveTrend              GarminProduct = 3983
 	GarminProductApproachS12Asia            GarminProduct = 3986
 	GarminProductFr255Music                 GarminProduct = 3990
 	GarminProductFr255SmallMusic            GarminProduct = 3991
@@ -1870,15 +1975,23 @@ const (
 	GarminProductVenu2PlusAsia              GarminProduct = 4017
 	GarminProductFr955                      GarminProduct = 4024
 	GarminProductFr55Asia                   GarminProduct = 4033
+	GarminProductEdge540                    GarminProduct = 4061
+	GarminProductEdge840                    GarminProduct = 4062
 	GarminProductVivosmart5                 GarminProduct = 4063
 	GarminProductInstinct2Asia              GarminProduct = 4071
+	GarminProductMarqGen2                   GarminProduct = 4105 // Adventurer, Athlete, Captain, Golfer
 	GarminProductVenusq2                    GarminProduct = 4115
 	GarminProductVenusq2music               GarminProduct = 4116
+	GarminProductMarqGen2Aviator            GarminProduct = 4124
 	GarminProductD2AirX10                   GarminProduct = 4125
 	GarminProductHrmProPlus                 GarminProduct = 4130
 	GarminProductDescentG1Asia              GarminProduct = 4132
 	GarminProductTactix7                    GarminProduct = 4135
+	GarminProductInstinctCrossover          GarminProduct = 4155
 	GarminProductEdgeExplore2               GarminProduct = 4169
+	GarminProductApproachS70                GarminProduct = 4233
+	GarminProductFr265Large                 GarminProduct = 4257
+	GarminProductFr265Small                 GarminProduct = 4258
 	GarminProductTacxNeoSmart               GarminProduct = 4265 // Neo Smart, Tacx
 	GarminProductTacxNeo2Smart              GarminProduct = 4266 // Neo 2 Smart, Tacx
 	GarminProductTacxNeo2TSmart             GarminProduct = 4267 // Neo 2T Smart, Tacx
@@ -1892,7 +2005,14 @@ const (
 	GarminProductTacxFlux2Smart             GarminProduct = 4275 // Flux 2 Smart, Tacx
 	GarminProductTacxMagnum                 GarminProduct = 4276 // Magnum, Tacx
 	GarminProductEdge1040Asia               GarminProduct = 4305
+	GarminProductEpixGen2Pro42              GarminProduct = 4312
+	GarminProductEpixGen2Pro47              GarminProduct = 4313
+	GarminProductEpixGen2Pro51              GarminProduct = 4314
+	GarminProductFr965                      GarminProduct = 4315
 	GarminProductEnduro2                    GarminProduct = 4341
+	GarminProductFenix7ProSolar             GarminProduct = 4375
+	GarminProductInstinct2x                 GarminProduct = 4394
+	GarminProductDescentT2                  GarminProduct = 4442
 	GarminProductSdm4                       GarminProduct = 10007 // SDM4 footpod
 	GarminProductEdgeRemote                 GarminProduct = 10014
 	GarminProductTacxTrainingAppWin         GarminProduct = 20533
@@ -1906,6 +2026,16 @@ const (
 	GarminProductAndroidAntplusPlugin       GarminProduct = 65532
 	GarminProductConnect                    GarminProduct = 65534 // Garmin Connect website
 	GarminProductInvalid                    GarminProduct = 0xFFFF
+)
+
+// GasConsumptionRateType represents the gas_consumption_rate_type FIT type.
+type GasConsumptionRateType byte
+
+const (
+	GasConsumptionRateTypePressureSac GasConsumptionRateType = 0 // Pressure-based Surface Air Consumption
+	GasConsumptionRateTypeVolumeSac   GasConsumptionRateType = 1 // Volumetric Surface Air Consumption
+	GasConsumptionRateTypeRmv         GasConsumptionRateType = 2 // Respiratory Minute Volume
+	GasConsumptionRateTypeInvalid     GasConsumptionRateType = 0xFF
 )
 
 // Gender represents the gender FIT type.
@@ -2078,7 +2208,20 @@ const (
 	HrZoneCalcCustom       HrZoneCalc = 0
 	HrZoneCalcPercentMaxHr HrZoneCalc = 1
 	HrZoneCalcPercentHrr   HrZoneCalc = 2
+	HrZoneCalcPercentLthr  HrZoneCalc = 3
 	HrZoneCalcInvalid      HrZoneCalc = 0xFF
+)
+
+// HrvStatus represents the hrv_status FIT type.
+type HrvStatus byte
+
+const (
+	HrvStatusNone       HrvStatus = 0
+	HrvStatusPoor       HrvStatus = 1
+	HrvStatusLow        HrvStatus = 2
+	HrvStatusUnbalanced HrvStatus = 3
+	HrvStatusBalanced   HrvStatus = 4
+	HrvStatusInvalid    HrvStatus = 0xFF
 )
 
 // HyperextensionExerciseName represents the hyperextension_exercise_name FIT type.
@@ -2397,7 +2540,15 @@ const (
 type LocalDeviceType uint8
 
 const (
-	LocalDeviceTypeInvalid LocalDeviceType = 0xFF
+	LocalDeviceTypeGps           LocalDeviceType = 0  // Onboard gps receiver
+	LocalDeviceTypeGlonass       LocalDeviceType = 1  // Onboard glonass receiver
+	LocalDeviceTypeGpsGlonass    LocalDeviceType = 2  // Onboard gps glonass receiver
+	LocalDeviceTypeAccelerometer LocalDeviceType = 3  // Onboard sensor
+	LocalDeviceTypeBarometer     LocalDeviceType = 4  // Onboard sensor
+	LocalDeviceTypeTemperature   LocalDeviceType = 5  // Onboard sensor
+	LocalDeviceTypeWhr           LocalDeviceType = 10 // Onboard wrist HR sensor
+	LocalDeviceTypeSensorHub     LocalDeviceType = 12 // Onboard software package
+	LocalDeviceTypeInvalid       LocalDeviceType = 0xFF
 )
 
 // LocaltimeIntoDay represents the localtime_into_day FIT type.
@@ -2641,6 +2792,10 @@ const (
 	ManufacturerTagHeuer               Manufacturer = 142
 	ManufacturerKeiserFitness          Manufacturer = 143
 	ManufacturerZwiftByte              Manufacturer = 144
+	ManufacturerPorscheEp              Manufacturer = 145
+	ManufacturerBlackbird              Manufacturer = 146
+	ManufacturerMeilanByte             Manufacturer = 147
+	ManufacturerEzon                   Manufacturer = 148
 	ManufacturerDevelopment            Manufacturer = 255
 	ManufacturerHealthandlife          Manufacturer = 257
 	ManufacturerLezyne                 Manufacturer = 258
@@ -2705,10 +2860,41 @@ const (
 	ManufacturerRaceRepublic           Manufacturer = 317
 	ManufacturerFazua                  Manufacturer = 318
 	ManufacturerOrekaTraining          Manufacturer = 319
-	ManufacturerIsec                   Manufacturer = 320 // Lishun Electric & Communication
+	ManufacturerLsec                   Manufacturer = 320 // Lishun Electric & Communication
 	ManufacturerLululemonStudio        Manufacturer = 321
+	ManufacturerShanyue                Manufacturer = 322
+	ManufacturerSpinningMda            Manufacturer = 323
+	ManufacturerHilldating             Manufacturer = 324
 	ManufacturerActigraphcorp          Manufacturer = 5759
 	ManufacturerInvalid                Manufacturer = 0xFFFF
+)
+
+// MaxMetCategory represents the max_met_category FIT type.
+type MaxMetCategory byte
+
+const (
+	MaxMetCategoryGeneric MaxMetCategory = 0
+	MaxMetCategoryCycling MaxMetCategory = 1
+	MaxMetCategoryInvalid MaxMetCategory = 0xFF
+)
+
+// MaxMetHeartRateSource represents the max_met_heart_rate_source FIT type.
+type MaxMetHeartRateSource byte
+
+const (
+	MaxMetHeartRateSourceWhr     MaxMetHeartRateSource = 0 // Wrist Heart Rate Monitor
+	MaxMetHeartRateSourceHrm     MaxMetHeartRateSource = 1 // Chest Strap Heart Rate Monitor
+	MaxMetHeartRateSourceInvalid MaxMetHeartRateSource = 0xFF
+)
+
+// MaxMetSpeedSource represents the max_met_speed_source FIT type.
+type MaxMetSpeedSource byte
+
+const (
+	MaxMetSpeedSourceOnboardGps   MaxMetSpeedSource = 0
+	MaxMetSpeedSourceConnectedGps MaxMetSpeedSource = 1
+	MaxMetSpeedSourceCadence      MaxMetSpeedSource = 2
+	MaxMetSpeedSourceInvalid      MaxMetSpeedSource = 0xFF
 )
 
 // MesgCount represents the mesg_count FIT type.
@@ -2804,16 +2990,30 @@ const (
 	MesgNumMagnetometerData            MesgNum = 208
 	MesgNumBarometerData               MesgNum = 209
 	MesgNumOneDSensorCalibration       MesgNum = 210
+	MesgNumMonitoringHrData            MesgNum = 211
+	MesgNumTimeInZone                  MesgNum = 216
 	MesgNumSet                         MesgNum = 225
 	MesgNumStressLevel                 MesgNum = 227
+	MesgNumMaxMetData                  MesgNum = 229
 	MesgNumDiveSettings                MesgNum = 258
 	MesgNumDiveGas                     MesgNum = 259
 	MesgNumDiveAlarm                   MesgNum = 262
 	MesgNumExerciseTitle               MesgNum = 264
 	MesgNumDiveSummary                 MesgNum = 268
+	MesgNumSpo2Data                    MesgNum = 269
+	MesgNumSleepLevel                  MesgNum = 275
 	MesgNumJump                        MesgNum = 285
+	MesgNumBeatIntervals               MesgNum = 290
+	MesgNumRespirationRate             MesgNum = 297
+	MesgNumSplit                       MesgNum = 312
 	MesgNumClimbPro                    MesgNum = 317
+	MesgNumTankUpdate                  MesgNum = 319
+	MesgNumTankSummary                 MesgNum = 323
+	MesgNumSleepAssessment             MesgNum = 346
+	MesgNumHrvStatusSummary            MesgNum = 370
+	MesgNumHrvValue                    MesgNum = 371
 	MesgNumDeviceAuxBatteryInfo        MesgNum = 375
+	MesgNumDiveApneaAlarm              MesgNum = 393
 	MesgNumMfgRangeMin                 MesgNum = 0xFF00 // 0xFF00 - 0xFFFE reserved for manufacturer specific messages
 	MesgNumMfgRangeMax                 MesgNum = 0xFFFE // 0xFF00 - 0xFFFE reserved for manufacturer specific messages
 	MesgNumInvalid                     MesgNum = 0xFFFF
@@ -2827,6 +3027,15 @@ const (
 	MessageIndexReserved MessageIndex = 0x7000 // reserved (default 0)
 	MessageIndexMask     MessageIndex = 0x0FFF // index
 	MessageIndexInvalid  MessageIndex = 0xFFFF
+)
+
+// NoFlyTimeMode represents the no_fly_time_mode FIT type.
+type NoFlyTimeMode byte
+
+const (
+	NoFlyTimeModeStandard    NoFlyTimeMode = 0 // Standard Diver Alert Network no-fly guidance
+	NoFlyTimeModeFlat24Hours NoFlyTimeMode = 1 // Flat 24 hour no-fly guidance
+	NoFlyTimeModeInvalid     NoFlyTimeMode = 0xFF
 )
 
 // OlympicLiftExerciseName represents the olympic_lift_exercise_name FIT type.
@@ -3500,6 +3709,18 @@ const (
 	SitUpExerciseNameInvalid                             SitUpExerciseName = 0xFFFF
 )
 
+// SleepLevel represents the sleep_level FIT type.
+type SleepLevel byte
+
+const (
+	SleepLevelUnmeasurable SleepLevel = 0
+	SleepLevelAwake        SleepLevel = 1
+	SleepLevelLight        SleepLevel = 2
+	SleepLevelDeep         SleepLevel = 3
+	SleepLevelRem          SleepLevel = 4
+	SleepLevelInvalid      SleepLevel = 0xFF
+)
+
 // SourceType represents the source_type FIT type.
 type SourceType byte
 
@@ -3511,6 +3732,45 @@ const (
 	SourceTypeWifi               SourceType = 4 // External device connected with Wifi
 	SourceTypeLocal              SourceType = 5 // Onboard device
 	SourceTypeInvalid            SourceType = 0xFF
+)
+
+// SplitType represents the split_type FIT type.
+type SplitType byte
+
+const (
+	SplitTypeAscentSplit      SplitType = 1
+	SplitTypeDescentSplit     SplitType = 2
+	SplitTypeIntervalActive   SplitType = 3
+	SplitTypeIntervalRest     SplitType = 4
+	SplitTypeIntervalWarmup   SplitType = 5
+	SplitTypeIntervalCooldown SplitType = 6
+	SplitTypeIntervalRecovery SplitType = 7
+	SplitTypeIntervalOther    SplitType = 8
+	SplitTypeClimbActive      SplitType = 9
+	SplitTypeClimbRest        SplitType = 10
+	SplitTypeSurfActive       SplitType = 11
+	SplitTypeRunActive        SplitType = 12
+	SplitTypeRunRest          SplitType = 13
+	SplitTypeWorkoutRound     SplitType = 14
+	SplitTypeRwdRun           SplitType = 17 // run/walk detection running
+	SplitTypeRwdWalk          SplitType = 18 // run/walk detection walking
+	SplitTypeWindsurfActive   SplitType = 21
+	SplitTypeRwdStand         SplitType = 22 // run/walk detection standing
+	SplitTypeTransition       SplitType = 23 // Marks the time going from ascent_split to descent_split/used in backcountry ski
+	SplitTypeSkiLiftSplit     SplitType = 28
+	SplitTypeSkiRunSplit      SplitType = 29
+	SplitTypeInvalid          SplitType = 0xFF
+)
+
+// Spo2MeasurementType represents the spo2_measurement_type FIT type.
+type Spo2MeasurementType byte
+
+const (
+	Spo2MeasurementTypeOffWrist        Spo2MeasurementType = 0
+	Spo2MeasurementTypeSpotCheck       Spo2MeasurementType = 1
+	Spo2MeasurementTypeContinuousCheck Spo2MeasurementType = 2
+	Spo2MeasurementTypePeriodic        Spo2MeasurementType = 3
+	Spo2MeasurementTypeInvalid         Spo2MeasurementType = 0xFF
 )
 
 // Sport represents the sport FIT type.
@@ -3567,6 +3827,10 @@ const (
 	SportBoxing                Sport = 47
 	SportFloorClimbing         Sport = 48
 	SportDiving                Sport = 53
+	SportHiit                  Sport = 62
+	SportRacket                Sport = 64
+	SportWaterTubing           Sport = 76
+	SportWakesurfing           Sport = 77
 	SportAll                   Sport = 254 // All is for goals only to include all sports.
 	SportInvalid               Sport = 0xFF
 )
@@ -3862,10 +4126,26 @@ const (
 	SubSportVirtualActivity      SubSport = 58
 	SubSportObstacle             SubSport = 59 // Used for events where participants run, crawl through mud, climb over walls, etc.
 	SubSportBreathing            SubSport = 62
-	SubSportSailRace             SubSport = 65 // Sailing
-	SubSportUltra                SubSport = 67 // Ultramarathon
-	SubSportIndoorClimbing       SubSport = 68 // Climbing
-	SubSportBouldering           SubSport = 69 // Climbing
+	SubSportSailRace             SubSport = 65  // Sailing
+	SubSportUltra                SubSport = 67  // Ultramarathon
+	SubSportIndoorClimbing       SubSport = 68  // Climbing
+	SubSportBouldering           SubSport = 69  // Climbing
+	SubSportHiit                 SubSport = 70  // High Intensity Interval Training
+	SubSportAmrap                SubSport = 73  // HIIT
+	SubSportEmom                 SubSport = 74  // HIIT
+	SubSportTabata               SubSport = 75  // HIIT
+	SubSportPickleball           SubSport = 84  // Racket
+	SubSportPadel                SubSport = 85  // Racket
+	SubSportFlyCanopy            SubSport = 110 // Flying
+	SubSportFlyParaglide         SubSport = 111 // Flying
+	SubSportFlyParamotor         SubSport = 112 // Flying
+	SubSportFlyPressurized       SubSport = 113 // Flying
+	SubSportFlyNavigate          SubSport = 114 // Flying
+	SubSportFlyTimer             SubSport = 115 // Flying
+	SubSportFlyAltimeter         SubSport = 116 // Flying
+	SubSportFlyWx                SubSport = 117 // Flying
+	SubSportFlyVfr               SubSport = 118 // Flying
+	SubSportFlyIfr               SubSport = 119 // Flying
 	SubSportAll                  SubSport = 254
 	SubSportInvalid              SubSport = 0xFF
 )

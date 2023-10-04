@@ -5,15 +5,28 @@ import "reflect"
 // ActivityFile represents the Activity FIT file type.
 // Records sensor data and events from active sessions.
 type ActivityFile struct {
-	Activity    *ActivityMsg
-	Sport       *SportMsg
-	Sessions    []*SessionMsg
-	Laps        []*LapMsg
-	Lengths     []*LengthMsg
-	Records     []*RecordMsg
-	Events      []*EventMsg
-	Hrvs        []*HrvMsg
-	DeviceInfos []*DeviceInfoMsg
+	// Documentation: https://developer.garmin.com/fit/file-types/activity/
+
+	// Required messages according to docs.
+	Activity *ActivityMsg
+	Sessions []*SessionMsg
+	Laps     []*LapMsg
+	Records  []*RecordMsg
+
+	// Optional messages according to docs.
+	DeviceInfos  []*DeviceInfoMsg
+	Events       []*EventMsg
+	Lengths      []*LengthMsg
+	SegmentLaps  []*SegmentLapMsg
+	UserProfile  *UserProfileMsg
+	ZoneTargets  []*ZonesTargetMsg
+	Workouts     []*WorkoutMsg
+	WorkoutSteps []*WorkoutStepMsg
+	Hrs          []*HrMsg
+	Hrvs         []*HrvMsg
+
+	// Requested messages by users.
+	Sport *SportMsg
 }
 
 // DeviceFile represents the Device FIT file type.
@@ -152,26 +165,39 @@ func (a *ActivityFile) add(msg reflect.Value) {
 	switch tmp := x.(type) {
 	case ActivityMsg:
 		a.Activity = &tmp
-	case SportMsg:
-		a.Sport = &tmp
 	case SessionMsg:
 		tmp.expandComponents()
 		a.Sessions = append(a.Sessions, &tmp)
 	case LapMsg:
 		tmp.expandComponents()
 		a.Laps = append(a.Laps, &tmp)
-	case LengthMsg:
-		a.Lengths = append(a.Lengths, &tmp)
 	case RecordMsg:
 		tmp.expandComponents()
 		a.Records = append(a.Records, &tmp)
+	case DeviceInfoMsg:
+		a.DeviceInfos = append(a.DeviceInfos, &tmp)
 	case EventMsg:
 		tmp.expandComponents()
 		a.Events = append(a.Events, &tmp)
+	case LengthMsg:
+		a.Lengths = append(a.Lengths, &tmp)
+	case SegmentLapMsg:
+		tmp.expandComponents()
+		a.SegmentLaps = append(a.SegmentLaps, &tmp)
+	case UserProfileMsg:
+		a.UserProfile = &tmp
+	case ZonesTargetMsg:
+		a.ZoneTargets = append(a.ZoneTargets, &tmp)
+	case WorkoutMsg:
+		a.Workouts = append(a.Workouts, &tmp)
+	case WorkoutStepMsg:
+		a.WorkoutSteps = append(a.WorkoutSteps, &tmp)
+	case HrMsg:
+		a.Hrs = append(a.Hrs, &tmp)
 	case HrvMsg:
 		a.Hrvs = append(a.Hrvs, &tmp)
-	case DeviceInfoMsg:
-		a.DeviceInfos = append(a.DeviceInfos, &tmp)
+	case SportMsg:
+		a.Sport = &tmp
 	default:
 	}
 }

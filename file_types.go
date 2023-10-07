@@ -73,11 +73,16 @@ type WorkoutFile struct {
 // CourseFile represents the Course FIT file type.
 // Uses data from an activity to recreate a course.
 type CourseFile struct {
-	Course       *CourseMsg
-	Laps         []*LapMsg
+	// Documentation: https://developer.garmin.com/fit/file-types/activity/
+
+	// Required messages according to docs.
+	Course  *CourseMsg
+	Lap     *LapMsg
+	Records []*RecordMsg
+	Events  []*EventMsg
+
+	// Optional messages according to docs.
 	CoursePoints []*CoursePointMsg
-	Events       []*EventMsg
-	Records      []*RecordMsg
 }
 
 // SchedulesFile represents the Schedules FIT file type.
@@ -275,7 +280,7 @@ func (c *CourseFile) add(msg reflect.Value) {
 		c.Course = &tmp
 	case LapMsg:
 		tmp.expandComponents()
-		c.Laps = append(c.Laps, &tmp)
+		c.Lap = &tmp
 	case CoursePointMsg:
 		c.CoursePoints = append(c.CoursePoints, &tmp)
 	case RecordMsg:

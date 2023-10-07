@@ -38,6 +38,17 @@ var decodeTestFiles = [...]struct {
 	},
 	{
 		"fitsdk",
+		"activity_poolswim_with_hr.fit",
+		"",
+		false,
+		3206658670657701702,
+		true,
+		tdoNone,
+		true,
+		"Encode error needs to be looked at in detail",
+	},
+	{
+		"fitsdk",
 		"MonitoringFile.fit",
 		"",
 		false,

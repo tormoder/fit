@@ -66,6 +66,9 @@ type SportFile struct {
 // Describes a structured activity that can be designed on a computer and
 // transferred to a display device to guide a user through the activity.
 type WorkoutFile struct {
+	// Documentation: https://developer.garmin.com/fit/file-types/workout/
+
+	// Required messages according to docs.
 	Workout      *WorkoutMsg
 	WorkoutSteps []*WorkoutStepMsg
 }

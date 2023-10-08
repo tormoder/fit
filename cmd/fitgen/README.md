@@ -15,6 +15,8 @@ for information about profile generation.
 
 ```shell
 usage: fitgen [flags] [path to sdk zip, xls or xlsx file] [output directory]
+  -hrst
+        handle quirk where needed 'heart rate source type' field not set as active in official profile spreadsheet
   -sdk string
         provide or override SDK version printed in generated code
   -test

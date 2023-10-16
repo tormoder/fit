@@ -120,7 +120,7 @@ func readGoldenProfile(path string) (*profile.Profile, error) {
 	}
 
 	if !strings.HasPrefix(scanner.Text(), headings[i]) {
-		return nil, fmt.Errorf("first line should be '%s'", headings[i])
+		return nil, fmt.Errorf("first line should be %q", headings[i])
 	}
 
 	for scanner.Scan() {

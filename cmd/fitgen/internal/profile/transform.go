@@ -1,6 +1,7 @@
 package profile
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"strconv"
@@ -331,7 +332,7 @@ func (f *Field) parseComponents(logger *log.Logger) error {
 
 	components := strings.Split(f.data[mCOMPS], ",")
 	if len(components) == 0 {
-		return fmt.Errorf("parseComponents: zero components after string split")
+		return errors.New("parseComponents: zero components after string split")
 	}
 
 	bitsFull := f.data[mBITS]

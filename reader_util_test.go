@@ -127,7 +127,7 @@ var decodeTestFiles = [...]struct {
 	preFormat := g.Bytes()
 	src, err := format.Source(preFormat)
 	if err != nil {
-		return fmt.Errorf("format.Source: %v on\n%s", err, preFormat)
+		return fmt.Errorf("format.Source: %w on\n%s", err, preFormat)
 	}
 
 	return os.WriteFile("reader_files_test.go", src, 0o644)

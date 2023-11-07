@@ -740,16 +740,16 @@ func (d *decoder) parseFitField(dm *defmsg, dfield fieldDef, fieldv reflect.Valu
 		f64 := math.Float64frombits(bits)
 		fieldv.SetFloat(f64)
 	case types.BaseString:
-		for j := 0; j < dsize; j++ {
+		var j int
+
+		for j = 0; j < dsize; j++ {
 			if d.tmp[j] == 0x00 {
-				if j > 0 {
-					fieldv.SetString(string(d.tmp[:j]))
-				}
 				break
 			}
-			if j == dsize-1 {
-				fieldv.SetString(string(d.tmp[:j]))
-			}
+		}
+
+		if j > 0 {
+			fieldv.SetString(string(d.tmp[:j]))
 		}
 	default:
 		return fmt.Errorf(

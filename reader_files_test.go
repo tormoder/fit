@@ -300,4 +300,15 @@ var decodeTestFiles = [...]struct {
 		true,
 		"Contains developer data fields",
 	},
+	{
+		"misc",
+		"unterminated-strings.fit",
+		"https://github.com/tormoder/fit/pull/84",
+		false,
+		11593656398538188064,
+		true,
+		tdoNone,
+		true,
+		"Contains string fields without NULL terminator",
+	},
 }

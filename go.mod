@@ -15,8 +15,8 @@ require (
 	github.com/mdempsky/unconvert v0.0.0-20230125054757-2661c2c99a9b
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
 	github.com/tealeg/xlsx v1.0.3
-	golang.org/x/image v0.10.0 // indirect
-	golang.org/x/tools v0.6.0
+	golang.org/x/image v0.18.0 // indirect
+	golang.org/x/tools v0.21.1-0.20240508182429-e35e4ccd0d2d
 	honnef.co/go/tools v0.4.2
 	mvdan.cc/gofumpt v0.4.0
 )

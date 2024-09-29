@@ -4,6 +4,9 @@
 [![GoDoc](https://godoc.org/github.com/tormoder/fit?status.svg)](https://godoc.org/github.com/tormoder/fit)
 [![Build](https://github.com/tormoder/fit/workflows/Build/badge.svg)](https://github.com/tormoder/fit/actions?query=workflow%3ABuild)
 
+**Note, September 2024:** This project is not actively maintained anymore.
+Please see https://github.com/muktihari/fit for a more modern alternative. 
+
 <img src="https://raw.githubusercontent.com/hackraft/gophericons/master/png/2.png" width="225" align="right" hspace="25" />
 
 fit is a [Go](http://www.golang.org/) package that implements decoding and
